@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Tala Med Spa — Where light is your finest treatment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ---------- TOKENS ---------- */
+  :root{
+    --cream: #F4EBE0;
+    --cream-2: #EFE2D2;
+    --ink: #2A1812;
+    --ink-soft: #4A2C24;
+    --blush: #E8B8A5;
+    --rose: #C97A6E;
+    --rose-deep: #8B4849;
+    --gold: #C9A87C;
+    --sage: #A8B5A0;
+    --plum: #4D2A35;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --serif: 'Instrument Serif', 'Times New Roman', serif;
+    --sans: 'DM Sans', -apple-system, system-ui, sans-serif;
+    --container: 1440px;
+    --radius-lg: 28px;
+    --radius-md: 18px;
+    --radius-sm: 10px;
+  }
+
+  /* ---------- RESET ---------- */
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--cream);
+    overflow-x: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a{color:inherit; text-decoration:none}
+  button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
+  img{max-width:100%; display:block}
+  ::selection{ background: var(--rose); color: var(--cream)}
+
+  /* ---------- AMBIENT BACKDROP (animated mesh gradient) ---------- */
+  .backdrop{
+    position: fixed; inset:0; z-index:-2; overflow:hidden;
+    background: var(--cream);
+  }
+  .blob{
+    position:absolute; width: 70vmax; height: 70vmax; border-radius:50%;
+    filter: blur(80px);
+    opacity: .55;
+    mix-blend-mode: multiply;
+    will-change: transform;
+  }
+  .blob.b1{ background: radial-gradient(circle at 30% 30%, #E8B8A5, transparent 60%); top:-20vmax; left:-10vmax; animation: float1 28s ease-in-out infinite;}
+  .blob.b2{ background: radial-gradient(circle at 50% 50%, #C97A6E, transparent 55%); top:20vh; right:-20vmax; animation: float2 32s ease-in-out infinite;}
+  .blob.b3{ background: radial-gradient(circle at 50% 50%, #C9A87C, transparent 60%); bottom:-30vmax; left:20vw; animation: float3 36s ease-in-out infinite;}
+  .blob.b4{ background: radial-gradient(circle at 50% 50%, #8B4849, transparent 60%); top:60vh; left:30vw; opacity:.35; animation: float4 40s ease-in-out infinite;}
+  @keyframes float1 { 0%,100%{ transform: translate(0,0) scale(1)} 50%{ transform: translate(10vw, 8vh) scale(1.1)} }
+  @keyframes float2 { 0%,100%{ transform: translate(0,0) scale(1)} 50%{ transform: translate(-12vw, 10vh) scale(1.15)} }
+  @keyframes float3 { 0%,100%{ transform: translate(0,0) scale(1)} 50%{ transform: translate(8vw, -10vh) scale(1.05)} }
+  @keyframes float4 { 0%,100%{ transform: translate(0,0) scale(1)} 50%{ transform: translate(-6vw, -8vh) scale(1.2)} }
+
+  .grain{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.18;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMDAnIGhlaWdodD0nMjAwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC45JyBudW1PY3RhdmVzPScyJy8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsdGVyPSd1cmwoJTIzbiknIG9wYWNpdHk9JzAuNTUnLz48L3N2Zz4=");
+    mix-blend-mode: multiply;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .container{ max-width: var(--container); padding: 0 32px; margin: 0 auto;}
+  section{ position:relative; padding: 120px 0;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position: fixed; top: 18px; left: 0; right: 0; z-index: 100;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-inner{
+    max-width: 1440px; margin: 0 auto; padding: 0 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-pill{
+    display:flex; align-items:center; gap:8px;
+    background: color-mix(in oklab, var(--cream) 70%, transparent);
+    backdrop-filter: blur(16px) saturate(1.1);
+    -webkit-backdrop-filter: blur(16px) saturate(1.1);
+    border: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+    border-radius: 999px;
+    padding: 10px 14px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family: var(--serif); font-size: 24px; letter-spacing:-.01em;
+    padding: 4px 10px;
+  }
+  .logo-mark{
+    width: 24px; height: 24px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff, var(--blush) 40%, var(--rose-deep) 90%);
+    box-shadow: inset -2px -3px 6px rgba(74,44,36,.3), 0 4px 12px rgba(201,122,110,.4);
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{ transform:scale(1); filter:brightness(1)} 50%{ transform:scale(1.06); filter:brightness(1.05)}}
+  .nav-links{ display:flex; gap: 4px;}
+  .nav-links a{
+    padding: 10px 16px; border-radius: 999px;
+    font-size: 14px; color: var(--ink-soft);
+    transition: background .25s, color .25s;
+  }
+  .nav-links a:hover{ background: color-mix(in oklab, var(--ink) 8%, transparent); color: var(--ink);}
+  .nav-cta{
+    background: var(--ink); color: var(--cream);
+    padding: 12px 20px; border-radius: 999px;
+    font-size: 14px; font-weight: 500;
+    transition: transform .25s, background .25s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .nav-cta:hover{ background: var(--rose-deep); transform: translateY(-1px);}
+  .nav.hidden{ transform: translateY(-120%);}
+
+  /* ---------- HERO ---------- */
+  .hero{ padding: 160px 0 80px; min-height: 100vh; display:flex; align-items:center; position:relative;}
+  .hero-grid{
+    display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: .14em;
+    padding: 8px 14px;
+    border: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--cream) 60%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  .eyebrow .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--rose);
+    box-shadow: 0 0 10px var(--rose);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  h1.headline{
+    margin: 28px 0 24px;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(56px, 7.8vw, 124px);
+    line-height: .94;
+    letter-spacing: -.025em;
+    color: var(--ink);
+  }
+  h1.headline .italic{ font-style: italic; color: var(--rose-deep); }
+  h1.headline .gradient{
+    background: linear-gradient(100deg, var(--rose-deep) 0%, var(--rose) 35%, var(--gold) 70%, var(--rose-deep) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shine 6s linear infinite;
+    font-style: italic;
+  }
+  @keyframes shine { to { background-position: 200% center; } }
+
+  /* word reveal */
+  .word{ display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .04em;}
+  .word > span{ display:inline-block; transform: translateY(110%) rotate(4deg); opacity:0;}
+  .reveal .word > span{ animation: rise .9s cubic-bezier(.2,.8,.2,1) forwards;}
+  @keyframes rise{ to{ transform: translateY(0) rotate(0); opacity:1}}
+
+  .lede{
+    max-width: 460px;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+  }
+  .cta-row{ display:flex; gap: 14px; flex-wrap: wrap; align-items:center;}
+  .btn{
+    display:inline-flex; align-items:center; gap: 10px;
+    padding: 18px 28px; border-radius: 999px;
+    font-size: 15px; font-weight: 500;
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), background .25s, color .25s, box-shadow .3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary{
+    background: var(--ink); color: var(--cream);
+    box-shadow: 0 8px 30px rgba(42,24,18,.25), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .btn-primary:hover{ transform: translateY(-2px); background: var(--rose-deep);}
+  .btn-primary::after{
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.25) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform .7s;
+  }
+  .btn-primary:hover::after{ transform: translateX(100%);}
+  .btn-ghost{
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid color-mix(in oklab, var(--ink) 22%, transparent);
+  }
+  .btn-ghost:hover{ background: color-mix(in oklab, var(--ink) 6%, transparent); transform: translateY(-1px);}
+  .btn .arrow{ transition: transform .3s;}
+  .btn:hover .arrow{ transform: translateX(4px);}
+
+  .trust{
+    display:flex; gap: 24px; align-items:center; margin-top: 56px;
+    font-family: var(--mono); font-size: 11px; letter-spacing:.12em; text-transform:uppercase;
+    color: var(--ink-soft);
+  }
+  .trust .stars{ color: var(--rose-deep); letter-spacing: 2px;}
+  .trust .sep{ width: 1px; height: 18px; background: color-mix(in oklab, var(--ink) 18%, transparent);}
+
+  /* ---------- HERO ORB ---------- */
+  .hero-visual{
+    position: relative; aspect-ratio: 1/1.05;
+    perspective: 1400px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .scene{
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    animation: scene-spin 18s ease-in-out infinite;
+  }
+  @keyframes scene-spin{
+    0%,100%{ transform: rotateY(-8deg) rotateX(8deg);}
+    50%{ transform: rotateY(8deg) rotateX(-6deg);}
+  }
+  .orb{
+    position: absolute; left:50%; top:50%; transform: translate(-50%,-50%);
+    width: 64%; aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(255,255,255,.95) 0%, rgba(255,232,222,.65) 15%, rgba(232,184,165,.6) 35%, rgba(201,122,110,.7) 60%, rgba(139,72,73,.92) 95%);
+    box-shadow:
+      inset -30px -40px 80px rgba(45,18,18,.55),
+      inset 20px 30px 60px rgba(255,235,222,.45),
+      0 60px 120px -20px rgba(139,72,73,.45),
+      0 30px 80px -10px rgba(201,122,110,.45);
+    animation: orb-float 8s ease-in-out infinite;
+  }
+  .orb::before{
+    content:''; position:absolute; top:8%; left:18%;
+    width: 32%; height: 24%; border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,.9), transparent 70%);
+    filter: blur(2px);
+  }
+  .orb::after{
+    content:''; position:absolute; bottom:14%; right:18%;
+    width: 18%; height: 12%; border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255,200,180,.9), transparent 70%);
+    filter: blur(4px);
+    mix-blend-mode: screen;
+  }
+  @keyframes orb-float{ 0%,100%{ transform: translate(-50%,-50%);} 50%{ transform: translate(-50%, -55%);} }
+
+  .ring{
+    position:absolute; left:50%; top:50%;
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--rose-deep) 30%, transparent);
+    transform-style: preserve-3d;
+  }
+  .ring.r1{ width: 86%; aspect-ratio:1; transform: translate(-50%,-50%) rotateX(72deg); animation: ring-spin1 22s linear infinite;}
+  .ring.r2{ width: 96%; aspect-ratio:1; transform: translate(-50%,-50%) rotateX(72deg) rotateZ(40deg); border-style: dashed; opacity:.5; animation: ring-spin2 30s linear infinite reverse;}
+  .ring.r3{ width: 108%; aspect-ratio:1; transform: translate(-50%,-50%) rotateY(70deg); opacity:.4; animation: ring-spin3 26s linear infinite;}
+  @keyframes ring-spin1{ to { transform: translate(-50%,-50%) rotateX(72deg) rotateZ(360deg);}}
+  @keyframes ring-spin2{ to { transform: translate(-50%,-50%) rotateX(72deg) rotateZ(400deg);}}
+  @keyframes ring-spin3{ to { transform: translate(-50%,-50%) rotateY(70deg) rotateZ(-360deg);}}
+
+  .satellite{
+    position:absolute; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fff, var(--gold) 60%, var(--rose-deep));
+    box-shadow: 0 8px 24px rgba(139,72,73,.4), inset -2px -3px 6px rgba(74,44,36,.4);
+  }
+  .satellite.s1{ width: 5%; aspect-ratio:1; top: 8%; left: 50%; transform: translateX(-50%); animation: drift1 9s ease-in-out infinite; }
+  .satellite.s2{ width: 3.5%; aspect-ratio:1; top: 45%; right: 4%; animation: drift2 11s ease-in-out infinite;}
+  .satellite.s3{ width: 4.2%; aspect-ratio:1; bottom: 12%; left: 14%; background: radial-gradient(circle at 30% 30%, #fff, var(--blush) 50%, var(--rose) 90%); animation: drift3 13s ease-in-out infinite;}
+  @keyframes drift1{ 0%,100%{ transform: translateX(-50%) translateY(0);} 50%{ transform: translateX(-50%) translateY(14px);}}
+  @keyframes drift2{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-18px);}}
+  @keyframes drift3{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(12px);}}
+
+  .floating-card{
+    position: absolute;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: color-mix(in oklab, var(--cream) 75%, transparent);
+    backdrop-filter: blur(14px);
+    border: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+    box-shadow: 0 20px 40px -10px rgba(74,44,36,.18);
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-soft);
+    display:flex; align-items:center; gap: 10px;
+  }
+  .floating-card .num{
+    font-family: var(--serif); font-style: italic;
+    font-size: 22px; color: var(--rose-deep);
+    text-transform: none; letter-spacing: 0;
+  }
+  .fc1{ top: 10%; left: -6%; transform: rotate(-4deg); animation: card-float 7s ease-in-out infinite; }
+  .fc2{ bottom: 14%; right: -4%; transform: rotate(3deg); animation: card-float 9s ease-in-out infinite reverse; }
+  .fc3{ top: 56%; left: -8%; transform: rotate(-2deg); animation: card-float 8s ease-in-out infinite; animation-delay: -2s;}
+  @keyframes card-float{ 0%,100%{ translate: 0 0;} 50%{ translate: 0 -10px;}}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee-wrap{
+    padding: 36px 0;
+    border-top: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+    overflow:hidden;
+    background: color-mix(in oklab, var(--cream) 70%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  .marquee{
+    display:flex; gap: 64px; width: max-content;
+    animation: scroll-x 38s linear infinite;
+    font-family: var(--serif); font-size: 56px; line-height:1; color: var(--ink);
+    align-items: center;
+  }
+  .marquee span{ font-style: italic; opacity: .8;}
+  .marquee .dot-sep{
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--rose-deep);
+    flex-shrink: 0;
+  }
+  @keyframes scroll-x{ to { transform: translateX(-50%);}}
+
+  /* ---------- SECTION HEADER ---------- */
+  .section-head{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    align-items: end; margin-bottom: 72px;
+  }
+  .section-eyebrow{
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: .16em; color: var(--ink-soft); margin-bottom: 16px;
+    display: flex; align-items:center; gap: 10px;
+  }
+  .section-eyebrow::before{ content:''; width: 24px; height:1px; background: var(--ink-soft);}
+  h2.section-title{
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(40px, 5.2vw, 84px);
+    line-height: .98; letter-spacing: -.02em; margin: 0;
+    color: var(--ink);
+  }
+  h2 .italic{ font-style: italic; color: var(--rose-deep);}
+  .section-head p{
+    color: var(--ink-soft); font-size: 17px; max-width: 460px; margin: 0 0 6px auto;
+  }
+
+  /* ---------- TREATMENTS ---------- */
+  .treatments-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  .card{
+    position: relative;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    background: color-mix(in oklab, var(--cream) 50%, white 40%);
+    border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+    min-height: 380px;
+    transform-style: preserve-3d;
+    transition: box-shadow .4s, border-color .4s;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .card:hover{
+    box-shadow: 0 30px 60px -20px rgba(74,44,36,.25);
+    border-color: color-mix(in oklab, var(--rose-deep) 30%, transparent);
+  }
+  .card .visual{
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 70% 30%, color-mix(in oklab, var(--blush) 60%, transparent), transparent 60%);
+    opacity: .9;
+    transform: translateZ(-20px);
+  }
+  .card .tag{
+    position: absolute; top: 28px; right: 28px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--ink-soft);
+    display:flex; align-items:center; gap:8px;
+    transform: translateZ(40px);
+  }
+  .card .num{
+    position: absolute; top: 28px; left: 28px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-soft);
+    transform: translateZ(40px);
+  }
+  .card .body{
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 28px;
+    transform: translateZ(30px);
+  }
+  .card h3{
+    font-family: var(--serif); font-weight: 400; font-size: 36px;
+    line-height: 1; letter-spacing: -.015em;
+    margin: 0 0 8px;
+  }
+  .card h3 .it{ font-style: italic; color: var(--rose-deep);}
+  .card p{ font-size: 14px; color: var(--ink-soft); margin: 0 0 18px; max-width: 30ch;}
+  .card .meta{
+    display:flex; gap: 18px; font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: .14em; color: var(--ink-soft);
+  }
+  .card .meta span strong{ color: var(--ink); font-weight: 500;}
+
+  /* unique visual per card */
+  .card .deco{ position: absolute; pointer-events:none; transform-style: preserve-3d;}
+  .deco-orb{
+    width: 220px; aspect-ratio:1; border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, #fff 0%, var(--blush) 25%, var(--rose) 55%, var(--rose-deep) 95%);
+    box-shadow: inset -10px -15px 30px rgba(45,18,18,.5), 0 20px 40px -10px rgba(139,72,73,.4);
+    top: -50px; right: -50px;
+    transform: translateZ(20px);
+    transition: transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .card:hover .deco-orb{ transform: translateZ(40px) scale(1.08);}
+  .deco-orb.gold{ background: radial-gradient(circle at 30% 25%, #fff, #F2D9B3 25%, var(--gold) 55%, #8C6A3E 95%); box-shadow: inset -10px -15px 30px rgba(80,55,30,.5), 0 20px 40px -10px rgba(201,168,124,.5);}
+  .deco-orb.plum{ background: radial-gradient(circle at 30% 25%, #fff, #C9A4B0 25%, #8C5266 55%, #3D1F2A 95%); box-shadow: inset -10px -15px 30px rgba(45,18,30,.6), 0 20px 40px -10px rgba(77,42,53,.5);}
+  .deco-orb.sage{ background: radial-gradient(circle at 30% 25%, #fff, #DCE2D2 25%, var(--sage) 55%, #5C6B53 95%); box-shadow: inset -10px -15px 30px rgba(40,55,40,.5);}
+  .deco-orb.dusk{ background: radial-gradient(circle at 30% 25%, #fff, #E8C5C5 25%, #B57887 55%, #5E2F3D 95%); box-shadow: inset -10px -15px 30px rgba(60,30,40,.6);}
+  .deco-orb.peach{ background: radial-gradient(circle at 30% 25%, #fff, #FCD6BD 25%, #E8A07A 55%, #8C4A2E 95%); box-shadow: inset -10px -15px 30px rgba(80,40,25,.5);}
+
+  /* ---------- METHOD (pinned-feel) ---------- */
+  .method{
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 40px;
+    margin: 0 32px;
+    padding: 120px 64px;
+    overflow: hidden;
+    position:relative;
+  }
+  .method::before{
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(50vw 30vw at 20% 10%, rgba(201,122,110,.25), transparent 60%),
+      radial-gradient(40vw 30vw at 90% 90%, rgba(201,168,124,.2), transparent 60%);
+    pointer-events:none;
+  }
+  .method *{ position: relative;}
+  .method .section-eyebrow{ color: color-mix(in oklab, var(--cream) 70%, transparent);}
+  .method .section-eyebrow::before{ background: color-mix(in oklab, var(--cream) 50%, transparent);}
+  .method h2{ color: var(--cream);}
+  .method h2 .italic{ color: var(--blush);}
+  .method .section-head p{ color: color-mix(in oklab, var(--cream) 75%, transparent);}
+  .phases{
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 80px;
+  }
+  .phase{
+    border-top: 1px solid color-mix(in oklab, var(--cream) 18%, transparent);
+    padding-top: 32px;
+    position: relative;
+    transition: border-color .4s;
+  }
+  .phase::before{
+    content:''; position:absolute; top:-1px; left:0;
+    height: 1px; width: 0;
+    background: var(--blush);
+    transition: width 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .phase.in::before{ width: 100%;}
+  .phase .step{ font-family: var(--mono); font-size: 11px; letter-spacing: .15em; color: var(--blush); text-transform: uppercase;}
+  .phase h3{
+    font-family: var(--serif); font-weight: 400;
+    font-size: 56px; line-height: 1; letter-spacing: -.02em;
+    margin: 18px 0 16px;
+  }
+  .phase h3 .it{ font-style: italic; color: var(--blush);}
+  .phase p{
+    font-size: 14px;
+    color: color-mix(in oklab, var(--cream) 70%, transparent);
+    max-width: 28ch;
+  }
+  .phase .icon{
+    width: 36px; height: 36px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--cream), var(--blush) 60%, var(--rose-deep));
+    margin-bottom: 12px;
+    box-shadow: 0 6px 16px rgba(201,122,110,.4);
+  }
+
+  /* ---------- ATMOSPHERE (video slots) ---------- */
+  .atmosphere{ padding-top: 60px;}
+  .atmosphere-grid{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 18px;
+    margin-top: 64px;
+  }
+  .slot{
+    position: relative; overflow: hidden;
+    border-radius: var(--radius-lg);
+    background:
+      repeating-linear-gradient(45deg, rgba(74,44,36,.04) 0 14px, transparent 14px 28px),
+      linear-gradient(135deg, var(--cream-2), var(--blush) 60%, var(--rose));
+    border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+    box-shadow: 0 24px 60px -20px rgba(74,44,36,.18);
+    isolation: isolate;
+  }
+  .slot.tall { grid-row: span 2; aspect-ratio: 4/5;}
+  .slot.wide { aspect-ratio: 16/10;}
+  .slot.square { aspect-ratio: 5/4;}
+  .slot video{
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1.04);
+    transition: transform 1.4s cubic-bezier(.2,.7,.2,1), filter .6s;
+    filter: saturate(1.02) contrast(1.02);
+  }
+  .slot:hover video{ transform: scale(1.10);}
+  .slot::after{
+    content:''; position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, transparent 55%, rgba(42,24,18,.55) 100%),
+      radial-gradient(120% 80% at 50% 0%, transparent 40%, rgba(42,24,18,.18) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .slot .label{
+    position: absolute; top: 24px; left: 24px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    padding: 8px 12px; border-radius: 999px;
+    background: color-mix(in oklab, var(--ink) 35%, transparent);
+    backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in oklab, var(--cream) 18%, transparent);
+    z-index: 2;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .slot .label .pip{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--blush);
+    box-shadow: 0 0 8px var(--blush);
+  }
+  .slot .caption{
+    position: absolute; left: 28px; right: 28px; bottom: 26px;
+    color: var(--cream);
+    z-index: 2;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  }
+  .slot .caption .title{
+    font-family: var(--serif); font-size: clamp(28px, 2.6vw, 44px);
+    line-height: .98; letter-spacing: -.015em;
+    font-style: italic;
+    text-shadow: 0 2px 24px rgba(0,0,0,.3);
+  }
+  .slot .caption .meta{
+    font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+    text-transform: uppercase; opacity: .85;
+    text-align: right; flex-shrink: 0;
+  }
+  .slot .corner{
+    position: absolute; bottom: 24px; right: 24px;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: color-mix(in oklab, var(--cream) 85%, transparent);
+    color: var(--ink);
+    display: grid; place-items: center;
+    z-index: 2;
+    transition: transform .4s, background .3s;
+    border: 1px solid color-mix(in oklab, var(--cream) 30%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .slot:hover .corner{ transform: scale(1.1); background: var(--cream);}
+  @media (max-width: 1024px){
+    .atmosphere-grid{ grid-template-columns: 1fr; grid-template-rows: auto;}
+    .slot.tall{ grid-row: auto; aspect-ratio: 4/5;}
+  }
+
+  /* ---------- RESULTS / GALLERY ---------- */
+  .results-strip{
+    display:grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 18px; margin-top: 72px;
+  }
+  .result{
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, var(--blush), var(--rose));
+    position: relative;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+  }
+  .result.tall{ aspect-ratio: 3/4.6;}
+  .result:hover{ transform: translateY(-6px);}
+  .result .placeholder{
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 12px, transparent 12px 24px),
+      linear-gradient(135deg, var(--blush), var(--rose) 60%, var(--rose-deep));
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.8);
+    letter-spacing: .14em; text-transform: uppercase;
+  }
+  .result.gold .placeholder{ background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 12px, transparent 12px 24px),
+    linear-gradient(135deg, #F2D9B3, var(--gold) 60%, #8C6A3E);}
+  .result.plum .placeholder{ background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 12px, transparent 12px 24px),
+    linear-gradient(135deg, #C9A4B0, #8C5266 60%, var(--plum));}
+  .result .caption{
+    position:absolute; bottom: 20px; left: 20px; right: 20px;
+    color: var(--cream);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    display:flex; justify-content:space-between;
+  }
+  .result .caption .big{
+    font-family: var(--serif); font-size: 32px; font-style: italic; line-height: 1; letter-spacing: -.01em; text-transform: none;
+  }
+
+  /* ---------- TESTIMONIAL ---------- */
+  .testimonial{
+    display:grid; grid-template-columns: .9fr 1.1fr; gap: 64px; align-items: center;
+    padding: 80px 0;
+  }
+  .testimonial blockquote{
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(32px, 3.8vw, 56px);
+    line-height: 1.08; letter-spacing: -.015em;
+    margin: 0; color: var(--ink);
+  }
+  .testimonial blockquote .it{ font-style: italic; color: var(--rose-deep);}
+  .testimonial .quote-mark{
+    font-family: var(--serif); font-size: 140px; line-height: .5;
+    color: var(--rose-deep); display:block; margin-bottom: -20px;
+    font-style: italic;
+  }
+  .testimonial .who{
+    margin-top: 28px;
+    display:flex; align-items:center; gap:14px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .testimonial .who .av{
+    width: 40px; height:40px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, var(--cream), var(--blush) 60%, var(--rose-deep));
+  }
+
+  .stats{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  .stat{
+    padding: 28px; border-radius: var(--radius-md);
+    border: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+    background: color-mix(in oklab, var(--cream) 60%, white 30%);
+  }
+  .stat .n{
+    font-family: var(--serif); font-size: 64px; line-height: 1;
+    color: var(--ink); font-style: italic;
+  }
+  .stat .n .grad{
+    background: linear-gradient(120deg, var(--rose-deep), var(--gold));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat .l{
+    margin-top: 12px;
+    font-size: 13px; color: var(--ink-soft);
+  }
+
+  /* ---------- CTA ---------- */
+  .cta{
+    text-align: center;
+    padding: 160px 0;
+    position: relative;
+  }
+  .cta-glow{
+    position:absolute; left:50%; top:50%; transform: translate(-50%,-50%);
+    width: 80%; aspect-ratio:1;
+    background: radial-gradient(circle, color-mix(in oklab, var(--rose) 30%, transparent), transparent 60%);
+    z-index:-1;
+    animation: pulse-glow 6s ease-in-out infinite;
+    filter: blur(20px);
+  }
+  @keyframes pulse-glow{ 0%,100%{ opacity:.6; transform: translate(-50%,-50%) scale(1);} 50%{ opacity: 1; transform: translate(-50%,-50%) scale(1.1);}}
+  .cta h2{
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(56px, 8vw, 140px); line-height: .94;
+    letter-spacing: -.02em; margin: 0 auto 36px; max-width: 14ch;
+  }
+  .cta h2 .it{ font-style: italic; color: var(--rose-deep);}
+  .cta .lede{ margin: 0 auto 36px; text-align:center;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding: 64px 0 32px;
+    border-top: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+    color: var(--ink-soft); font-size: 14px;
+  }
+  .footer-grid{ display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;}
+  .footer-grid h4{ font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; margin: 0 0 18px; color: var(--ink);}
+  .footer-grid a{ display:block; padding: 6px 0; transition: color .25s;}
+  .footer-grid a:hover{ color: var(--rose-deep);}
+  .footer-base{ display:flex; justify-content:space-between; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;}
+
+  /* ---------- REVEAL UTIL ---------- */
+  .reveal-up{ opacity: 0; transform: translateY(30px); transition: opacity .9s, transform .9s cubic-bezier(.2,.7,.2,1);}
+  .reveal-up.in{ opacity: 1; transform: translateY(0);}
+
+  /* ---------- CURSOR GLOW ---------- */
+  .cursor-glow{
+    position: fixed; pointer-events:none; z-index: 1;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in oklab, var(--rose) 25%, transparent), transparent 60%);
+    transform: translate(-50%,-50%);
+    mix-blend-mode: multiply;
+    transition: opacity .4s;
+    opacity: 0;
+    filter: blur(20px);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 1024px){
+    .hero-grid{ grid-template-columns: 1fr; gap: 60px;}
+    .hero-visual{ max-width: 480px; margin: 0 auto;}
+    .treatments-grid{ grid-template-columns: repeat(2,1fr);}
+    .phases{ grid-template-columns: repeat(2,1fr);}
+    .section-head{ grid-template-columns: 1fr;}
+    .testimonial{ grid-template-columns: 1fr;}
+    .footer-grid{ grid-template-columns: 1fr 1fr;}
+    .method{ padding: 80px 36px;}
+  }
+  @media (max-width: 640px){
+    section{ padding: 80px 0;}
+    .container{ padding: 0 20px;}
+    .treatments-grid{ grid-template-columns: 1fr;}
+    .phases{ grid-template-columns: 1fr;}
+    .stats{ grid-template-columns: 1fr;}
+    .results-strip{ grid-template-columns: 1fr;}
+    .footer-grid{ grid-template-columns: 1fr;}
+    .nav-links{ display:none;}
+    .method{ margin: 0 16px; padding: 60px 24px; border-radius: 24px;}
+    .marquee{ font-size: 40px;}
+  }
+</style>
+</head>
+<template id="__bundler_thumbnail" data-bg-color="#F4EBE0">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="orb" cx="40%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="18%" stop-color="#FFE8DE"/>
+        <stop offset="40%" stop-color="#E8B8A5"/>
+        <stop offset="70%" stop-color="#C97A6E"/>
+        <stop offset="100%" stop-color="#8B4849"/>
+      </radialGradient>
+    </defs>
+    <rect width="1200" height="800" fill="#F4EBE0"/>
+    <g transform="translate(600 400)">
+      <ellipse cx="0" cy="0" rx="280" ry="80" fill="none" stroke="#8B4849" stroke-opacity="0.35" stroke-width="2"/>
+      <ellipse cx="0" cy="0" rx="320" ry="92" fill="none" stroke="#8B4849" stroke-opacity="0.22" stroke-width="2" stroke-dasharray="6 8" transform="rotate(20)"/>
+      <circle cx="0" cy="0" r="170" fill="url(#orb)"/>
+      <ellipse cx="-50" cy="-65" rx="55" ry="30" fill="#ffffff" fill-opacity="0.55"/>
+    </g>
+    <text x="600" y="700" text-anchor="middle" font-family="Times New Roman, serif" font-style="italic" font-size="64" fill="#2A1812">Tala</text>
+  </svg>
+</template>
+
+<body data-screen-label="Tala Med Spa Landing">
+
+<div class="backdrop">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+<div class="grain"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-pill">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        <span>Tala</span>
+      </div>
+    </div>
+    <div class="nav-pill">
+      <div class="nav-links">
+        <a href="#treatments">Treatments</a>
+        <a href="#method">The Method</a>
+        <a href="#results">Results</a>
+        <a href="#stories">Stories</a>
+        <a href="#visit">Visit</a>
+      </div>
+    </div>
+    <div class="nav-pill" style="padding: 6px 6px 6px 16px;">
+      <span style="font-family: var(--mono); font-size: 11px; letter-spacing:.12em; text-transform:uppercase; color: var(--ink-soft);">Now booking · summer</span>
+      <a href="#book" class="nav-cta">Book a consult <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Medically-led aesthetics · Est. 2019</div>
+        <h1 class="headline reveal" id="headline">
+          <span class="word"><span>Become</span></span> <span class="word"><span>the</span></span><br>
+          <span class="word"><span class="italic">most&nbsp;radiant</span></span><br>
+          <span class="word"><span>version</span></span> <span class="word"><span>of</span></span> <span class="word"><span class="gradient">you.</span></span>
+        </h1>
+        <p class="lede reveal-up">
+          Tala is a medical spa built around one belief — that beauty is biology made visible.
+          Every treatment is designed, performed and followed up by our team of board-certified physicians and licensed aestheticians.
+        </p>
+        <div class="cta-row reveal-up">
+          <a href="#book" class="btn btn-primary">Book your consult <span class="arrow">→</span></a>
+          <a href="#method" class="btn btn-ghost">See the Method</a>
+        </div>
+        <div class="trust reveal-up">
+          <div><span class="stars">★★★★★</span> 4.96 · 1,400+ reviews</div>
+          <div class="sep"></div>
+          <div>As seen in Vogue · Allure · Goop</div>
+        </div>
+      </div>
+
+      <div class="hero-visual" id="heroVisual">
+        <div class="scene">
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
+          <div class="ring r3"></div>
+          <div class="orb"></div>
+          <div class="satellite s1"></div>
+          <div class="satellite s2"></div>
+          <div class="satellite s3"></div>
+        </div>
+        <div class="floating-card fc1">
+          <span class="num">01</span>
+          <div>
+            <div style="color:var(--ink);">Hydrafacial · Signature</div>
+            <div>45 min · From $189</div>
+          </div>
+        </div>
+        <div class="floating-card fc2">
+          <span class="num">↑18%</span>
+          <div>
+            <div style="color:var(--ink);">Collagen density</div>
+            <div>After 3 sessions</div>
+          </div>
+        </div>
+        <div class="floating-card fc3">
+          <span class="num">96%</span>
+          <div>
+            <div style="color:var(--ink);">Would recommend</div>
+            <div>Internal patient survey</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Hydrafacial</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">Botox &amp; Filler</span><div class="dot-sep"></div>
+    <span>Laser Resurfacing</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">IV Drip Therapy</span><div class="dot-sep"></div>
+    <span>Microneedling</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">Body Sculpting</span><div class="dot-sep"></div>
+    <span>Cryo &amp; Red Light</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">Chemical Peels</span><div class="dot-sep"></div>
+    <!-- duplicate for seamless loop -->
+    <span>Hydrafacial</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">Botox &amp; Filler</span><div class="dot-sep"></div>
+    <span>Laser Resurfacing</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">IV Drip Therapy</span><div class="dot-sep"></div>
+    <span>Microneedling</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">Body Sculpting</span><div class="dot-sep"></div>
+    <span>Cryo &amp; Red Light</span><div class="dot-sep"></div>
+    <span style="font-style:normal;">Chemical Peels</span><div class="dot-sep"></div>
+  </div>
+</div>
+
+<!-- TREATMENTS -->
+<section id="treatments">
+  <div class="container">
+    <div class="section-head reveal-up">
+      <div>
+        <div class="section-eyebrow">02 — Treatments</div>
+        <h2 class="section-title">A menu, <span class="italic">written</span><br>like a love letter<br>to your skin.</h2>
+      </div>
+      <p>Every protocol begins with a 360° skin and wellness assessment. From injectables to regenerative therapies, we curate the smallest, most considered plan that produces the largest, most lasting change.</p>
+    </div>
+
+    <div class="treatments-grid" id="treatmentsGrid">
+
+      <article class="card tilt" data-tilt>
+        <div class="visual"></div>
+        <span class="num">/ 01</span>
+        <span class="tag">Injectables</span>
+        <div class="deco deco-orb"></div>
+        <div class="body">
+          <h3>Botox &amp; <span class="it">Filler</span></h3>
+          <p>Soft, undetectable refinement. Subtle volume that moves with you.</p>
+          <div class="meta">
+            <span>From <strong>$12/u</strong></span>
+            <span>30 min</span>
+            <span>MD-performed</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card tilt" data-tilt>
+        <div class="visual"></div>
+        <span class="num">/ 02</span>
+        <span class="tag">Skin</span>
+        <div class="deco deco-orb gold"></div>
+        <div class="body">
+          <h3>Signature <span class="it">Hydrafacial</span></h3>
+          <p>Cleanse, exfoliate, infuse. The afterglow our patients are best known for.</p>
+          <div class="meta">
+            <span>From <strong>$189</strong></span>
+            <span>45 min</span>
+            <span>All skin types</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card tilt" data-tilt>
+        <div class="visual"></div>
+        <span class="num">/ 03</span>
+        <span class="tag">Laser</span>
+        <div class="deco deco-orb plum"></div>
+        <div class="body">
+          <h3>Laser <span class="it">Resurfacing</span></h3>
+          <p>Erase sun damage, refine texture, return the skin you were born in.</p>
+          <div class="meta">
+            <span>From <strong>$650</strong></span>
+            <span>60 min</span>
+            <span>1–3 sessions</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card tilt" data-tilt>
+        <div class="visual"></div>
+        <span class="num">/ 04</span>
+        <span class="tag">Wellness</span>
+        <div class="deco deco-orb sage"></div>
+        <div class="body">
+          <h3>IV <span class="it">Drip Therapy</span></h3>
+          <p>Glutathione, NAD+, B-complex — wellness delivered straight to your cells.</p>
+          <div class="meta">
+            <span>From <strong>$220</strong></span>
+            <span>40 min</span>
+            <span>RN administered</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card tilt" data-tilt>
+        <div class="visual"></div>
+        <span class="num">/ 05</span>
+        <span class="tag">Regenerative</span>
+        <div class="deco deco-orb dusk"></div>
+        <div class="body">
+          <h3>Micro<span class="it">needling</span> + PRF</h3>
+          <p>Your own growth factors, woven into the dermis. Real collagen renewal.</p>
+          <div class="meta">
+            <span>From <strong>$520</strong></span>
+            <span>75 min</span>
+            <span>3-pack favored</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card tilt" data-tilt>
+        <div class="visual"></div>
+        <span class="num">/ 06</span>
+        <span class="tag">Body</span>
+        <div class="deco deco-orb peach"></div>
+        <div class="body">
+          <h3>Body <span class="it">Sculpting</span></h3>
+          <p>EmSculpt + radiofrequency. Tone what diet and gym cannot reach.</p>
+          <div class="meta">
+            <span>From <strong>$480</strong></span>
+            <span>30 min</span>
+            <span>No downtime</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- THE METHOD -->
+<section id="method" style="padding: 80px 0;">
+  <div class="method">
+    <div class="container" style="padding:0;">
+      <div class="section-head">
+        <div>
+          <div class="section-eyebrow">03 — The Tala Method</div>
+          <h2 class="section-title">Four phases.<br>One <span class="italic">unmistakable</span><br>arrival.</h2>
+        </div>
+        <p>Tala (tah-lah) means <em>light</em> in Tagalog. Our method is a four-phase ritual that brings yours into focus — built from a decade of clinical work, refined into something a great deal more like ceremony.</p>
+      </div>
+
+      <div class="phases">
+        <div class="phase">
+          <div class="icon"></div>
+          <div class="step">Phase 01</div>
+          <h3><span class="it">Reveal</span></h3>
+          <p>A 60-minute deep diagnostic — VISIA imaging, skin barrier mapping, hormonal markers.</p>
+        </div>
+        <div class="phase">
+          <div class="icon"></div>
+          <div class="step">Phase 02</div>
+          <h3><span class="it">Refine</span></h3>
+          <p>Targeted in-clinic treatments timed to your skin's biological calendar.</p>
+        </div>
+        <div class="phase">
+          <div class="icon"></div>
+          <div class="step">Phase 03</div>
+          <h3><span class="it">Renew</span></h3>
+          <p>Personalized at-home protocol — actives, peptides, devices, formulated for you.</p>
+        </div>
+        <div class="phase">
+          <div class="icon"></div>
+          <div class="step">Phase 04</div>
+          <h3><span class="it">Radiate</span></h3>
+          <p>Quarterly re-imaging. We measure the difference, then we keep going.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ATMOSPHERE -->
+<section id="atmosphere" class="atmosphere">
+  <div class="container">
+    <div class="section-head reveal-up">
+      <div>
+        <div class="section-eyebrow">04 — Atmosphere</div>
+        <h2 class="section-title">Step inside,<br><span class="italic">and exhale</span>.</h2>
+      </div>
+      <p>Behind every result is a room — and a ritual. A few quiet moments from inside Tala, where the work of becoming yourself again actually happens.</p>
+    </div>
+
+    <div class="atmosphere-grid reveal-up">
+      <div class="slot tall">
+        <span class="label"><span class="pip"></span> Now playing · 01</span>
+        <video src="media/atmosphere-1.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <div class="caption">
+          <div class="title">The morning<br>ritual</div>
+          <div class="meta">Studio<br>7:14 AM</div>
+        </div>
+        <div class="corner" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="slot wide">
+        <span class="label"><span class="pip"></span> Now playing · 02</span>
+        <video src="media/atmosphere-2.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <div class="caption">
+          <div class="title">Skin, slowly</div>
+          <div class="meta">Treatment<br>Room 3</div>
+        </div>
+        <div class="corner" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="slot square">
+        <span class="label"><span class="pip"></span> Now playing · 03</span>
+        <video src="media/atmosphere-3.mp4" autoplay muted loop playsinline preload="metadata"></video>
+        <div class="caption">
+          <div class="title">The afterglow</div>
+          <div class="meta">Patient<br>walkthrough</div>
+        </div>
+        <div class="corner" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="container">
+    <div class="section-head reveal-up">
+      <div>
+        <div class="section-eyebrow">05 — Results</div>
+        <h2 class="section-title">The proof,<br><span class="italic">in pictures</span>.</h2>
+      </div>
+      <p>A selection of recent patient journeys. Results are real, unretouched, and shared with permission. The slow, beautiful arc of consistent care.</p>
+    </div>
+
+    <div class="results-strip reveal-up">
+      <div class="result"><div class="placeholder">Result · Hydrafacial · 6 wks</div><div class="caption"><span class="big">M, 34</span><span>Glow restoration</span></div></div>
+      <div class="result gold tall"><div class="placeholder">Result · Laser + PRF · 12 wks</div><div class="caption"><span class="big">S, 41</span><span>Texture &amp; tone</span></div></div>
+      <div class="result plum"><div class="placeholder">Result · Filler refinement</div><div class="caption"><span class="big">A, 29</span><span>Jawline shaping</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section id="stories" style="padding-top: 0;">
+  <div class="container">
+    <div class="testimonial">
+      <div>
+        <span class="quote-mark">"</span>
+        <blockquote>
+          They didn't try to change <span class="it">my face</span> — they returned it to me. I leave Tala looking like the version of myself I&nbsp;remember.
+        </blockquote>
+        <div class="who">
+          <div class="av"></div>
+          Marisol R. · Patient since 2022
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat reveal-up">
+          <div class="n"><span class="grad" data-count="96">0</span>%</div>
+          <div class="l">Patients who book a follow-up within 90 days.</div>
+        </div>
+        <div class="stat reveal-up">
+          <div class="n"><span class="grad" data-count="14">0</span>k+</div>
+          <div class="l">Treatments delivered since opening in 2019.</div>
+        </div>
+        <div class="stat reveal-up">
+          <div class="n"><span class="grad" data-count="4.96">0</span></div>
+          <div class="l">Average rating across 1,400+ verified reviews.</div>
+        </div>
+        <div class="stat reveal-up">
+          <div class="n"><span class="grad" data-count="2">0</span> MD</div>
+          <div class="l">Board-certified physicians on every plan.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="book" class="cta">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <div class="section-eyebrow reveal-up" style="justify-content:center;">— Begin your consultation</div>
+    <h2 class="reveal-up">Your <span class="it">light</span><br>is waiting.</h2>
+    <p class="lede reveal-up">Complimentary 30-minute consultation with one of our medical directors. No obligation, no upsell — just an honest, expert opinion about your skin.</p>
+    <div class="cta-row reveal-up" style="justify-content:center;">
+      <a href="#" class="btn btn-primary">Reserve a consult <span class="arrow">→</span></a>
+      <a href="#" class="btn btn-ghost">Call (323) 555-0148</a>
+    </div>
+  </div>
+</section>
+
+<footer id="visit">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="padding-left:0;"><div class="logo-mark"></div><span style="font-size:32px;">Tala</span></div>
+        <p style="margin-top:16px; max-width: 320px;">Tala Med Spa · 8412 Melrose Place, Los Angeles, CA 90069</p>
+        <p style="font-family: var(--mono); font-size: 11px; letter-spacing:.14em; text-transform:uppercase; margin-top: 24px;">Tue–Sat · 10a–7p</p>
+      </div>
+      <div>
+        <h4>Treatments</h4>
+        <a href="#">Injectables</a>
+        <a href="#">Skin</a>
+        <a href="#">Laser</a>
+        <a href="#">Wellness</a>
+        <a href="#">Body</a>
+      </div>
+      <div>
+        <h4>Clinic</h4>
+        <a href="#">Our team</a>
+        <a href="#">The Method</a>
+        <a href="#">Press</a>
+        <a href="#">Membership</a>
+      </div>
+      <div>
+        <h4>Care</h4>
+        <a href="#">First visit</a>
+        <a href="#">Financing</a>
+        <a href="#">Gift cards</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 Tala Med Spa, Inc.</span>
+      <span>Made with care in Los Angeles</span>
+      <span><a href="#">Privacy</a> · <a href="#">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ---------- HEADLINE WORD REVEAL ---------- */
+  // Stagger word reveals
+  document.querySelectorAll('#headline .word > span').forEach((s,i)=>{
+    s.style.animationDelay = (0.15 + i*0.09) + 's';
+  });
+
+  /* ---------- INTERSECTION REVEAL ---------- */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);}
+    });
+  }, { threshold: .12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal-up, .phase').forEach(el=> io.observe(el));
+
+  /* ---------- NAV HIDE ON SCROLL DOWN ---------- */
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  window.addEventListener('scroll', ()=>{
+    const y = window.scrollY;
+    if(y > 200 && y > lastY){ nav.classList.add('hidden'); } else { nav.classList.remove('hidden'); }
+    lastY = y;
+  }, {passive:true});
+
+  /* ---------- CURSOR GLOW ---------- */
+  const cg = document.getElementById('cursorGlow');
+  let cgX=0,cgY=0, tgX=0,tgY=0, cgOn=false;
+  window.addEventListener('mousemove', (e)=>{
+    tgX = e.clientX; tgY = e.clientY;
+    if(!cgOn){ cgOn=true; cg.style.opacity='.7';}
+  });
+  window.addEventListener('mouseleave', ()=>{ cg.style.opacity='0'; cgOn=false;});
+  (function tick(){
+    cgX += (tgX-cgX)*0.12;
+    cgY += (tgY-cgY)*0.12;
+    cg.style.transform = `translate(${cgX}px, ${cgY}px) translate(-50%,-50%)`;
+    requestAnimationFrame(tick);
+  })();
+
+  /* ---------- 3D PROXIMITY TILT ---------- */
+  // Cards detect the cursor even when it isn't on top of them — a generous halo
+  // surrounds each card; strength falls off with distance, and target values are
+  // lerped each frame for buttery motion.
+  const tiltCards = [...document.querySelectorAll('[data-tilt]')];
+  const tiltState = tiltCards.map(el => ({
+    el,
+    rx: 0, ry: 0, lift: 0,
+    cx: 0, cy: 0, w: 0, h: 0
+  }));
+  function measureTilts(){
+    tiltState.forEach(s => {
+      const r = s.el.getBoundingClientRect();
+      s.cx = r.left + r.width / 2;
+      s.cy = r.top + r.height / 2;
+      s.w = r.width; s.h = r.height;
+    });
+  }
+  measureTilts();
+  window.addEventListener('resize', measureTilts);
+  window.addEventListener('scroll', measureTilts, { passive: true });
+
+  let mouseX = -99999, mouseY = -99999;
+  window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+  window.addEventListener('mouseleave', () => { mouseX = -99999; mouseY = -99999; });
+
+  function tiltLoop(){
+    for (const s of tiltState){
+      const dx = mouseX - s.cx;
+      const dy = mouseY - s.cy;
+      // Halo extends ~80% of the card's size beyond its edges
+      const halo = Math.max(s.w, s.h) * 0.8;
+      const reachX = s.w / 2 + halo;
+      const reachY = s.h / 2 + halo;
+      let targetRx = 0, targetRy = 0, targetLift = 0;
+      if (Math.abs(dx) < reachX && Math.abs(dy) < reachY){
+        const nx = Math.max(-1, Math.min(1, dx / reachX));
+        const ny = Math.max(-1, Math.min(1, dy / reachY));
+        // ease the falloff so the edges feel gentle
+        const easeX = Math.sign(nx) * (1 - Math.pow(1 - Math.abs(nx), 2));
+        const easeY = Math.sign(ny) * (1 - Math.pow(1 - Math.abs(ny), 2));
+        targetRy = easeX * 11;
+        targetRx = -easeY * 8;
+        const dist = Math.hypot(dx, dy);
+        const closeness = 1 - Math.min(1, dist / Math.max(reachX, reachY));
+        targetLift = closeness * 8;
+      }
+      s.rx += (targetRx - s.rx) * 0.11;
+      s.ry += (targetRy - s.ry) * 0.11;
+      s.lift += (targetLift - s.lift) * 0.11;
+      s.el.style.transform =
+        `perspective(1000px) rotateX(${s.rx.toFixed(3)}deg) rotateY(${s.ry.toFixed(3)}deg) translateY(${(-s.lift).toFixed(2)}px)`;
+    }
+    requestAnimationFrame(tiltLoop);
+  }
+  requestAnimationFrame(tiltLoop);
+
+  /* ---------- HERO PARALLAX TILT ---------- */
+  const heroVisual = document.getElementById('heroVisual');
+  if (heroVisual){
+    const scene = heroVisual.querySelector('.scene');
+    window.addEventListener('mousemove', (e)=>{
+      const r = heroVisual.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top + r.height/2;
+      const dx = (e.clientX - cx) / window.innerWidth;
+      const dy = (e.clientY - cy) / window.innerHeight;
+      // additive subtle parallax — keep CSS animation running underneath
+      scene.style.translate = `${dx*16}px ${dy*16}px`;
+    });
+  }
+
+  /* ---------- COUNTERS ---------- */
+  function animateCount(el, target){
+    const isFloat = (target % 1) !== 0;
+    const dur = 1800;
+    const start = performance.now();
+    function step(t){
+      const p = Math.min(1, (t-start)/dur);
+      const eased = 1 - Math.pow(1-p, 3);
+      const v = target * eased;
+      el.textContent = isFloat ? v.toFixed(2) : Math.round(v);
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  const countIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const v = parseFloat(e.target.dataset.count);
+        animateCount(e.target, v);
+        countIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: .6});
+  document.querySelectorAll('[data-count]').forEach(el=> countIO.observe(el));
+
+  /* ---------- SCROLL-TIED ORB ROTATION ---------- */
+  const sceneEl = document.querySelector('.scene');
+  window.addEventListener('scroll', ()=>{
+    if(!sceneEl) return;
+    const y = window.scrollY;
+    sceneEl.style.setProperty('--scroll-rot', `${y*0.05}deg`);
+  }, {passive:true});
+
+</script>
+</body>
+</html>
