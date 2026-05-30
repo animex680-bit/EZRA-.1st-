@@ -24,7 +24,10 @@ Reject our own work against this list before showing the client. We failed here 
 - [ ] **A signature moment.** One unforgettable, original interaction or visual the site is *about*. Not "tiles that move."
 - [ ] **At least one custom shader.** GLSL doing something the client can't get from a template (see web3d-shaders).
 - [ ] **Original art direction.** Bespoke assets, real type system, intentional color. No procedural placeholder grids.
-- [ ] **A motion system.** Coherent easing + choreographed scroll (Lenis + GSAP), not ad-hoc rAF loops.
+- [ ] **A motion system.** Coherent easing + choreographed scroll, not ad-hoc rAF loops. Scroll must *create* content (scrubbed assembly), not just trigger fades. (see web3d-motion)
+- [ ] **No stagnant tiles.** Every tile/word/card has perpetual gentle drift AND reacts to the cursor (evade/attract). Static = bland = slop.
+- [ ] **No hard section edges.** Sections blend/blip into each other — continuous backgrounds, crossfades, no visible dividers.
+- [ ] **Type is the hero.** Characterful editorial type pairing. Bland/default type sinks the whole site.
 - [ ] **Performance budget met.** 60fps on a mid-tier phone, initial payload lean, models Draco/KTX2 compressed (see web3d-perf).
 - [ ] **Accessible fallback.** `prefers-reduced-motion` honored; degrades gracefully without WebGL.
 - [ ] **Doesn't look AI/tool-generated.** If it looks like a bundler export, it's slop.

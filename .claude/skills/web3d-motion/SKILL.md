@@ -7,6 +7,19 @@ description: Motion design system for 3D and high-end websites — smooth scroll
 
 Slop animates with ad-hoc `requestAnimationFrame` loops and linear timing. Premium sites have a *motion language*: one easing family, choreographed timing, and scroll as the narrative spine.
 
+## REQUIRED signature techniques (learned from real feedback — bland = rejected)
+
+These are not optional flourishes; their absence is what made past work "bland". A premium scroll experience must do all of:
+
+1. **Scroll CREATES the content — scrubbed, not triggered.** As text comes into view, characters should look like they are being *generated and arranging themselves in lock-step with the scroll position* — letter/word reveal scrubbed by scroll progress (split into chars/words, map each to a slice of the scroll range). Scroll up = they un-create. The scroll position IS the animation timeline, not a one-shot trigger. Never a single fade-up when blip/assembly is wanted.
+2. **Scroll-as-scrubber, not travel.** Pin a stage (sticky), give it a tall scroll track, and map scroll progress to `video.currentTime` (or a timeline). Scrolling scrubs the video forward; stopping freezes it; scrolling up plays it backward. The viewport shouldn't feel like it "goes down" — the scroll is a playhead. Lerp the mapped value for glide.
+3. **Seamless, edgeless section transitions.** NO hard boundaries between sections. When one stage's scrub completes, slip into the next (continuous/shared background, crossfade, no visible divider). It should feel like a blip/morph, not a page break.
+4. **Nothing is ever stagnant.** Every tile (word, image, video card) perpetually drifts — gentle, smooth, varied (some vertical, some horizontal), never violent. Use per-tile phase offsets so the field breathes organically.
+5. **Cursor-reactive tiles.** On pointer proximity, tiles react — mostly **evade** the cursor, but a few are **drawn toward** it. Spring/lerp back to base. Living and playful, not decorative.
+6. **Typography is the hero.** A characterful editorial type pairing, treated as the centerpiece — never bland/default. Bland type alone makes a whole site read cheap.
+
+(When WebGL can't be verified — see web3d-build verifiability rule — implement ALL of the above in plain DOM/CSS/JS + a scrubbed `<video>`. None of it requires WebGL.)
+
 ## The stack
 
 - **Lenis** — smooth/inertial scroll. Foundation of the premium feel. Sync it to GSAP's ticker and to the R3F render loop.

@@ -3,229 +3,388 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e0f10">
+<meta name="theme-color" content="#0b0c0d">
 <title>Aluminium Windows Cape Town — Framing Light</title>
 <meta name="description" content="Aluminium windows & doors that dissolve the wall between your home and the Cape. Designed, manufactured & installed in-house.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0e0f10; --panel:#16181a; --alu:#c8ccce; --ink:#f3f1ec; --ink-soft:#a7a9aa;
-    --accent:#e8c79a; --line:rgba(255,255,255,.1);
-    --d:'Archivo',-apple-system,system-ui,sans-serif; --b:'Inter',-apple-system,system-ui,sans-serif;
+    --bg:#0b0c0d; --ink:#f4f1ea; --ink-soft:#9a978f; --accent:#e7c79a;
+    --line:rgba(255,255,255,.10);
+    --serif:'Fraunces',Georgia,serif;
+    --grotesk:'Space Grotesk',-apple-system,system-ui,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--ink);font-family:var(--b);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--grotesk);
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:default}
   a{color:inherit;text-decoration:none}
-  img,video{display:block;max-width:100%}
+  video{display:block}
   ::selection{background:var(--accent);color:#1a1206}
 
+  /* scroll length — the body scrolls; the stage stays fixed (scroll = playhead) */
+  .scroll-space{position:relative;z-index:1}
+
+  /* fixed full-screen stage holder; one continuous background = no hard edges */
+  .viewport{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg)}
+  .stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    opacity:0;visibility:hidden;will-change:opacity}
+  .stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .stage .grain,.stage .veil{position:absolute;inset:0;z-index:1;pointer-events:none}
+  .veil{background:radial-gradient(130% 100% at 50% 42%,rgba(11,12,13,0) 30%,rgba(11,12,13,.55) 100%),
+    linear-gradient(180deg,rgba(11,12,13,.45),rgba(11,12,13,0) 26%,rgba(11,12,13,0) 60%,rgba(11,12,13,.85))}
+
   /* chrome */
-  .chrome{position:fixed;inset:0 0 auto 0;z-index:40;display:flex;align-items:center;justify-content:space-between;
-    padding:22px 36px;pointer-events:none;mix-blend-mode:difference}
-  .brand{font-family:var(--d);font-weight:800;font-size:19px;letter-spacing:-.01em;line-height:1;pointer-events:auto}
-  .brand small{display:block;font-weight:600;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#fff;opacity:.7;margin-top:5px}
-  .nav{display:flex;gap:26px;font-family:var(--d);font-weight:600;font-size:14px;pointer-events:auto}
+  .chrome{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;align-items:center;
+    justify-content:space-between;padding:24px 38px;pointer-events:none;mix-blend-mode:difference}
+  .brand{font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:-.01em;line-height:1;pointer-events:auto}
+  .brand i{font-style:italic}
+  .brand small{display:block;font-family:var(--grotesk);font-weight:500;font-size:10px;
+    letter-spacing:.26em;text-transform:uppercase;opacity:.7;margin-top:6px}
+  .nav{display:flex;gap:28px;font-family:var(--grotesk);font-weight:500;font-size:13px;
+    letter-spacing:.04em;pointer-events:auto}
   .nav a{opacity:.85;transition:opacity .2s}.nav a:hover{opacity:1}
-  @media(max-width:720px){.nav{display:none}.chrome{padding:18px 22px}}
+  @media(max-width:760px){.nav{display:none}.chrome{padding:18px 22px}}
 
-  section{position:relative}
-  .pad{max-width:1320px;margin:0 auto;padding:0 36px;width:100%}
-  @media(max-width:720px){.pad{padding:0 22px}}
+  /* headline assembly */
+  .head{position:relative;z-index:3;text-align:center;padding:0 24px;max-width:18ch}
+  .eyebrow{font-family:var(--grotesk);font-weight:600;font-size:12px;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  .eyebrow .char{display:inline-block}
+  h1,h2{font-family:var(--serif);font-weight:340;line-height:.98;letter-spacing:-.018em}
+  h1{font-size:clamp(48px,9vw,150px)}
+  h2{font-size:clamp(38px,6.6vw,104px)}
+  h1 em,h2 em{font-style:italic;font-weight:340;color:var(--accent)}
+  .char{display:inline-block;white-space:pre;will-change:transform,opacity,filter}
+  .sub{margin-top:26px;font-family:var(--grotesk);font-size:clamp(15px,1.5vw,19px);
+    color:var(--ink-soft);max-width:46ch;margin-left:auto;margin-right:auto;line-height:1.55}
 
-  /* HERO — video background */
-  .hero{height:100svh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
-  .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-  .hero .veil{position:absolute;inset:0;z-index:1;
-    background:linear-gradient(180deg,rgba(14,15,16,.35) 0%,rgba(14,15,16,0) 30%,rgba(14,15,16,.15) 55%,rgba(14,15,16,.92) 100%)}
-  .hero .pad{position:relative;z-index:2;padding-bottom:8vh}
-  .hero h1{font-family:var(--d);font-weight:800;letter-spacing:-.03em;line-height:.92;font-size:clamp(46px,8.4vw,140px);max-width:15ch}
-  .hero .sub{margin-top:22px;max-width:46ch;font-size:clamp(15px,1.5vw,19px);color:#e7e6e2}
-  .scrollcue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:3;
-    font-family:var(--d);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#fff;opacity:.8;
-    display:flex;flex-direction:column;align-items:center;gap:9px}
-  .scrollcue .bar{width:1px;height:40px;background:linear-gradient(#fff,transparent);animation:cue 2.2s ease-in-out infinite}
-  @keyframes cue{0%,100%{opacity:.2;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+  /* progress + cue */
+  .cue{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;
+    font-family:var(--grotesk);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--ink);opacity:.7;display:flex;flex-direction:column;align-items:center;gap:10px;
+    mix-blend-mode:difference;pointer-events:none;transition:opacity .5s}
+  .cue .bar{width:1px;height:46px;background:linear-gradient(var(--ink),transparent);
+    transform-origin:top;animation:cue 2.4s ease-in-out infinite}
+  @keyframes cue{0%,100%{transform:scaleY(.4);opacity:.3}50%{transform:scaleY(1);opacity:1}}
+  .pbar{position:fixed;top:0;left:0;height:2px;width:0;z-index:70;
+    background:linear-gradient(90deg,var(--accent),#fff);box-shadow:0 0 12px rgba(231,199,154,.6)}
 
-  /* REVEAL — sticky video that scrubs/scales as you scroll */
-  .reveal{height:230vh;position:relative}
-  .reveal-sticky{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center;justify-content:center}
-  .reveal video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transform:scale(1.15);will-change:transform}
-  .reveal .frame{position:absolute;inset:0;z-index:1;
-    box-shadow:inset 0 0 0 2px rgba(232,199,154,.0);transition:box-shadow .4s}
-  .reveal .veil{position:absolute;inset:0;z-index:1;background:radial-gradient(120% 90% at 50% 50%,rgba(14,15,16,0) 30%,rgba(14,15,16,.5) 100%)}
-  .reveal .cap{position:relative;z-index:2;text-align:center;max-width:18ch;margin:0 auto}
-  .reveal .eyebrow{font-family:var(--d);font-weight:600;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
-  .reveal h2{font-family:var(--d);font-weight:800;letter-spacing:-.025em;line-height:1.0;font-size:clamp(30px,4.6vw,64px)}
+  /* living tiles stage */
+  .tiles-head{position:absolute;z-index:4;text-align:center;left:50%;top:50%;
+    transform:translate(-50%,-50%);max-width:20ch;pointer-events:none}
+  .field{position:absolute;inset:0;z-index:3}
+  .tile{position:absolute;border-radius:14px;overflow:hidden;will-change:transform;
+    background:#16181a;border:1px solid var(--line);box-shadow:0 24px 60px -28px rgba(0,0,0,.7);
+    display:flex;align-items:flex-end;padding:16px}
+  .tile.word{background:rgba(20,22,24,.55);backdrop-filter:blur(6px);align-items:center;justify-content:center;
+    font-family:var(--serif);font-style:italic;font-weight:360;color:var(--ink)}
+  .tile.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92}
+  .tile .lbl{position:relative;z-index:2;font-family:var(--grotesk);font-weight:600;font-size:13px;letter-spacing:.02em}
+  .tile .lbl small{display:block;font-weight:400;color:var(--ink-soft);margin-top:3px;font-size:11px;letter-spacing:.04em}
 
-  /* generic content beat */
-  .beat{padding:14vh 0}
-  .eyebrow{font-family:var(--d);font-weight:600;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
-  .beat h2{font-family:var(--d);font-weight:800;letter-spacing:-.025em;line-height:1.0;font-size:clamp(32px,5vw,72px);max-width:18ch}
-  .beat p{margin-top:20px;max-width:52ch;font-size:clamp(15px,1.4vw,18px);color:var(--ink-soft)}
+  /* CTA */
+  .cta-wrap{position:relative;z-index:3;text-align:center;padding:0 24px}
+  .row{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .btn{font-family:var(--grotesk);font-weight:600;font-size:15px;padding:16px 30px;border-radius:999px;
+    transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s,border-color .3s;pointer-events:auto}
+  .btn.solid{background:var(--accent);color:#1a1206}.btn.solid:hover{transform:translateY(-3px)}
+  .btn.ghost{border:1px solid rgba(255,255,255,.24)}.btn.ghost:hover{transform:translateY(-3px);border-color:var(--ink-soft)}
+  .meta{position:fixed;left:0;right:0;bottom:22px;z-index:4;display:flex;justify-content:center;gap:26px;
+    font-family:var(--grotesk);font-size:12px;color:var(--ink-soft);flex-wrap:wrap;padding:0 22px;text-align:center;
+    opacity:0;transition:opacity .6s}
 
-  .range-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
-  .pcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;min-height:190px;
-    display:flex;flex-direction:column;justify-content:flex-end;transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .3s}
-  .pcard:hover{transform:translateY(-6px);border-color:rgba(232,199,154,.45)}
-  .pcard .n{font-family:var(--d);font-weight:700;font-size:19px}
-  .pcard .m{font-size:13px;color:var(--ink-soft);margin-top:6px}
-  @media(max-width:900px){.range-grid{grid-template-columns:1fr 1fr}}
+  .flag{position:fixed;bottom:10px;right:12px;z-index:80;font-family:var(--grotesk);font-size:9px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);background:rgba(0,0,0,.45);
+    border:1px solid var(--line);padding:5px 9px;border-radius:7px;mix-blend-mode:difference}
 
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
-  .stat .big{font-family:var(--d);font-weight:800;font-size:clamp(32px,4.4vw,58px);letter-spacing:-.02em}
-  .stat .lbl{color:var(--ink-soft);font-size:14px;margin-top:6px}
-  @media(max-width:720px){.stats{grid-template-columns:1fr;gap:16px}}
+  .enter{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:18px;transition:opacity 1s ease,visibility 1s}
+  .enter.gone{opacity:0;visibility:hidden}
+  .enter .m{font-family:var(--serif);font-style:italic;font-size:clamp(26px,5vw,46px)}
+  .enter .s{font-family:var(--grotesk);font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-soft)}
 
-  .cta{min-height:88svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-  .cta h2{font-family:var(--d);font-weight:800;letter-spacing:-.03em;line-height:.98;font-size:clamp(34px,6vw,90px);max-width:14ch}
-  .cta .row{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-  .btn{font-family:var(--d);font-weight:600;font-size:16px;padding:16px 28px;border-radius:999px;transition:transform .25s,background .25s,border-color .25s}
-  .btn.solid{background:var(--accent);color:#1a1206}.btn.solid:hover{transform:translateY(-2px)}
-  .btn.ghost{border:1px solid rgba(255,255,255,.22)}.btn.ghost:hover{transform:translateY(-2px);border-color:var(--ink-soft)}
-
-  footer{padding:60px 0 50px;color:var(--ink-soft);font-size:14px;border-top:1px solid var(--line)}
-  footer .pad{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
-
-  .flag{position:fixed;bottom:12px;right:12px;z-index:50;font-family:var(--d);font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--ink-soft);background:rgba(0,0,0,.5);border:1px solid var(--line);padding:6px 10px;border-radius:8px}
-
-  /* reveal-on-scroll */
-  .ru{opacity:0;transform:translateY(30px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
-  .ru.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){
-    .ru{opacity:1;transform:none}.reveal video{transform:scale(1.05)!important}.scrollcue .bar{animation:none}
-    html{scroll-behavior:auto}
-  }
+  @media(prefers-reduced-motion:reduce){.cue .bar{animation:none}}
 </style>
 </head>
 <body>
 
+<div class="enter" id="enter">
+  <div class="m">Framing&nbsp;Light</div>
+  <div class="s">Aluminium Windows · Cape Town</div>
+</div>
+
+<div class="pbar" id="pbar"></div>
+
 <header class="chrome">
-  <div class="brand">AWCT<small>Cape Town</small></div>
+  <div class="brand">Aluminium <i>Windows</i><small>Cape Town</small></div>
   <nav class="nav">
-    <a href="#reveal">The Reveal</a>
-    <a href="#range">Range</a>
-    <a href="#made">Made Here</a>
-    <a href="#quote">Quote</a>
+    <a data-go="0.30">Reveal</a>
+    <a data-go="0.66">Range</a>
+    <a data-go="0.99">Quote</a>
   </nav>
 </header>
 
-<!-- HERO -->
-<section class="hero">
-  <video src="media/hero.mp4" autoplay muted loop playsinline preload="auto"></video>
-  <div class="veil"></div>
-  <div class="pad">
-    <h1>We frame the light.</h1>
-    <p class="sub">Aluminium windows &amp; doors that dissolve the wall between your home and the Cape — designed, manufactured and installed in-house, to your exact spec.</p>
-  </div>
-  <div class="scrollcue"><span>Scroll</span><span class="bar"></span></div>
-</section>
+<!-- FIXED STAGE — scroll never "travels", it scrubs these -->
+<div class="viewport" id="viewport">
 
-<!-- REVEAL: sticky scrubbing video -->
-<section class="reveal" id="reveal">
-  <div class="reveal-sticky">
-    <video id="revealVideo" src="media/reveal.mp4" muted loop playsinline preload="auto"></video>
+  <!-- STAGE 0 — hero, video scrubbed by scroll, headline assembles -->
+  <section class="stage" data-stage="0">
+    <video src="media/hero.mp4" muted playsinline preload="auto" data-scrub></video>
     <div class="veil"></div>
-    <div class="frame"></div>
-    <div class="cap">
-      <div class="eyebrow">Open the wall</div>
-      <h2>A stacking door doesn’t divide a room. It removes one.</h2>
+    <div class="head">
+      <div class="eyebrow" data-split>Indoor · Outdoor</div>
+      <h1 data-split>We frame the <em>light</em>.</h1>
+      <p class="sub" data-fade>Aluminium windows &amp; doors that dissolve the wall between your home and the Cape.</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- RANGE -->
-<section class="beat" id="range">
-  <div class="pad">
-    <div class="eyebrow ru">The Range</div>
-    <h2 class="ru">Every opening, engineered.</h2>
-    <p class="ru">From frameless sliding walls to side-hung casements — each profile thermally broken, climate-rated for the Western Cape, and finished to architectural tolerance.</p>
-    <div class="range-grid">
-      <div class="pcard ru"><div class="n">Folding / Stacking</div><div class="m">Up to 6 leaves</div></div>
-      <div class="pcard ru"><div class="n">Sliding Doors</div><div class="m">Frameless options</div></div>
-      <div class="pcard ru"><div class="n">Casement Windows</div><div class="m">Side &amp; top hung</div></div>
-      <div class="pcard ru"><div class="n">Shopfronts</div><div class="m">Commercial spec</div></div>
+  <!-- STAGE 1 — reveal, second video scrubbed, line assembles -->
+  <section class="stage" data-stage="1">
+    <video src="media/reveal.mp4" muted playsinline preload="auto" data-scrub></video>
+    <div class="veil"></div>
+    <div class="head">
+      <div class="eyebrow" data-split>Open the wall</div>
+      <h2 data-split>A door that doesn’t <em>divide</em> a room — it removes one.</h2>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- MADE HERE -->
-<section class="beat" id="made">
-  <div class="pad">
-    <div class="eyebrow ru">Made Here</div>
-    <h2 class="ru">Our factory. Your tolerances.</h2>
-    <p class="ru">In-house production at Racing Park means we own the line from extrusion to installation — faster turnaround, tighter tolerances, one point of accountability.</p>
-    <div class="stats">
-      <div class="stat ru"><div class="big">In-house</div><div class="lbl">Manufacturing &amp; install</div></div>
-      <div class="stat ru"><div class="big">±1mm</div><div class="lbl">Architectural tolerance</div></div>
-      <div class="stat ru"><div class="big">Western Cape</div><div class="lbl">Climate-rated systems</div></div>
+  <!-- STAGE 2 — living tiles -->
+  <section class="stage" data-stage="2">
+    <div class="field" id="field"></div>
+    <div class="tiles-head">
+      <div class="eyebrow" data-split>The Range</div>
+      <h2 data-split>Every <em>opening</em>, engineered.</h2>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CTA -->
-<section class="cta" id="quote">
-  <div class="pad">
-    <h2 class="ru">Let’s open up your space.</h2>
-    <div class="row ru">
-      <a class="btn solid" href="tel:+27673687537">Call +27 67 368 7537</a>
-      <a class="btn ghost" href="mailto:admin@tganorth.co.za">Request a quote</a>
+  <!-- STAGE 3 — CTA -->
+  <section class="stage" data-stage="3">
+    <div class="cta-wrap">
+      <div class="eyebrow" data-split>Made in-house · Racing Park</div>
+      <h2 data-split>Let’s <em>open up</em> your space.</h2>
+      <div class="row">
+        <a class="btn solid" href="tel:+27673687537">Call +27 67 368 7537</a>
+        <a class="btn ghost" href="mailto:admin@tganorth.co.za">Request a quote</a>
+      </div>
     </div>
-  </div>
-</section>
+    <div class="meta" id="meta">
+      <span>Racing Park, 25 Benetton Rd, Killarney Ave</span>
+      <span>admin@tganorth.co.za · +27 67 368 7537</span>
+    </div>
+  </section>
 
-<footer>
-  <div class="pad">
-    <div>Aluminium Windows Cape Town · Racing Park, 25 Benetton Rd, Killarney Ave</div>
-    <div>admin@tganorth.co.za · +27 67 368 7537</div>
-  </div>
-</footer>
+</div>
 
+<div class="cue" id="cue"><span>Scroll</span><span class="bar"></span></div>
 <div class="flag">Unsolicited concept · not affiliated</div>
 
-<script>
-  /* scroll-reveal for .ru elements */
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); });
-  }, {threshold:.18, rootMargin:'0px 0px -8% 0px'});
-  document.querySelectorAll('.ru').forEach(function(el){ io.observe(el); });
+<!-- scroll length: total height controls how much "playhead" there is -->
+<div class="scroll-space" style="height:620vh"></div>
 
-  /* REVEAL: scrub the video time + zoom-out as the section scrolls past */
-  var sec = document.getElementById('reveal');
-  var vid = document.getElementById('revealVideo');
-  var ready = false;
-  vid.addEventListener('loadedmetadata', function(){ ready = true; });
-  // keep it paused; we drive currentTime from scroll
-  vid.pause();
+<script>
+(function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function onScroll(){
-    var r = sec.getBoundingClientRect();
-    var total = sec.offsetHeight - window.innerHeight;
-    var p = Math.max(0, Math.min(1, -r.top / (total || 1)));
-    if(ready && vid.duration){
-      if(reduce){ if(vid.paused) vid.play().catch(function(){}); }
-      else { vid.currentTime = p * (vid.duration - 0.05); }
-    }
-    // zoom from 1.15 -> 1.0 as the wall "opens", brighten the frame edge
-    var scale = 1.15 - p*0.15;
-    vid.style.transform = 'scale('+scale.toFixed(3)+')';
-  }
-  window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', onScroll);
-  // some browsers won't let us set currentTime until the video can seek
-  vid.addEventListener('canplay', onScroll);
-  onScroll();
+  /* ---------- helpers ---------- */
+  function clamp(v,a,b){return v<a?a:v>b?b:v;}
+  function smooth(e0,e1,x){var t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);}
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function rand(a,b){return a+Math.random()*(b-a);}
 
-  /* hero video: ensure it actually plays (autoplay can be blocked until interaction) */
-  var hero = document.querySelector('.hero video');
-  function kickHero(){ var pr = hero.play(); if(pr&&pr.catch) pr.catch(function(){}); }
-  kickHero();
-  document.addEventListener('click', kickHero, {once:true});
-  document.addEventListener('touchstart', kickHero, {once:true});
+  /* ---------- split text into chars (for scroll-built assembly) ---------- */
+  function splitNode(el){
+    var walk=[], frag=document.createDocumentFragment();
+    el.childNodes.forEach(function(n){
+      if(n.nodeType===3){ // text
+        n.nodeValue.split('').forEach(function(ch){
+          var s=document.createElement('span');s.className='char';s.textContent=ch;
+          s.dataset.a=rand(-26,26).toFixed(1); // angle
+          s.dataset.x=rand(-34,34).toFixed(1);
+          s.dataset.y=rand(30,90).toFixed(1);
+          frag.appendChild(s); walk.push(s);
+        });
+      } else if(n.nodeType===1){ // element (em etc) — split its text but keep tag
+        var inner=document.createElement(n.tagName);
+        inner.className=n.className;
+        n.textContent.split('').forEach(function(ch){
+          var s=document.createElement('span');s.className='char';s.textContent=ch;
+          s.dataset.a=rand(-26,26).toFixed(1);
+          s.dataset.x=rand(-34,34).toFixed(1);
+          s.dataset.y=rand(30,90).toFixed(1);
+          inner.appendChild(s); walk.push(s);
+        });
+        frag.appendChild(inner);
+      }
+    });
+    el.innerHTML=''; el.appendChild(frag);
+    return walk;
+  }
+
+  /* ---------- build stage model ---------- */
+  var stages=[].slice.call(document.querySelectorAll('.stage'));
+  var stageData=stages.map(function(st){
+    var splits=[].slice.call(st.querySelectorAll('[data-split]')).map(function(el){
+      return {chars:splitNode(el)};
+    });
+    var fades=[].slice.call(st.querySelectorAll('[data-fade]'));
+    var vid=st.querySelector('[data-scrub]');
+    return {el:st, splits:splits, fades:fades, vid:vid, vidT:0};
+  });
+
+  // global g-range windows per stage [fadeIn, fullIn, fullOut, fadeOut]
+  var windows=[
+    [0.00,0.015,0.22,0.285],
+    [0.275,0.34,0.55,0.625],
+    [0.605,0.665,0.80,0.86],
+    [0.83,0.90,1.0,1.01]
+  ];
+
+  /* ---------- living tiles ---------- */
+  var field=document.getElementById('field');
+  var tileDefs=[
+    {t:'word',txt:'Folding'}, {t:'vid',src:'media/reveal.mp4'},
+    {t:'word',txt:'Sliding'}, {t:'lbl',n:'Frameless',m:'Glass walls'},
+    {t:'vid',src:'media/hero.mp4'}, {t:'word',txt:'Casement'},
+    {t:'lbl',n:'Shopfronts',m:'Commercial'}, {t:'word',txt:'Stacking'},
+    {t:'lbl',n:'±1mm',m:'Tolerance'}
+  ];
+  // hand-placed-ish positions (% of viewport), avoiding the center text band
+  var pos=[
+    [12,20],[28,30],[16,66],[40,16],[62,62],[74,24],[84,68],[50,80],[36,50]
+  ];
+  var tiles=[];
+  tileDefs.forEach(function(d,i){
+    var el=document.createElement('div');
+    var w=rand(120,190), h=d.t==='word'?rand(70,96):rand(150,210);
+    el.className='tile '+(d.t==='vid'?'vid':d.t==='word'?'word':'');
+    el.style.width=w+'px'; el.style.height=h+'px';
+    if(d.t==='vid'){var v=document.createElement('video');v.src=d.src;v.muted=true;v.loop=true;v.playsInline=true;v.autoplay=true;v.setAttribute('playsinline','');el.appendChild(v);v.play&&v.play().catch(function(){});}
+    else if(d.t==='word'){el.style.fontSize=rand(22,34).toFixed(0)+'px';el.textContent=d.txt;}
+    else {var lab=document.createElement('div');lab.className='lbl';lab.innerHTML=d.n+'<small>'+d.m+'</small>';el.appendChild(lab);}
+    field.appendChild(el);
+    var bx=pos[i][0], by=pos[i][1];
+    tiles.push({
+      el:el, bx:bx, by:by, w:w, h:h,
+      phx:rand(0,6.28), phy:rand(0,6.28),
+      ampx:rand(6,16), ampy:rand(8,20), spd:rand(.4,.9),
+      attract: (i%4===0), // a few are drawn toward the cursor; rest evade
+      cx:0, cy:0 // current cursor-offset (lerped)
+    });
+  });
+
+  /* ---------- pointer ---------- */
+  var mx=-9999, my=-9999, hasPointer=false;
+  window.addEventListener('pointermove',function(e){mx=e.clientX;my=e.clientY;hasPointer=true;},{passive:true});
+  window.addEventListener('pointerleave',function(){mx=-9999;my=-9999;});
+
+  /* ---------- scroll state (lerped → glide) ---------- */
+  var totalScroll=1, gTarget=0, g=0;
+  function recompute(){ totalScroll=Math.max(1, document.body.scrollHeight - window.innerHeight); }
+  window.addEventListener('resize', recompute); recompute();
+  window.addEventListener('scroll', function(){ gTarget = clamp(window.scrollY/totalScroll,0,1); }, {passive:true});
+
+  // nav jump
+  document.querySelectorAll('[data-go]').forEach(function(a){
+    a.addEventListener('click', function(){ window.scrollTo({top: parseFloat(a.dataset.go)*totalScroll, behavior:'smooth'}); });
+  });
+
+  var cue=document.getElementById('cue'), pbar=document.getElementById('pbar'), meta=document.getElementById('meta');
+
+  /* ---------- main loop ---------- */
+  function applyChar(s, p){
+    // p 0→1 : from scattered (built by scroll) to settled
+    var inv=1-p;
+    var x=parseFloat(s.dataset.x)*inv;
+    var y=parseFloat(s.dataset.y)*inv;
+    var a=parseFloat(s.dataset.a)*inv;
+    s.style.opacity=clamp(p*1.15,0,1);
+    s.style.filter='blur('+(inv*7).toFixed(2)+'px)';
+    s.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+a.toFixed(1)+'deg) scale('+(0.86+0.14*p).toFixed(3)+')';
+  }
+
+  function frame(t){
+    // glide scroll
+    g += (gTarget-g)*(reduce?1:0.12);
+    var time=t*0.001;
+
+    pbar.style.width=(g*100)+'%';
+    cue.style.opacity = g>0.04?0:0.7;
+
+    for(var i=0;i<stageData.length;i++){
+      var sd=stageData[i], w=windows[i];
+      // opacity: crossfade in over [w0,w1], out over [w2,w3] → seamless, no hard edge
+      var op = Math.min(smooth(w[0],w[1],g), 1-smooth(w[2],w[3],g));
+      op = clamp(op,0,1);
+      var st=sd.el;
+      if(op<=0.001){ if(st.style.visibility!=='hidden'){st.style.visibility='hidden';st.style.opacity=0;} }
+      else {
+        st.style.visibility='visible';
+        st.style.opacity=op.toFixed(3);
+        // local progress across the "full" band drives video + text assembly
+        var lp = clamp((g-w[1])/(w[2]-w[1]),0,1);
+
+        // scrub video: scroll is the playhead (freezes when you stop, reverses on scroll-up)
+        if(sd.vid && sd.vid.duration){
+          var target = lp*(sd.vid.duration-0.05);
+          sd.vidT += (target - sd.vidT)*0.18;
+          try{ if(sd.vid.readyState>=2) sd.vid.currentTime = sd.vidT; }catch(e){}
+        }
+
+        // assemble each split element's chars across staggered slices of lp
+        sd.splits.forEach(function(sp){
+          var n=sp.chars.length;
+          for(var c=0;c<n;c++){
+            var start=(c/n)*0.55;          // staggered start
+            var cp=clamp((lp-start)/0.32,0,1);
+            applyChar(sp.chars[c], cp);
+          }
+        });
+        sd.fades.forEach(function(f){ f.style.opacity=smooth(0.15,0.5,lp); f.style.transform='translateY('+((1-smooth(0.15,0.5,lp))*20).toFixed(1)+'px)'; });
+      }
+    }
+
+    // living tiles (stage 2): perpetual drift + cursor evade/attract
+    var tilesVisible = stageData[2].el.style.visibility==='visible';
+    if(tilesVisible){
+      for(var k=0;k<tiles.length;k++){
+        var ti=tiles[k];
+        var driftX=Math.sin(time*ti.spd+ti.phx)*ti.ampx;
+        var driftY=Math.cos(time*ti.spd*0.8+ti.phy)*ti.ampy;
+        // base pixel position
+        var baseX=ti.bx/100*window.innerWidth - ti.w/2;
+        var baseY=ti.by/100*window.innerHeight - ti.h/2;
+        // cursor interaction
+        var tcx=baseX+ti.w/2, tcy=baseY+ti.h/2;
+        var dx=tcx-mx, dy=tcy-my, dist=Math.hypot(dx,dy);
+        var R=240, fx=0, fy=0;
+        if(hasPointer && dist<R){
+          var force=(1-dist/R);
+          var dir=ti.attract?-1:1;            // attract tiles pull toward cursor
+          var ux=(dx/(dist||1)), uy=(dy/(dist||1));
+          fx=ux*force*70*dir; fy=uy*force*70*dir;
+        }
+        ti.cx+=(fx-ti.cx)*0.12; ti.cy+=(fy-ti.cy)*0.12;
+        ti.el.style.transform='translate('+(baseX+driftX+ti.cx).toFixed(1)+'px,'+(baseY+driftY+ti.cy).toFixed(1)+'px)';
+      }
+    }
+
+    // CTA meta fades in near the end
+    meta.style.opacity = g>0.93?1:0;
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- preload videos so scrubbing has data ---------- */
+  stageData.forEach(function(sd){ if(sd.vid){ sd.vid.load(); sd.vid.pause(); } });
+
+  /* ---------- intro ---------- */
+  window.addEventListener('load', function(){ setTimeout(function(){ document.getElementById('enter').classList.add('gone'); }, 900); });
+  setTimeout(function(){ document.getElementById('enter').classList.add('gone'); }, 2200);
+})();
 </script>
 </body>
 </html>

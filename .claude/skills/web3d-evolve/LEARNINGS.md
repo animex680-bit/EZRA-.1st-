@@ -58,3 +58,14 @@ This file is the memory of the pipeline. Read it at the start of every 3D web pr
 - THE FIX SHIPPED: rebuilt /alucape/ as a dependency-free static page (no build step, no WebGL, no CDN except Google Fonts) driven by the user's TWO real aluminium animation videos (H.264, 8s, ~1MB each): hero = looping bg video; reveal = sticky video scrubbed by scroll (currentTime tied to scroll progress) + zoom-out. This WILL render.
 - Videos provided by user are ideal: H.264/avc1, web-ready, no transcode needed.
 - SKILL EDITS made (c): web3d-build — add the "don't ship unverifiable WebGL / Environment preset = network fetch / always have visible fallback+error boundary" rules, and a "video-driven page" as the safe default when WebGL can't be verified.
+
+## 2026-05-30 (d) — Feedback: "bland". Direction crystallized into a real motion language.
+- User feedback verbatim intent: the procedural topography (Table Mountain shader) AND the text animations were **bland/"blend"**. Plain fade-up reveals are not enough. Static anything reads as cheap.
+- The vision the user actually wants (this is now a core anti-slop standard — promote to web3d-motion):
+  1. **Scroll CREATES the words.** As you scroll and text is about to appear, the characters should look like they're being *generated and arranging themselves in sync with the scroll* — scrubbed letter-by-letter, not a one-shot transition. Scroll back = they un-create. The scroll position IS the timeline.
+  2. **Scroll drives the video, you don't travel.** Pinned stage (sticky): scrolling scrubs the video forward; stop scrolling = video freezes; scroll up = plays backward. The viewport doesn't "go down" — the scroll is a scrubber, not a translator. (Sticky + tall track + currentTime scrub; lerp for glide.)
+  3. **Seamless section blips — NO hard edges.** When the video ends you don't hit a boundary; you slip into another section. Continuous background, crossfades, no visible dividers between sections. "Feels like a blip / a transition without a seam."
+  4. **Tiles are never stagnant.** Every tile (word or video) perpetually drifts — up/down, some left/right — slightly, smoothly (never violent). On cursor proximity tiles REACT: mostly evade, but some are drawn toward the cursor. Living, physical, playful.
+  5. **Typography must be super aesthetic.** Bland system-ish type kills it. Use a characterful, editorial pairing and treat type as the hero.
+- Implementation decision: deliver ALL of this in plain DOM/CSS/JS + scrubbed `<video>` (no WebGL) — keeps it within the verifiability rule (renders deterministically) while being far from bland.
+- SKILL EDITS made (d): web3d-motion — add "scroll-creates-the-words" scrubbed text assembly, scroll-as-scrubber pinned video, seamless/edgeless section transitions, and perpetual + cursor-reactive (evade/attract) tiles as required techniques; web3d (orchestrator) anti-slop bar — add "no stagnant tiles" and "no hard section edges".
