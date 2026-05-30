@@ -1,7 +1,7 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { GradientTexture } from '@react-three/drei';
 import * as THREE from 'three';
+import Vista from './Vista.jsx';
 
 /*
   The signature moment: an aluminium stacking door whose panels slide open as
@@ -165,16 +165,8 @@ export default function GlassDoor({ progressRef }) {
 
   return (
     <group ref={group} position={[0, 0, 0]}>
-      {/* the vista behind (lit plane; swapped for real Cape Town imagery later) */}
-      <mesh position={[0, 0, -3]} scale={[14, 8, 1]}>
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial toneMapped={false}>
-          <GradientTexture
-            stops={[0, 0.45, 0.62, 1]}
-            colors={['#f6dcae', '#e7b98a', '#7c8b86', '#33403f']}
-          />
-        </meshBasicMaterial>
-      </mesh>
+      {/* procedural Cape Town vista (Table Mountain + Lion's Head), warms as door opens */}
+      <Vista revealRef={progressRef} />
 
       {/* god-rays through the opening */}
       <mesh ref={rays} position={[0, 0, -1.4]} scale={[5.5, 6, 1]} material={rayMat}>

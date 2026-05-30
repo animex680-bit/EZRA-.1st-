@@ -38,3 +38,12 @@ This file is the memory of the pipeline. Read it at the start of every 3D web pr
 - Business: no quote yet (outbound concept). Intended play: DM the live link as proof. Quoted/landed: n/a.
 - SKILL EDITS made from this project:
   - web3d-build: add explicit rules — drei GradientTexture needs stops+colors; never animate ShaderMaterial.opacity (use a uniform); lazy-load Canvas + manualChunks to beat the 500KB bundle warning.
+
+## 2026-05-30 (b) — AluCape vista upgrade (real Cape Town backdrop)
+- Goal: replace the placeholder gradient behind the door with a real Cape Town vista.
+- BLOCKER discovered: sandbox network allowlist blocks ALL the usual CC0 photo/HDRI hosts — upload.wikimedia.org, images.unsplash.com, commons.wikimedia.org, dl.polyhaven.org all return 403. Only raw.githubusercontent.com (301/reachable). So "download a free photo" is NOT available in-sandbox.
+- Decision: built a **procedural Cape Town vista shader** instead (Vista.jsx) — sunset sky + sun glow, Table Mountain flat-top silhouette with Devil's Peak + Lion's Head, atmospheric haze, shimmering waterline, film grain + vignette; warms/brightens via `uReveal` tied to door progress. Cost: +1.3KB (vs a multi-hundred-KB photo). Original, instant, on-brand, no licensing.
+- Worked: procedural backdrop is a strong default when assets can't be fetched; doubles as more "moat." Reused the same eased-uniform pattern (uReveal lerp in useFrame).
+- Caveat: a hand-tuned silhouette in GLSL is approximate — needs the user's eyes to judge if Table Mountain reads correctly (can't render here). If they want photoreal, they must supply an image file directly (I can base64/import it) since I can't fetch one.
+- SKILL EDITS made from this project (b):
+  - web3d-assets: document the sandbox asset-host block + "procedural backdrop as fallback" pattern, and that user-supplied image files are the path to photoreal here.

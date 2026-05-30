@@ -30,6 +30,12 @@ The web cannot eat raw 3D assets. Every model ships through Blender and leaves a
    - prune unused, dedup, weld, resample animations.
 7. **Verify** — drop into the build, check it renders, check size. Targets: hero model < ~2–3MB, secondary < 500KB.
 
+## Sandbox constraint + procedural fallback (learned — see LEARNINGS)
+
+In this remote environment the network allowlist **blocks the usual CC0 asset hosts** (Wikimedia/`upload.wikimedia.org`, Unsplash, Poly Haven `dl.polyhaven.org` all 403). You generally **cannot download a free photo/HDRI in-sandbox**. Two paths:
+- **Procedural backdrop shader** — when you need a scene/sky/landscape and can't fetch one, author it in GLSL (sky gradient + sun glow + silhouettes + haze + grain). It's a few KB, original, instant, and on-brand — often a *better* call than a stock photo. (Done for the AluCape Table Mountain vista.)
+- **User-supplied files** — the only route to photoreal here. Have the user drop an image/HDRI into the upload dir; import it (or base64-inline small ones). Then run it through the normal compression rules below.
+
 ## Hard rules
 
 - No Meshy output ships unretopologized.
