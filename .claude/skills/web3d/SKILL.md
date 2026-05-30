@@ -41,9 +41,9 @@ Reject our own work against this list before showing the client. We failed here 
 8. **Business** → `web3d-business`. Positioning, portfolio, pricing, finding $50k+ clients. Runs in parallel, always.
 9. **Evolve** → `web3d-evolve`. The supreme rule. Always last, never skipped.
 
-## Stack decision (user chose "decide per project")
+## Stack decision (default: React Three Fiber)
 
-Default reasoning, fastest-to-strongest-result first:
+**React Three Fiber + drei + GSAP + Lenis is the chosen default.** Only deviate with a written reason in the LEARNINGS entry. Alternatives, fastest-to-strongest-result first:
 - **React Three Fiber + drei + GSAP + Lenis** — default for most content/marketing 3D sites. Component model, ecosystem, speed.
 - **Vanilla three.js + Vite** — when bundle size / fine control matters or the site is one bespoke scene.
 - **OGL / raw WebGL** — shader-first, ultra-light, hero pieces where every kb counts.
