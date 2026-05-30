@@ -40,6 +40,16 @@ Same principles: `WebGLRenderer({ antialias, powerPreference })`, `renderer.setP
 - **A loader that earns the wait** — progress tied to actual asset load, branded, with an intentional reveal.
 - **Real responsiveness** — recompute layout/camera on resize; design the mobile experience deliberately (often a lighter scene, not the desktop one shrunk).
 
+## VERIFIABILITY RULE (highest build priority — learned by shipping a blank screen twice)
+
+**Never ship WebGL you cannot render-test as the primary deliverable.** This sandbox has no browser engine and `*.github.io` is firewalled from the agent, so an unverified WebGL page is a coin-flip that has already come up blank twice. When you cannot open a browser:
+- Default to a **deterministic static page** (HTML + CSS + `<video>`) that is guaranteed to render. Treat WebGL as an enhancement only when there's a real way to verify it (user testing in-loop, or a screenshot tool).
+- **`<Environment preset="...">` (drei) fetches an HDRI from a CDN at runtime.** Do NOT use presets in self-contained builds — use a bundled local HDRI or a plain light rig. And never make a network-dependent loader the *sole* child of your only `<Suspense>`: if it hangs/CORS-fails, the entire scene never mounts → black screen.
+- Always wrap the Canvas in an **error boundary** and provide a **visible non-WebGL fallback** (image/video/poster), so an asset or context failure shows content, not black.
+
+### The safe default: video-driven page
+When the brief wants motion but WebGL can't be verified, a static page driven by real `<video>` is premium AND reliable: a looping muted `playsinline` hero video, and a "reveal" via a **sticky video scrubbed by scroll** (`video.currentTime = progress * duration`, keep it paused, drive from a passive scroll listener) plus a transform zoom. No build step, no CDN, renders everywhere. This is often the right call, not a cop-out.
+
 ## Gotchas (learned the hard way — see LEARNINGS)
 
 - **drei `<GradientTexture>` requires `stops` AND `colors` props.** Bare usage throws at runtime. Always pass both, same length.

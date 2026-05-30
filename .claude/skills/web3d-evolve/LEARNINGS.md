@@ -47,3 +47,14 @@ This file is the memory of the pipeline. Read it at the start of every 3D web pr
 - Caveat: a hand-tuned silhouette in GLSL is approximate — needs the user's eyes to judge if Table Mountain reads correctly (can't render here). If they want photoreal, they must supply an image file directly (I can base64/import it) since I can't fetch one.
 - SKILL EDITS made from this project (b):
   - web3d-assets: document the sandbox asset-host block + "procedural backdrop as fallback" pattern, and that user-supplied image files are the path to photoreal here.
+
+## 2026-05-30 (c) — CRITICAL: shipped a blank WebGL screen, twice. Pivoted to video.
+- What happened: user reported "don't see anything" on the live R3F page. I had shipped TWO WebGL versions I could never render-test (no browser engine in sandbox + github.io firewalled from agent side). Almost certainly blank.
+- ROOT CAUSE (high confidence): `<Environment preset="sunset" />` (drei) **fetches an HDRI from a CDN at runtime** and was inside the SAME `<Suspense>` as the whole scene. If that fetch is slow/blocked/CORS-fails in the user's browser, NOTHING in the Suspense mounts → black screen. There was also no error boundary and no non-WebGL fallback actually visible.
+- THE REAL LESSON (promote hard): **Never ship WebGL I cannot render-test as the primary deliverable.** When I can't open a browser, an unverifiable WebGL page is a coin-flip. Default to something that renders deterministically (static HTML + `<video>`), and treat WebGL as an enhancement only when there's a way to verify it.
+- Additional rules learned:
+  - drei `<Environment preset=...>` = runtime CDN fetch. For self-contained/offline-safe builds, DON'T use presets; use a bundled local HDRI or a plain lighting rig. Never put a network-dependent loader as the sole child of the only Suspense.
+  - Always include a VISIBLE fallback + an error boundary around the Canvas, so a WebGL/asset failure shows content, not black.
+- THE FIX SHIPPED: rebuilt /alucape/ as a dependency-free static page (no build step, no WebGL, no CDN except Google Fonts) driven by the user's TWO real aluminium animation videos (H.264, 8s, ~1MB each): hero = looping bg video; reveal = sticky video scrubbed by scroll (currentTime tied to scroll progress) + zoom-out. This WILL render.
+- Videos provided by user are ideal: H.264/avc1, web-ready, no transcode needed.
+- SKILL EDITS made (c): web3d-build — add the "don't ship unverifiable WebGL / Environment preset = network fetch / always have visible fallback+error boundary" rules, and a "video-driven page" as the safe default when WebGL can't be verified.
