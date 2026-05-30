@@ -40,6 +40,13 @@ Same principles: `WebGLRenderer({ antialias, powerPreference })`, `renderer.setP
 - **A loader that earns the wait** — progress tied to actual asset load, branded, with an intentional reveal.
 - **Real responsiveness** — recompute layout/camera on resize; design the mobile experience deliberately (often a lighter scene, not the desktop one shrunk).
 
+## Gotchas (learned the hard way — see LEARNINGS)
+
+- **drei `<GradientTexture>` requires `stops` AND `colors` props.** Bare usage throws at runtime. Always pass both, same length.
+- **Never animate `ShaderMaterial.opacity`** — it does nothing; a ShaderMaterial's alpha comes from `gl_FragColor.a`. Drive a real uniform (e.g. `uIntensity`) and read it in the fragment shader instead.
+- **Beat the 500KB bundle warning:** three.js alone is ~290KB gzip. Lazy-load the `<Canvas>` (dynamic import) so first paint isn't blocked, and split vendor with `build.rollupOptions.output.manualChunks`. Acceptable to skip for a throwaway concept; fix before any paid delivery (it's in the web3d-perf gate).
+- **Scroll→3D wiring that works:** a tall sticky "reveal" section + a Lenis raf loop that computes progress from `getBoundingClientRect()` into a `progressRef`, then ease that ref inside `useFrame` (never apply raw scroll — it snaps). Keep DOM content in normal flow *over* a `position:fixed` Canvas.
+
 ## Don't
 
 - Don't fake 3D with CSS transforms and call it a 3D site.
