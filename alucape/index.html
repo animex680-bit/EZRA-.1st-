@@ -316,8 +316,8 @@
   /* ---------- living tiles (stage 2) ---------- */
   var field=document.getElementById('field');
   var defs=[
-    {t:'word',txt:'Folding'},{t:'vid',src:'media/reveal.mp4'},{t:'word',txt:'Sliding'},
-    {t:'lbl',n:'Frameless',m:'Glass walls'},{t:'vid',src:'media/hero.mp4'},{t:'word',txt:'Casement'},
+    {t:'word',txt:'Folding'},{t:'vid',src:'media/p2.mp4'},{t:'word',txt:'Sliding'},
+    {t:'lbl',n:'Frameless',m:'Glass walls'},{t:'vid',src:'media/p5.mp4'},{t:'word',txt:'Casement'},
     {t:'lbl',n:'Shopfronts',m:'Commercial'},{t:'word',txt:'Stacking'},{t:'lbl',n:'±1mm',m:'Tolerance'}
   ];
   var pos=[[14,22],[30,32],[18,68],[44,18],[64,60],[78,26],[86,70],[52,82],[38,52]];
@@ -342,12 +342,14 @@
      project photos/videos + real prices to be supplied by the client. */
   var spiral=document.getElementById('spiral');
   var projects=[
-    {tag:'Camps Bay Villa', src:'media/reveal.mp4', price:'R 248,000', fit:'A 6-leaf folding stacking wall opening the living room straight onto the sea view — thermally broken for the wind, frameless sightlines for the vista.'},
-    {tag:'Constantia Home', src:'media/hero.mp4', price:'R 96,500', fit:'Slim-profile casement windows matched to a heritage façade, double-glazed for the cold Constantia nights.'},
-    {tag:'City Bowl Loft', src:'media/reveal.mp4', price:'R 154,000', fit:'Floor-to-ceiling sliding doors to the balcony, maximising light in a north-facing loft.'},
-    {tag:'Sea Point Apt', src:'media/hero.mp4', price:'R 72,000', fit:'Acoustic-rated sliders cutting promenade noise while keeping the ocean in frame.'},
-    {tag:'Stellenbosch Estate', src:'media/reveal.mp4', price:'R 312,000', fit:'A full shopfront-grade glazing run for a wine-tasting room — big spans, minimal frame.'},
-    {tag:'Hout Bay Deck', src:'media/hero.mp4', price:'R 188,000', fit:'Folding doors wrapping a corner, dissolving two walls onto the deck.'}
+    {tag:'Folding Stack — Sea View', src:'media/p1.mp4', price:'Est. R 180k–260k', fit:'A multi-leaf folding stacking door that collapses an entire wall onto the view — thermally broken for coastal wind, slim sightlines so the glass disappears.'},
+    {tag:'Sliding Wall — Living', src:'media/p2.mp4', price:'Est. R 120k–180k', fit:'Large-span sliding doors flooding a north-facing living room with light, on a low-friction track that moves with one hand.'},
+    {tag:'Casement Suite — Heritage', src:'media/p3.mp4', price:'Est. R 70k–110k', fit:'Slim casement windows matched to a heritage façade, double-glazed for cold nights without losing the proportions.'},
+    {tag:'Frameless Glass — Patio', src:'media/p4.mp4', price:'Est. R 150k–230k', fit:'Frameless glass opening the patio to the garden — maximum view, minimum frame, full weather seal.'},
+    {tag:'Acoustic Sliders — Apt', src:'media/p5.mp4', price:'Est. R 60k–95k', fit:'Acoustic-rated sliders cutting street noise in an apartment while keeping the city in frame.'},
+    {tag:'Corner Open — Deck', src:'media/p6.mp4', price:'Est. R 160k–240k', fit:'Folding doors wrapping a corner so two walls dissolve onto the deck — a true indoor-outdoor room.'},
+    {tag:'Shopfront — Commercial', src:'media/p7.mp4', price:'Est. R 200k+', fit:'Shopfront-grade glazing for a retail space: big spans, durable hardware, clean minimal frame.'},
+    {tag:'Luxury Glaze — Pool', src:'media/p8.mp4', price:'Est. R 140k–210k', fit:'Floor-to-ceiling glazing framing a pool and skyline, engineered for large panes and safety.'}
   ];
   var pins=[];
   projects.forEach(function(p,i){
