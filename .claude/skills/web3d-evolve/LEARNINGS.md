@@ -85,3 +85,10 @@ This file is the memory of the pipeline. Read it at the start of every 3D web pr
 - inspiration_6.mp4: 1200px, 22s — reference for the spiral gallery look. (Reference only; not used as site footage — also <2K so wouldn't be stretched anyway.)
 - No ffmpeg/ffprobe in sandbox — cannot transcode/resize video here; depend on user-supplied correctly-sized assets.
 - SKILL EDITS made (e): web3d-assets — added RESOLUTION RULE + ASK-FOR-ASSETS RULE; web3d-motion — add circle-blip (iris) transition, reactive+glowing magnetic buttons, snake-ribbon-under-tiles, spiral case-study gallery w/ price+fit card; settled-text-must-be-clean rule.
+
+## 2026-05-31 (f) — Real footage wired in
+- User supplied ~11 real clips. Probed: ALL low-res (1024x768 or IG-reel sized), NONE 2K+. Per resolution rule: nothing stretched fullscreen; hero/reveal framed in a window, projects in small tiles. inspiration_6.mp4 + 7240a738 = spiral references only.
+- Spiral gallery now 8 distinct real projects. Prices = ESTIMATED RANGES ("Est. R Xk-Yk"), clearly marked — real numbers unavailable and IG/site are firewalled (403) from sandbox. Honesty rule: never present invented figures as real; labelled estimates + asked user for actuals.
+- Perf debt (TODO before any real delivery): ~48MB total media across 10 clips, 8 video pins all created up-front. Add preload=none / lazy attach for offscreen pins; still need a real 2K hero to ever do a fullscreen stretch.
+- No ffmpeg/ffprobe in sandbox: cannot transcode/resize; fully dependent on user-supplied correctly-sized assets. Reinforces ASK-FOR-ASSETS rule.
+- SKILL EDITS made (f): none to craft skills (wiring + assets round only).
