@@ -36,6 +36,17 @@ In this remote environment the network allowlist **blocks the usual CC0 asset ho
 - **Procedural backdrop shader** — when you need a scene/sky/landscape and can't fetch one, author it in GLSL (sky gradient + sun glow + silhouettes + haze + grain). It's a few KB, original, instant, and on-brand — often a *better* call than a stock photo. (Done for the AluCape Table Mountain vista.)
 - **User-supplied files** — the only route to photoreal here. Have the user drop an image/HDRI into the upload dir; import it (or base64-inline small ones). Then run it through the normal compression rules below.
 
+## RESOLUTION RULE — never violate (learned from feedback)
+
+**Match display size to source resolution. Low-res footage in a big container looks cheap and sinks the whole site.**
+- **Small / low-res video (< ~1080p, e.g. 720px wide):** only ever shown in **small tiles** at or below native size. **Never** `object-fit: cover` it fullscreen or stretch it. A crisp small tile beats a soft big one every time.
+- **Stretching / fullscreen / hero-cover requires a genuinely high-res source — 2K (2048px) wide or above.** Only stretch when the source can take it.
+- If a layout needs a big/fullscreen video and the available asset is low-res, **STOP and ask the user for a 2K+ version.** Do not ship it stretched as a "placeholder" and hope. This is a rule you never skip.
+
+## ASK-FOR-ASSETS RULE — never skip
+
+You cannot fetch stock assets in this sandbox (hosts are blocked) and you must not stretch low-res footage. So **whenever a section needs an asset you don't have at the right resolution — a hi-res hero video, project photos, a specific animation — proactively ASK the user for it**, with a precise spec: purpose, min resolution, aspect ratio, duration, and whether it loops. List all needed assets together so the user can supply them in one go. Build the structure with clearly-labelled placeholders meanwhile, but never pretend a placeholder is final and never silently stretch a small asset to fill the gap.
+
 ## Hard rules
 
 - No Meshy output ships unretopologized.

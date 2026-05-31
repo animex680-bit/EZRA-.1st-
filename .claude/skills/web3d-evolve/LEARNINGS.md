@@ -69,3 +69,19 @@ This file is the memory of the pipeline. Read it at the start of every 3D web pr
   5. **Typography must be super aesthetic.** Bland system-ish type kills it. Use a characterful, editorial pairing and treat type as the hero.
 - Implementation decision: deliver ALL of this in plain DOM/CSS/JS + scrubbed `<video>` (no WebGL) — keeps it within the verifiability rule (renders deterministically) while being far from bland.
 - SKILL EDITS made (d): web3d-motion — add "scroll-creates-the-words" scrubbed text assembly, scroll-as-scrubber pinned video, seamless/edgeless section transitions, and perpetual + cursor-reactive (evade/attract) tiles as required techniques; web3d (orchestrator) anti-slop bar — add "no stagnant tiles" and "no hard section edges".
+
+## 2026-05-30 (e) — Feedback round 2: text legibility, circle-blip transition, money-skill, longer page, snake line, spiral case-studies, RESOLUTION + ASK rules
+- WINS: scrubbed video (1), scroll-built words (2), cursor-reactive tiles (3) all landed. Text *animation* good.
+- FIX — text PLACEMENT: chars settle into positions that are hard to read ("weird since I can read them" = the in-between/settled layout is awkward). Lesson: the scatter is for the *journey*; the SETTLED state must be a clean, perfectly-legible baseline (no leftover rotation/offset). Animate FROM scatter TO a crisp typographic rest. Don't leave residual transform at p=1.
+- NEW MECHANICS REQUESTED:
+  - **Circle-blip transition** between video 1 → video 2: screen goes dark, then a small circle grows (iris/clip-path circle reveal) exposing the 2nd video that the darkness was hiding. Use it as the section-to-section reveal.
+  - **All buttons reactive + glow** (hover/pointer-proximity glow, magnetic).
+  - **Longer page** overall.
+  - **Snake/worm line** in section 3: a long, 3–5cm-wide ribbon that slithers across/between tiles, color blends with bg (low distraction), and renders UNDER tiles/buttons (z below them), over the bg.
+  - **Spiral case-study gallery**: photos/videos arranged in a downward near-spiral (like the start of inspiration_6.mp4). Tap a tile → it plays AND shows the project COST + why it's a fit for that customer (a recommendation/case-study card). This is the money/business mechanic — pulled from web3d-business: concrete case studies w/ price + fit = what converts.
+  - Apply **web3d-business** thinking to the page itself: proof, case studies w/ price, clear CTA path.
+- RESOLUTION RULE (now permanent in web3d-assets): never stretch low-res (<1080p) video; small footage → small tiles at native size only; fullscreen/stretch needs 2K+ source; if missing, ASK.
+- ASK-FOR-ASSETS RULE (now permanent): proactively ask the user for assets at correct resolution with a precise spec; never silently stretch or fake-final a placeholder.
+- inspiration_6.mp4: 1200px, 22s — reference for the spiral gallery look. (Reference only; not used as site footage — also <2K so wouldn't be stretched anyway.)
+- No ffmpeg/ffprobe in sandbox — cannot transcode/resize video here; depend on user-supplied correctly-sized assets.
+- SKILL EDITS made (e): web3d-assets — added RESOLUTION RULE + ASK-FOR-ASSETS RULE; web3d-motion — add circle-blip (iris) transition, reactive+glowing magnetic buttons, snake-ribbon-under-tiles, spiral case-study gallery w/ price+fit card; settled-text-must-be-clean rule.

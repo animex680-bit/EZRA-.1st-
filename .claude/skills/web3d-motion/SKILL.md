@@ -18,6 +18,12 @@ These are not optional flourishes; their absence is what made past work "bland".
 5. **Cursor-reactive tiles.** On pointer proximity, tiles react — mostly **evade** the cursor, but a few are **drawn toward** it. Spring/lerp back to base. Living and playful, not decorative.
 6. **Typography is the hero.** A characterful editorial type pairing, treated as the centerpiece — never bland/default. Bland type alone makes a whole site read cheap.
 
+7. **Settled text must be perfectly legible.** The scatter is for the *journey only*. At full progress (p=1) characters must land at a clean typographic baseline — zero residual rotation/offset/blur. Animate FROM scattered/blurred TO crisp rest; never leave an awkward in-between as the readable state.
+8. **Circle-blip (iris) transitions.** A premium way to move between video stages: fade to dark, then grow a small circle (`clip-path: circle()`) from a point to full-screen, revealing what the darkness hid (the next video). Reversible on scroll.
+9. **Buttons are reactive and glow.** No dead/flat buttons. On pointer proximity they should glow (box-shadow/radial bloom in the brand accent) and be slightly magnetic (translate toward the cursor, spring back). Applies to every clickable.
+10. **Decorative "snake/ribbon" lines.** A long, slow-slithering ribbon (SVG path with animated control points, or stroke-dashoffset travel) can thread a section together. Rules: color blends with the background (low distraction), and it renders UNDER tiles/buttons (lower z-index) — never over interactive/content tiles.
+11. **Spiral case-study gallery (the money mechanic).** Arrange project media in a downward near-spiral; tap a tile → it plays AND surfaces a case-study card with the **project cost** and **why it fits that customer**. Concrete proof + price + fit is what converts browsers to buyers (see web3d-business). Use this whenever a page must *sell*, not just impress.
+
 (When WebGL can't be verified — see web3d-build verifiability rule — implement ALL of the above in plain DOM/CSS/JS + a scrubbed `<video>`. None of it requires WebGL.)
 
 ## The stack

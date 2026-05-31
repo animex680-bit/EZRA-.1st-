@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0b0c0d; --ink:#f4f1ea; --ink-soft:#9a978f; --accent:#e7c79a;
+    --bg:#0b0c0d; --bg2:#101214; --ink:#f4f1ea; --ink-soft:#9a978f; --accent:#e7c79a;
     --line:rgba(255,255,255,.10);
     --serif:'Fraunces',Georgia,serif;
     --grotesk:'Space Grotesk',-apple-system,system-ui,sans-serif;
@@ -19,86 +19,123 @@
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
   body{background:var(--bg);color:var(--ink);font-family:var(--grotesk);
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:default}
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
   video{display:block}
   ::selection{background:var(--accent);color:#1a1206}
 
-  /* scroll length — the body scrolls; the stage stays fixed (scroll = playhead) */
-  .scroll-space{position:relative;z-index:1}
-
-  /* fixed full-screen stage holder; one continuous background = no hard edges */
+  /* ---------- fixed scrubbed stage (scroll = playhead) ---------- */
   .viewport{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg)}
   .stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     opacity:0;visibility:hidden;will-change:opacity}
-  .stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-  .stage .grain,.stage .veil{position:absolute;inset:0;z-index:1;pointer-events:none}
-  .veil{background:radial-gradient(130% 100% at 50% 42%,rgba(11,12,13,0) 30%,rgba(11,12,13,.55) 100%),
-    linear-gradient(180deg,rgba(11,12,13,.45),rgba(11,12,13,0) 26%,rgba(11,12,13,0) 60%,rgba(11,12,13,.85))}
 
-  /* chrome */
+  /* framed window: low-res video shown at modest size, NOT stretched fullscreen */
+  .window{position:relative;width:min(76vw,1040px);aspect-ratio:16/9;border-radius:10px;overflow:hidden;
+    box-shadow:0 50px 120px -40px rgba(0,0,0,.85), inset 0 0 0 2px rgba(255,255,255,.06);
+    background:#000}
+  .window::after{content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 0 10px rgba(200,204,206,.10), inset 0 0 0 11px rgba(0,0,0,.4);
+    border-radius:10px}
+  /* aluminium mullion cross */
+  .window .mullion{position:absolute;background:linear-gradient(180deg,#c8ccce,#8d9295);z-index:3;pointer-events:none;opacity:.5}
+  .window .mullion.v{top:0;bottom:0;left:50%;width:3px;transform:translateX(-1.5px)}
+  .window .mullion.h{left:0;right:0;top:50%;height:3px;transform:translateY(-1.5px)}
+  .window video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+  .window .innerveil{position:absolute;inset:0;z-index:2;
+    background:linear-gradient(180deg,rgba(11,12,13,.15),rgba(11,12,13,0) 40%,rgba(11,12,13,.6))}
+  @media(max-width:760px){.window{width:90vw}}
+
+  /* iris layer for circle-blip transitions (radial-gradient hole, set in JS) */
+  .iris{position:absolute;inset:0;z-index:20;pointer-events:none}
+
+  /* ---------- chrome ---------- */
   .chrome{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;align-items:center;
     justify-content:space-between;padding:24px 38px;pointer-events:none;mix-blend-mode:difference}
   .brand{font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:-.01em;line-height:1;pointer-events:auto}
   .brand i{font-style:italic}
   .brand small{display:block;font-family:var(--grotesk);font-weight:500;font-size:10px;
     letter-spacing:.26em;text-transform:uppercase;opacity:.7;margin-top:6px}
-  .nav{display:flex;gap:28px;font-family:var(--grotesk);font-weight:500;font-size:13px;
-    letter-spacing:.04em;pointer-events:auto}
-  .nav a{opacity:.85;transition:opacity .2s}.nav a:hover{opacity:1}
+  .nav{display:flex;gap:26px;font-family:var(--grotesk);font-weight:500;font-size:13px;letter-spacing:.04em;pointer-events:auto}
+  .nav a{opacity:.85;transition:opacity .2s;cursor:pointer}.nav a:hover{opacity:1}
   @media(max-width:760px){.nav{display:none}.chrome{padding:18px 22px}}
 
-  /* headline assembly */
-  .head{position:relative;z-index:3;text-align:center;padding:0 24px;max-width:18ch}
+  /* ---------- text ---------- */
+  .head{position:relative;z-index:30;text-align:center;padding:0 24px;max-width:20ch;pointer-events:none}
   .eyebrow{font-family:var(--grotesk);font-weight:600;font-size:12px;letter-spacing:.34em;
-    text-transform:uppercase;color:var(--accent);margin-bottom:22px}
-  .eyebrow .char{display:inline-block}
-  h1,h2{font-family:var(--serif);font-weight:340;line-height:.98;letter-spacing:-.018em}
-  h1{font-size:clamp(48px,9vw,150px)}
-  h2{font-size:clamp(38px,6.6vw,104px)}
+    text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+  h1,h2{font-family:var(--serif);font-weight:340;line-height:1.0;letter-spacing:-.018em}
+  h1{font-size:clamp(44px,8vw,128px)}
+  h2{font-size:clamp(34px,5.6vw,88px)}
   h1 em,h2 em{font-style:italic;font-weight:340;color:var(--accent)}
   .char{display:inline-block;white-space:pre;will-change:transform,opacity,filter}
-  .sub{margin-top:26px;font-family:var(--grotesk);font-size:clamp(15px,1.5vw,19px);
-    color:var(--ink-soft);max-width:46ch;margin-left:auto;margin-right:auto;line-height:1.55}
+  .sub{margin-top:24px;font-family:var(--grotesk);font-size:clamp(15px,1.4vw,18px);
+    color:var(--ink-soft);max-width:46ch;margin:24px auto 0;line-height:1.55}
 
-  /* progress + cue */
+  /* ---------- cue + progress ---------- */
   .cue{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;
-    font-family:var(--grotesk);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
-    color:var(--ink);opacity:.7;display:flex;flex-direction:column;align-items:center;gap:10px;
-    mix-blend-mode:difference;pointer-events:none;transition:opacity .5s}
-  .cue .bar{width:1px;height:46px;background:linear-gradient(var(--ink),transparent);
-    transform-origin:top;animation:cue 2.4s ease-in-out infinite}
+    font-family:var(--grotesk);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);opacity:.7;
+    display:flex;flex-direction:column;align-items:center;gap:10px;mix-blend-mode:difference;pointer-events:none;transition:opacity .5s}
+  .cue .bar{width:1px;height:46px;background:linear-gradient(var(--ink),transparent);transform-origin:top;animation:cue 2.4s ease-in-out infinite}
   @keyframes cue{0%,100%{transform:scaleY(.4);opacity:.3}50%{transform:scaleY(1);opacity:1}}
-  .pbar{position:fixed;top:0;left:0;height:2px;width:0;z-index:70;
-    background:linear-gradient(90deg,var(--accent),#fff);box-shadow:0 0 12px rgba(231,199,154,.6)}
+  .pbar{position:fixed;top:0;left:0;height:2px;width:0;z-index:70;background:linear-gradient(90deg,var(--accent),#fff);box-shadow:0 0 12px rgba(231,199,154,.6)}
 
-  /* living tiles stage */
-  .tiles-head{position:absolute;z-index:4;text-align:center;left:50%;top:50%;
-    transform:translate(-50%,-50%);max-width:20ch;pointer-events:none}
-  .field{position:absolute;inset:0;z-index:3}
-  .tile{position:absolute;border-radius:14px;overflow:hidden;will-change:transform;
-    background:#16181a;border:1px solid var(--line);box-shadow:0 24px 60px -28px rgba(0,0,0,.7);
-    display:flex;align-items:flex-end;padding:16px}
-  .tile.word{background:rgba(20,22,24,.55);backdrop-filter:blur(6px);align-items:center;justify-content:center;
+  /* ---------- living tiles + snake ---------- */
+  .field{position:absolute;inset:0;z-index:10}
+  .snake{position:absolute;inset:0;z-index:8;pointer-events:none} /* UNDER tiles (z10) */
+  .tile{position:absolute;border-radius:14px;overflow:hidden;will-change:transform;background:var(--bg2);
+    border:1px solid var(--line);box-shadow:0 24px 60px -28px rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:14px}
+  .tile.word{background:rgba(16,18,20,.55);backdrop-filter:blur(6px);
     font-family:var(--serif);font-style:italic;font-weight:360;color:var(--ink)}
-  .tile.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92}
-  .tile .lbl{position:relative;z-index:2;font-family:var(--grotesk);font-weight:600;font-size:13px;letter-spacing:.02em}
+  .tile.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.95}
+  .tile .lbl{position:relative;z-index:2;text-align:center;font-family:var(--grotesk);font-weight:600;font-size:13px;letter-spacing:.02em}
   .tile .lbl small{display:block;font-weight:400;color:var(--ink-soft);margin-top:3px;font-size:11px;letter-spacing:.04em}
 
-  /* CTA */
-  .cta-wrap{position:relative;z-index:3;text-align:center;padding:0 24px}
-  .row{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-  .btn{font-family:var(--grotesk);font-weight:600;font-size:15px;padding:16px 30px;border-radius:999px;
-    transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s,border-color .3s;pointer-events:auto}
-  .btn.solid{background:var(--accent);color:#1a1206}.btn.solid:hover{transform:translateY(-3px)}
-  .btn.ghost{border:1px solid rgba(255,255,255,.24)}.btn.ghost:hover{transform:translateY(-3px);border-color:var(--ink-soft)}
-  .meta{position:fixed;left:0;right:0;bottom:22px;z-index:4;display:flex;justify-content:center;gap:26px;
-    font-family:var(--grotesk);font-size:12px;color:var(--ink-soft);flex-wrap:wrap;padding:0 22px;text-align:center;
-    opacity:0;transition:opacity .6s}
+  /* ---------- spiral case-study gallery ---------- */
+  .spiral{position:absolute;inset:0;z-index:10}
+  .pin{position:absolute;width:150px;height:200px;border-radius:12px;overflow:hidden;cursor:pointer;
+    border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(0,0,0,.8);will-change:transform;background:var(--bg2)}
+  .pin video,.pin .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .pin .ph{display:flex;align-items:center;justify-content:center;font-family:var(--grotesk);font-size:11px;
+    color:var(--ink-soft);background:repeating-linear-gradient(45deg,#121417,#121417 10px,#15171a 10px,#15171a 20px)}
+  .pin .ptag{position:absolute;left:10px;bottom:10px;z-index:3;font-family:var(--grotesk);font-weight:600;font-size:12px;
+    background:rgba(0,0,0,.5);padding:5px 9px;border-radius:8px;backdrop-filter:blur(4px)}
+  .pin .play{position:absolute;top:10px;right:10px;z-index:3;width:26px;height:26px;border-radius:50%;
+    background:rgba(231,199,154,.9);color:#1a1206;display:grid;place-items:center;font-size:11px}
 
-  .flag{position:fixed;bottom:10px;right:12px;z-index:80;font-family:var(--grotesk);font-size:9px;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);background:rgba(0,0,0,.45);
-    border:1px solid var(--line);padding:5px 9px;border-radius:7px;mix-blend-mode:difference}
+  .casecard{position:fixed;inset:0;z-index:85;display:none;align-items:center;justify-content:center;padding:24px}
+  .casecard.open{display:flex}
+  .cc-scrim{position:absolute;inset:0;background:rgba(8,9,10,.72);backdrop-filter:blur(10px)}
+  .cc-card{position:relative;z-index:1;width:min(880px,96vw);max-height:90vh;overflow:hidden;border-radius:18px;
+    background:var(--bg2);border:1px solid var(--line);display:grid;grid-template-columns:1.1fr 1fr;box-shadow:0 60px 140px -50px #000}
+  .cc-media{position:relative;background:#000;min-height:340px}
+  .cc-media video,.cc-media .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .cc-body{padding:34px 32px;display:flex;flex-direction:column;justify-content:center}
+  .cc-body .eyebrow{margin-bottom:14px}
+  .cc-body h3{font-family:var(--serif);font-weight:360;font-size:30px;line-height:1.05;margin-bottom:6px}
+  .cc-price{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:26px;margin:14px 0 18px}
+  .cc-fit{color:var(--ink-soft);font-size:15px;line-height:1.6;margin-bottom:24px}
+  .cc-close{position:absolute;top:14px;right:16px;z-index:3;width:36px;height:36px;border-radius:50%;
+    background:rgba(255,255,255,.92);color:#111;display:grid;place-items:center;font-size:16px;cursor:pointer}
+  @media(max-width:760px){.cc-card{grid-template-columns:1fr;max-height:92vh;overflow-y:auto}.cc-media{min-height:240px;position:relative;height:240px}}
+
+  /* ---------- buttons: reactive + glow + magnetic ---------- */
+  .row{margin-top:34px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+  .btn{position:relative;font-family:var(--grotesk);font-weight:600;font-size:15px;padding:16px 30px;border-radius:999px;
+    pointer-events:auto;cursor:pointer;will-change:transform;transition:box-shadow .3s,background .3s,border-color .3s,color .3s;isolation:isolate}
+  .btn.solid{background:var(--accent);color:#1a1206}
+  .btn.ghost{border:1px solid rgba(255,255,255,.24);color:var(--ink)}
+  .btn .glow{position:absolute;inset:-2px;border-radius:999px;z-index:-1;opacity:0;transition:opacity .3s;
+    background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(231,199,154,.65),rgba(231,199,154,0) 60%);filter:blur(10px)}
+  .btn:hover .glow{opacity:1}
+  .btn.solid:hover{box-shadow:0 0 34px rgba(231,199,154,.55)}
+  .btn.ghost:hover{border-color:var(--accent);color:#fff;box-shadow:0 0 26px rgba(231,199,154,.3)}
+
+  .cta-wrap{position:relative;z-index:30;text-align:center;padding:0 24px}
+  .meta{position:fixed;left:0;right:0;bottom:22px;z-index:30;display:flex;justify-content:center;gap:26px;
+    font-family:var(--grotesk);font-size:12px;color:var(--ink-soft);flex-wrap:wrap;padding:0 22px;text-align:center;opacity:0;transition:opacity .6s}
+
+  .flag{position:fixed;bottom:10px;right:12px;z-index:80;font-family:var(--grotesk);font-size:9px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-soft);background:rgba(0,0,0,.45);border:1px solid var(--line);padding:5px 9px;border-radius:7px;mix-blend-mode:difference}
 
   .enter{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;align-items:center;justify-content:center;
     flex-direction:column;gap:18px;transition:opacity 1s ease,visibility 1s}
@@ -122,52 +159,70 @@
   <div class="brand">Aluminium <i>Windows</i><small>Cape Town</small></div>
   <nav class="nav">
     <a data-go="0.30">Reveal</a>
-    <a data-go="0.66">Range</a>
+    <a data-go="0.55">Range</a>
+    <a data-go="0.78">Work</a>
     <a data-go="0.99">Quote</a>
   </nav>
 </header>
 
-<!-- FIXED STAGE — scroll never "travels", it scrubs these -->
 <div class="viewport" id="viewport">
 
-  <!-- STAGE 0 — hero, video scrubbed by scroll, headline assembles -->
+  <!-- STAGE 0 — hero (framed video, scrubbed) -->
   <section class="stage" data-stage="0">
-    <video src="media/hero.mp4" muted playsinline preload="auto" data-scrub></video>
-    <div class="veil"></div>
-    <div class="head">
+    <div class="window">
+      <video src="media/hero.mp4" muted playsinline preload="auto" data-scrub></video>
+      <span class="mullion v"></span><span class="mullion h"></span>
+      <div class="innerveil"></div>
+    </div>
+    <div class="head" style="position:absolute">
       <div class="eyebrow" data-split>Indoor · Outdoor</div>
       <h1 data-split>We frame the <em>light</em>.</h1>
       <p class="sub" data-fade>Aluminium windows &amp; doors that dissolve the wall between your home and the Cape.</p>
     </div>
   </section>
 
-  <!-- STAGE 1 — reveal, second video scrubbed, line assembles -->
+  <!-- STAGE 1 — reveal (framed video, scrubbed) — entered via circle-blip -->
   <section class="stage" data-stage="1">
-    <video src="media/reveal.mp4" muted playsinline preload="auto" data-scrub></video>
-    <div class="veil"></div>
-    <div class="head">
+    <div class="window">
+      <video src="media/reveal.mp4" muted playsinline preload="auto" data-scrub></video>
+      <span class="mullion v"></span><span class="mullion h"></span>
+      <div class="innerveil"></div>
+    </div>
+    <div class="head" style="position:absolute">
       <div class="eyebrow" data-split>Open the wall</div>
       <h2 data-split>A door that doesn’t <em>divide</em> a room — it removes one.</h2>
     </div>
   </section>
 
-  <!-- STAGE 2 — living tiles -->
+  <!-- STAGE 2 — living tiles + snake line -->
   <section class="stage" data-stage="2">
+    <svg class="snake" id="snake" preserveAspectRatio="none"><path id="snakePath" fill="none"
+      stroke="rgba(231,199,154,0.14)" stroke-width="22" stroke-linecap="round"/></svg>
     <div class="field" id="field"></div>
-    <div class="tiles-head">
+    <div class="head" style="position:absolute;z-index:30">
       <div class="eyebrow" data-split>The Range</div>
       <h2 data-split>Every <em>opening</em>, engineered.</h2>
     </div>
   </section>
 
-  <!-- STAGE 3 — CTA -->
+  <!-- STAGE 3 — spiral case-study gallery (the money mechanic) -->
   <section class="stage" data-stage="3">
+    <div class="spiral" id="spiral"></div>
+    <div class="head" style="position:absolute;z-index:30;pointer-events:none">
+      <div class="eyebrow" data-split>Selected Work</div>
+      <h2 data-split>Proof, with <em>numbers</em>.</h2>
+      <p class="sub" data-fade>Tap a project — see what it cost and why it fit.</p>
+    </div>
+  </section>
+
+  <!-- STAGE 4 — CTA -->
+  <section class="stage" data-stage="4">
     <div class="cta-wrap">
       <div class="eyebrow" data-split>Made in-house · Racing Park</div>
       <h2 data-split>Let’s <em>open up</em> your space.</h2>
       <div class="row">
-        <a class="btn solid" href="tel:+27673687537">Call +27 67 368 7537</a>
-        <a class="btn ghost" href="mailto:admin@tganorth.co.za">Request a quote</a>
+        <a class="btn solid magnetic" href="tel:+27673687537"><span class="glow"></span>Call +27 67 368 7537</a>
+        <a class="btn ghost magnetic" href="mailto:admin@tganorth.co.za"><span class="glow"></span>Request a quote</a>
       </div>
     </div>
     <div class="meta" id="meta">
@@ -178,212 +233,281 @@
 
 </div>
 
+<!-- case-study modal -->
+<div class="casecard" id="casecard">
+  <div class="cc-scrim" data-close></div>
+  <div class="cc-card">
+    <div class="cc-close" data-close>✕</div>
+    <div class="cc-media" id="ccMedia"></div>
+    <div class="cc-body">
+      <div class="eyebrow">A Tala-grade fit</div>
+      <h3 id="ccTitle">—</h3>
+      <div class="cc-price" id="ccPrice"></div>
+      <div class="cc-fit" id="ccFit"></div>
+      <div class="row" style="margin-top:0;justify-content:flex-start">
+        <a class="btn solid magnetic" href="mailto:admin@tganorth.co.za"><span class="glow"></span>Get this for your home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="cue" id="cue"><span>Scroll</span><span class="bar"></span></div>
 <div class="flag">Unsolicited concept · not affiliated</div>
 
-<!-- scroll length: total height controls how much "playhead" there is -->
-<div class="scroll-space" style="height:620vh"></div>
+<div class="scroll-space" style="height:820vh"></div>
 
 <script>
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ---------- helpers ---------- */
   function clamp(v,a,b){return v<a?a:v>b?b:v;}
   function smooth(e0,e1,x){var t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);}
   function lerp(a,b,t){return a+(b-a)*t;}
   function rand(a,b){return a+Math.random()*(b-a);}
 
-  /* ---------- split text into chars (for scroll-built assembly) ---------- */
+  /* ---------- split text; settled state is CLEAN (no residual transform) ---------- */
   function splitNode(el){
     var walk=[], frag=document.createDocumentFragment();
+    function emit(parent,text){
+      text.split('').forEach(function(ch){
+        var s=document.createElement('span');s.className='char';s.textContent=ch;
+        s.dataset.x=rand(-30,30).toFixed(1); s.dataset.y=rand(28,80).toFixed(1); s.dataset.a=rand(-22,22).toFixed(1);
+        parent.appendChild(s); walk.push(s);
+      });
+    }
     el.childNodes.forEach(function(n){
-      if(n.nodeType===3){ // text
-        n.nodeValue.split('').forEach(function(ch){
-          var s=document.createElement('span');s.className='char';s.textContent=ch;
-          s.dataset.a=rand(-26,26).toFixed(1); // angle
-          s.dataset.x=rand(-34,34).toFixed(1);
-          s.dataset.y=rand(30,90).toFixed(1);
-          frag.appendChild(s); walk.push(s);
-        });
-      } else if(n.nodeType===1){ // element (em etc) — split its text but keep tag
-        var inner=document.createElement(n.tagName);
-        inner.className=n.className;
-        n.textContent.split('').forEach(function(ch){
-          var s=document.createElement('span');s.className='char';s.textContent=ch;
-          s.dataset.a=rand(-26,26).toFixed(1);
-          s.dataset.x=rand(-34,34).toFixed(1);
-          s.dataset.y=rand(30,90).toFixed(1);
-          inner.appendChild(s); walk.push(s);
-        });
-        frag.appendChild(inner);
-      }
+      if(n.nodeType===3){ emit(frag,n.nodeValue); }
+      else if(n.nodeType===1){ var inner=document.createElement(n.tagName); inner.className=n.className; emit(inner,n.textContent); frag.appendChild(inner); }
     });
-    el.innerHTML=''; el.appendChild(frag);
-    return walk;
+    el.innerHTML=''; el.appendChild(frag); return walk;
   }
 
-  /* ---------- build stage model ---------- */
   var stages=[].slice.call(document.querySelectorAll('.stage'));
   var stageData=stages.map(function(st){
-    var splits=[].slice.call(st.querySelectorAll('[data-split]')).map(function(el){
-      return {chars:splitNode(el)};
-    });
-    var fades=[].slice.call(st.querySelectorAll('[data-fade]'));
-    var vid=st.querySelector('[data-scrub]');
-    return {el:st, splits:splits, fades:fades, vid:vid, vidT:0};
+    return {
+      el:st,
+      splits:[].slice.call(st.querySelectorAll('[data-split]')).map(function(el){return {chars:splitNode(el)};}),
+      fades:[].slice.call(st.querySelectorAll('[data-fade]')),
+      vid:st.querySelector('[data-scrub]'), vidT:0
+    };
   });
 
-  // global g-range windows per stage [fadeIn, fullIn, fullOut, fadeOut]
-  var windows=[
-    [0.00,0.015,0.22,0.285],
-    [0.275,0.34,0.55,0.625],
-    [0.605,0.665,0.80,0.86],
-    [0.83,0.90,1.0,1.01]
+  // crossfade windows per stage [in0,in1,out0,out1] over global scroll g (0..1)
+  var W=[
+    [0.00,0.02,0.17,0.225],
+    [0.245,0.30,0.43,0.485],
+    [0.50,0.555,0.66,0.715],
+    [0.73,0.785,0.90,0.95],
+    [0.93,0.965,1.0,1.01]
   ];
+  // circle-blip transition band between stage0 and stage1
+  var BLIP=[0.205,0.27]; // dark fully at mid; circle grows after
 
-  /* ---------- living tiles ---------- */
+  /* ---------- settled-clean char apply ---------- */
+  function applyChar(s,p){
+    var inv=1-p;
+    var x=parseFloat(s.dataset.x)*inv, y=parseFloat(s.dataset.y)*inv, a=parseFloat(s.dataset.a)*inv;
+    // snap to perfectly clean rest as p→1 (kills awkward in-between legibility)
+    if(p>0.985){x=0;y=0;a=0;}
+    s.style.opacity=clamp(p*1.2,0,1);
+    s.style.filter= inv>0.02 ? 'blur('+(inv*6).toFixed(2)+'px)' : 'none';
+    s.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+a.toFixed(1)+'deg) scale('+(0.9+0.1*p).toFixed(3)+')';
+  }
+
+  /* ---------- living tiles (stage 2) ---------- */
   var field=document.getElementById('field');
-  var tileDefs=[
-    {t:'word',txt:'Folding'}, {t:'vid',src:'media/reveal.mp4'},
-    {t:'word',txt:'Sliding'}, {t:'lbl',n:'Frameless',m:'Glass walls'},
-    {t:'vid',src:'media/hero.mp4'}, {t:'word',txt:'Casement'},
-    {t:'lbl',n:'Shopfronts',m:'Commercial'}, {t:'word',txt:'Stacking'},
-    {t:'lbl',n:'±1mm',m:'Tolerance'}
+  var defs=[
+    {t:'word',txt:'Folding'},{t:'vid',src:'media/reveal.mp4'},{t:'word',txt:'Sliding'},
+    {t:'lbl',n:'Frameless',m:'Glass walls'},{t:'vid',src:'media/hero.mp4'},{t:'word',txt:'Casement'},
+    {t:'lbl',n:'Shopfronts',m:'Commercial'},{t:'word',txt:'Stacking'},{t:'lbl',n:'±1mm',m:'Tolerance'}
   ];
-  // hand-placed-ish positions (% of viewport), avoiding the center text band
-  var pos=[
-    [12,20],[28,30],[16,66],[40,16],[62,62],[74,24],[84,68],[50,80],[36,50]
-  ];
+  var pos=[[14,22],[30,32],[18,68],[44,18],[64,60],[78,26],[86,70],[52,82],[38,52]];
   var tiles=[];
-  tileDefs.forEach(function(d,i){
+  defs.forEach(function(d,i){
     var el=document.createElement('div');
-    var w=rand(120,190), h=d.t==='word'?rand(70,96):rand(150,210);
+    // small footage → SMALL tiles, native-ish size (resolution rule)
+    var w = d.t==='vid'? 150 : rand(118,168);
+    var h = d.t==='word'? rand(66,86) : d.t==='vid'? 96 : rand(96,128); // vid tile keeps ~16:10, not stretched big
     el.className='tile '+(d.t==='vid'?'vid':d.t==='word'?'word':'');
-    el.style.width=w+'px'; el.style.height=h+'px';
+    el.style.width=w+'px';el.style.height=h+'px';
     if(d.t==='vid'){var v=document.createElement('video');v.src=d.src;v.muted=true;v.loop=true;v.playsInline=true;v.autoplay=true;v.setAttribute('playsinline','');el.appendChild(v);v.play&&v.play().catch(function(){});}
-    else if(d.t==='word'){el.style.fontSize=rand(22,34).toFixed(0)+'px';el.textContent=d.txt;}
-    else {var lab=document.createElement('div');lab.className='lbl';lab.innerHTML=d.n+'<small>'+d.m+'</small>';el.appendChild(lab);}
+    else if(d.t==='word'){el.style.fontSize=rand(22,32).toFixed(0)+'px';el.textContent=d.txt;}
+    else {var l=document.createElement('div');l.className='lbl';l.innerHTML=d.n+'<small>'+d.m+'</small>';el.appendChild(l);}
     field.appendChild(el);
-    var bx=pos[i][0], by=pos[i][1];
-    tiles.push({
-      el:el, bx:bx, by:by, w:w, h:h,
-      phx:rand(0,6.28), phy:rand(0,6.28),
-      ampx:rand(6,16), ampy:rand(8,20), spd:rand(.4,.9),
-      attract: (i%4===0), // a few are drawn toward the cursor; rest evade
-      cx:0, cy:0 // current cursor-offset (lerped)
-    });
+    tiles.push({el:el,bx:pos[i][0],by:pos[i][1],w:w,h:h,phx:rand(0,6.28),phy:rand(0,6.28),
+      ampx:rand(6,15),ampy:rand(8,18),spd:rand(.4,.85),attract:(i%4===0),cx:0,cy:0,nx:0,ny:0});
   });
+
+  /* ---------- spiral case-study gallery (stage 3) ---------- */
+  /* NOTE: media here are PLACEHOLDERS (only 2 low-res clips available). Real
+     project photos/videos + real prices to be supplied by the client. */
+  var spiral=document.getElementById('spiral');
+  var projects=[
+    {tag:'Camps Bay Villa', src:'media/reveal.mp4', price:'R 248,000', fit:'A 6-leaf folding stacking wall opening the living room straight onto the sea view — thermally broken for the wind, frameless sightlines for the vista.'},
+    {tag:'Constantia Home', src:'media/hero.mp4', price:'R 96,500', fit:'Slim-profile casement windows matched to a heritage façade, double-glazed for the cold Constantia nights.'},
+    {tag:'City Bowl Loft', src:'media/reveal.mp4', price:'R 154,000', fit:'Floor-to-ceiling sliding doors to the balcony, maximising light in a north-facing loft.'},
+    {tag:'Sea Point Apt', src:'media/hero.mp4', price:'R 72,000', fit:'Acoustic-rated sliders cutting promenade noise while keeping the ocean in frame.'},
+    {tag:'Stellenbosch Estate', src:'media/reveal.mp4', price:'R 312,000', fit:'A full shopfront-grade glazing run for a wine-tasting room — big spans, minimal frame.'},
+    {tag:'Hout Bay Deck', src:'media/hero.mp4', price:'R 188,000', fit:'Folding doors wrapping a corner, dissolving two walls onto the deck.'}
+  ];
+  var pins=[];
+  projects.forEach(function(p,i){
+    var el=document.createElement('div');el.className='pin';
+    var v=document.createElement('video');v.src=p.src;v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');
+    el.appendChild(v);
+    var tag=document.createElement('div');tag.className='ptag';tag.textContent=p.tag;el.appendChild(tag);
+    var play=document.createElement('div');play.className='play';play.textContent='▶';el.appendChild(play);
+    el.addEventListener('click',function(){openCase(p);});
+    el.addEventListener('pointerenter',function(){v.play&&v.play().catch(function(){});});
+    el.addEventListener('pointerleave',function(){v.pause&&v.pause();});
+    spiral.appendChild(el);
+    pins.push({el:el,p:p});
+  });
+
+  /* ---------- case modal ---------- */
+  var casecard=document.getElementById('casecard');
+  function openCase(p){
+    document.getElementById('ccTitle').textContent=p.tag;
+    document.getElementById('ccPrice').textContent=p.price+' · installed';
+    document.getElementById('ccFit').textContent=p.fit;
+    var m=document.getElementById('ccMedia');m.innerHTML='';
+    var v=document.createElement('video');v.src=p.src;v.muted=false;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');
+    m.appendChild(v);casecard.classList.add('open');v.play&&v.play().catch(function(){v.muted=true;v.play().catch(function(){});});
+  }
+  function closeCase(){casecard.classList.remove('open');var v=casecard.querySelector('video');if(v)v.pause();}
+  casecard.querySelectorAll('[data-close]').forEach(function(e){e.addEventListener('click',closeCase);});
+  window.addEventListener('keydown',function(e){if(e.key==='Escape')closeCase();});
 
   /* ---------- pointer ---------- */
-  var mx=-9999, my=-9999, hasPointer=false;
+  var mx=-9999,my=-9999,hasPointer=false;
   window.addEventListener('pointermove',function(e){mx=e.clientX;my=e.clientY;hasPointer=true;},{passive:true});
   window.addEventListener('pointerleave',function(){mx=-9999;my=-9999;});
 
-  /* ---------- scroll state (lerped → glide) ---------- */
-  var totalScroll=1, gTarget=0, g=0;
-  function recompute(){ totalScroll=Math.max(1, document.body.scrollHeight - window.innerHeight); }
-  window.addEventListener('resize', recompute); recompute();
-  window.addEventListener('scroll', function(){ gTarget = clamp(window.scrollY/totalScroll,0,1); }, {passive:true});
+  /* ---------- magnetic + glowing buttons ---------- */
+  var mags=[].slice.call(document.querySelectorAll('.magnetic'));
+  function magnet(){
+    mags.forEach(function(b){
+      var r=b.getBoundingClientRect();var cx=r.left+r.width/2,cy=r.top+r.height/2;
+      var dx=mx-cx,dy=my-cy,dist=Math.hypot(dx,dy),R=160;
+      if(hasPointer&&dist<R){var f=(1-dist/R);b.style.transform='translate('+(dx*0.25*f).toFixed(1)+'px,'+(dy*0.3*f).toFixed(1)+'px)';
+        var g=b.querySelector('.glow');if(g){g.style.opacity=f;g.style.setProperty('--gx',((mx-r.left)/r.width*100)+'%');g.style.setProperty('--gy',((my-r.top)/r.height*100)+'%');}}
+      else {b.style.transform='translate(0,0)';var g2=b.querySelector('.glow');if(g2&&!b.matches(':hover'))g2.style.opacity=0;}
+    });
+  }
 
-  // nav jump
-  document.querySelectorAll('[data-go]').forEach(function(a){
-    a.addEventListener('click', function(){ window.scrollTo({top: parseFloat(a.dataset.go)*totalScroll, behavior:'smooth'}); });
-  });
+  /* ---------- scroll state ---------- */
+  var totalScroll=1,gTarget=0,g=0;
+  function recompute(){totalScroll=Math.max(1,document.body.scrollHeight-window.innerHeight);}
+  window.addEventListener('resize',recompute);recompute();
+  window.addEventListener('scroll',function(){gTarget=clamp(window.scrollY/totalScroll,0,1);},{passive:true});
+  document.querySelectorAll('[data-go]').forEach(function(a){a.addEventListener('click',function(){window.scrollTo({top:parseFloat(a.dataset.go)*totalScroll,behavior:'smooth'});});});
 
-  var cue=document.getElementById('cue'), pbar=document.getElementById('pbar'), meta=document.getElementById('meta');
+  var cue=document.getElementById('cue'),pbar=document.getElementById('pbar'),meta=document.getElementById('meta');
+  var snakePath=document.getElementById('snakePath');
+
+  function buildSnake(t){
+    // long slithering ribbon across the tiles, UNDER them (z8). blends w/ bg.
+    var w=window.innerWidth,h=window.innerHeight,pts=[],N=7;
+    for(var i=0;i<=N;i++){
+      var x=(i/N)*w;
+      var y=h*0.5 + Math.sin(t*0.6+i*0.9)*h*0.14 + Math.cos(t*0.3+i*1.7)*h*0.05;
+      pts.push([x,y]);
+    }
+    var d='M'+pts[0][0]+','+pts[0][1];
+    for(var j=1;j<pts.length;j++){
+      var xc=(pts[j-1][0]+pts[j][0])/2, yc=(pts[j-1][1]+pts[j][1])/2;
+      d+=' Q'+pts[j-1][0]+','+pts[j-1][1]+' '+xc+','+yc;
+    }
+    snakePath.setAttribute('d',d);
+  }
 
   /* ---------- main loop ---------- */
-  function applyChar(s, p){
-    // p 0→1 : from scattered (built by scroll) to settled
-    var inv=1-p;
-    var x=parseFloat(s.dataset.x)*inv;
-    var y=parseFloat(s.dataset.y)*inv;
-    var a=parseFloat(s.dataset.a)*inv;
-    s.style.opacity=clamp(p*1.15,0,1);
-    s.style.filter='blur('+(inv*7).toFixed(2)+'px)';
-    s.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+a.toFixed(1)+'deg) scale('+(0.86+0.14*p).toFixed(3)+')';
-  }
-
   function frame(t){
-    // glide scroll
-    g += (gTarget-g)*(reduce?1:0.12);
+    g+=(gTarget-g)*(reduce?1:0.12);
     var time=t*0.001;
-
     pbar.style.width=(g*100)+'%';
-    cue.style.opacity = g>0.04?0:0.7;
+    cue.style.opacity=g>0.04?0:0.7;
+    magnet();
 
     for(var i=0;i<stageData.length;i++){
-      var sd=stageData[i], w=windows[i];
-      // opacity: crossfade in over [w0,w1], out over [w2,w3] → seamless, no hard edge
-      var op = Math.min(smooth(w[0],w[1],g), 1-smooth(w[2],w[3],g));
-      op = clamp(op,0,1);
+      var sd=stageData[i],w=W[i];
+      var op=clamp(Math.min(smooth(w[0],w[1],g),1-smooth(w[2],w[3],g)),0,1);
       var st=sd.el;
-      if(op<=0.001){ if(st.style.visibility!=='hidden'){st.style.visibility='hidden';st.style.opacity=0;} }
-      else {
-        st.style.visibility='visible';
-        st.style.opacity=op.toFixed(3);
-        // local progress across the "full" band drives video + text assembly
-        var lp = clamp((g-w[1])/(w[2]-w[1]),0,1);
-
-        // scrub video: scroll is the playhead (freezes when you stop, reverses on scroll-up)
-        if(sd.vid && sd.vid.duration){
-          var target = lp*(sd.vid.duration-0.05);
-          sd.vidT += (target - sd.vidT)*0.18;
-          try{ if(sd.vid.readyState>=2) sd.vid.currentTime = sd.vidT; }catch(e){}
-        }
-
-        // assemble each split element's chars across staggered slices of lp
-        sd.splits.forEach(function(sp){
-          var n=sp.chars.length;
-          for(var c=0;c<n;c++){
-            var start=(c/n)*0.55;          // staggered start
-            var cp=clamp((lp-start)/0.32,0,1);
-            applyChar(sp.chars[c], cp);
-          }
-        });
-        sd.fades.forEach(function(f){ f.style.opacity=smooth(0.15,0.5,lp); f.style.transform='translateY('+((1-smooth(0.15,0.5,lp))*20).toFixed(1)+'px)'; });
-      }
+      if(op<=0.001){if(st.style.visibility!=='hidden'){st.style.visibility='hidden';st.style.opacity=0;}continue;}
+      st.style.visibility='visible';st.style.opacity=op.toFixed(3);
+      var lp=clamp((g-w[1])/(w[2]-w[1]),0,1);
+      if(sd.vid&&sd.vid.duration){var target=lp*(sd.vid.duration-0.05);sd.vidT+=(target-sd.vidT)*0.18;try{if(sd.vid.readyState>=2)sd.vid.currentTime=sd.vidT;}catch(e){}}
+      sd.splits.forEach(function(sp){var n=sp.chars.length;for(var c=0;c<n;c++){var start=(c/n)*0.5;applyChar(sp.chars[c],clamp((lp-start)/0.34,0,1));}});
+      sd.fades.forEach(function(f){var fp=smooth(0.2,0.55,lp);f.style.opacity=fp;f.style.transform='translateY('+((1-fp)*18).toFixed(1)+'px)';});
     }
 
-    // living tiles (stage 2): perpetual drift + cursor evade/attract
-    var tilesVisible = stageData[2].el.style.visibility==='visible';
-    if(tilesVisible){
+    // CIRCLE-BLIP between stage0 and stage1.
+    // iris1 is a bg-colored disc covering stage1's video. We shrink the COVER
+    // (clip a hole) so the video shows inside a growing circle: dark → tiny
+    // circle → full reveal. Reversible (scroll up shrinks it back).
+    var bp=clamp((g-BLIP[0])/(BLIP[1]-BLIP[0]),0,1);
+    if(bp>0 && bp<1){
+      stageData[1].el.style.visibility='visible';
+      stageData[1].el.style.opacity='1';
+      // first half: stage0 already faded to dark via its window; second half: grow circle
+      var r = bp<0.45 ? 0 : (bp-0.45)/0.55;     // 0 until dark, then grows
+      // cover everything (circle radius small) then open up: cover = 0% means fully hidden by bg disc
+      irisHole(blipIris, r*150);                 // hole radius % grows → reveal
+    } else {
+      irisHole(blipIris, bp>=1 ? 150 : 0);       // past band fully open, before band closed
+    }
+
+    // living tiles
+    if(stageData[2].el.style.visibility==='visible'){
+      buildSnake(time);
       for(var k=0;k<tiles.length;k++){
         var ti=tiles[k];
-        var driftX=Math.sin(time*ti.spd+ti.phx)*ti.ampx;
-        var driftY=Math.cos(time*ti.spd*0.8+ti.phy)*ti.ampy;
-        // base pixel position
-        var baseX=ti.bx/100*window.innerWidth - ti.w/2;
-        var baseY=ti.by/100*window.innerHeight - ti.h/2;
-        // cursor interaction
-        var tcx=baseX+ti.w/2, tcy=baseY+ti.h/2;
-        var dx=tcx-mx, dy=tcy-my, dist=Math.hypot(dx,dy);
-        var R=240, fx=0, fy=0;
-        if(hasPointer && dist<R){
-          var force=(1-dist/R);
-          var dir=ti.attract?-1:1;            // attract tiles pull toward cursor
-          var ux=(dx/(dist||1)), uy=(dy/(dist||1));
-          fx=ux*force*70*dir; fy=uy*force*70*dir;
-        }
-        ti.cx+=(fx-ti.cx)*0.12; ti.cy+=(fy-ti.cy)*0.12;
-        ti.el.style.transform='translate('+(baseX+driftX+ti.cx).toFixed(1)+'px,'+(baseY+driftY+ti.cy).toFixed(1)+'px)';
+        var dx2=Math.sin(time*ti.spd+ti.phx)*ti.ampx, dy2=Math.cos(time*ti.spd*0.8+ti.phy)*ti.ampy;
+        var baseX=ti.bx/100*window.innerWidth-ti.w/2, baseY=ti.by/100*window.innerHeight-ti.h/2;
+        var tcx=baseX+ti.w/2,tcy=baseY+ti.h/2,ddx=tcx-mx,ddy=tcy-my,dist=Math.hypot(ddx,ddy),R=240,fx=0,fy=0;
+        if(hasPointer&&dist<R){var force=(1-dist/R),dir=ti.attract?-1:1,ux=ddx/(dist||1),uy=ddy/(dist||1);fx=ux*force*70*dir;fy=uy*force*70*dir;}
+        ti.cx+=(fx-ti.cx)*0.12;ti.cy+=(fy-ti.cy)*0.12;
+        ti.el.style.transform='translate('+(baseX+dx2+ti.cx).toFixed(1)+'px,'+(baseY+dy2+ti.cy).toFixed(1)+'px)';
       }
     }
 
-    // CTA meta fades in near the end
-    meta.style.opacity = g>0.93?1:0;
+    // spiral gallery layout (downward near-spiral), gentle perpetual rotation
+    if(stageData[3].el.style.visibility==='visible'){
+      var cxv=window.innerWidth*0.5, cyv=window.innerHeight*0.5;
+      for(var s=0;s<pins.length;s++){
+        var pn=pins[s];
+        var ang=time*0.12 + s*(Math.PI*2/3.2);  // spiral angle
+        var rad=70 + s*46;                        // expanding radius → spiral
+        var px=cxv + Math.cos(ang)*rad - 75;
+        var py=cyv + Math.sin(ang)*rad*0.62 + s*14 - 100; // squashed + drifting down = downward spiral
+        // pointer evade (subtle)
+        var pcx=px+75,pcy=py+100,pdx=pcx-mx,pdy=pcy-my,pdist=Math.hypot(pdx,pdy),pf=0,pfx=0,pfy=0;
+        if(hasPointer&&pdist<200){pf=(1-pdist/200);pfx=(pdx/(pdist||1))*40*pf;pfy=(pdy/(pdist||1))*40*pf;}
+        pn.el.style.transform='translate('+(px+pfx).toFixed(1)+'px,'+(py+pfy).toFixed(1)+'px) rotate('+(Math.sin(ang)*6).toFixed(1)+'deg)';
+        pn.el.style.zIndex=String(10+Math.round(Math.sin(ang)*5));
+      }
+    }
 
+    meta.style.opacity=g>0.96?1:0;
     requestAnimationFrame(frame);
   }
+
+  // single iris cover over stage1 (the reveal): a dark layer with a transparent
+  // circular hole made by a radial-gradient. hole radius grows 0→full:
+  // r=0 → fully dark, r large → video fully revealed. Reliable, reversible.
+  var blipIris=document.createElement('div');blipIris.className='iris';
+  blipIris.style.background='var(--bg)';
+  stageData[1].el.appendChild(blipIris);
+  function irisHole(el,pct){
+    var r=Math.max(0,pct); // % of viewport-ish
+    el.style.background='radial-gradient(circle at 50% 50%, rgba(11,12,13,0) '+r+'%, rgba(11,12,13,1) '+(r+6)+'%)';
+  }
+  irisHole(blipIris,0);
+
+  stageData.forEach(function(sd){if(sd.vid){sd.vid.load();sd.vid.pause();}});
   requestAnimationFrame(frame);
 
-  /* ---------- preload videos so scrubbing has data ---------- */
-  stageData.forEach(function(sd){ if(sd.vid){ sd.vid.load(); sd.vid.pause(); } });
-
-  /* ---------- intro ---------- */
-  window.addEventListener('load', function(){ setTimeout(function(){ document.getElementById('enter').classList.add('gone'); }, 900); });
-  setTimeout(function(){ document.getElementById('enter').classList.add('gone'); }, 2200);
+  window.addEventListener('load',function(){setTimeout(function(){document.getElementById('enter').classList.add('gone');},900);});
+  setTimeout(function(){document.getElementById('enter').classList.add('gone');},2200);
 })();
 </script>
 </body>
