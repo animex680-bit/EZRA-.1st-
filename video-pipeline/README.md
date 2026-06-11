@@ -1,92 +1,99 @@
-# VIDEO PIPELINE — 0x100x Style Guide
-## Master Index
+# video-pipeline
 
-Reference channel: [@0x100x](https://www.instagram.com/0x100x/)  
-Target platforms: Instagram Reels · TikTok · YouTube Shorts  
-Goal: Every video produced should feel like it came directly from @0x100x — same aesthetic, same motion language, same emotional weight.
+Premium short-form vertical video editing in the @0x100x aesthetic. Orchestrated by the `reels` skill set in `.claude/skills/reels*/`.
 
----
+For the historical style-guide reference (color palette, motion principles, original style docs), see `STYLE-GUIDE.md` in this folder.
 
-## Directory Map
+## TL;DR
 
 ```
+When the user says "make me a reel":
+  1. Read .claude/skills/reels-evolve/LEARNINGS.md
+  2. Confirm inputs: script (or brief), voice, footage, music
+  3. Invoke the reels skill — it routes through 11 sub-skills
+  4. Watcher gates every render — no delivery without PASS
+  5. Run reels-evolve retro at the end
+```
+
+## What's where
+
+```
+.claude/skills/
+  reels/                 ← orchestrator (read this first)
+  reels-script           ← writes the script in the 0x100x voice
+  reels-voice            ← cleans user's VO, produces vo_words.json
+  reels-storyboard       ← scene + beat plan + signature-moment placement
+  reels-footage          ← selects & cuts B-roll / on-face shots
+  reels-motion           ← motion graphics spec (motion.json)
+  reels-captions         ← caption spec, ±1 frame sync (captions.json)
+  reels-color            ← color grade spec (grade.json)
+  reels-sound            ← SFX + mix spec (audio.json) — optional
+  reels-render           ← FFmpeg composite + AE handoff
+  reels-watcher          ← QA gate; programmatic frame inspection
+  reels-evolve           ← supreme rule — pipeline improves every project
+
 video-pipeline/
-├── README.md                          ← YOU ARE HERE — master index
-│
-├── 01-style-guide/
-│   ├── 00-aesthetic-overview.md       ← What this style IS and ISN'T
-│   ├── 01-color-palette.md            ← Exact colors, grades, LUTs
-│   ├── 02-typography.md               ← Fonts, sizes, animations
-│   ├── 03-motion-principles.md        ← How things move + timing rules
-│   └── 04-scene-structure.md          ← Scene anatomy, pacing, beats
-│
-├── 02-technical/
-│   ├── 00-project-settings.md         ← AE / Resolve project specs
-│   ├── 01-effects-arsenal.md          ← Every effect used and how
-│   ├── 02-transitions.md              ← Transition types + usage rules
-│   └── 03-export-specs.md             ← Final delivery settings
-│
-├── 03-assets/
-│   ├── README.md                      ← Asset library index
-│   ├── fonts/
-│   │   └── fonts-list.md              ← Font names, weights, download sources
-│   ├── overlays/
-│   │   └── overlays-list.md           ← Grain, flares, cinematic bars, VHS
-│   ├── luts/
-│   │   └── luts-list.md               ← Color grade LUT names + sources
-│   └── sfx/
-│       └── sfx-list.md                ← Sound effects library
-│
-├── 04-workflow/
-│   ├── 00-pre-production.md           ← Footage selection, planning
-│   ├── 01-editing-workflow.md         ← Step-by-step edit process
-│   └── 02-review-checklist.md         ← Quality check before export
-│
-└── 05-caption-lyrics/
-    ├── caption-style-guide.md         ← Caption appearance + animation
-    └── lyric-sync-workflow.md         ← Beat-synced lyric workflow
+  watcher/
+    watcher.py           ← run on every render; checks safe area, dead frames,
+                            edge clip, overexposure, audio clipping, coverage
+  compositor/            ← compose.py, text_layer.py, caption_sync.py,
+                            ae_handoff.py  (TODO: implement on first real project)
+  reference/
+    0x100x-analysis.md   ← honest analysis of the channel grammar
+  STYLE-GUIDE.md         ← the older long-form style guide
+  01-style-guide/        ← color/typography/motion docs
+  02-technical/          ← project settings, effects arsenal, exports
+  03-assets/
+    fonts/BebasNeue.ttf  ← installed
+    luts/                ← put .cube LUTs here
+    overlays/            ← grain, light leaks
+    sfx/                 ← organized SFX library (user populates)
+  04-workflow/           ← pre-production, editing workflow, review checklist
+  05-caption-lyrics/     ← caption + lyric sync workflow docs
+  templates/             ← reusable timeline templates (TBD)
+  productions/
+    NNN-slug/            ← one folder per reel
+      inputs/{voice,footage,music}
+      brief.md  script.md  storyboard.md
+      shotlist.json  text_plan.json  motion.json
+      captions.json  grade.json  audio.json
+      cuts/                ← prepped per-scene footage
+      preview_captions/    ← caption position previews for sign-off
+      vNN.mp4              ← render outputs
+      qa-vNN/              ← watcher reports per render
+      ae-handoff/          ← .jsx + assets for AE polish pass
+  outputs/                 ← final delivered files
 ```
 
----
+## The watcher — the trust mechanism
 
-## Quick Reference Cheat Sheet
+Read `.claude/skills/reels-watcher/SKILL.md`. Tool at `video-pipeline/watcher/watcher.py`. Usage:
 
-| Attribute | Value |
-|---|---|
-| **Aspect Ratio** | 9:16 (1080 × 1920px) |
-| **Frame Rate** | 24fps (cinematic) or 30fps |
-| **Codec (export)** | H.264 / H.265, High bitrate |
-| **Primary BG Color** | #000000 – #0A0A0A |
-| **Accent Color 1** | #FFFFFF (white) |
-| **Accent Color 2** | Gold/Amber — #D4AF37 or #FFB800 |
-| **Accent Color 3** | Electric Blue — #00C2FF |
-| **Gradient Signature** | Purple → Cyan → Orange reactive gradient |
-| **Primary Font** | Druk Wide Bold / Bebas Neue |
-| **Secondary Font** | Neue Haas Grotesk or similar grotesque |
-| **Cinematic Bars** | ~8-10% top+bottom black bars (always on) |
-| **Grain Overlay** | Subtle 8mm grain, ~15-25% opacity |
-| **Default Transition** | Shape wipe, zoom push, or hard cut on beat |
-| **Caption Position** | Center screen, ~30-40% from bottom |
-| **Tool (primary)** | Adobe After Effects |
-| **Tool (color)** | DaVinci Resolve or Lumetri in AE |
-| **Slow-mo Plugin** | Twixtor Pro |
+```bash
+python3 video-pipeline/watcher/watcher.py \
+    video-pipeline/productions/001-x/vNN.mp4 \
+    --out video-pipeline/productions/001-x/qa-vNN/ \
+    --every 4
+```
 
----
+Outputs `report.json`, `report.md`, and an `annotated/` directory of keyframes with the safe-area rectangle drawn (cyan) and any violation bboxes (red). The Read tool can view those frames — that's how the watcher agent does its work.
 
-## The 5 Non-Negotiables of This Style
+## Anti-slop bar (the orchestrator enforces)
 
-1. **Dark base always** — no bright or pastel backgrounds. Ever.
-2. **Beat sync is sacred** — every cut, text entrance, and effect hits on a beat or sub-beat.
-3. **Cinematic bars are always on** — letterbox is part of the identity.
-4. **Bold typography leads** — text is a visual element, not just information.
-5. **Gradient character signature** — the reactive gradient fill on subject silhouettes is the brand's fingerprint.
+See `.claude/skills/reels/SKILL.md`. A reel is slop unless:
+- Real footage present (no text-on-black slideshows)
+- Captions in IG-safe area (top 14% / bottom 18% / sides 4% reserved)
+- No dead frames > 4 consecutive samples below luma 10
+- Beat-synced typography
+- One signature moment (not five)
+- Premium type (Bebas Neue / Druk)
+- Dark cinematic grade
+- Letterbox bars on
+- Grain overlay on
+- Audio mixed to -14 LUFS, no clipping
 
----
+The watcher checks the technical ones programmatically. Failures route back to the responsible sub-agent for fixes.
 
-## How to Use This Guide
+## Productions
 
-- Starting a new edit? Start with `04-workflow/00-pre-production.md`
-- Choosing a color scheme? Go to `01-style-guide/01-color-palette.md`
-- Writing captions or lyrics? Go to `05-caption-lyrics/caption-style-guide.md`
-- Unsure about an effect or transition? Check `02-technical/01-effects-arsenal.md`
-- Final quality check before export? Run through `04-workflow/02-review-checklist.md`
+See `productions/001-building-websites/` for the first project. The first two render attempts failed the watcher hard (52 safe-area fails, 97 dead frames). The QA report is preserved in `qa-v01/` as a regression test — any future render of this project should beat those numbers.
