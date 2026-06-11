@@ -1,0 +1,25 @@
+{
+  "comp": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 24,
+    "safe": {
+      "top": 0.14,
+      "bot": 0.18,
+      "side": 0.04
+    }
+  },
+  "total_captions": 19,
+  "scenes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "violations": [],
+  "verdict": "PASS"
+}
