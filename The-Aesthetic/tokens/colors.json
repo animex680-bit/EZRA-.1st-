@@ -1,0 +1,97 @@
+{
+  "$schema": "https://tokens.studio/schema/1.0",
+  "_source": "Derived from 72 reference images, June 2026",
+  "_streams": ["A=THE_VOID", "B=THE_INTERFACE"],
+
+  "universal": {
+    "neutrals": {
+      "obsidian":   { "value": "#0A0A0C", "use": "True black with blue undertone" },
+      "void":       { "value": "#111115", "use": "Primary dark background" },
+      "smoke":      { "value": "#1C1C22", "use": "Elevated surface" },
+      "ash":        { "value": "#2E2E38", "use": "Border, divider" },
+      "fog":        { "value": "#8A8A9A", "use": "Muted text, placeholder" },
+      "ghost":      { "value": "#C8C8D8", "use": "Secondary text" },
+      "bone":       { "value": "#F0EFE8", "use": "Warm off-white" },
+      "pure_white": { "value": "#FFFFFF", "use": "Max contrast moments only" }
+    },
+    "accents": {
+      "chrome":   { "value": "#B8C4CC", "use": "Metallic neutral" },
+      "teal":     { "value": "#0E9DA8", "use": "Tech, precision, intelligence" },
+      "lavender": { "value": "#9B8FD4", "use": "Creativity, depth" },
+      "amber":    { "value": "#C8962A", "use": "Gold, value, premium" },
+      "crimson":  { "value": "#A01830", "use": "Urgency, power" }
+    }
+  },
+
+  "stream_a": {
+    "_name": "THE VOID",
+    "background": {
+      "primary":  { "value": "#0D0D0F", "use": "Primary background, near-black with warmth" },
+      "elevated": { "value": "#1A1612", "use": "Warm dark brown-black surface" },
+      "surface":  { "value": "#2C2820", "use": "Border, divider, secondary surface" }
+    },
+    "light": {
+      "bone":      { "value": "#EDE8E0", "use": "Primary light tone, warm off-white" },
+      "porcelain": { "value": "#F5F2ED", "use": "Maximum light, very sparing" }
+    },
+    "accents": {
+      "dusty_rose":  { "value": "#C4A89A", "use": "Skin warmth, intimacy" },
+      "ash_lavender":{ "value": "#9E97B0", "use": "Ethereal, dream-like distance" },
+      "chrome":      { "value": "#B2BFC9", "use": "Metallic reflection, the mask" },
+      "teal_shadow": { "value": "#1D4E52", "use": "Deep shadow with color, prevents dead blacks" },
+      "muted_gold":  { "value": "#A8924A", "use": "Subtle luxury, tiny quantities" },
+      "terracotta":  { "value": "#8E5840", "use": "Raw material energy, clay, earth" }
+    },
+    "harvested": {
+      "_note": "Color-picked from reference images",
+      "mannequin_skin":       { "value": "#E8D5C8" },
+      "mannequin_cool_light": { "value": "#8BA8B2" },
+      "mannequin_bg":         { "value": "#1E1A16" },
+      "chrome_mid":           { "value": "#9EACB4" },
+      "chrome_highlight":     { "value": "#D4DDE2" },
+      "chrome_bg":            { "value": "#0C0C0C" },
+      "painting_sienna":      { "value": "#3D2E28" },
+      "painting_ochre":       { "value": "#C08860" },
+      "painting_cool":        { "value": "#7090A0" }
+    }
+  },
+
+  "stream_b": {
+    "_name": "THE INTERFACE",
+    "dark_mode": {
+      "bg_void":       { "value": "#0C0C10", "use": "Base background, blue undertone" },
+      "surface_l1":    { "value": "#141418", "use": "Card, panel background" },
+      "surface_l2":    { "value": "#1E1E26", "use": "Elevated panel, modal base" },
+      "surface_l3":    { "value": "#28282F", "use": "Tooltip, overlay, dropdown" },
+      "border_subtle": { "value": "#2A2A35", "use": "Dividers, card borders" },
+      "border_medium": { "value": "#3A3A48", "use": "Active borders, focus rings" },
+      "text_primary":  { "value": "#F0F0F6", "use": "Headlines, primary text" },
+      "text_secondary":{ "value": "#9090A8", "use": "Subtitles, descriptions" },
+      "text_muted":    { "value": "#5C5C72", "use": "Placeholders, captions" }
+    },
+    "light_mode_neumorphic": {
+      "_source": "Exact spec from reference image: Virtual assistant app in neomorphic design",
+      "bg":           { "value": "#EFF2F9" },
+      "surface":      { "value": "#E4EBF1" },
+      "muted":        { "value": "#B5BFC6" },
+      "text":         { "value": "#6E7F8D" },
+      "shadow_light": { "value": "#FAFBFF", "opacity": 1.0 },
+      "shadow_dark":  { "value": "#161B1D", "opacity": 0.23 }
+    },
+    "glass": {
+      "fill_low":     { "value": "rgba(255,255,255,0.06)" },
+      "fill_med":     { "value": "rgba(255,255,255,0.10)" },
+      "border":       { "value": "rgba(255,255,255,0.12)" },
+      "border_strong":{ "value": "rgba(255,255,255,0.20)" },
+      "backdrop":     { "value": "blur(20px) saturate(1.8)" }
+    },
+    "accents": {
+      "blue":   { "value": "#3B82F6", "use": "Primary interactive, links, CTA" },
+      "teal":   { "value": "#0EA5E9", "use": "AI, data, intelligence, real-time" },
+      "purple": { "value": "#8B5CF6", "use": "Generative, creative, AI-imaginative" },
+      "emerald":{ "value": "#10B981", "use": "Success, positive states" },
+      "amber":  { "value": "#F59E0B", "use": "Warning, attention, premium gold" },
+      "rose":   { "value": "#F43F5E", "use": "Error, critical, power" }
+    }
+  }
+}

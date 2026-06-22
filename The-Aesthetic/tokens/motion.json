@@ -1,0 +1,69 @@
+{
+  "_source": "Derived from aesthetic study and production experience, June 2026",
+
+  "easing": {
+    "stream_a_drift":   { "value": "cubic-bezier(0.25, 0.10, 0.0, 1.0)", "use": "Stream A: gradual start, definitive finish" },
+    "stream_b_fast":    { "value": "cubic-bezier(0.2, 0, 0, 1)",          "use": "Stream B: micro-interactions, state changes" },
+    "stream_b_reveal":  { "value": "cubic-bezier(0.32, 0.72, 0, 1)",      "use": "Stream B: panel/modal opens" },
+    "stream_b_hero":    { "value": "cubic-bezier(0.16, 1, 0.3, 1)",       "use": "Stream B: major hero reveals" },
+    "atmospheric":      { "value": "ease-in-out",                          "use": "Both: ambient loops, glass shimmer" },
+    "NEVER_use_linear": { "value": "linear",                               "use": "FORBIDDEN — mechanical, dead" }
+  },
+
+  "duration": {
+    "stream_a": {
+      "minimum":     "600ms",
+      "standard":    "900-1400ms",
+      "atmospheric": "2000-4000ms",
+      "rule": "Nothing moves faster than 600ms in Stream A. Slowness is the message."
+    },
+    "stream_b": {
+      "micro":       "150-200ms",
+      "component":   "250-350ms",
+      "page":        "400-600ms",
+      "atmospheric": "2000-6000ms",
+      "rule": "UI responses under 200ms feel instant. Transitions over 600ms feel premium."
+    }
+  },
+
+  "vocabulary": {
+    "both_streams": [
+      { "name": "Fade + Scale",    "css": "opacity:0→1; scale:0.96→1.0",            "dur_A": "1000ms", "dur_B": "250ms" },
+      { "name": "Fade + Drift Up", "css": "opacity:0→1; translateY:20px→0",          "dur_A": "1200ms", "dur_B": "300ms" },
+      { "name": "Clip Reveal",     "css": "clip-path mask slides from left/right/top","dur_A": "1400ms", "dur_B": "400ms" }
+    ],
+    "stream_a_only": [
+      { "name": "Long Dissolve",  "css": "cross-fade opacity 0→1, 50% overlap",                        "duration": "2000ms+" },
+      { "name": "Parallax Depth", "css": "bg translateY at 0.3x speed of fg" },
+      { "name": "Chrome Shimmer", "css": "specular gradient sweeps: 0→0.3→0 opacity",                  "duration": "3000ms loop" },
+      { "name": "Scale Breathe",  "css": "scale 1.0→1.01→1.0",                                        "duration": "8000ms loop" },
+      { "name": "Dust Particles", "css": "very slow drift, near-static, ultra-subtle" }
+    ],
+    "stream_b_only": [
+      { "name": "Glass Shimmer",   "css": "rgba(255,255,255,0)→0.15→0 gradient sweep",  "duration": "3000ms loop" },
+      { "name": "Particle Field",  "css": "dots from opacity 0, velocity fade",          "fps": 60 },
+      { "name": "Staggered List",  "css": "each item +40ms delay" },
+      { "name": "Counter Roll",    "css": "0 to value",                                  "duration": "800ms ease-out" },
+      { "name": "Skeleton Pulse",  "css": "placeholder shimmer → content snap",          "duration": "200ms snap" },
+      { "name": "Typing Cursor",   "css": "text appears char by char",                   "rate": "20ms/char" }
+    ]
+  },
+
+  "spring_physics": {
+    "_use_for": "Stream B UI component state changes",
+    "standard": { "stiffness": 200, "damping": 20, "mass": 1 },
+    "snappy":   { "stiffness": 400, "damping": 30, "mass": 1 },
+    "gentle":   { "stiffness": 100, "damping": 15, "mass": 1 }
+  },
+
+  "forbidden": [
+    "linear easing — ever",
+    "Bounce in Stream A — ever",
+    "Spinning objects (unless 3D, very slow, purposeful)",
+    "Rapid flash cuts (strobe without purpose)",
+    "Wiggle / shake (unless error state in B)",
+    "Pop-in from below at high speed",
+    "Animation with no communicative purpose",
+    "Particle fields below 30fps"
+  ]
+}

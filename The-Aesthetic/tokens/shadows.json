@@ -1,0 +1,35 @@
+{
+  "_source": "Derived from reference images including exact neumorphic spec, June 2026",
+
+  "stream_a": {
+    "_name": "THE VOID — Shadows",
+    "_philosophy": "Shadows are deep, directional, with color. Never flat grey. Teal undertone in deep shadows.",
+    "object_key":     { "value": "8px 16px 32px rgba(10, 10, 14, 0.8)",  "use": "Key shadow on sculptural objects" },
+    "object_ambient": { "value": "0px 2px 8px rgba(0, 0, 0, 0.4)",       "use": "Ambient fill shadow" },
+    "teal_shadow":    { "value": "4px 8px 24px rgba(14, 78, 82, 0.4)",   "use": "Teal-toned deep shadow — prevents dead blacks" },
+    "editorial_drop": { "value": "12px 24px 48px rgba(0, 0, 0, 0.7)",   "use": "Strong editorial drop shadow" }
+  },
+
+  "stream_b": {
+    "_name": "THE INTERFACE — Shadows",
+    "_philosophy": "Shadows create spatial hierarchy. Blue-tinted for dark mode, soft directional for neumorphic.",
+
+    "dark_mode": {
+      "card":       { "value": "0 4px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)", "use": "Standard dark card" },
+      "modal":      { "value": "0 16px 64px rgba(0,0,0,0.6)",                                       "use": "Modal/overlay" },
+      "elevated":   { "value": "0 2px 12px rgba(0,0,0,0.3)",                                        "use": "Slightly elevated element" },
+      "glow_blue":  { "value": "0 0 20px rgba(59,130,246,0.3)",                                     "use": "Blue accent glow" },
+      "glow_purple":{ "value": "0 0 20px rgba(139,92,246,0.3)",                                    "use": "Purple/generative glow" },
+      "glow_teal":  { "value": "0 0 20px rgba(14,165,233,0.3)",                                     "use": "Teal/AI glow" }
+    },
+
+    "neumorphic_light": {
+      "_source": "EXACT SPEC from 'Virtual assistant app in neomorphic design' reference image",
+      "_colors": { "bg": "#EFF2F9", "surface": "#E4EBF1", "shadow_light": "#FAFBFF (100%)", "shadow_dark": "#161B1D (23%)" },
+      "shadow_sm": { "value": "-5px -5px 10px #FAFBFF, 5px 5px 10px rgba(22,27,29,0.23)",     "use": "Small element (±5, blur 10)" },
+      "shadow_md": { "value": "-10px -10px 20px #FAFBFF, 10px 10px 20px rgba(22,27,29,0.23)", "use": "Medium card (±10, blur 20)" },
+      "shadow_lg": { "value": "-20px -20px 40px #FAFBFF, 20px 20px 40px rgba(22,27,29,0.23)", "use": "Large panel (±20, blur 40)" },
+      "inner":     { "value": "inset -5px -5px 10px #FAFBFF, inset 5px 5px 10px rgba(22,27,29,0.23)", "use": "Pressed/inset state" }
+    }
+  }
+}
