@@ -1,0 +1,148 @@
+{
+  "_note": "Influencer Fail List — 3 pill buttons. Stream B 60% / Stream A 40%. The Aesthetic ref.",
+  "_canvas": { "w": 1080, "h": 1920, "fps": 30 },
+  "_safe_zone": { "top_px": 269, "bottom_px": 1574, "left_px": 43, "right_px": 1037 },
+  "_letterbox_px": 110,
+
+  "shape_layers": [
+
+    {
+      "id": "sweep_line",
+      "kind": "divider",
+      "note": "Thin line draws left→right just above the list — signals the list is about to arrive",
+      "x_start_px": 60,
+      "x_end_px": 940,
+      "y_px": 698,
+      "y_frac": 0.364,
+      "in_frame": 0,
+      "frames": 8,
+      "ease": "ease_out",
+      "color": "#F0EFE8",
+      "alpha": 0.25,
+      "weight": 1
+    },
+
+    {
+      "id": "pill_1",
+      "kind": "pill_button",
+      "note": "NO CLEAR PROMISE — first failure",
+      "x_px": 60,
+      "y_px": 720,
+      "w_px": 880,
+      "h_px": 76,
+      "radius_px": 12,
+      "bg_color": "#141418",
+      "border_color": "rgba(255,255,255,0.12)",
+      "border_weight_px": 1,
+      "accent_bar": {
+        "color": "#A01830",
+        "width_px": 4,
+        "border_radius_left_px": 12,
+        "border_radius_right_px": 0
+      },
+      "label": "NO CLEAR PROMISE",
+      "font": "Inter SemiBold",
+      "font_size_px": 24,
+      "letter_spacing_em": 0.1,
+      "text_color": "#F0EFE8",
+      "text_x_offset_px": 28,
+      "text_y_center": true,
+      "in_frame": 9,
+      "anim": {
+        "kind": "fade_scale",
+        "from_opacity": 0,
+        "to_opacity": 1,
+        "from_scale": 0.92,
+        "to_scale": 1.0,
+        "origin": "center",
+        "frames": 9,
+        "ease": "cubic-bezier(0.32,0.72,0,1)"
+      }
+    },
+
+    {
+      "id": "pill_2",
+      "kind": "pill_button",
+      "note": "LACK OF SCROLL REASON — second failure",
+      "x_px": 60,
+      "y_px": 812,
+      "w_px": 880,
+      "h_px": 76,
+      "radius_px": 12,
+      "bg_color": "#141418",
+      "border_color": "rgba(255,255,255,0.12)",
+      "border_weight_px": 1,
+      "accent_bar": {
+        "color": "#A01830",
+        "width_px": 4,
+        "border_radius_left_px": 12,
+        "border_radius_right_px": 0
+      },
+      "label": "LACK OF SCROLL REASON",
+      "font": "Inter SemiBold",
+      "font_size_px": 24,
+      "letter_spacing_em": 0.1,
+      "text_color": "#F0EFE8",
+      "text_x_offset_px": 28,
+      "text_y_center": true,
+      "in_frame": 11,
+      "anim": {
+        "kind": "fade_scale",
+        "from_opacity": 0,
+        "to_opacity": 1,
+        "from_scale": 0.92,
+        "to_scale": 1.0,
+        "origin": "center",
+        "frames": 9,
+        "ease": "cubic-bezier(0.32,0.72,0,1)"
+      }
+    },
+
+    {
+      "id": "pill_3",
+      "kind": "pill_button",
+      "note": "NO CTA — third failure",
+      "x_px": 60,
+      "y_px": 904,
+      "w_px": 880,
+      "h_px": 76,
+      "radius_px": 12,
+      "bg_color": "#141418",
+      "border_color": "rgba(255,255,255,0.12)",
+      "border_weight_px": 1,
+      "accent_bar": {
+        "color": "#A01830",
+        "width_px": 4,
+        "border_radius_left_px": 12,
+        "border_radius_right_px": 0
+      },
+      "label": "NO CTA",
+      "font": "Inter SemiBold",
+      "font_size_px": 24,
+      "letter_spacing_em": 0.1,
+      "text_color": "#F0EFE8",
+      "text_x_offset_px": 28,
+      "text_y_center": true,
+      "in_frame": 13,
+      "anim": {
+        "kind": "fade_scale",
+        "from_opacity": 0,
+        "to_opacity": 1,
+        "from_scale": 0.92,
+        "to_scale": 1.0,
+        "origin": "center",
+        "frames": 9,
+        "ease": "cubic-bezier(0.32,0.72,0,1)"
+      }
+    }
+
+  ],
+
+  "hold_frames": 90,
+  "exit_anim": {
+    "kind": "fade",
+    "targets": ["pill_1", "pill_2", "pill_3", "sweep_line"],
+    "frames": 8,
+    "ease": "ease_in"
+  }
+}
