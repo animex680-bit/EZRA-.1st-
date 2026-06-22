@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Influencer Fail List — Motion Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    gap: 20px;
+  }
+
+  .label {
+    color: #5C5C72;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Phone frame */
+  .phone {
+    width: 360px;
+    height: 640px;
+    background: #0C0C10;
+    border-radius: 36px;
+    border: 1.5px solid #2A2A35;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.8), 0 0 0 1px #1C1C22;
+  }
+
+  /* Notch */
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 6px;
+    background: #1C1C22;
+    border-radius: 4px;
+    z-index: 10;
+  }
+
+  /* Letterbox bars */
+  .letterbox-top,
+  .letterbox-bottom {
+    position: absolute;
+    left: 0; right: 0;
+    height: 36px;
+    background: rgba(0,0,0,0.85);
+    z-index: 5;
+  }
+  .letterbox-top { top: 0; }
+  .letterbox-bottom { bottom: 0; }
+
+  /* Background subtle gradient */
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(59,130,246,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 30% at 80% 100%, rgba(139,92,246,0.04) 0%, transparent 70%);
+  }
+
+  /* Content area */
+  .content {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    right: 20px;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* Header label */
+  .header-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5C5C72;
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeIn 0.4s ease-out 0.1s forwards;
+  }
+
+  /* Sweep line */
+  .sweep-line {
+    height: 1px;
+    background: rgba(240, 239, 232, 0.25);
+    margin-bottom: 16px;
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: drawLine 0.27s ease-out 0s forwards;
+  }
+
+  /* Pills */
+  .pill {
+    display: flex;
+    align-items: center;
+    height: 52px;
+    background: #141418;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.92);
+    position: relative;
+  }
+
+  .pill-1 { animation: pillIn 0.3s cubic-bezier(0.32,0.72,0,1) 0.30s forwards; }
+  .pill-2 { animation: pillIn 0.3s cubic-bezier(0.32,0.72,0,1) 0.37s forwards; }
+  .pill-3 { animation: pillIn 0.3s cubic-bezier(0.32,0.72,0,1) 0.43s forwards; }
+
+  /* Crimson left bar */
+  .accent-bar {
+    width: 3px;
+    height: 100%;
+    background: #A01830;
+    flex-shrink: 0;
+  }
+
+  /* Pill text */
+  .pill-text {
+    padding-left: 14px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #F0EFE8;
+    white-space: nowrap;
+  }
+
+  /* Number badge */
+  .pill-num {
+    margin-left: auto;
+    margin-right: 16px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #3A3A48;
+    letter-spacing: 0.05em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Subtext */
+  .subtext {
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+    color: #3A3A48;
+    text-transform: uppercase;
+    margin-top: 14px;
+    opacity: 0;
+    animation: fadeIn 0.4s ease-out 0.7s forwards;
+  }
+
+  /* Replay button */
+  .replay-btn {
+    background: #141418;
+    border: 1px solid rgba(255,255,255,0.10);
+    color: #9090A8;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 150ms ease-out;
+    font-family: inherit;
+  }
+  .replay-btn:hover {
+    background: #1E1E26;
+    color: #F0EFE8;
+    border-color: rgba(255,255,255,0.18);
+  }
+
+  /* Keyframes */
+  @keyframes drawLine {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @keyframes pillIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1.0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Grain overlay */
+  .grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+    pointer-events: none;
+    z-index: 6;
+  }
+</style>
+</head>
+<body>
+
+<p class="label">Motion Preview — 1080 × 1920 scaled</p>
+
+<div class="phone">
+  <div class="bg-gradient"></div>
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+  <div class="grain"></div>
+
+  <div class="content">
+    <div class="header-label">Where most reels fail</div>
+    <div class="sweep-line"></div>
+
+    <div class="pill pill-1">
+      <div class="accent-bar"></div>
+      <span class="pill-text">No Clear Promise</span>
+      <span class="pill-num">01</span>
+    </div>
+
+    <div class="pill pill-2">
+      <div class="accent-bar"></div>
+      <span class="pill-text">Lack of Scroll Reason</span>
+      <span class="pill-num">02</span>
+    </div>
+
+    <div class="pill pill-3">
+      <div class="accent-bar"></div>
+      <span class="pill-text">No CTA</span>
+      <span class="pill-num">03</span>
+    </div>
+
+    <div class="subtext">Fix these. Your reach doubles.</div>
+  </div>
+</div>
+
+<button class="replay-btn" onclick="replay()">↺ Replay</button>
+
+<script>
+function replay() {
+  const phone = document.querySelector('.phone');
+  const clone = phone.cloneNode(true);
+  phone.parentNode.replaceChild(clone, phone);
+}
+</script>
+
+</body>
+</html>
