@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Influencer Fail — Motion Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #06060A;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, sans-serif;
+  gap: 32px;
+}
+
+.phone {
+  width: 390px;
+  height: 720px;
+  position: relative;
+  border-radius: 52px;
+  background: #08080E;
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.8),
+    0 60px 160px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -10%,  rgba(59,130,246,0.18)  0%, transparent 70%),
+    radial-gradient(ellipse 55% 40% at 90% 60%,   rgba(139,92,246,0.12)  0%, transparent 65%),
+    radial-gradient(ellipse 60% 35% at 10% 80%,   rgba(14,165,233,0.10)  0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 50% 100%,  rgba(160,24,48,0.08)   0%, transparent 60%),
+    #08080E;
+}
+
+.lbx {
+  position: absolute; left:0; right:0; z-index: 9;
+  background: linear-gradient(180deg, #08080E 60%, transparent 100%);
+  height: 56px;
+}
+.lbx.top { top:0; }
+.lbx.bot {
+  bottom:0; height:56px;
+  background: linear-gradient(0deg, #08080E 60%, transparent 100%);
+}
+
+.island {
+  position: absolute;
+  top: 14px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 34px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 10;
+}
+
+.grain {
+  position: absolute; inset:0; z-index: 8; pointer-events:none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 28px 56px;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: fadeUp 1.6s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #A01830;
+  box-shadow: 0 0 8px rgba(160,24,48,0.8);
+  animation: pulse 2.4s ease-in-out 1.2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; box-shadow: 0 0 8px rgba(160,24,48,0.8); }
+  50%      { opacity:0.5; box-shadow: 0 0 3px rgba(160,24,48,0.3); }
+}
+.status-label {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: #5C5C72;
+}
+
+.headline {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.0;
+  color: #F0F0F6;
+  margin-bottom: 10px;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 1.8s cubic-bezier(0.16,1,0.3,1) 0.32s forwards;
+}
+.headline .accent {
+  background: linear-gradient(135deg, #F0F0F6 30%, #9090A8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.headline .dim { color: #3A3A48; -webkit-text-fill-color: #3A3A48; }
+
+.sub-headline {
+  font-size: 13px; font-weight: 400;
+  color: #5C5C72; letter-spacing: 0.01em;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 1.6s cubic-bezier(0.16,1,0.3,1) 0.52s forwards;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(160,24,48,0.5) 0%,
+    rgba(255,255,255,0.12) 50%,
+    transparent 100%);
+  margin-bottom: 20px;
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: drawLine 1.2s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+}
+@keyframes drawLine { to { transform: scaleX(1); } }
+
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 68px;
+  padding: 0 20px 0 6px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  box-shadow:
+    0 2px 32px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px) scale(0.97);
+}
+.pill::before {
+  content: '';
+  position: absolute; top:0; left:0; right:0; height:50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+  border-radius: 20px 20px 0 0;
+  pointer-events: none;
+}
+.pill:hover {
+  border-color: rgba(160,24,48,0.3);
+  box-shadow:
+    0 2px 32px rgba(0,0,0,0.4),
+    0 0 20px rgba(160,24,48,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: all 0.4s ease;
+}
+
+.pill-1 { animation: slideUp 1.6s cubic-bezier(0.16,1,0.3,1) 1.0s forwards; }
+.pill-2 { animation: slideUp 1.6s cubic-bezier(0.16,1,0.3,1) 1.32s forwards; }
+.pill-3 { animation: slideUp 1.6s cubic-bezier(0.16,1,0.3,1) 1.64s forwards; }
+
+.badge {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(160,24,48,0.12);
+  border: 1px solid rgba(160,24,48,0.25);
+  box-shadow: 0 0 12px rgba(160,24,48,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
+  font-size: 12px;
+  color: #C41A32;
+  font-weight: 600;
+}
+
+.pill-body { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.pill-title { font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; color: #F0EFE8; }
+.pill-desc  { font-size: 10.5px; font-weight: 400; color: #5C5C72; letter-spacing: 0.01em; }
+
+.pill-tag {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(160,24,48,0.6);
+  border: 1px solid rgba(160,24,48,0.2);
+  padding: 2px 8px; border-radius: 20px;
+  background: rgba(160,24,48,0.06);
+  flex-shrink: 0; white-space: nowrap;
+}
+
+.closer {
+  margin-top: 24px;
+  display: flex; align-items: center; gap: 12px;
+  opacity: 0;
+  animation: fadeUp 1.6s cubic-bezier(0.16,1,0.3,1) 2.2s forwards;
+}
+.closer-line { height: 1px; flex: 1; background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, transparent 100%); }
+.closer-text { font-size: 11px; font-weight: 400; color: #3A3A48; letter-spacing: 0.04em; white-space: nowrap; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(14px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(14px) scale(0.97); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+.controls { display: flex; gap: 10px; }
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 10px 22px; border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: #5C5C72;
+  transition: all 200ms ease-out;
+  backdrop-filter: blur(20px);
+}
+.btn:hover { background: rgba(255,255,255,0.08); color: #F0EFE8; border-color: rgba(255,255,255,0.14); }
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <div class="ambient"></div>
+  <div class="island"></div>
+  <div class="lbx top"></div>
+  <div class="lbx bot"></div>
+  <div class="grain"></div>
+
+  <div class="scene">
+    <div class="status-row">
+      <div class="status-dot"></div>
+      <span class="status-label">Reel Audit</span>
+    </div>
+
+    <div class="headline">
+      <span class="accent">3 reasons</span><br>
+      your reels<br>
+      <span class="dim">don't work.</span>
+    </div>
+
+    <div class="sub-headline">What most influencers never diagnose.</div>
+
+    <div class="divider"></div>
+
+    <div class="pill pill-1">
+      <div class="badge">&#10005;</div>
+      <div class="pill-body">
+        <div class="pill-title">No Clear Promise</div>
+        <div class="pill-desc">Viewer doesn't know what they'll gain</div>
+      </div>
+      <div class="pill-tag">Hook</div>
+    </div>
+
+    <div class="pill pill-2">
+      <div class="badge">&#10005;</div>
+      <div class="pill-body">
+        <div class="pill-title">Lack of Scroll Reason</div>
+        <div class="pill-desc">Nothing pulling past the first second</div>
+      </div>
+      <div class="pill-tag">Retention</div>
+    </div>
+
+    <div class="pill pill-3">
+      <div class="badge">&#10005;</div>
+      <div class="pill-body">
+        <div class="pill-title">No CTA</div>
+        <div class="pill-desc">Watch ends. Reach dies. Nothing converts.</div>
+      </div>
+      <div class="pill-tag">Convert</div>
+    </div>
+
+    <div class="closer">
+      <div class="closer-line"></div>
+      <div class="closer-text">Fix these. Your reach compounds.</div>
+      <div class="closer-line" style="background:linear-gradient(270deg,rgba(255,255,255,0.06) 0%,transparent 100%)"></div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn" onclick="replay()">&#8635; Replay</button>
+</div>
+
+<script>
+function replay() {
+  const p = document.getElementById('phone');
+  const clone = p.cloneNode(true);
+  p.parentNode.replaceChild(clone, p);
+  clone.id = 'phone';
+}
+</script>
+</body>
+</html>
