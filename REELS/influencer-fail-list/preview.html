@@ -2,201 +2,252 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Influencer Fail List — Motion Preview</title>
+<title>Influencer Fail List</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@400;500;600;700&display=swap');
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: #1a1a1a;
+    background: #080808;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    gap: 20px;
+    gap: 28px;
   }
 
-  .label {
-    color: #5C5C72;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  /* Phone frame */
+  /* ── Phone shell ── */
   .phone {
-    width: 360px;
-    height: 640px;
+    width: 390px;
+    height: 692px;
     background: #0C0C10;
-    border-radius: 36px;
-    border: 1.5px solid #2A2A35;
+    border-radius: 44px;
+    border: 1px solid #1C1C22;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.8), 0 0 0 1px #1C1C22;
+    box-shadow:
+      0 0 0 1px #0A0A0C,
+      0 48px 120px rgba(0,0,0,0.9),
+      inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
-  /* Notch */
-  .phone::before {
-    content: '';
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 6px;
-    background: #1C1C22;
-    border-radius: 4px;
-    z-index: 10;
-  }
-
-  /* Letterbox bars */
-  .letterbox-top,
-  .letterbox-bottom {
-    position: absolute;
-    left: 0; right: 0;
-    height: 36px;
-    background: rgba(0,0,0,0.85);
-    z-index: 5;
-  }
-  .letterbox-top { top: 0; }
-  .letterbox-bottom { bottom: 0; }
-
-  /* Background subtle gradient */
-  .bg-gradient {
+  /* subtle bg atmosphere */
+  .atmo {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(59,130,246,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 30% at 80% 100%, rgba(139,92,246,0.04) 0%, transparent 70%);
+      radial-gradient(ellipse 70% 35% at 50% -5%, rgba(59,130,246,0.09) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 15% 80%, rgba(160,24,48,0.07) 0%, transparent 60%);
+    pointer-events: none;
   }
 
-  /* Content area */
-  .content {
+  /* letterbox */
+  .lbx { position: absolute; left:0; right:0; height:40px; background:#0C0C10; z-index:8; }
+  .lbx.top { top:0; }
+  .lbx.bot { bottom:0; }
+
+  /* notch */
+  .notch {
+    position: absolute; top:13px; left:50%; transform:translateX(-50%);
+    width:90px; height:5px; background:#111115; border-radius:3px; z-index:9;
+  }
+
+  /* grain */
+  .grain {
+    position:absolute; inset:0; z-index:7; pointer-events:none; opacity:0.055;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:200px 200px;
+  }
+
+  /* ── Content ── */
+  .scene {
     position: absolute;
-    top: 50px;
-    left: 20px;
-    right: 20px;
-    bottom: 50px;
+    inset: 44px 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 0;
+    padding: 0 28px;
   }
 
-  /* Header label */
-  .header-label {
+  /* eyebrow */
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #5C5C72;
-    margin-bottom: 14px;
+    color: #3A3A48;
+    margin-bottom: 18px;
     opacity: 0;
-    animation: fadeIn 0.4s ease-out 0.1s forwards;
+    animation: riseIn 0.5s ease-out 0.05s forwards;
   }
 
-  /* Sweep line */
-  .sweep-line {
+  /* hero headline */
+  .headline {
+    font-family: 'Inter', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.0;
+    color: #F0F0F6;
+    margin-bottom: 6px;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: riseIn 0.55s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+  }
+
+  .headline em {
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 44px;
+    color: #A01830;
+    letter-spacing: -0.01em;
+  }
+
+  /* sub-headline */
+  .sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #5C5C72;
+    letter-spacing: 0.01em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 0.3s forwards;
+  }
+
+  /* divider sweep */
+  .sweep {
     height: 1px;
-    background: rgba(240, 239, 232, 0.25);
-    margin-bottom: 16px;
-    transform-origin: left center;
+    background: linear-gradient(90deg, rgba(160,24,48,0.6) 0%, rgba(240,239,232,0.15) 40%, transparent 100%);
+    margin-bottom: 20px;
+    transform-origin: left;
     transform: scaleX(0);
-    animation: drawLine 0.27s ease-out 0s forwards;
+    animation: sweep 0.35s ease-out 0.32s forwards;
   }
 
-  /* Pills */
+  /* pills */
   .pill {
     display: flex;
     align-items: center;
-    height: 52px;
-    background: #141418;
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 10px;
+    gap: 14px;
+    padding: 0 18px 0 0;
+    height: 62px;
+    background: rgba(20,20,24,0.9);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
     margin-bottom: 10px;
     overflow: hidden;
-    opacity: 0;
-    transform: scale(0.92);
     position: relative;
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+    backdrop-filter: blur(10px);
   }
 
-  .pill-1 { animation: pillIn 0.3s cubic-bezier(0.32,0.72,0,1) 0.30s forwards; }
-  .pill-2 { animation: pillIn 0.3s cubic-bezier(0.32,0.72,0,1) 0.37s forwards; }
-  .pill-3 { animation: pillIn 0.3s cubic-bezier(0.32,0.72,0,1) 0.43s forwards; }
+  /* glass shimmer on pill */
+  .pill::after {
+    content:'';
+    position:absolute; inset:0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+    border-radius:14px;
+    pointer-events:none;
+  }
 
-  /* Crimson left bar */
-  .accent-bar {
-    width: 3px;
+  .pill-1 { animation: slideUp 0.4s cubic-bezier(0.32,0.72,0,1) 0.38s forwards; }
+  .pill-2 { animation: slideUp 0.4s cubic-bezier(0.32,0.72,0,1) 0.46s forwards; }
+  .pill-3 { animation: slideUp 0.4s cubic-bezier(0.32,0.72,0,1) 0.54s forwards; }
+
+  /* crimson left bar */
+  .bar {
+    width: 4px;
     height: 100%;
+    background: linear-gradient(180deg, #C41A32 0%, #7A0F20 100%);
+    flex-shrink: 0;
+  }
+
+  /* X mark */
+  .xmark {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(160,24,48,0.15);
+    border: 1px solid rgba(160,24,48,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #A01830;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .pill-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .pill-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #F0EFE8;
+  }
+
+  .pill-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: #3A3A48;
+    letter-spacing: 0.04em;
+  }
+
+  .pill-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #2A2A35;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  /* bottom cta */
+  .cta-line {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 0.8s forwards;
+  }
+
+  .cta-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
     background: #A01830;
     flex-shrink: 0;
   }
 
-  /* Pill text */
-  .pill-text {
-    padding-left: 14px;
-    font-size: 11.5px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #F0EFE8;
-    white-space: nowrap;
+  .cta-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 300;
+    font-style: italic;
+    color: #6E6E80;
+    letter-spacing: 0.02em;
   }
 
-  /* Number badge */
-  .pill-num {
-    margin-left: auto;
-    margin-right: 16px;
-    font-size: 10px;
-    font-weight: 500;
-    color: #3A3A48;
-    letter-spacing: 0.05em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Subtext */
-  .subtext {
-    font-size: 8.5px;
-    letter-spacing: 0.08em;
-    color: #3A3A48;
-    text-transform: uppercase;
-    margin-top: 14px;
-    opacity: 0;
-    animation: fadeIn 0.4s ease-out 0.7s forwards;
-  }
-
-  /* Replay button */
-  .replay-btn {
-    background: #141418;
-    border: 1px solid rgba(255,255,255,0.10);
-    color: #9090A8;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 10px 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 150ms ease-out;
-    font-family: inherit;
-  }
-  .replay-btn:hover {
-    background: #1E1E26;
-    color: #F0EFE8;
-    border-color: rgba(255,255,255,0.18);
-  }
-
-  /* Keyframes */
-  @keyframes drawLine {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
-  }
-
-  @keyframes pillIn {
-    from { opacity: 0; transform: scale(0.92); }
-    to   { opacity: 1; transform: scale(1.0); }
+  /* ── Keyframes ── */
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes fadeIn {
@@ -204,63 +255,118 @@
     to   { opacity: 1; }
   }
 
-  /* Grain overlay */
-  .grain {
-    position: absolute;
-    inset: 0;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-size: 128px 128px;
-    pointer-events: none;
-    z-index: 6;
+  @keyframes sweep {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
   }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── Controls ── */
+  .controls {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #2A2A35;
+    background: #141418;
+    color: #5C5C72;
+    transition: all 150ms ease-out;
+  }
+
+  .btn:hover { background: #1E1E26; color: #F0EFE8; border-color: #3A3A48; }
+  .btn.primary { border-color: rgba(160,24,48,0.4); color: #A01830; }
+  .btn.primary:hover { background: rgba(160,24,48,0.1); color: #C41A32; }
 </style>
 </head>
 <body>
 
-<p class="label">Motion Preview — 1080 × 1920 scaled</p>
-
-<div class="phone">
-  <div class="bg-gradient"></div>
-  <div class="letterbox-top"></div>
-  <div class="letterbox-bottom"></div>
+<div class="phone" id="phone">
+  <div class="atmo"></div>
+  <div class="notch"></div>
+  <div class="lbx top"></div>
+  <div class="lbx bot"></div>
   <div class="grain"></div>
 
-  <div class="content">
-    <div class="header-label">Where most reels fail</div>
-    <div class="sweep-line"></div>
+  <div class="scene">
+
+    <div class="eyebrow">Reel Audit</div>
+
+    <div class="headline">3 reasons<br>your reels <em>die.</em></div>
+
+    <div class="sub">What most influencers never fix.</div>
+
+    <div class="sweep"></div>
 
     <div class="pill pill-1">
-      <div class="accent-bar"></div>
-      <span class="pill-text">No Clear Promise</span>
-      <span class="pill-num">01</span>
+      <div class="bar"></div>
+      <div class="xmark">✕</div>
+      <div class="pill-body">
+        <div class="pill-label">No Clear Promise</div>
+        <div class="pill-sub">Viewer doesn't know what they're getting</div>
+      </div>
+      <div class="pill-num">01</div>
     </div>
 
     <div class="pill pill-2">
-      <div class="accent-bar"></div>
-      <span class="pill-text">Lack of Scroll Reason</span>
-      <span class="pill-num">02</span>
+      <div class="bar"></div>
+      <div class="xmark">✕</div>
+      <div class="pill-body">
+        <div class="pill-label">Lack of Scroll Reason</div>
+        <div class="pill-sub">Nothing pulling them past the first second</div>
+      </div>
+      <div class="pill-num">02</div>
     </div>
 
     <div class="pill pill-3">
-      <div class="accent-bar"></div>
-      <span class="pill-text">No CTA</span>
-      <span class="pill-num">03</span>
+      <div class="bar"></div>
+      <div class="xmark">✕</div>
+      <div class="pill-body">
+        <div class="pill-label">No CTA</div>
+        <div class="pill-sub">Watch ends. Nothing happens. Reach dies.</div>
+      </div>
+      <div class="pill-num">03</div>
     </div>
 
-    <div class="subtext">Fix these. Your reach doubles.</div>
+    <div class="cta-line">
+      <div class="cta-dot"></div>
+      <div class="cta-text">Fix all three. Your reach compounds.</div>
+    </div>
+
   </div>
 </div>
 
-<button class="replay-btn" onclick="replay()">↺ Replay</button>
+<div class="controls">
+  <button class="btn primary" onclick="replay()">↺ Replay</button>
+  <button class="btn" onclick="toggleSub()">Toggle Subtext</button>
+</div>
 
 <script>
-function replay() {
-  const phone = document.querySelector('.phone');
-  const clone = phone.cloneNode(true);
-  phone.parentNode.replaceChild(clone, phone);
-}
-</script>
+  function replay() {
+    const p = document.getElementById('phone');
+    const clone = p.cloneNode(true);
+    p.parentNode.replaceChild(clone, p);
+    clone.id = 'phone';
+  }
 
+  let subVisible = true;
+  function toggleSub() {
+    const subs = document.querySelectorAll('.pill-sub, .sub, .cta-line');
+    subVisible = !subVisible;
+    subs.forEach(el => el.style.display = subVisible ? '' : 'none');
+  }
+</script>
 </body>
 </html>
