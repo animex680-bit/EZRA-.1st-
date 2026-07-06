@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRISMA — every idea refracts into finished work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f2ec;--bg-dark:#0c0b10;--ink:#14131a;--muted:#5c5867;--faint:#8b8797;
+  --hair:rgba(20,19,26,.09);--hair-dark:rgba(255,255,255,.10);
+  --iris1:#ff5ea8;--iris2:#7a5cff;--iris3:#4dc4ff;--iris4:#7ff0c8;--iris5:#ffc46b;
+  --disp:'Fraunces',Georgia,serif;--sans:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(122,92,255,.25)}
+
+/* ambient cream photographic base */
+.paper{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.paper .m1{position:absolute;width:70vw;height:70vw;left:-12vw;top:-14vw;background:radial-gradient(circle,rgba(255,232,208,.9),transparent 60%);filter:blur(30px)}
+.paper .m2{position:absolute;width:56vw;height:56vw;right:-14vw;top:22vh;background:radial-gradient(circle,rgba(214,224,240,.7),transparent 62%);filter:blur(40px)}
+.paper .m3{position:absolute;width:44vw;height:44vw;left:34vw;bottom:-14vw;background:radial-gradient(circle,rgba(255,215,190,.55),transparent 64%);filter:blur(60px)}
+.grain{position:fixed;inset:0;z-index:44;pointer-events:none;opacity:.06;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* snake bg entity (subtle iridescent line following scroll) */
+.snakewrap{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;opacity:.55}
+.snakewrap svg{position:absolute;top:0;left:0;width:100vw;height:100%}
+.bg-line{fill:none;stroke:url(#irisGrad);stroke-width:26;stroke-linecap:round;filter:blur(12px);opacity:.32}
+.bg-line.core{stroke-width:1.6;filter:blur(.4px);opacity:.55}
+
+/* NAV */
+.nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:22px;align-items:center;
+  padding:10px 12px 10px 20px;border:1px solid var(--hair);border-radius:100px;background:rgba(246,242,236,.7);backdrop-filter:blur(18px) saturate(120%);
+  box-shadow:0 12px 40px -18px rgba(20,19,26,.18),0 1px 0 rgba(255,255,255,.6) inset}
+.brand{font-family:var(--sans);font-weight:700;letter-spacing:.32em;font-size:14px;display:flex;gap:10px;align-items:center}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:conic-gradient(from 0deg,var(--iris1),var(--iris2),var(--iris3),var(--iris4),var(--iris5),var(--iris1));box-shadow:0 0 12px 2px rgba(122,92,255,.5)}
+.nav .ig{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.nav .cta{font-size:13px;font-weight:600;padding:9px 18px;border-radius:100px;color:#fff;
+  background:linear-gradient(120deg,#1a1822,#3a3350);box-shadow:0 10px 26px -10px rgba(20,19,26,.5);transition:transform .32s cubic-bezier(.2,.9,.2,1),box-shadow .32s}
+.nav .cta:hover{transform:translateY(-2px);box-shadow:0 16px 34px -10px rgba(20,19,26,.55)}
+@media(max-width:620px){.nav .ig{display:none}}
+
+/* --- SECTION 1 HERO --- */
+#hero{position:relative;height:100vh;width:100%;overflow:hidden;z-index:2;background:#050408}
+.stagevid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.herotint{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,transparent 22%,rgba(5,4,8,.35) 62%,rgba(5,4,8,.86) 100%)}
+.heroIntro{position:absolute;z-index:4;left:0;right:0;top:14vh;text-align:center;padding:0 6vw;pointer-events:none;color:#f2eee8}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#d8ccff}
+.heroIntro h1{font-family:var(--disp);font-weight:300;font-size:clamp(2.8rem,7.8vw,6.4rem);line-height:.98;letter-spacing:-.02em;margin:.26em 0 .3em}
+.heroIntro h1 .it{font-style:italic;background:linear-gradient(120deg,var(--iris1),var(--iris3),var(--iris4));-webkit-background-clip:text;background-clip:text;color:transparent}
+.heroIntro p{color:#c9c2d4;font-size:clamp(1rem,1.4vw,1.15rem);max-width:44ch;margin:0 auto}
+
+/* hero gutter captions (dark hero so light text) */
+.cap{position:absolute;z-index:5;max-width:300px;opacity:0;pointer-events:none;color:#f2eee8;
+  transform:translateY(var(--ty,26px)) scale(var(--sc,.96));filter:blur(var(--bl,6px));will-change:opacity,transform,filter}
+.cap .k{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#d0c4ff;display:block;margin-bottom:8px}
+.cap .t{font-family:var(--disp);font-weight:300;font-size:clamp(1.4rem,2.4vw,2rem);line-height:1.16}
+.cap .t em{font-style:italic;background:linear-gradient(120deg,var(--iris1),var(--iris3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.p-tl{left:6vw;top:16vh;text-align:left}
+.p-tr{right:6vw;top:16vh;text-align:right}
+.p-bl{left:6vw;bottom:18vh;text-align:left}
+.p-br{right:6vw;bottom:18vh;text-align:right}
+
+.scrollhint{position:absolute;left:50%;bottom:5vh;transform:translateX(-50%);z-index:6;color:#d0c4ff;font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;opacity:.7;display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none}
+.scrollhint b{display:block;width:1px;height:26px;background:linear-gradient(to bottom,#d0c4ff,transparent);animation:sh 1.8s ease-in-out infinite}
+@keyframes sh{0%,100%{opacity:.35;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* --- SECTION 2 FEATURES GALLERY --- */
+#gallery{position:relative;padding:180px 0 200px;z-index:3;background:transparent}
+.g-inner{max-width:1240px;margin:0 auto;padding:0 6vw;text-align:center;position:relative}
+.g-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+.g-title{font-family:var(--disp);font-weight:300;font-size:clamp(2.4rem,5vw,4.6rem);line-height:1.02;letter-spacing:-.02em;margin:.4em 0 .3em;color:var(--ink)}
+.g-title em{font-style:italic;background:linear-gradient(120deg,var(--iris2),var(--iris1),var(--iris5));-webkit-background-clip:text;background-clip:text;color:transparent}
+.g-sub{color:var(--muted);font-size:clamp(1rem,1.3vw,1.15rem);max-width:52ch;margin:0 auto 76px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;position:relative}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+
+.btn{position:relative;border-radius:26px;padding:36px 26px 30px;text-align:left;background:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.7);backdrop-filter:blur(20px) saturate(140%);
+  box-shadow:
+    0 30px 60px -30px rgba(20,19,26,.22),
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 0 0 1px rgba(20,19,26,.03) inset;
+  cursor:pointer;will-change:transform;
+  opacity:0;transform:translateY(38px) scale(.94);
+  transition:opacity .8s cubic-bezier(.2,.85,.2,1),transform .8s cubic-bezier(.2,.85,.2,1)}
+.btn.in{opacity:1;transform:translateY(0) scale(1)}
+.btn::before{content:'';position:absolute;inset:0;border-radius:26px;padding:1px;
+  background:conic-gradient(from var(--rot,0deg),var(--iris1),var(--iris2),var(--iris3),var(--iris4),var(--iris5),var(--iris1));
+  -webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s;pointer-events:none}
+.btn.hot::before{opacity:1;animation:rot 4s linear infinite}
+@keyframes rot{to{--rot:360deg}}
+@property --rot{syntax:'<angle>';initial-value:0deg;inherits:false}
+.btn .ico{width:74px;height:74px;margin-bottom:20px;border-radius:22px;
+  background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.55));
+  display:grid;place-items:center;position:relative;overflow:hidden;
+  box-shadow:0 12px 30px -12px rgba(122,92,255,.35),0 1px 0 rgba(255,255,255,.9) inset}
+.btn .ico svg{width:52px;height:52px;filter:drop-shadow(0 4px 10px rgba(122,92,255,.35))}
+.btn h3{font-family:var(--disp);font-weight:400;font-size:1.5rem;letter-spacing:-.01em;color:var(--ink);margin-bottom:8px}
+.btn p{font-family:var(--sans);font-size:.94rem;color:var(--muted);line-height:1.5}
+.btn .arrow{position:absolute;right:22px;top:22px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(20,19,26,.06);color:var(--ink);transition:background .3s,transform .3s}
+.btn:hover .arrow{background:linear-gradient(120deg,var(--iris2),var(--iris1));color:#fff;transform:rotate(-45deg)}
+
+/* --- LINKING LINE (S2 → S3) --- */
+.linker{position:absolute;left:0;right:0;top:100%;height:280px;z-index:3;pointer-events:none;overflow:visible}
+.linker svg{width:100%;height:100%;display:block;overflow:visible}
+.linker path{fill:none;stroke:url(#irisGrad2);stroke-width:2.2;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(122,92,255,.4))}
+
+/* --- SECTION 3 --- */
+#s3{position:relative;height:100vh;width:100%;overflow:hidden;z-index:4;background:#050408;
+  transform:translateX(0);will-change:transform,opacity}
+#s3 .herotint{background:radial-gradient(circle at 50% 50%,transparent 26%,rgba(5,4,8,.4) 62%,rgba(5,4,8,.82) 100%)}
+#s3 .cap{color:#f2eee8}
+#s3 .heroIntro{color:#f2eee8;top:auto;bottom:14vh;left:6vw;right:auto;text-align:left;padding:0;max-width:520px}
+#s3 .heroIntro h2{font-family:var(--disp);font-weight:300;font-size:clamp(2rem,4.6vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin:.3em 0}
+#s3 .heroIntro h2 em{font-style:italic;background:linear-gradient(120deg,var(--iris3),var(--iris4));-webkit-background-clip:text;background-clip:text;color:transparent}
+#s3 .heroIntro p{color:#c2bccc;font-size:1.02rem;max-width:44ch}
+
+/* --- SECTION 4 STAGE (s4 + horizontal → s5) --- */
+#s4stage{position:relative;height:100vh;width:100%;overflow:hidden;z-index:5;background:#050408}
+.htrack{position:absolute;top:0;left:0;height:100%;width:200vw;display:flex;will-change:transform}
+.hpane{position:relative;width:100vw;height:100%;flex:none;overflow:hidden}
+.hpane .stagevid{position:absolute;inset:0}
+.hpane .herotint{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,transparent 24%,rgba(5,4,8,.32) 62%,rgba(5,4,8,.8) 100%);pointer-events:none}
+.hpane .cap{color:#f2eee8}
+.hpane .heroIntro{color:#f2eee8;padding:0 6vw}
+.hpane .heroIntro h2{font-family:var(--disp);font-weight:300;font-size:clamp(2rem,4.6vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin:.3em 0}
+.hpane .heroIntro h2 em{font-style:italic;background:linear-gradient(120deg,var(--iris1),var(--iris5));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hpane .heroIntro p{color:#c2bccc;font-size:1.02rem;max-width:44ch}
+#p4 .heroIntro{position:absolute;top:14vh;left:0;right:0;text-align:center}
+#p5 .heroIntro{position:absolute;bottom:14vh;right:6vw;left:auto;text-align:right;max-width:520px}
+
+/* --- FOOTER --- */
+footer{position:relative;padding:120px 6vw 60px;text-align:center;z-index:3;color:var(--ink);background:transparent}
+footer .fb{font-family:var(--disp);font-weight:300;font-style:italic;font-size:clamp(2.4rem,5vw,4.4rem);letter-spacing:-.02em}
+footer .fb em{background:linear-gradient(120deg,var(--iris2),var(--iris1),var(--iris5));-webkit-background-clip:text;background-clip:text;color:transparent}
+footer .req{display:inline-flex;gap:12px;margin:32px 0 40px;padding:14px 26px;border-radius:100px;background:linear-gradient(120deg,#1a1822,#3a3350);color:#fff;font-weight:600;font-size:.98rem;
+  box-shadow:0 20px 44px -18px rgba(20,19,26,.5);transition:transform .32s cubic-bezier(.2,.9,.2,1),box-shadow .32s}
+footer .req:hover{transform:translateY(-3px);box-shadow:0 26px 54px -18px rgba(20,19,26,.55)}
+footer small{display:block;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.14em}
+
+/* no3d fallback */
+body.no3d #hero,body.no3d #s3,body.no3d #s4stage{height:auto;min-height:60vh}
+body.no3d .stagevid{position:absolute}
+body.no3d .cap{position:static;opacity:1;transform:none;filter:none;max-width:none;margin:16px auto;text-align:center}
+body.no3d .scrollhint{display:none}
+body.no3d .htrack{position:relative;width:100%;flex-direction:column;transform:none!important}
+body.no3d .hpane{width:100%;height:80vh}
+</style>
+</head>
+<body>
+
+<div class="paper"><div class="m1"></div><div class="m2"></div><div class="m3"></div></div>
+<div class="snakewrap">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="irisGrad" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="#ff5ea8"/>
+        <stop offset=".33" stop-color="#7a5cff"/>
+        <stop offset=".66" stop-color="#4dc4ff"/>
+        <stop offset="1" stop-color="#7ff0c8"/>
+      </linearGradient>
+    </defs>
+    <path class="bg-line" id="snakeGlow"></path>
+    <path class="bg-line core" id="snakeCore"></path>
+  </svg>
+</div>
+<div class="grain"></div>
+
+<nav class="nav">
+  <a href="#" class="brand"><span class="dot"></span>PRISMA</a>
+  <span class="ig">@prisma.tools</span>
+  <a href="#request" class="cta">Request access</a>
+</nav>
+
+<!-- ================= SECTION 1 HERO ================= -->
+<section id="hero">
+  <video id="heroVid" class="stagevid" muted playsinline preload="auto" poster="assets/img/hero-poster.jpg">
+    <source src="assets/videos/hero.mp4" type="video/mp4"></video>
+  <div class="herotint"></div>
+
+  <div class="heroIntro" id="heroIntro">
+    <span class="eyebrow">A creative workspace for the AI age</span>
+    <h1>Every idea, <span class="it">refracted.</span></h1>
+    <p>PRISMA turns one raw spark into finished work — writing, visuals, motion, code — from a single canvas.</p>
+  </div>
+
+  <div class="cap p-tl" data-beat="0"><span class="k">Genesis</span><div class="t">One spark. <em>One signal.</em> One question.</div></div>
+  <div class="cap p-tr" data-beat="1"><span class="k">Refract</span><div class="t">PRISMA turns it into <em>finished work.</em></div></div>
+
+  <div class="scrollhint" id="scrollhint">scroll to refract<b></b></div>
+</section>
+
+<!-- ================= SECTION 2 FEATURES GALLERY ================= -->
+<section id="gallery">
+  <div class="g-inner">
+    <span class="g-eyebrow">Six tools · one canvas</span>
+    <h2 class="g-title">Everything you make, <em>on one surface.</em></h2>
+    <p class="g-sub">Write a line, visualize the mood, animate the story, refactor the code, compose the sound, ship the whole thing. No app-hopping.</p>
+
+    <div class="grid" id="grid">
+
+      <div class="btn" data-tool="write">
+        <span class="arrow">↗</span>
+        <div class="ico">
+          <svg viewBox="0 0 60 60"><defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5ea8"/><stop offset=".5" stop-color="#7a5cff"/><stop offset="1" stop-color="#4dc4ff"/></linearGradient>
+          </defs>
+          <path d="M12 42 L40 14 L48 22 L20 50 Z" fill="url(#g1)" stroke="rgba(255,255,255,.9)" stroke-width="1.4"/>
+          <path d="M12 42 L18 44 L20 50 Z" fill="#fff" opacity=".85"/>
+          <circle cx="45" cy="17" r="2.4" fill="#fff" opacity=".9"/></svg>
+        </div>
+        <h3>Refract</h3>
+        <p>Write drafts, briefs, sales copy — with PRISMA's tuned models.</p>
+      </div>
+
+      <div class="btn" data-tool="visualize">
+        <span class="arrow">↗</span>
+        <div class="ico">
+          <svg viewBox="0 0 60 60"><defs>
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4dc4ff"/><stop offset=".5" stop-color="#7ff0c8"/><stop offset="1" stop-color="#ffc46b"/></linearGradient>
+          </defs>
+          <path d="M30 8 L38 24 L54 26 L42 38 L46 54 L30 46 L14 54 L18 38 L6 26 L22 24 Z" fill="url(#g2)" stroke="rgba(255,255,255,.9)" stroke-width="1.2"/>
+          <circle cx="30" cy="30" r="4" fill="#fff" opacity=".9"/></svg>
+        </div>
+        <h3>Prism</h3>
+        <p>Turn a mood board into hero images and product visuals.</p>
+      </div>
+
+      <div class="btn" data-tool="animate">
+        <span class="arrow">↗</span>
+        <div class="ico">
+          <svg viewBox="0 0 60 60"><defs>
+            <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a5cff"/><stop offset=".5" stop-color="#4dc4ff"/><stop offset="1" stop-color="#ff5ea8"/></linearGradient>
+          </defs>
+          <circle cx="30" cy="30" r="18" fill="none" stroke="url(#g3)" stroke-width="4"/>
+          <circle cx="30" cy="30" r="10" fill="none" stroke="url(#g3)" stroke-width="2" opacity=".7"/>
+          <circle cx="30" cy="12" r="4" fill="#fff"/>
+          <circle cx="48" cy="30" r="3" fill="#fff" opacity=".8"/></svg>
+        </div>
+        <h3>Beam</h3>
+        <p>Scroll-scrubbed motion, spring physics, kinetic type — no timeline.</p>
+      </div>
+
+      <div class="btn" data-tool="compose">
+        <span class="arrow">↗</span>
+        <div class="ico">
+          <svg viewBox="0 0 60 60"><defs>
+            <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7ff0c8"/><stop offset=".5" stop-color="#4dc4ff"/><stop offset="1" stop-color="#7a5cff"/></linearGradient>
+          </defs>
+          <path d="M8 30 C 16 12, 24 48, 32 30 S 48 12, 52 30" fill="none" stroke="url(#g4)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M8 40 C 16 26, 24 54, 32 40 S 48 26, 52 40" fill="none" stroke="url(#g4)" stroke-width="2.4" stroke-linecap="round" opacity=".65"/></svg>
+        </div>
+        <h3>Chorus</h3>
+        <p>Score, voice-over, ambient beds — mixed to your video's beats.</p>
+      </div>
+
+      <div class="btn" data-tool="refactor">
+        <span class="arrow">↗</span>
+        <div class="ico">
+          <svg viewBox="0 0 60 60"><defs>
+            <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc46b"/><stop offset=".5" stop-color="#ff5ea8"/><stop offset="1" stop-color="#7a5cff"/></linearGradient>
+          </defs>
+          <path d="M18 18 L10 30 L18 42 M42 18 L50 30 L42 42" fill="none" stroke="url(#g5)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="35" y1="14" x2="25" y2="46" stroke="url(#g5)" stroke-width="3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Refactor</h3>
+        <p>Ship-ready components, framework-native — Tailwind, React, Vue.</p>
+      </div>
+
+      <div class="btn" data-tool="ship">
+        <span class="arrow">↗</span>
+        <div class="ico">
+          <svg viewBox="0 0 60 60"><defs>
+            <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4dc4ff"/><stop offset=".5" stop-color="#7a5cff"/><stop offset="1" stop-color="#ff5ea8"/></linearGradient>
+          </defs>
+          <path d="M30 6 C 40 22, 40 38, 30 54 C 20 38, 20 22, 30 6 Z" fill="url(#g6)" stroke="rgba(255,255,255,.9)" stroke-width="1.4"/>
+          <circle cx="30" cy="24" r="4" fill="#fff" opacity=".95"/>
+          <path d="M22 46 L18 54 M38 46 L42 54" stroke="url(#g6)" stroke-width="3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Launch</h3>
+        <p>One-click deploy, share links, gather feedback — no context switch.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- linking line into S3 -->
+  <div class="linker" aria-hidden="true">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="irisGrad2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ff5ea8"/>
+          <stop offset=".5" stop-color="#7a5cff"/>
+          <stop offset="1" stop-color="#4dc4ff"/>
+        </linearGradient>
+      </defs>
+      <path id="linkPath" d="M 50 0 C 50 40, 20 55, 12 100"></path>
+    </svg>
+  </div>
+</section>
+
+<!-- ================= SECTION 3 ================= -->
+<section id="s3">
+  <video id="s3Vid" class="stagevid" muted playsinline preload="auto" poster="assets/img/s3-poster.jpg">
+    <source src="assets/videos/s3.mp4" type="video/mp4"></video>
+  <div class="herotint"></div>
+
+  <div class="heroIntro">
+    <span class="eyebrow" style="color:#8fd6ff">One canvas</span>
+    <h2>Made to feel <em>like one tool.</em></h2>
+    <p>Every panel, every module, every model — tuned to the same rhythm. Nothing to learn, nothing to sync.</p>
+  </div>
+
+  <div class="cap p-tl" data-beat="0"><span class="k">Compose</span><div class="t">Six panels. <em>One rhythm.</em></div></div>
+  <div class="cap p-tr" data-beat="1"><span class="k">Tune</span><div class="t">Dial in the vibe. <em>PRISMA follows.</em></div></div>
+</section>
+
+<!-- ================= SECTION 4 STAGE (s4 + horizontal → s5) ================= -->
+<section id="s4stage">
+  <div class="htrack" id="htrack">
+
+    <!-- pane 4: comes up from below then holds while scrubbing s4 -->
+    <div class="hpane" id="p4">
+      <video id="s4Vid" class="stagevid" muted playsinline preload="auto" poster="assets/img/s4-poster.jpg">
+        <source src="assets/videos/s4.mp4" type="video/mp4"></video>
+      <div class="herotint"></div>
+      <div class="heroIntro">
+        <span class="eyebrow" style="color:#f0e4ff">Alignment</span>
+        <h2>Are you <em>aligned?</em></h2>
+        <p>PRISMA reads your intent — the tone, the audience, the outcome — before it makes a single move.</p>
+      </div>
+      <div class="cap p-bl" data-beat="0"><span class="k">Signal</span><div class="t">One thought <em>lines up</em> the whole canvas.</div></div>
+    </div>
+
+    <!-- pane 5: sits to the right, revealed by translateX -->
+    <div class="hpane" id="p5">
+      <video id="s5Vid" class="stagevid" muted playsinline preload="auto" poster="assets/img/s5-poster.jpg">
+        <source src="assets/videos/s5.mp4" type="video/mp4"></video>
+      <div class="herotint"></div>
+      <div class="heroIntro">
+        <span class="eyebrow" style="color:#ffd0a8">Refraction</span>
+        <h2>From a spark <em>to a system.</em></h2>
+        <p>Bright ideas travel — from the first line to the last export. PRISMA keeps the whole path lit.</p>
+      </div>
+      <div class="cap p-tl" data-beat="0"><span class="k">Move</span><div class="t">Every idea has <em>momentum.</em></div></div>
+      <div class="cap p-tr" data-beat="1"><span class="k">Land</span><div class="t">And a place to <em>land.</em></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer id="request">
+  <div class="fb">Refract your next <em>idea.</em></div>
+  <a href="#" class="req">Request early access →</a>
+  <small>PRISMA · a creative workspace · @prisma.tools · © 2026</small>
+</footer>
+
+<div id="zoomer" style="position:fixed;inset:0;pointer-events:none;z-index:120"></div>
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const FULL=!RM && innerWidth>=768;
+if(!FULL) document.body.classList.add('no3d');
+function seg(p,a,b,c,d){ if(p<a||p>d) return 0; if(p<b) return (p-a)/(b-a); if(p>c) return 1-(p-c)/(d-c); return 1; }
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+/* ---------- snake bg path ---------- */
+(function(){
+  const glow=document.getElementById('snakeGlow'), core=document.getElementById('snakeCore');
+  function build(){
+    const H=100, pts=[]; const n=28;
+    for(let i=0;i<=n;i++){ const y=i/n*H; const x=50+Math.sin(i*0.62)*24+Math.sin(i*0.19)*8; pts.push([x,y]); }
+    let d='M '+pts[0][0]+' '+pts[0][1];
+    for(let i=1;i<pts.length;i++){ const [x,y]=pts[i], [px,py]=pts[i-1]; const mx=(px+x)/2,my=(py+y)/2; d+=' Q '+px+' '+py+' '+mx+' '+my; }
+    glow.setAttribute('d',d); core.setAttribute('d',d);
+    const L=core.getTotalLength();
+    [glow,core].forEach(p=>{p.style.strokeDasharray=L; p.style.strokeDashoffset=L;});
+    return L;
+  }
+  let L=build(); addEventListener('resize',()=>{L=build();});
+  let cur=L, tgt=L, wig=0;
+  function tick(){
+    requestAnimationFrame(tick);
+    const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+    const p=Math.min(1,scrollY/max);
+    tgt=L*(1-(0.14+p*0.86));
+    cur+=(tgt-cur)*0.07;
+    wig+=0.018;
+    const off=cur+Math.sin(wig)*5;
+    glow.style.strokeDashoffset=off; core.style.strokeDashoffset=off;
+  }
+  tick();
+})();
+
+/* ---------- scrub engine (with prime-once + !seeking guard + self-heal) ---------- */
+function makeScrub(opts){
+  const vid=document.getElementById(opts.vid), stage=document.getElementById(opts.stage);
+  if(!vid||!stage) return null;
+  let dur=opts.clip||5, ready=false, tgt=0, cur=0, prog=0;
+  vid.addEventListener('loadedmetadata',()=>{ dur=Math.min(opts.clip||vid.duration,vid.duration); ready=true; });
+  vid.pause();
+  const caps=stage.querySelectorAll('.cap'), beats=opts.beats||[];
+  const st=ScrollTrigger.create({trigger:opts.trigger||stage,start:opts.start||'top top',end:'+='+opts.end,pin:opts.pin!==false,scrub:true,
+    onUpdate:s=>{prog=s.progress; if(opts.onProg)opts.onProg(prog);}});
+  function loop(){
+    requestAnimationFrame(loop);
+    if(ready){
+      const sp=opts.mapProg?opts.mapProg(prog):prog;
+      tgt=clamp(sp,0,1)*Math.max(0.05,dur-0.05);
+      cur+=(tgt-cur)*0.16;
+      if(vid.readyState>=2 && !vid.seeking && Math.abs(vid.currentTime-cur)>0.033){ try{vid.currentTime=cur;}catch(e){} }
+    }
+    caps.forEach((c,i)=>{ const b=beats[i]; if(!b)return; const v=seg(prog,b[0],b[1],b[2],b[3]);
+      c.style.opacity=v; c.style.setProperty('--ty',(26*(1-v)).toFixed(1)+'px');
+      c.style.setProperty('--sc',(0.96+0.04*v).toFixed(3)); c.style.setProperty('--bl',(6*(1-v)).toFixed(1)+'px'); });
+    if(opts.intro){ opts.intro.style.opacity=Math.max(0,1-prog/0.15); opts.intro.style.transform='translateY('+(-prog*40)+'px)'; }
+    if(opts.hint){ opts.hint.style.opacity=Math.max(0,1-prog/0.1); }
+  }
+  loop();
+  /* prime once (never re-fire during scrub) */
+  let primed=false;
+  function prime(){ if(primed)return; primed=true; vid.play().then(()=>vid.pause()).catch(()=>{primed=false;}); }
+  vid.addEventListener('loadeddata',prime); vid.addEventListener('canplay',prime);
+  let healed=0; vid.addEventListener('error',()=>{ if(healed++<3){ready=false;cur=0;primed=false;vid.load();} });
+  return {st, getProg:()=>prog};
+}
+
+/* ---------- init ---------- */
+let lenis;
+if(FULL){
+  lenis=new Lenis({lerp:.09,smoothWheel:true}); window.lenis=lenis;
+  gsap.ticker.add(t=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
+  lenis.on('scroll',ScrollTrigger.update);
+
+  /* --- HERO scrub (S1) --- */
+  makeScrub({vid:'heroVid',stage:'hero',end:'2800',clip:6,
+    intro:document.getElementById('heroIntro'),hint:document.getElementById('scrollhint'),
+    beats:[[0.06,0.16,0.28,0.4],[0.34,0.44,0.56,0.66]]  // fade both by 0.66 so baked "What is your inspiration?" reads solo
+  });
+
+  /* --- S2 button reveal (scroll-into-view stagger) --- */
+  const btns=document.querySelectorAll('.btn');
+  btns.forEach((b,i)=>{
+    ScrollTrigger.create({trigger:b,start:'top 82%',
+      onEnter:()=>setTimeout(()=>b.classList.add('in'),i*80)});
+  });
+
+  /* --- S2 cursor-magnetic + hot border --- */
+  const grid=document.getElementById('grid'); const RADIUS=220;
+  grid.addEventListener('pointermove',e=>{
+    btns.forEach(b=>{
+      const r=b.getBoundingClientRect();
+      const cx=r.left+r.width/2, cy=r.top+r.height/2;
+      const dx=e.clientX-cx, dy=e.clientY-cy;
+      const d=Math.hypot(dx,dy);
+      if(d<RADIUS){
+        const f=1-d/RADIUS;
+        b.style.transform='translate('+(dx*.10*f).toFixed(1)+'px,'+(dy*.10*f).toFixed(1)+'px) scale('+(1+.03*f).toFixed(3)+')';
+        b.classList.add('hot');
+      } else {
+        b.style.transform='';
+        b.classList.remove('hot');
+      }
+    });
+  });
+  grid.addEventListener('pointerleave',()=>{
+    btns.forEach(b=>{ b.style.transform=''; b.classList.remove('hot'); });
+  });
+
+  /* --- LINKING line draw (S2→S3) --- */
+  const linkPath=document.getElementById('linkPath');
+  const linkLen=linkPath.getTotalLength();
+  linkPath.style.strokeDasharray=linkLen;
+  linkPath.style.strokeDashoffset=linkLen;
+  ScrollTrigger.create({trigger:'.linker',start:'top 90%',end:'bottom 40%',scrub:true,
+    onUpdate:s=>{ linkPath.style.strokeDashoffset=linkLen*(1-s.progress); }});
+
+  /* --- S3 slide-in-from-right + scrub --- */
+  const s3=document.getElementById('s3');
+  ScrollTrigger.create({trigger:s3,start:'top bottom',end:'top top',scrub:true,
+    onUpdate:s=>{ const p=1-s.progress; s3.style.transform='translateX('+(p*40)+'vw)'; s3.style.opacity=(0.4+0.6*s.progress).toFixed(3); }});
+  makeScrub({vid:'s3Vid',stage:'s3',end:'2400',clip:5,
+    beats:[[0.08,0.18,0.42,0.55],[0.5,0.6,0.82,0.94]]
+  });
+
+  /* --- S4stage combined: enter-from-below + scrub s4 + go-left + scrub s5 --- */
+  const s4stage=document.getElementById('s4stage'), htrack=document.getElementById('htrack');
+  const p4=document.getElementById('p4'), p5=document.getElementById('p5');
+  const s4vid=document.getElementById('s4Vid'), s5vid=document.getElementById('s5Vid');
+  let sready4=false,sready5=false,cur4=0,cur5=0;
+  s4vid.addEventListener('loadedmetadata',()=>sready4=true);
+  s5vid.addEventListener('loadedmetadata',()=>sready5=true);
+  s4vid.pause(); s5vid.pause();
+  let s4primed=false, s5primed=false;
+  const prime4=()=>{ if(s4primed)return; s4primed=true; s4vid.play().then(()=>s4vid.pause()).catch(()=>s4primed=false); };
+  const prime5=()=>{ if(s5primed)return; s5primed=true; s5vid.play().then(()=>s5vid.pause()).catch(()=>s5primed=false); };
+  s4vid.addEventListener('loadeddata',prime4); s4vid.addEventListener('canplay',prime4);
+  s5vid.addEventListener('loadeddata',prime5); s5vid.addEventListener('canplay',prime5);
+  let heal4=0,heal5=0;
+  s4vid.addEventListener('error',()=>{ if(heal4++<3){sready4=false;cur4=0;s4primed=false;s4vid.load();} });
+  s5vid.addEventListener('error',()=>{ if(heal5++<3){sready5=false;cur5=0;s5primed=false;s5vid.load();} });
+
+  const s4caps=p4.querySelectorAll('.cap'), s5caps=p5.querySelectorAll('.cap');
+  const beats4=[[0.14,0.20,0.34,0.42]];
+  const beats5=[[0.58,0.66,0.78,0.86],[0.82,0.88,0.96,1.0]];
+
+  let sprog=0;
+  ScrollTrigger.create({trigger:s4stage,start:'top top',end:'+=5600',pin:true,scrub:true,
+    onUpdate:s=>{ sprog=s.progress; }});
+
+  function s4loop(){
+    requestAnimationFrame(s4loop);
+    // phases (with soft transitions):
+    //   0.00–0.12  enter: track translateY 100vh→0, opacity 0→1
+    //   0.12–0.42  scrub s4 (0→4s)
+    //   0.42–0.52  go-left: translateX 0→-100vw
+    //   0.52–1.00  scrub s5 (0→10s)
+    let ty=0, tx=0, op=1;
+    if(sprog<0.12){ const p=sprog/0.12; ty=(1-p)*100; op=p; }
+    if(sprog>=0.42 && sprog<0.52){ const p=(sprog-0.42)/0.10; tx=-p*100; }
+    else if(sprog>=0.52){ tx=-100; }
+    htrack.style.transform='translate('+tx.toFixed(2)+'vw,'+ty.toFixed(2)+'vh)';
+    htrack.style.opacity=op.toFixed(3);
+
+    // scrub s4 during 0.12–0.42
+    if(sready4){
+      const p4p=clamp((sprog-0.12)/0.30,0,1);
+      const t=p4p*Math.max(0.05,4-0.05);
+      cur4+=(t-cur4)*0.16;
+      if(s4vid.readyState>=2 && !s4vid.seeking && Math.abs(s4vid.currentTime-cur4)>0.033){ try{s4vid.currentTime=cur4;}catch(e){} }
+    }
+    // scrub s5 during 0.52–1.00
+    if(sready5){
+      const p5p=clamp((sprog-0.52)/0.48,0,1);
+      const t=p5p*Math.max(0.05,10-0.05);
+      cur5+=(t-cur5)*0.16;
+      if(s5vid.readyState>=2 && !s5vid.seeking && Math.abs(s5vid.currentTime-cur5)>0.033){ try{s5vid.currentTime=cur5;}catch(e){} }
+    }
+
+    // captions
+    s4caps.forEach((c,i)=>{ const b=beats4[i]; if(!b)return; const v=seg(sprog,b[0],b[1],b[2],b[3]);
+      c.style.opacity=v; c.style.setProperty('--ty',(26*(1-v)).toFixed(1)+'px');
+      c.style.setProperty('--sc',(0.96+0.04*v).toFixed(3)); c.style.setProperty('--bl',(6*(1-v)).toFixed(1)+'px'); });
+    s5caps.forEach((c,i)=>{ const b=beats5[i]; if(!b)return; const v=seg(sprog,b[0],b[1],b[2],b[3]);
+      c.style.opacity=v; c.style.setProperty('--ty',(26*(1-v)).toFixed(1)+'px');
+      c.style.setProperty('--sc',(0.96+0.04*v).toFixed(3)); c.style.setProperty('--bl',(6*(1-v)).toFixed(1)+'px'); });
+  }
+  s4loop();
+
+  /* --- keep Lenis' scroll limit synced with pin-spacers (no window 'load' refresh, causes video-download jump) --- */
+  ScrollTrigger.addEventListener('refresh',()=>lenis.resize());
+  ScrollTrigger.refresh();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
+
+} else {
+  // reduced motion: reveal buttons statically
+  document.querySelectorAll('.btn').forEach(b=>b.classList.add('in'));
+}
+</script>
+</body>
+</html>
