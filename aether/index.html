@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AETHER — a living network of people, signal & life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070f;--bg2:#0a0e1e;
+  --ink:#eaf0ff;--muted:#8a93b8;--faint:#5b638a;
+  --blue:#5b8cff;--blue-bri:#8fb2ff;--cyan:#7fe8ff;--coral:#ff6f8c;--gold:#ffc46b;
+  --line:rgba(120,150,255,.13);
+  --disp:'Fraunces',Georgia,serif;--sans:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(91,140,255,.3)}
+
+/* ambient background */
+.aura{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aura b{position:absolute;border-radius:50%;filter:blur(100px);opacity:.55;mix-blend-mode:screen;animation:drift 22s ease-in-out infinite}
+.a1{width:64vw;height:64vw;left:-14vw;top:-18vw;background:radial-gradient(circle,rgba(91,140,255,.55),transparent 62%)}
+.a2{width:52vw;height:52vw;right:-14vw;bottom:-16vw;background:radial-gradient(circle,rgba(127,232,255,.32),transparent 62%);animation-delay:-8s}
+.a3{width:40vw;height:40vw;left:40vw;top:50vh;background:radial-gradient(circle,rgba(255,111,140,.18),transparent 64%);animation-delay:-14s}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(3vw,-3vh)}}
+.grain{position:fixed;inset:0;z-index:42;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* snake entity */
+.snakewrap{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.snakewrap svg{position:absolute;top:0;left:0;width:100vw;height:100%}
+.bg-line{fill:none;stroke:rgba(91,140,255,.20);stroke-width:64;stroke-linecap:round;filter:blur(15px)}
+.bg-line.core{stroke:rgba(143,178,255,.5);stroke-width:3;filter:blur(.4px)}
+
+/* nav */
+.nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:24px;align-items:center;
+  padding:11px 12px 11px 22px;border:1px solid var(--line);border-radius:100px;background:rgba(10,14,30,.55);backdrop-filter:blur(16px)}
+.brand{font-family:var(--sans);font-weight:700;letter-spacing:.34em;font-size:15px;display:flex;gap:11px;align-items:center}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px 3px var(--cyan)}
+.nav .ig{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.nav .cta{font-size:13px;font-weight:600;padding:9px 18px;border-radius:100px;color:#05070f;
+  background:linear-gradient(120deg,var(--gold),var(--coral));box-shadow:0 8px 26px -8px var(--coral);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.nav .cta:hover{transform:translateY(-2px);box-shadow:0 14px 34px -8px var(--coral)}
+@media(max-width:620px){.nav .ig{display:none}}
+
+/* HERO */
+#hero{position:relative;height:100vh;width:100%;overflow:hidden;z-index:2}
+.stagevid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.herotint{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(circle at 50% 46%,transparent 20%,rgba(5,7,15,.35) 62%,rgba(5,7,15,.86) 100%)}
+.heroIntro{position:absolute;z-index:4;left:0;right:0;top:20vh;text-align:center;padding:0 6vw;pointer-events:none}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--blue-bri)}
+.heroIntro h1{font-family:var(--disp);font-weight:300;font-size:clamp(2.9rem,8.2vw,6.6rem);line-height:.98;letter-spacing:-.015em;margin:.24em 0 .3em}
+.heroIntro h1 .it{font-style:italic;color:var(--blue-bri)}
+.heroIntro p{color:var(--muted);font-size:clamp(1rem,1.5vw,1.18rem);max-width:46ch;margin:0 auto}
+
+/* gutter captions */
+.cap{position:absolute;z-index:5;max-width:300px;opacity:0;pointer-events:none;
+  transform:translateY(var(--ty,26px)) scale(var(--sc,.96));filter:blur(var(--bl,6px));will-change:opacity,transform,filter}
+.cap .k{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:8px}
+.cap .t{font-family:var(--disp);font-weight:400;font-size:clamp(1.5rem,2.6vw,2.15rem);line-height:1.14}
+.cap .t em{font-style:italic;color:var(--blue-bri)}
+.p-tl{left:6vw;top:16vh;text-align:left}
+.p-br{right:6vw;bottom:18vh;text-align:right}
+.p-tr{right:6vw;top:17vh;text-align:right}
+
+/* proximity orbs (decorative) */
+.orb{position:absolute;z-index:4;width:60px;height:60px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 42% 38%,rgba(255,255,255,.5),rgba(143,178,255,.28) 46%,transparent 70%);
+  box-shadow:0 0 0 1px rgba(143,178,255,.12) inset;opacity:.42;transition:opacity .5s;will-change:transform}
+.orb::after{content:'';position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(circle,rgba(127,232,255,.5),transparent 66%);opacity:0;transition:opacity .4s}
+.orb.lit::after{opacity:.9}
+
+/* core ball -> tappable button */
+.coreball{position:absolute;z-index:8;left:50%;top:50%;width:170px;height:170px;transform:translate(-50%,-50%) scale(.6);
+  border-radius:50%;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.coreball.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.coreball .halo{position:absolute;inset:-46%;border-radius:50%;background:radial-gradient(circle,rgba(143,178,255,.5),rgba(127,232,255,.16) 46%,transparent 70%);animation:pulse 3.4s ease-in-out infinite}
+.coreball .ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(143,178,255,.4);animation:ripple 3s ease-out infinite}
+.coreball .ring.r2{animation-delay:1.5s}
+.coreball .glass{position:absolute;inset:24%;border-radius:50%;
+  background:radial-gradient(circle at 40% 34%,#fff,#cfe0ff 34%,#6ea0ff 66%,rgba(45,80,200,.5));
+  box-shadow:0 0 60px -6px var(--blue),inset 0 0 30px rgba(255,255,255,.5)}
+.coreball .lab{position:absolute;left:50%;bottom:-46px;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink)}
+.coreball .lab span{color:var(--cyan)}
+@keyframes pulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.9;transform:scale(1.08)}}
+@keyframes ripple{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.9);opacity:0}}
+
+.scrollhint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--faint);text-transform:uppercase}
+.scrollhint b{display:block;width:1px;height:26px;margin:10px auto 0;background:linear-gradient(var(--blue),transparent);animation:sc 2s ease-in-out infinite}
+@keyframes sc{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+
+/* manifesto after hero */
+.manifesto{position:relative;z-index:3;background:var(--bg);padding:16vh 6vw;text-align:center}
+.manifesto h2{font-family:var(--disp);font-weight:300;font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.08;letter-spacing:-.01em;max-width:20ch;margin:0 auto}
+.manifesto h2 em{font-style:italic;color:var(--blue-bri)}
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:960px;margin:64px auto 0;text-align:left}
+.phase{padding:26px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(18,24,48,.5),rgba(10,14,30,.3))}
+.phase .n{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--cyan)}
+.phase h3{font-family:var(--disp);font-weight:400;font-size:1.5rem;margin:12px 0 8px}
+.phase p{color:var(--muted);font-size:14px}
+@media(max-width:760px){.phases{grid-template-columns:1fr}}
+
+footer{position:relative;z-index:3;background:var(--bg);border-top:1px solid var(--line);padding:56px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+footer .fb{font-family:var(--sans);font-weight:700;letter-spacing:.3em;font-size:14px}
+footer small{color:var(--faint);font-family:var(--mono);font-size:12px}
+
+/* zoom transition overlay */
+#zoomer{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;background:var(--bg)}
+#zoomer .ball{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(.06);
+  background:radial-gradient(circle at 42% 38%,#fff,#cfe0ff 30%,#6ea0ff 58%,#2d50c8 78%,var(--bg));
+  box-shadow:0 0 120px 30px rgba(143,178,255,.6)}
+
+/* no3d fallback */
+body.no3d #hero{height:auto;min-height:100vh}
+body.no3d .stagevid{position:absolute}
+body.no3d .cap{position:static;opacity:1;transform:none;filter:none;max-width:none;margin:16px auto;text-align:center}
+body.no3d .scrollhint,body.no3d .orb{display:none}
+body.no3d .coreball{position:relative;opacity:1;transform:none;margin:40px auto;left:auto;top:auto}
+</style>
+</head>
+<body>
+<div class="aura"><b class="a1"></b><b class="a2"></b><b class="a3"></b></div>
+<div class="snakewrap"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path class="bg-line" id="snakeGlow"></path><path class="bg-line core" id="snakeCore"></path></svg></div>
+<div class="grain"></div>
+
+<nav class="nav">
+  <a href="index.html" class="brand"><span class="dot"></span>AETHER</a>
+  <span class="ig">@aether.network</span>
+  <a href="#request" class="cta">Request access</a>
+</nav>
+
+<section id="hero">
+  <video id="heroVid" class="stagevid" muted playsinline preload="auto" poster="assets/img/hero-poster.jpg">
+    <source src="assets/videos/hero.mp4" type="video/mp4"></video>
+  <div class="herotint"></div>
+
+  <div class="heroIntro" id="heroIntro">
+    <span class="eyebrow">In the beginning, one signal</span>
+    <h1>Let there <span class="it">be life.</span></h1>
+    <p>AETHER turns a scattered audience into one living, growing network — born from a single spark.</p>
+  </div>
+
+  <!-- gutter captions (never over the ball) -->
+  <div class="cap p-tl" data-beat="0"><span class="k">Genesis</span><div class="t">Every great network begins as <em>one point of light.</em></div></div>
+  <div class="cap p-br" data-beat="1"><span class="k">Gather</span><div class="t">Signal finds signal. <em>The dark starts to hum.</em></div></div>
+  <div class="cap p-tr" data-beat="2"><span class="k">Ignite</span><div class="t">One core forms — <em>and the whole field wakes.</em></div></div>
+
+  <!-- proximity orbs -->
+  <div class="orb" style="left:16%;top:26%"></div>
+  <div class="orb" style="left:82%;top:32%"></div>
+  <div class="orb" style="left:22%;top:72%"></div>
+  <div class="orb" style="left:78%;top:70%"></div>
+  <div class="orb" style="left:50%;top:20%"></div>
+
+  <!-- the glowing ball becomes a tappable button -->
+  <a class="coreball" id="coreBall" href="bloom.html" aria-label="Enter the network">
+    <span class="halo"></span><span class="ring"></span><span class="ring r2"></span><span class="glass"></span>
+    <span class="lab">tap the core · <span>enter the bloom</span></span>
+  </a>
+
+  <div class="scrollhint" id="scrollhint">scroll to ignite<b></b></div>
+</section>
+
+<section class="manifesto">
+  <h2>A network is not a list. It is a <em>living thing</em> — it senses, blooms, and connects.</h2>
+  <div class="phases">
+    <div class="phase"><span class="n">01 · Genesis</span><h3>One spark</h3><p>It starts with a single signal in the dark — the first member, the first idea worth gathering around.</p></div>
+    <div class="phase"><span class="n">02 · Bloom</span><h3>It grows</h3><p>Warmth spreads. What you plant compounds — attention becomes momentum, momentum becomes a movement.</p></div>
+    <div class="phase"><span class="n">03 · Network</span><h3>It connects</h3><p>Every person becomes a node. AETHER maps the whole constellation and keeps it alive.</p></div>
+  </div>
+</section>
+
+<footer id="request">
+  <span class="fb">AETHER</span>
+  <small>© 2026 AETHER · a living network · @aether.network</small>
+</footer>
+
+<div id="zoomer"><div class="ball"></div></div>
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const FULL=!RM && innerWidth>=768;
+if(!FULL) document.body.classList.add('no3d');
+function seg(p,a,b,c,d){ if(p<a||p>d) return 0; if(p<b) return (p-a)/(b-a); if(p>c) return 1-(p-c)/(d-c); return 1; }
+const smooth=t=>t*t*(3-2*t);
+
+/* ---------- snake path ---------- */
+(function(){
+  const glow=document.getElementById('snakeGlow'), core=document.getElementById('snakeCore');
+  function build(){
+    const H=100, pts=[]; const n=26;
+    for(let i=0;i<=n;i++){ const y=i/n*H; const x=50+Math.sin(i*0.66)*26+Math.sin(i*0.23)*10; pts.push([x,y]); }
+    let d='M '+pts[0][0]+' '+pts[0][1];
+    for(let i=1;i<pts.length;i++){ const [x,y]=pts[i], [px,py]=pts[i-1]; const mx=(px+x)/2,my=(py+y)/2; d+=' Q '+px+' '+py+' '+mx+' '+my; }
+    glow.setAttribute('d',d); core.setAttribute('d',d);
+    const L=core.getTotalLength();
+    [glow,core].forEach(p=>{p.style.strokeDasharray=L; p.style.strokeDashoffset=L;});
+    return L;
+  }
+  let L=build(); addEventListener('resize',()=>{L=build();});
+  let cur=L, tgt=L, wig=0;
+  function tick(){
+    requestAnimationFrame(tick);
+    const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+    const p=Math.min(1,scrollY/max);
+    tgt=L*(1-(0.12+p*0.88));
+    cur+=(tgt-cur)*0.07;
+    wig+=0.02;
+    const off=cur+Math.sin(wig)*6;
+    glow.style.strokeDashoffset=off; core.style.strokeDashoffset=off;
+  }
+  tick();
+})();
+
+/* ---------- scrub engine (with !seeking guard + self-heal) ---------- */
+function makeScrub(opts){
+  const vid=document.getElementById(opts.vid), stage=document.getElementById(opts.stage);
+  if(!vid||!stage) return;
+  let dur=opts.clip||5, ready=false, tgt=0, cur=0;
+  vid.addEventListener('loadedmetadata',()=>{ dur=Math.min(opts.clip||vid.duration,vid.duration); ready=true; });
+  vid.pause();
+  const caps=stage.querySelectorAll('.cap'), beats=opts.beats||[];
+  const hot=opts.hot?document.getElementById(opts.hot):null;
+  let prog=0;
+  ScrollTrigger.create({trigger:stage,start:'top top',end:'+='+opts.end,pin:true,scrub:true,
+    onUpdate:s=>{prog=s.progress; if(opts.onProg)opts.onProg(prog);}});
+  function loop(){
+    requestAnimationFrame(loop);
+    if(ready){
+      tgt=prog*Math.max(0.05,dur-0.05);
+      cur+=(tgt-cur)*0.16;
+      if(vid.readyState>=2 && !vid.seeking && Math.abs(vid.currentTime-cur)>0.033){ try{vid.currentTime=cur;}catch(e){} }
+    }
+    caps.forEach((c,i)=>{ const b=beats[i]; if(!b)return; const v=seg(prog,b[0],b[1],b[2],b[3]);
+      c.style.opacity=v; c.style.setProperty('--ty',(26*(1-v)).toFixed(1)+'px');
+      c.style.setProperty('--sc',(0.96+0.04*v).toFixed(3)); c.style.setProperty('--bl',(6*(1-v)).toFixed(1)+'px'); });
+    if(hot){ if(prog>0.84) hot.classList.add('show'); else hot.classList.remove('show'); }
+    if(opts.intro){ opts.intro.style.opacity=Math.max(0,1-prog/0.15); opts.intro.style.transform='translateY('+(-prog*40)+'px)'; }
+    if(opts.hint){ opts.hint.style.opacity=Math.max(0,1-prog/0.1); }
+  }
+  loop();
+  /* decode-primer: play→pause ONCE so frames are seekable; never re-fire during scrub
+     (re-firing on every canplay makes play() fight the scrub seek → stutter + demuxer stress) */
+  let primed=false;
+  function prime(){ if(primed) return; primed=true; vid.play().then(()=>vid.pause()).catch(()=>{primed=false;}); }
+  vid.addEventListener('loadeddata',prime); vid.addEventListener('canplay',prime);
+  let healed=0; vid.addEventListener('error',()=>{ if(healed++<3){ready=false;cur=0;primed=false;vid.load();} });
+}
+
+/* ---------- init ---------- */
+let lenis;
+if(FULL){
+  lenis=new Lenis({lerp:.09,smoothWheel:true}); window.lenis=lenis;
+  gsap.ticker.add(t=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
+  lenis.on('scroll',ScrollTrigger.update);
+
+  makeScrub({vid:'heroVid',stage:'hero',end:'3200',clip:12,hot:'coreBall',
+    intro:document.getElementById('heroIntro'),hint:document.getElementById('scrollhint'),
+    beats:[[0.05,0.13,0.24,0.34],[0.32,0.42,0.54,0.64],[0.6,0.7,0.82,0.92]]});
+
+  /* proximity orbs — light up + drift toward cursor */
+  const orbs=[...document.querySelectorAll('.orb')].map(el=>{const r=el.getBoundingClientRect();return{el,hx:r.left+r.width/2,hy:r.top+r.height/2,dx:0,dy:0};});
+  addEventListener('resize',()=>orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.hx=r.left+r.width/2;o.hy=r.top+r.height/2;}));
+  let mx=-999,my=-999; addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  const R=200;
+  (function orbTick(){
+    requestAnimationFrame(orbTick);
+    orbs.forEach(o=>{
+      const r=o.el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+      const d=Math.hypot(mx-cx,my-cy); const near=Math.max(0,1-d/R);
+      const tx=(mx-o.hx)*near*0.16, ty=(my-o.hy)*near*0.16;
+      o.dx+=(tx-o.dx)*0.12; o.dy+=(ty-o.dy)*0.12;
+      o.el.style.transform='translate('+o.dx.toFixed(1)+'px,'+o.dy.toFixed(1)+'px) scale('+(1+near*0.5).toFixed(2)+')';
+      o.el.style.opacity=(0.42+near*0.55).toFixed(2);
+      o.el.classList.toggle('lit',near>0.15);
+    });
+  })();
+
+  /* keep Lenis' scroll limit in sync with ScrollTrigger's pin-spacers.
+     Refresh once now (creates spacers + sets Lenis limit) and again only after fonts
+     settle — NOT on window 'load', which fires after the 8.7MB video downloads and
+     would snap the page mid-scroll. */
+  ScrollTrigger.addEventListener('refresh',()=>lenis.resize());
+  ScrollTrigger.refresh();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
+} else {
+  const hv=document.getElementById('heroVid'); hv.setAttribute('loop','');hv.setAttribute('autoplay','');hv.play&&hv.play().catch(()=>{});
+}
+
+/* ---------- zoom transition to bloom.html ---------- */
+document.getElementById('coreBall').addEventListener('click',e=>{
+  e.preventDefault();
+  const z=document.getElementById('zoomer'), ball=z.querySelector('.ball');
+  const cb=document.getElementById('coreBall').getBoundingClientRect();
+  const cx=cb.left+cb.width/2, cy=cb.top+cb.height/2;
+  const D=Math.max(innerWidth,innerHeight);
+  ball.style.width=ball.style.height=D+'px'; ball.style.left=cx+'px'; ball.style.top=cy+'px';
+  z.style.transition='opacity .25s ease'; z.style.opacity='1'; z.style.pointerEvents='auto';
+  requestAnimationFrame(()=>{ ball.style.transition='transform 1s cubic-bezier(.6,0,.3,1)'; ball.style.transform='translate(-50%,-50%) scale(42)'; });
+  setTimeout(()=>{ location.href='bloom.html'; },900);
+});
+</script>
+</body>
+</html>

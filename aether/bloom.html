@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AETHER — the bloom & the network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070f;--ink:#eaf0ff;--muted:#8a93b8;--faint:#5b638a;
+  --blue:#5b8cff;--blue-bri:#8fb2ff;--cyan:#7fe8ff;--coral:#ff6f8c;--gold:#ffc46b;
+  --line:rgba(120,150,255,.13);
+  --disp:'Fraunces',Georgia,serif;--sans:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(91,140,255,.3)}
+.grain{position:fixed;inset:0;z-index:42;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* snake */
+.snakewrap{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.snakewrap svg{position:absolute;top:0;left:0;width:100vw;height:100%}
+.bg-line{fill:none;stroke:rgba(91,140,255,.16);stroke-width:60;stroke-linecap:round;filter:blur(15px)}
+.bg-line.core{stroke:rgba(143,178,255,.42);stroke-width:3;filter:blur(.4px)}
+
+/* nav */
+.nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:24px;align-items:center;
+  padding:11px 12px 11px 22px;border:1px solid var(--line);border-radius:100px;background:rgba(10,14,30,.55);backdrop-filter:blur(16px)}
+.brand{font-family:var(--sans);font-weight:700;letter-spacing:.34em;font-size:15px;display:flex;gap:11px;align-items:center}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--coral);box-shadow:0 0 16px 3px var(--coral)}
+.nav .back{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* reveal (zoom-out from ball) */
+#reveal{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;transition:opacity .7s ease}
+#reveal .ball{width:60vmax;height:60vmax;border-radius:50%;
+  background:radial-gradient(circle at 42% 38%,#fff,#cfe0ff 26%,#6ea0ff 52%,#2d50c8 72%,var(--bg) 92%);
+  box-shadow:0 0 160px 40px rgba(143,178,255,.5);animation:shrink 1s cubic-bezier(.6,0,.3,1) forwards}
+@keyframes shrink{0%{transform:scale(2.4)}100%{transform:scale(.1);opacity:0}}
+
+/* generic ghost caption */
+.ghost{opacity:0;will-change:opacity,transform}
+.ghost .k{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:10px}
+.ghost .t{font-family:var(--disp);font-weight:300;font-size:clamp(1.9rem,4.4vw,3.4rem);line-height:1.08;letter-spacing:-.01em}
+.ghost .t em{font-style:italic;color:var(--blue-bri)}
+
+/* SECTION A: bloom (spring loop) */
+#bloom{position:relative;z-index:2}
+.stick{position:sticky;top:0;height:100vh;overflow:hidden}
+.stagevid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tint-dark{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,transparent 20%,rgba(5,7,15,.4) 70%,rgba(5,7,15,.82))}
+.tint-warm{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,7,15,.6),transparent 30%,transparent 70%,rgba(5,7,15,.6))}
+.bloom-caps{position:relative;z-index:3;margin-top:-100vh}
+.bcap{min-height:88vh;display:flex;padding:0 8vw;align-items:center}
+.bcap:nth-child(even){justify-content:flex-end;text-align:right}
+.bcap .ghost{max-width:520px}
+
+/* SECTION B: voyage (horizontal go-left) */
+#voyage{position:relative;z-index:2;height:100vh;overflow:hidden}
+.htrack{display:flex;width:200vw;height:100vh;will-change:transform}
+.hpanel{width:100vw;height:100vh;position:relative;flex:0 0 100vw;display:grid;place-items:center;overflow:hidden}
+.hpanel .plabel{position:relative;z-index:3;text-align:center;padding:0 8vw}
+.arrowhint{font-family:var(--mono);font-size:12px;letter-spacing:.26em;color:var(--faint);text-transform:uppercase;margin-top:22px}
+.vcap{position:absolute;z-index:3;max-width:420px;opacity:0}
+.v-tl{left:7vw;top:20vh;text-align:left}
+.v-br{right:7vw;bottom:20vh;text-align:right}
+
+/* SECTION C: network (scrub + person nodes) */
+#network{position:relative;height:100vh;width:100%;overflow:hidden;z-index:2}
+.netTint{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 24%,rgba(5,7,15,.5) 78%)}
+.net-intro{position:absolute;z-index:4;left:0;right:0;top:11vh;text-align:center;padding:0 6vw;pointer-events:none}
+.net-intro .k{font-family:var(--mono);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan)}
+.net-intro h2{font-family:var(--disp);font-weight:300;font-size:clamp(2rem,5vw,3.6rem);line-height:1;letter-spacing:-.01em;margin-top:.3em}
+.net-intro h2 em{font-style:italic;color:var(--blue-bri)}
+.cap{position:absolute;z-index:5;max-width:280px;opacity:0;pointer-events:none;transform:translateY(var(--ty,26px)) scale(var(--sc,.96));filter:blur(var(--bl,6px))}
+.cap .k{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:8px}
+.cap .t{font-family:var(--disp);font-weight:400;font-size:clamp(1.4rem,2.4vw,2rem);line-height:1.14}
+.n-bl{left:6vw;bottom:16vh;text-align:left}
+
+/* person nodes */
+.node{position:absolute;z-index:7;width:66px;height:66px;transform:translate(-50%,-50%);cursor:pointer;will-change:transform}
+.node .dotwrap{position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 42% 38%,rgba(255,255,255,.28),rgba(91,140,255,.16) 55%,transparent 72%);
+  box-shadow:0 0 0 1px rgba(143,178,255,.22) inset;transition:box-shadow .35s,background .35s}
+.node .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--sans);font-weight:700;font-size:13px;color:#0a1024;
+  background:linear-gradient(140deg,var(--blue-bri),var(--cyan));box-shadow:0 4px 14px -4px rgba(0,0,0,.5)}
+.node .halo{position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(circle,rgba(127,232,255,.55),transparent 66%);opacity:0;transition:opacity .35s}
+.node .name{position:absolute;left:50%;top:-34px;transform:translateX(-50%) translateY(6px);white-space:nowrap;opacity:0;transition:opacity .3s,transform .3s;
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink);background:rgba(10,14,30,.72);border:1px solid var(--line);padding:5px 10px;border-radius:100px;backdrop-filter:blur(8px)}
+.node.lit .halo{opacity:1}
+.node.lit .dotwrap{box-shadow:0 0 0 1px var(--cyan) inset,0 0 24px -2px var(--cyan)}
+.node.lit .name{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* center gate */
+.flakecore{position:absolute;z-index:8;left:50%;top:50%;width:120px;height:120px;transform:translate(-50%,-50%);cursor:pointer}
+.flakecore .halo{position:absolute;inset:-30%;border-radius:50%;background:radial-gradient(circle,rgba(143,178,255,.4),transparent 68%);animation:pulse 3.2s ease-in-out infinite}
+.flakecore .ring{position:absolute;inset:16%;border-radius:50%;border:1px solid rgba(143,178,255,.4);animation:ripple 3s ease-out infinite}
+.flakecore .glass{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle at 40% 34%,#fff,#cfe0ff 40%,#6ea0ff 74%);box-shadow:0 0 40px -6px var(--blue)}
+.flakecore .lab{position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);white-space:nowrap;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+.flakecore .lab span{color:var(--cyan)}
+.flakecore.gone{opacity:0;transform:translate(-50%,-50%) scale(1.5);pointer-events:none;transition:opacity .8s,transform .8s}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.9;transform:scale(1.08)}}
+@keyframes ripple{0%{transform:scale(.9);opacity:.7}100%{transform:scale(2);opacity:0}}
+
+/* profile panel */
+#profile{position:fixed;top:0;right:0;height:100vh;width:min(400px,90vw);z-index:120;
+  background:linear-gradient(180deg,rgba(12,16,34,.96),rgba(6,9,20,.98));border-left:1px solid var(--line);backdrop-filter:blur(18px);
+  transform:translateX(102%);transition:transform .5s cubic-bezier(.2,.8,.2,1);padding:80px 34px 34px;overflow-y:auto}
+#profile.open{transform:translateX(0)}
+#profile .close{position:absolute;top:22px;right:24px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer}
+#profile .pav{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:26px;color:#0a1024;background:linear-gradient(140deg,var(--blue-bri),var(--cyan))}
+#profile .prole{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-top:22px}
+#profile h3{font-family:var(--disp);font-weight:400;font-size:2rem;margin:6px 0 4px}
+#profile .pcompany{color:var(--muted);font-size:14px}
+#profile .pblurb{margin-top:20px;font-size:15px;color:#c7cdea;line-height:1.7}
+#profile .pstat{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+#profile .pstat .big{font-family:var(--disp);font-size:2.4rem;color:var(--blue-bri)}
+#profile .pstat .cap{position:static;opacity:1;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);transform:none;filter:none}
+#scrim{position:fixed;inset:0;z-index:110;background:rgba(5,7,15,.5);opacity:0;pointer-events:none;transition:opacity .4s}
+#scrim.on{opacity:1;pointer-events:auto}
+
+/* CTA + footer */
+.cta-sec{position:relative;z-index:2;background:var(--bg);text-align:center;padding:18vh 6vw}
+.cta-sec h2{font-family:var(--disp);font-weight:300;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.05;letter-spacing:-.01em;max-width:18ch;margin:0 auto}
+.cta-sec h2 em{font-style:italic;color:var(--coral)}
+.btn{display:inline-block;margin-top:34px;font-weight:600;font-size:15px;padding:15px 32px;border-radius:100px;color:#05070f;
+  background:linear-gradient(120deg,var(--gold),var(--coral));box-shadow:0 12px 34px -10px var(--coral);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.btn:hover{transform:translateY(-3px)}
+footer{position:relative;z-index:2;background:var(--bg);border-top:1px solid var(--line);padding:52px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer .fb{font-weight:700;letter-spacing:.3em;font-size:14px}
+footer small{color:var(--faint);font-family:var(--mono);font-size:12px}
+
+body.no3d #voyage{height:auto}
+body.no3d .htrack{flex-direction:column;width:100%}
+body.no3d .hpanel{height:70vh}
+body.no3d .ghost,body.no3d .vcap,body.no3d .cap{opacity:1!important;transform:none!important;filter:none!important}
+body.no3d .stick{position:relative}
+</style>
+</head>
+<body>
+<div class="snakewrap"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path class="bg-line" id="snakeGlow"></path><path class="bg-line core" id="snakeCore"></path></svg></div>
+<div class="grain"></div>
+<div id="reveal"><div class="ball"></div></div>
+
+<nav class="nav">
+  <a href="index.html" class="brand"><span class="dot"></span>AETHER</a>
+  <a href="index.html" class="back">← genesis</a>
+</nav>
+
+<!-- SECTION A: THE BLOOM (spring loop) -->
+<section id="bloom">
+  <div class="stick">
+    <video class="stagevid" muted loop playsinline autoplay preload="auto" poster="assets/img/bloom-poster.jpg">
+      <source src="assets/videos/bloom.mp4" type="video/mp4"></video>
+    <div class="tint-warm"></div>
+  </div>
+  <div class="bloom-caps">
+    <div class="bcap"><div class="ghost"><span class="k">The Bloom</span><div class="t">What you plant in the dark <em>comes up in colour.</em></div></div></div>
+    <div class="bcap"><div class="ghost"><span class="k">Momentum</span><div class="t">Attention becomes warmth. Warmth becomes <em>a movement.</em></div></div></div>
+    <div class="bcap"><div class="ghost"><span class="k">Growth</span><div class="t">Nothing here is static — <em>it grows while you sleep.</em></div></div></div>
+  </div>
+</section>
+
+<!-- SECTION B: DRIFT WEST (horizontal go-left, cosmic orbs loop) -->
+<section id="voyage">
+  <div class="htrack" id="htrack">
+    <div class="hpanel">
+      <div class="plabel">
+        <span class="k" style="font-family:var(--mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--cyan)">Keep drifting</span>
+        <div style="font-family:var(--disp);font-weight:300;font-size:clamp(2rem,5vw,3.6rem);line-height:1;letter-spacing:-.01em;margin-top:.3em">Scroll, and the world <em style="font-style:italic;color:var(--blue-bri)">slides west.</em></div>
+        <div class="arrowhint">← many worlds waiting</div>
+      </div>
+    </div>
+    <div class="hpanel">
+      <video class="stagevid" muted loop playsinline autoplay preload="auto" poster="assets/img/orbs-poster.jpg">
+        <source src="assets/videos/orbs.mp4" type="video/mp4"></video>
+      <div class="tint-dark"></div>
+      <div class="vcap v-tl"><span class="k" style="font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:10px">Many worlds</span><div style="font-family:var(--disp);font-weight:300;font-size:clamp(1.9rem,4vw,3rem);line-height:1.08">Not one community — <em style="font-style:italic;color:var(--blue-bri)">a whole field of them.</em></div></div>
+      <div class="vcap v-br"><span class="k" style="font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:10px">One field</span><div style="font-family:var(--disp);font-weight:300;font-size:clamp(1.9rem,4vw,3rem);line-height:1.08">Each one glowing on <em style="font-style:italic;color:var(--blue-bri)">its own frequency.</em></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION C: THE NETWORK (snowflake scrub + tappable people) -->
+<section id="network">
+  <video id="netVid" class="stagevid" muted playsinline preload="auto" poster="assets/img/network-poster.jpg">
+    <source src="assets/videos/network.mp4" type="video/mp4"></video>
+  <div class="netTint"></div>
+  <div class="net-intro" id="netIntro">
+    <span class="k">The Network</span>
+    <h2>Every person, <em>a point of light.</em></h2>
+  </div>
+
+  <div class="cap n-bl" data-beat="0"><span class="k">Connected</span><div class="t">Six strands. Six people. <em>One living map.</em></div></div>
+
+  <!-- person nodes (hex around centre) -->
+  <div class="node" style="left:50%;top:16%" data-i="0"></div>
+  <div class="node" style="left:76%;top:33%" data-i="1"></div>
+  <div class="node" style="left:76%;top:67%" data-i="2"></div>
+  <div class="node" style="left:50%;top:84%" data-i="3"></div>
+  <div class="node" style="left:24%;top:67%" data-i="4"></div>
+  <div class="node" style="left:24%;top:33%" data-i="5"></div>
+
+  <!-- centre gate -->
+  <div class="flakecore" id="flakeCore">
+    <span class="halo"></span><span class="ring"></span><span class="glass"></span>
+    <span class="lab">tap the core · <span>reveal the network</span></span>
+  </div>
+</section>
+
+<div id="scrim"></div>
+<aside id="profile">
+  <span class="close" id="profClose">close ✕</span>
+  <div class="pav" id="pAv">M</div>
+  <div class="prole" id="pRole"></div>
+  <h3 id="pName"></h3>
+  <div class="pcompany" id="pCompany"></div>
+  <div class="pblurb" id="pBlurb"></div>
+  <div class="pstat"><div class="big" id="pBig"></div><div class="cap" id="pStat"></div></div>
+</aside>
+
+<section class="cta-sec">
+  <h2>Your network is already out there. <em>Let's bring it to life.</em></h2>
+  <a href="#" class="btn">Request access →</a>
+</section>
+<footer>
+  <span class="fb">AETHER</span>
+  <small>© 2026 AETHER · a living network · @aether.network</small>
+</footer>
+
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const FULL=!RM && innerWidth>=768;
+if(!FULL) document.body.classList.add('no3d');
+function seg(p,a,b,c,d){ if(p<a||p>d) return 0; if(p<b) return (p-a)/(b-a); if(p>c) return 1-(p-c)/(d-c); return 1; }
+
+/* people data */
+const PEOPLE=[
+ {i:'M',name:'Mara Vale',role:'Community Lead',co:'Signal Collective',blurb:'Turned 400 quiet lurkers into a 12,000-strong movement — without ever running an ad.',big:'12k',stat:'members grown in 9 months'},
+ {i:'K',name:'Kito Reyes',role:'Founder',co:'Halo Labs',blurb:'Ships to his network first and launches second. Every product lands warm.',big:'3×',stat:'launch conversion vs. cold'},
+ {i:'I',name:'Inès Fald',role:'Creator',co:'Independent',blurb:'Her drops sell out before they are announced — the network moves faster than the calendar.',big:'0s',stat:'time-to-sold-out'},
+ {i:'D',name:'Dario Nunn',role:'Head of Growth',co:'Northwind',blurb:'Reads the room in real time. AETHER shows him who is leaning in before they raise a hand.',big:'41%',stat:'reply rate to warm signals'},
+ {i:'L',name:'Lena Oku',role:'Educator',co:'The Long Game',blurb:'3,000 students who actually finish — because the network keeps them accountable to each other.',big:'87%',stat:'course completion rate'},
+ {i:'S',name:'Sol Amara',role:'Curator',co:'Quiet Room',blurb:'Runs the quietest, highest-signal room online. Membership is by resonance, not reach.',big:'#1',stat:'signal-to-noise in its class'},
+];
+
+/* snake */
+(function(){
+  const glow=document.getElementById('snakeGlow'), core=document.getElementById('snakeCore');
+  function build(){ const H=100,n=26,pts=[]; for(let i=0;i<=n;i++){const y=i/n*H;const x=50+Math.sin(i*0.7+1)*24+Math.sin(i*0.27)*11;pts.push([x,y]);}
+    let d='M '+pts[0][0]+' '+pts[0][1]; for(let i=1;i<pts.length;i++){const[x,y]=pts[i],[px,py]=pts[i-1];const mx=(px+x)/2,my=(py+y)/2;d+=' Q '+px+' '+py+' '+mx+' '+my;}
+    glow.setAttribute('d',d);core.setAttribute('d',d);const L=core.getTotalLength();[glow,core].forEach(p=>{p.style.strokeDasharray=L;p.style.strokeDashoffset=L;});return L; }
+  let L=build();addEventListener('resize',()=>L=build());let cur=L,wig=0;
+  (function tick(){requestAnimationFrame(tick);const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);const p=Math.min(1,scrollY/max);
+    const tgt=L*(1-(0.1+p*0.9));cur+=(tgt-cur)*0.07;wig+=0.02;const off=cur+Math.sin(wig)*6;glow.style.strokeDashoffset=off;core.style.strokeDashoffset=off;})();
+})();
+
+/* reveal fade */
+addEventListener('load',()=>{ const r=document.getElementById('reveal'); setTimeout(()=>{r.style.opacity='0';setTimeout(()=>r.remove(),700);},760); });
+
+let lenis;
+if(FULL){
+  lenis=new Lenis({lerp:.09,smoothWheel:true}); window.lenis=lenis;
+  gsap.ticker.add(t=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
+  lenis.on('scroll',ScrollTrigger.update);
+
+  /* ghost captions — appear near centre, vanish top/bottom */
+  const ghosts=[...document.querySelectorAll('.ghost')];
+  (function gtick(){ requestAnimationFrame(gtick); const vh=innerHeight;
+    ghosts.forEach(g=>{ const r=g.getBoundingClientRect(); const cy=r.top+r.height/2;
+      let v=1-Math.abs(cy-vh*0.5)/(vh*0.5); v=Math.max(0,Math.min(1,v)); const e=v*v*(3-2*v);
+      g.style.opacity=e.toFixed(3); g.style.transform='translateY('+((1-e)*30).toFixed(1)+'px)'; });
+  })();
+
+  /* SECTION B horizontal go-left */
+  const track=document.getElementById('htrack');
+  const vcaps=document.querySelectorAll('#voyage .vcap');
+  ScrollTrigger.create({trigger:'#voyage',start:'top top',end:'+=2400',pin:true,scrub:true,
+    onUpdate:s=>{ const p=s.progress; track.style.transform='translateX('+(-p*100)+'vw)';
+      vcaps[0].style.opacity=seg(p,0.5,0.62,0.78,0.9); vcaps[1].style.opacity=seg(p,0.66,0.78,0.9,1); }});
+
+  /* SECTION C network scrub */
+  const netVid=document.getElementById('netVid'); let dur=16,ready=false,tgt=0,curT=0,prog=0,gateOpen=false;
+  netVid.addEventListener('loadedmetadata',()=>{dur=netVid.duration;ready=true;}); netVid.pause();
+  const netCap=document.querySelector('#network .cap'), netIntro=document.getElementById('netIntro');
+  const netST=ScrollTrigger.create({trigger:'#network',start:'top top',end:'+=4200',pin:true,scrub:true,
+    onUpdate:s=>{prog=s.progress;}});
+  function netLoop(){ requestAnimationFrame(netLoop);
+    if(ready){ tgt=prog*Math.max(0.05,dur-0.05); curT+=(tgt-curT)*0.16;
+      if(netVid.readyState>=2 && !netVid.seeking && Math.abs(netVid.currentTime-curT)>0.033){ try{netVid.currentTime=curT;}catch(e){} } }
+    const v=seg(prog,0.05,0.14,0.5,0.62); netCap.style.opacity=v; netCap.style.setProperty('--ty',(26*(1-v)).toFixed(1)+'px'); netCap.style.setProperty('--bl',(6*(1-v)).toFixed(1)+'px');
+    netIntro.style.opacity=Math.max(0,1-prog/0.12);
+  }
+  netLoop();
+  /* decode-primer: run ONCE (re-firing on every canplay fights the scrub seek) */
+  let nprimed=false;
+  function nprime(){ if(nprimed) return; nprimed=true; netVid.play().then(()=>netVid.pause()).catch(()=>{nprimed=false;}); }
+  netVid.addEventListener('loadeddata',nprime); netVid.addEventListener('canplay',nprime);
+  let nheal=0; netVid.addEventListener('error',()=>{if(nheal++<3){ready=false;curT=0;nprimed=false;netVid.load();}});
+
+  /* person nodes — proximity light + drift, click -> profile */
+  const nodes=[...document.querySelectorAll('.node')];
+  nodes.forEach(nd=>{ const d=PEOPLE[+nd.dataset.i];
+    nd.innerHTML='<span class="halo"></span><span class="dotwrap"><span class="av">'+d.i+'</span></span><span class="name">'+d.name+'</span>';
+    nd.dataset.base=nd.getAttribute('style'); });
+  let mx=-999,my=-999; addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  const R=200;
+  (function nodeTick(){ requestAnimationFrame(nodeTick);
+    nodes.forEach(nd=>{ const r=nd.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+      const dist=Math.hypot(mx-cx,my-cy), near=Math.max(0,1-dist/R);
+      const px=(mx-cx)*near*0.18, py=(my-cy)*near*0.18;
+      let dx=+(nd._dx||0), dy=+(nd._dy||0); dx+=(px-dx)*0.14; dy+=(py-dy)*0.14; nd._dx=dx; nd._dy=dy;
+      nd.style.transform='translate(-50%,-50%) translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px) scale('+(1+near*0.28).toFixed(2)+')';
+      nd.classList.toggle('lit',near>0.12);
+    });
+  })();
+  function openProfile(d){ document.getElementById('pAv').textContent=d.i; document.getElementById('pRole').textContent=d.role;
+    document.getElementById('pName').textContent=d.name; document.getElementById('pCompany').textContent=d.co;
+    document.getElementById('pBlurb').textContent=d.blurb; document.getElementById('pBig').textContent=d.big; document.getElementById('pStat').textContent=d.stat;
+    document.getElementById('profile').classList.add('open'); document.getElementById('scrim').classList.add('on'); }
+  function closeProfile(){ document.getElementById('profile').classList.remove('open'); document.getElementById('scrim').classList.remove('on'); }
+  nodes.forEach(nd=>nd.addEventListener('click',()=>openProfile(PEOPLE[+nd.dataset.i])));
+  document.getElementById('profClose').addEventListener('click',closeProfile);
+  document.getElementById('scrim').addEventListener('click',closeProfile);
+
+  /* centre gate — tap continues the video to 18s by auto-advancing the scrub */
+  document.getElementById('flakeCore').addEventListener('click',()=>{
+    if(gateOpen) return; gateOpen=true;
+    document.getElementById('flakeCore').classList.add('gone');
+    lenis.scrollTo(netST.end,{duration:2.6,easing:t=>1-Math.pow(1-t,3)});
+  });
+
+  /* keep Lenis' scroll limit in sync with ScrollTrigger's pin-spacers.
+     Refresh now + after fonts settle — NOT on window 'load' (fires after heavy video
+     download and would snap the page). */
+  ScrollTrigger.addEventListener('refresh',()=>lenis.resize());
+  ScrollTrigger.refresh();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>ScrollTrigger.refresh());
+} else {
+  document.querySelectorAll('video').forEach(v=>{v.setAttribute('autoplay','');v.setAttribute('loop','');v.play&&v.play().catch(()=>{});});
+  const nodes=[...document.querySelectorAll('.node')];
+  nodes.forEach(nd=>{const d=PEOPLE[+nd.dataset.i];nd.innerHTML='<span class="dotwrap"><span class="av">'+d.i+'</span></span><span class="name" style="opacity:1;position:static;transform:none;display:block;margin-top:8px">'+d.name+'</span>';});
+}
+</script>
+</body>
+</html>
