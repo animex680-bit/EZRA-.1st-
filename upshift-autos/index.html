@@ -1,0 +1,1338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>UPSHIFT AUTOS — The Art of the Rebuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --bg:#08080b;
+  --bg2:#0c0c11;
+  --paper:#f4f2ee;
+  --mute:rgba(244,242,238,.52);
+  --faint:rgba(244,242,238,.28);
+  /* accent — driven by chosen car (rgb triplet) */
+  --ar:56; --ag:182; --ab:255;
+  /* S2 forest hue driven by scrub */
+  --fh:350deg; --fs:80%; --fl:50%;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--paper);font-family:'Inter',system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* film grain */
+body::after{
+  content:"";position:fixed;inset:0;z-index:300;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:120;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 42px;pointer-events:none;
+}
+.nav>*{pointer-events:auto}
+.brand{display:flex;align-items:center;gap:13px;opacity:0;filter:blur(8px)}
+.brand .bmk{
+  width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  background:linear-gradient(140deg,rgba(255,255,255,.14),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.22);
+  font-family:'Space Grotesk';font-weight:700;font-size:15px;
+  color:rgb(var(--ar),var(--ag),var(--ab));
+  box-shadow:0 0 24px -6px rgba(var(--ar),var(--ag),var(--ab),.6);
+  transition:color .8s, box-shadow .8s;
+}
+.brand .bt{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.3em;text-transform:uppercase}
+.brand .bt span{font-weight:300;opacity:.55}
+.nav-r{display:flex;gap:12px;align-items:center;opacity:0;filter:blur(8px)}
+.gpill{
+  padding:10px 18px;border-radius:999px;
+  background:linear-gradient(140deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+  display:inline-flex;align-items:center;gap:9px;
+}
+.gpill .dot{width:6px;height:6px;border-radius:50%;background:rgb(var(--ar),var(--ag),var(--ab));box-shadow:0 0 10px rgba(var(--ar),var(--ag),var(--ab),.8);transition:background .8s, box-shadow .8s}
+
+/* ============ S1 HERO ============ */
+#hero{position:relative;height:100vh;min-height:700px;overflow:hidden;background:#050507}
+.hero-vid,.hero-still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-still{opacity:0;pointer-events:none}
+/* blurred colour-fill layer used when a portrait car image takes over */
+.hero-fill{position:absolute;inset:-6%;background-size:cover;background-position:center;filter:blur(70px) saturate(1.35) brightness(.5);opacity:0;transform:scale(1.1)}
+.hero-sharp{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:9vh 4vw 12vh 26vw;opacity:0;pointer-events:none;
+}
+.hero-sharp img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 50px 60px rgba(0,0,0,.55))}
+/* scrims — keep gutters readable, never cover the car (car sits centre-left in the film) */
+.hero-scrim{position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(105deg, rgba(5,5,7,.78) 0%, rgba(5,5,7,.35) 26%, transparent 48%),
+    linear-gradient(0deg, rgba(5,5,7,.72) 0%, transparent 30%),
+    linear-gradient(180deg, rgba(5,5,7,.5) 0%, transparent 22%);
+}
+.hero-glow{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.5;
+  background:radial-gradient(52vw 40vh at 74% 62%, rgba(var(--ar),var(--ag),var(--ab),.20), transparent 65%);
+  transition:background 1.2s;
+}
+
+/* headline — top-left dark curtain zone */
+.h-copy{position:absolute;left:5vw;top:15vh;z-index:12;max-width:44vw}
+.h-kick{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.4em;text-transform:uppercase;
+  color:rgb(var(--ar),var(--ag),var(--ab));display:flex;align-items:center;gap:14px;transition:color .8s;
+  opacity:0;filter:blur(10px);
+}
+.h-kick::before{content:"";width:44px;height:1px;background:currentColor}
+.h-title{
+  margin-top:20px;font-family:'Space Grotesk';font-weight:300;
+  font-size:clamp(44px,4.6vw,74px);line-height:1.02;letter-spacing:-.03em;
+}
+.h-title .ln{display:block;overflow:hidden}
+.h-title .ln>span{display:inline-block;transform:translateY(110%);will-change:transform}
+.h-title b{font-weight:700}
+.h-title .accw{color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.h-title .slash{font-weight:300;opacity:.4;letter-spacing:-.06em}
+.h-sub{
+  margin-top:22px;max-width:400px;font-size:14px;line-height:1.75;font-weight:300;color:var(--mute);
+  opacity:0;filter:blur(8px);
+}
+.h-sub b{color:var(--paper);font-weight:500}
+
+/* chips + price + CTA — bottom-left floor zone */
+.h-deck{position:absolute;left:5vw;bottom:7vh;z-index:12;display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;max-width:46vw}
+.chip{
+  border-radius:16px;padding:14px 18px;
+  background:linear-gradient(140deg,rgba(255,255,255,.10),rgba(255,255,255,.028));
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13), 0 18px 44px -22px rgba(0,0,0,.8);
+  opacity:0;filter:blur(8px);position:relative;overflow:hidden;
+  will-change:transform;
+}
+.chip::before{ /* cursor glow layer */
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(120px 120px at var(--gx,50%) var(--gy,50%), rgba(var(--ar),var(--ag),var(--ab),.28), transparent 70%);
+  transition:opacity .25s;
+}
+.chip .cl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.chip .cv{font-family:'Space Grotesk';font-weight:500;font-size:21px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.chip .cv small{font-size:11px;opacity:.5;font-family:'JetBrains Mono',monospace;margin-left:3px}
+.chip.price .cv{color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.cta{
+  display:flex;align-items:center;gap:12px;padding:0 26px;border-radius:16px;
+  background:rgba(244,242,238,.94);color:#0a0a0c;
+  font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.04em;
+  opacity:0;filter:blur(8px);position:relative;overflow:hidden;
+  transition:box-shadow .4s;will-change:transform;
+}
+.cta:hover{box-shadow:0 0 44px -8px rgba(var(--ar),var(--ag),var(--ab),.85)}
+.cta::after{content:"→";font-weight:400}
+
+/* glass telemetry panel — right wall zone (ref: "scanning the car") */
+.scan{
+  position:absolute;right:8.5vw;top:16vh;z-index:12;width:250px;
+  border-radius:22px;padding:20px;
+  background:linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 30px 70px -30px rgba(0,0,0,.9);
+  opacity:0;filter:blur(10px);position:absolute;overflow:hidden;will-change:transform;
+}
+.scan::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(160px 160px at var(--gx,50%) var(--gy,50%), rgba(var(--ar),var(--ag),var(--ab),.22), transparent 70%);
+  transition:opacity .25s;
+}
+.scan .sh{font-family:'Space Grotesk';font-weight:500;font-size:15px;margin-bottom:2px}
+.scan .ss{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.scan .srow{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.scan .srow:last-child{border-bottom:0;padding-bottom:0}
+.scan .sk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.scan .sv{font-family:'Space Grotesk';font-weight:500;font-size:13px;font-variant-numeric:tabular-nums}
+.scan .sbar{height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:14px;overflow:hidden}
+.scan .sbar i{display:block;height:100%;width:38%;border-radius:2px;background:rgb(var(--ar),var(--ag),var(--ab));box-shadow:0 0 12px rgba(var(--ar),var(--ag),var(--ab),.7);transition:background .8s}
+
+/* car selector rail — bottom-right, above the floor */
+.rail{
+  position:absolute;right:8.5vw;bottom:7vh;z-index:14;display:flex;gap:10px;align-items:flex-end;
+}
+.ritem{
+  width:74px;height:52px;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;
+  border:1px solid rgba(255,255,255,.16);
+  background:#101014;
+  opacity:0;filter:blur(8px);
+  transition:border-color .35s, box-shadow .35s;
+  will-change:transform;
+}
+.ritem img{width:100%;height:100%;object-fit:cover;filter:grayscale(.75) brightness(.8);transition:filter .45s}
+.ritem .rn{
+  position:absolute;left:0;right:0;bottom:0;padding:3px 6px;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;
+  background:linear-gradient(0deg,rgba(0,0,0,.8),transparent);color:rgba(255,255,255,.85);
+  opacity:0;transition:opacity .3s;
+}
+.ritem:hover .rn{opacity:1}
+.ritem.on{border-color:rgb(var(--ar),var(--ag),var(--ab));box-shadow:0 0 22px -4px rgba(var(--ar),var(--ag),var(--ab),.75)}
+.ritem.on img{filter:grayscale(0) brightness(1)}
+.rail-lbl{
+  position:absolute;right:8.5vw;bottom:calc(7vh + 64px);z-index:14;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);
+  opacity:0;filter:blur(6px);
+}
+
+/* IG handle — hero, required */
+.h-ig{
+  position:absolute;left:5vw;top:calc(15vh - 46px);z-index:12;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);
+  opacity:0;filter:blur(6px);
+}
+.h-ig b{color:rgb(var(--ar),var(--ag),var(--ab));font-weight:500;transition:color .8s}
+
+/* scroll hint */
+.h-hint{
+  position:absolute;left:50%;bottom:3.4vh;transform:translateX(-50%);z-index:12;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--faint);
+  opacity:0;
+}
+
+/* ============ S2 — FOREST CREDITS (scroll-scrub) ============ */
+#forest{position:relative;height:100vh;overflow:hidden;background:#07070a}
+/* dynamic BG matched to the film's hue — red → blue → teal → smoke → red */
+.f-bg{
+  position:absolute;inset:-12%;pointer-events:none;
+  background:
+    radial-gradient(55vw 60vh at 24% 40%, hsla(var(--fh),var(--fs),calc(var(--fl) - 14%),.5), transparent 62%),
+    radial-gradient(48vw 52vh at 78% 66%, hsla(var(--fh),var(--fs),calc(var(--fl) - 22%),.42), transparent 64%),
+    linear-gradient(180deg,#050508 0%, #0a090f 50%, #050508 100%);
+}
+.f-bg::after{ /* soft forest texture echo */
+  content:"";position:absolute;inset:0;opacity:.35;
+  background:
+    radial-gradient(1.6px 1.6px at 16% 30%, hsla(var(--fh),90%,80%,.8), transparent 60%),
+    radial-gradient(1.4px 1.4px at 82% 22%, hsla(var(--fh),90%,84%,.7), transparent 60%),
+    radial-gradient(1.8px 1.8px at 64% 74%, hsla(var(--fh),90%,78%,.6), transparent 60%),
+    radial-gradient(1.3px 1.3px at 34% 84%, hsla(var(--fh),90%,82%,.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 91% 55%, hsla(var(--fh),90%,80%,.55), transparent 60%);
+}
+.f-inner{position:absolute;inset:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 3vw;gap:2.5vw}
+
+/* vertical film pane — TRUE aspect, never stretched, never cropped */
+.f-pane{
+  position:relative;height:88vh;aspect-ratio:576/1284;
+  border-radius:24px;overflow:hidden;justify-self:center;
+  box-shadow:
+    0 60px 130px -40px rgba(0,0,0,.95),
+    0 0 90px -16px hsla(var(--fh),var(--fs),55%,.55),
+    inset 0 0 0 1px rgba(255,255,255,.07);
+  will-change:transform;
+}
+.f-pane video{width:100%;height:100%;object-fit:cover}
+.f-pane::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(90% 70% at 50% 50%, transparent 60%, rgba(0,0,0,.3) 100%)}
+/* floor light under the pane */
+.f-floor{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:70vh;height:14vh;pointer-events:none;
+  background:radial-gradient(50% 100% at 50% 100%, hsla(var(--fh),var(--fs),50%,.5), transparent 70%);
+  filter:blur(30px);mix-blend-mode:screen;
+}
+
+/* credit-roll gutters — movie-ending style, roll UP */
+.f-col{position:relative;height:88vh;overflow:hidden}
+.f-col::before,.f-col::after{content:"";position:absolute;left:0;right:0;height:16vh;z-index:3;pointer-events:none}
+.f-col::before{top:0;background:linear-gradient(180deg,#07070a 6%,transparent)}
+.f-col::after{bottom:0;background:linear-gradient(0deg,#07070a 4%,transparent)}
+.f-roll{
+  position:relative;display:flex;flex-direction:column;gap:9vh;
+  will-change:transform;transform:translateY(20vh);
+}
+.f-col.L .f-roll{align-items:flex-end;text-align:right;padding-right:1vw}
+.f-col.R .f-roll{align-items:flex-start;text-align:left;padding-left:1vw}
+.fb{opacity:0;will-change:opacity,transform;max-width:330px}
+.fb .fk{
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;
+  color:hsl(var(--fh), 85%, 78%);text-shadow:0 1px 8px rgba(0,0,0,.6);
+}
+.fb .fh2{
+  margin-top:10px;font-family:'Space Grotesk';font-weight:300;
+  font-size:clamp(30px,3vw,46px);line-height:1.04;letter-spacing:-.025em;color:#fff;
+  text-shadow:0 2px 14px rgba(0,0,0,.65);
+}
+.fb .fh2 b{font-weight:600;color:hsl(var(--fh), 90%, 82%)}
+.fb .fp{
+  margin-top:12px;font-size:14.5px;line-height:1.7;font-weight:300;color:rgba(244,242,238,.92);
+  text-shadow:0 1px 8px rgba(0,0,0,.6);
+}
+.fb .fq{
+  font-family:'Space Grotesk';font-weight:300;font-style:italic;font-size:19px;line-height:1.5;
+  color:rgba(255,255,255,.95);text-shadow:0 1px 10px rgba(0,0,0,.65);
+}
+.fb .fsig{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:rgba(244,242,238,.6)}
+.fb .fhr{width:70px;height:1px;background:hsla(var(--fh),80%,75%,.55);margin-bottom:16px}
+.f-col.L .fb .fhr{margin-left:auto}
+
+/* ============ S3 — THE HIDDEN WORLD ============ */
+/* the fixed video lives BEHIND the whole page; this section is a transparent window */
+#deepfix{position:fixed;inset:0;z-index:0;pointer-events:none;visibility:hidden}
+#deepfix video{width:100%;height:100%;object-fit:cover}
+#deepfix .d-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,6,10,.24),transparent 30%,transparent 70%,rgba(3,6,10,.3))}
+#deep{position:relative;height:150vh;background:transparent;z-index:1}
+.d-cap{
+  position:sticky;top:74vh;margin-left:5vw;max-width:340px;z-index:2;
+  opacity:0;filter:blur(8px);
+}
+.d-cap .dk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:rgba(190,230,255,.85);text-shadow:0 1px 10px rgba(0,0,0,.7)}
+.d-cap .dh{margin-top:12px;font-family:'Space Grotesk';font-weight:300;font-size:clamp(26px,2.4vw,38px);line-height:1.1;letter-spacing:-.02em;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.d-cap .dh b{font-weight:600}
+/* sections above/below carry SOLID backgrounds and higher z — they are "the bg" that peels away */
+#hero,#forest,#register,#learn,#bento,#waitdark,#waitword,#mailsec{z-index:2;position:relative}
+
+/* ============================================================
+   S4+ — THE PITCH DECK SITE (copied from the swapie deck film,
+   re-authored for the rebuild shop)
+   ============================================================ */
+
+/* ---------- shared light / dark deck tokens ---------- */
+.deck-light{background:#ecedf1;color:#141417}
+.deck-dark{
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 1px, transparent 1px 96px),
+    linear-gradient(180deg,#0d0d10,#0a0a0d);
+  color:#f2f1f4;
+}
+.gel{ /* the deck's signature gradient gel */
+  background:linear-gradient(100deg,#3a5bff 0%,#7a4bf0 26%,#c44bd8 52%,#ff5f6d 76%,#ff9a3d 100%);
+}
+
+/* ---------- S4 SWITCH (light deck hero) ---------- */
+#register{overflow:hidden;min-height:100vh;padding:16vh 0 10vh}
+.sw-wrap{max-width:1380px;margin:0 auto;padding:0 48px;position:relative;min-height:74vh}
+.sw-copy{position:relative;z-index:5;max-width:600px;padding-top:9vh}
+.sw-kick{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8b8b93;opacity:0}
+.sw-title{
+  margin-top:16px;font-family:'Space Grotesk';letter-spacing:-.035em;
+  font-size:clamp(38px,4.4vw,68px);line-height:1.06;font-weight:300;color:#141417;
+}
+.sw-title b{font-weight:700}
+.sw-title .gelw{ /* gel-blob word like "generati✳n" */
+  background:linear-gradient(100deg,#3a5bff,#c44bd8 55%,#ff9a3d);
+  -webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700;
+}
+.sw-title .ln{display:block;overflow:hidden}
+.sw-title .ln>span{display:inline-block;transform:translateY(112%)}
+.sw-star{display:inline-block;color:#141417;font-weight:400}
+.sw-feats{display:flex;gap:34px;margin-top:44px;flex-wrap:wrap}
+.sw-feat{display:flex;align-items:center;gap:12px;opacity:0;will-change:transform,opacity}
+.sw-feat .fi{
+  width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;
+  background:#fff;border:1px solid rgba(20,20,23,.1);
+  box-shadow:0 10px 26px -14px rgba(20,20,23,.35);
+}
+.sw-feat .fi svg{width:17px;height:17px;stroke:#141417;fill:none;stroke-width:1.6}
+.sw-feat .ft{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#5b5b63;line-height:1.8}
+.sw-arrow{margin-top:8vh;opacity:0;color:#141417}
+.sw-arrow svg{width:26px;height:44px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+/* the floating tilted CAR-CARD STACK — the register, airborne (top-right) */
+.stack{position:absolute;right:-2vw;top:-4vh;width:46vw;height:84vh;z-index:4;perspective:1200px;pointer-events:none}
+.scard{
+  position:absolute;width:19vw;max-width:320px;aspect-ratio:16/10;border-radius:18px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow:0 40px 80px -30px rgba(20,20,23,.5), inset 0 1px 0 rgba(255,255,255,.6);
+  transform-style:preserve-3d;cursor:pointer;pointer-events:auto;
+  opacity:0;will-change:transform,opacity;
+}
+.scard img{width:100%;height:100%;object-fit:cover}
+.scard::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.34),transparent 42%);mix-blend-mode:screen}
+.scard .sn{
+  position:absolute;left:12px;bottom:9px;z-index:2;
+  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;
+  color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.7);
+}
+
+/* ---------- S5 LEARN (dark tiled wall + phone) ---------- */
+#learn{overflow:hidden;min-height:100vh}
+.ln-inner{position:relative;max-width:1380px;margin:0 auto;padding:12vh 48px 9vh;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:3vw;min-height:100vh}
+.ln-left{justify-self:start}
+.ln-left .lt{
+  font-family:'Space Grotesk';font-weight:300;font-size:clamp(34px,3.4vw,54px);line-height:1.1;letter-spacing:-.03em;
+}
+.ln-left .lt b{font-weight:700}
+.ln-left .lt .ln2{display:block;overflow:hidden}
+.ln-left .lt .ln2>span{display:inline-block;transform:translateY(112%)}
+.ln-right{justify-self:end;text-align:right;font-family:'Space Grotesk';font-weight:300;font-size:clamp(22px,2vw,32px);letter-spacing:-.02em;color:rgba(242,241,244,.6);opacity:0}
+.ln-right b{color:#fff;font-weight:600;display:block}
+.ln-right .star{color:#fff}
+/* phone — the lambo film plays INSIDE the phone screen at native aspect */
+.phone{
+  position:relative;width:min(320px,24vw);aspect-ratio:9/18.6;border-radius:44px;z-index:5;
+  background:#141418;border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 60px 120px -40px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.14), inset 0 0 0 6px #08080a;
+  padding:10px;opacity:0;will-change:transform,opacity;
+}
+.phone .ph-screen{
+  position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;
+  background:#cfc4e8; /* the lambo film's own lilac — BG copies the video's aesthetics */
+}
+.phone .ph-screen video{width:100%;height:100%;object-fit:contain}
+.phone .ph-notch{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:84px;height:22px;border-radius:12px;background:#08080a;z-index:3}
+/* glass "quick estimates" card overlapping phone top-right (like the deck) */
+.qe{
+  position:absolute;top:7vh;right:-13vw;z-index:6;width:250px;border-radius:18px;padding:16px;
+  background:rgba(255,255,255,.92);color:#141417;
+  box-shadow:0 30px 70px -28px rgba(0,0,0,.8);
+  opacity:0;will-change:transform,opacity;
+}
+.qe .qt{font-family:'Space Grotesk';font-weight:600;font-size:14px}
+.qe .qs{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#8b8b93;margin-top:3px}
+.qe .qav{display:flex;margin-top:12px}
+.qe .qav i{
+  width:30px;height:30px;border-radius:50%;border:2px solid #fff;margin-left:-8px;flex:none;
+  display:grid;place-items:center;font-style:normal;font-family:'Space Grotesk';font-weight:600;font-size:11px;color:#fff;
+}
+.qe .qav i:first-child{margin-left:0}
+.qe .qav .more{background:#141417;font-size:9px}
+/* the deck's chunky down arrow under the phone */
+.big-arrow{
+  position:absolute;left:50%;bottom:-3vh;transform:translateX(-50%);z-index:4;
+  width:120px;color:rgba(255,255,255,.35);opacity:0;will-change:transform,opacity;
+}
+.big-arrow svg{width:100%;fill:currentColor}
+
+/* ---------- S6 BENTO (light, assembles) ---------- */
+#bento{overflow:hidden;padding:14vh 0}
+.bt-head{max-width:1280px;margin:0 auto 7vh;padding:0 48px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.bt-head h3{font-family:'Space Grotesk';font-weight:300;font-size:clamp(30px,3.2vw,50px);letter-spacing:-.03em;line-height:1.05;color:#141417}
+.bt-head h3 b{font-weight:700}
+.bt-head .bh-r{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:#8b8b93}
+.bento{
+  max-width:1280px;margin:0 auto;padding:0 48px;
+  display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:96px;gap:14px;
+}
+.bx{
+  position:relative;border-radius:20px;overflow:hidden;
+  background:#fff;border:1px solid rgba(20,20,23,.08);
+  box-shadow:0 24px 60px -34px rgba(20,20,23,.4);
+  opacity:0;will-change:transform,opacity;
+}
+.bx::after{ /* cursor glow (light theme) */
+  content:"";position:absolute;inset:0;z-index:6;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(200px 200px at var(--gx,50%) var(--gy,50%), rgba(122,75,240,.15), transparent 70%);
+  transition:opacity .3s;
+}
+.bx .bl{position:absolute;left:16px;top:14px;z-index:5}
+.bx .bl .bk{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b8b93}
+.bx .bl .bv{font-family:'Space Grotesk';font-weight:700;font-size:26px;letter-spacing:-.02em;color:#141417;margin-top:4px}
+.bx .bl .bv small{font-weight:400;font-size:13px;color:#8b8b93}
+.bx.dark{background:#141418;border-color:rgba(255,255,255,.1)}
+.bx.dark .bl .bv{color:#fff}
+.bx.blue{background:linear-gradient(150deg,#2f56e8,#3a7bff);border:0}
+.bx.blue .bl .bk{color:rgba(255,255,255,.65)}
+.bx.blue .bl .bv{color:#fff}
+.bx.gel-t{border:0}
+.bx.gel-t .bl .bk{color:rgba(255,255,255,.8)}
+.bx.gel-t .bl .bv{color:#fff}
+/* video tiles — video at NATIVE aspect, tile bg dyed to the film's own palette */
+.bx .bvid{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.bx .bvid video{height:100%;object-fit:contain}
+.bx.v-mauve{background:#8a8093}   /* McLaren turntable film */
+.bx.v-kitty{background:#f4f0f2}   /* hello-kitty showroom film */
+.bx.v-anime{background:#17130f}   /* anime drift film */
+.bx .bcap{
+  position:absolute;left:14px;bottom:12px;z-index:5;
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6);
+}
+.bx .bcap.dk{color:#141417;text-shadow:none}
+.bx .pillrow{position:absolute;inset:auto 14px 12px 14px;z-index:5;display:flex;gap:8px;flex-wrap:wrap}
+.bx .pl{
+  padding:7px 13px;border-radius:999px;background:rgba(20,20,23,.06);
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#3c3c44;
+}
+.b-1{grid-column:span 3;grid-row:span 2}
+.b-2{grid-column:span 5;grid-row:span 4}
+.b-3{grid-column:span 4;grid-row:span 5}
+.b-4{grid-column:span 3;grid-row:span 3}
+.b-5{grid-column:span 5;grid-row:span 3}
+.b-6{grid-column:span 3;grid-row:span 3}
+.b-7{grid-column:span 5;grid-row:span 2}
+.b-8{grid-column:span 8;grid-row:span 2}
+
+/* ---------- S7 OUR WAITLIST (dark scene) ---------- */
+#waitdark{overflow:hidden;min-height:92vh;display:grid;align-items:center}
+.wd-inner{position:relative;max-width:1380px;margin:0 auto;padding:14vh 48px;display:grid;grid-template-columns:1.1fr 1fr;gap:5vw;align-items:center;width:100%}
+.wd-title{font-family:'Space Grotesk';font-weight:300;font-size:clamp(54px,6.4vw,104px);letter-spacing:-.04em;line-height:.98}
+.wd-title b{font-weight:700;display:block}
+.wd-title .ln3{display:block;overflow:hidden}
+.wd-title .ln3>span{display:inline-block;transform:translateY(112%)}
+.wd-sub{margin-top:22px;max-width:380px;font-size:14px;line-height:1.75;font-weight:300;color:rgba(242,241,244,.55);opacity:0}
+.wd-scene{position:relative;height:56vh;min-height:380px}
+/* balance phone */
+.wd-phone{
+  position:absolute;right:4%;top:50%;transform:translateY(-50%) rotate(6deg);
+  width:min(260px,20vw);aspect-ratio:9/18;border-radius:38px;z-index:3;
+  background:#101014;border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 60px 110px -40px rgba(0,0,0,.95), inset 0 0 0 6px #060608;
+  padding:9px;opacity:0;will-change:transform,opacity;
+}
+.wd-phone .wps{width:100%;height:100%;border-radius:30px;overflow:hidden;background:#0c0c10;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px}
+.wd-phone .wb1{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.wd-phone .wb2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(22px,1.9vw,30px);letter-spacing:-.02em;color:#fff}
+.wd-phone .wb3{padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+/* curved hand-drawn arrow */
+.wd-arrow{position:absolute;left:6%;top:16%;width:34%;color:#fff;z-index:4;opacity:0;will-change:transform,opacity}
+.wd-arrow svg{width:100%;fill:none;stroke:currentColor;stroke-width:7;stroke-linecap:round}
+
+/* ---------- S8 GIANT WORD ---------- */
+#waitword{overflow:hidden;min-height:86vh;display:grid;place-items:center}
+.ww{
+  font-family:'Space Grotesk';font-weight:700;letter-spacing:-.05em;
+  font-size:clamp(90px,17.5vw,300px);line-height:.9;color:#141417;white-space:nowrap;
+  display:flex;
+}
+.ww .wl{display:inline-block;overflow:hidden}
+.ww .wl>span{display:inline-block;transform:translateY(115%);will-change:transform}
+
+/* ---------- S9 MAIL (gel pill) ---------- */
+#mailsec{overflow:hidden;padding:16vh 0 0}
+.ml-inner{max-width:1100px;margin:0 auto;padding:0 48px;position:relative}
+.ml-title{font-family:'Space Grotesk';font-weight:300;font-size:clamp(34px,3.6vw,58px);letter-spacing:-.03em;line-height:1.04;color:#141417}
+.ml-title b{font-weight:700;display:block}
+.ml-title .ln4{display:block;overflow:hidden}
+.ml-title .ln4>span{display:inline-block;transform:translateY(112%)}
+/* the gel input bar */
+.ml-bar{
+  position:relative;margin-top:6vh;height:86px;border-radius:999px;overflow:hidden;
+  display:flex;align-items:center;padding:10px 12px 10px 34px;gap:16px;
+  box-shadow:0 34px 80px -34px rgba(58,91,255,.55);
+  opacity:0;will-change:transform,opacity;
+}
+.ml-bar input{
+  flex:1;background:transparent;border:0;outline:0;color:#fff;
+  font-family:'Space Grotesk';font-weight:500;font-size:clamp(16px,1.6vw,22px);letter-spacing:-.01em;
+}
+.ml-bar input::placeholder{color:rgba(255,255,255,.8)}
+.ml-bar .ml-go{
+  flex:none;height:100%;padding:0 34px;border-radius:999px;background:#101014;color:#fff;
+  font-family:'Space Grotesk';font-weight:600;font-size:14px;display:flex;align-items:center;gap:10px;
+  transition:transform .3s;
+}
+.ml-bar .ml-go:hover{transform:scale(1.04)}
+.ml-note{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#8b8b93;opacity:0}
+/* floating gel shard top-right */
+.ml-shard{
+  position:absolute;right:2vw;top:-16vh;width:170px;height:280px;border-radius:26px;z-index:2;
+  box-shadow:0 50px 100px -40px rgba(122,75,240,.6);
+  opacity:0;will-change:transform,opacity;transform:rotate(14deg);
+}
+.ml-shard::after{content:"";position:absolute;inset:0;border-radius:26px;background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 46%);mix-blend-mode:screen}
+
+.foot{
+  max-width:1380px;margin:12vh auto 0;padding:26px 48px 34px;
+  border-top:1px solid rgba(20,20,23,.12);
+  display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:14px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#8b8b93;
+}
+.foot .fig b{color:#141417}
+
+/* ============ responsive ============ */
+@media (max-width:1060px){
+  .scan{display:none}
+  .h-copy{max-width:70vw}
+  .f-col{display:none}
+  .f-inner{grid-template-columns:1fr}
+  .rail{right:4vw}
+  .rail-lbl{right:4vw}
+}
+@media (max-width:760px){
+  .nav{padding:16px 20px}
+  .h-copy{left:6vw;top:13vh;max-width:86vw}
+  .h-deck{left:6vw;max-width:88vw;bottom:16vh}
+  .rail{left:6vw;right:auto;bottom:5vh;flex-wrap:wrap}
+  .rail-lbl{left:6vw;right:auto;bottom:calc(5vh + 58px)}
+  .h-ig{left:6vw}
+  .f-pane{height:74vh}
+  .d-cap{margin-left:6vw}
+  /* deck sections */
+  .sw-wrap{padding:0 24px;min-height:0}
+  .stack{position:relative;right:auto;top:auto;width:100%;height:64vh;margin-top:6vh}
+  .scard{width:52vw}
+  .ln-inner{grid-template-columns:1fr;justify-items:center;gap:7vh;padding:12vh 24px}
+  .ln-left,.ln-right{justify-self:center;text-align:center}
+  .phone{width:64vw}
+  .qe{right:auto;left:50%;transform:translateX(-50%);top:-8vh}
+  .bento{grid-template-columns:repeat(6,1fr);grid-auto-rows:84px;padding:0 24px}
+  .b-1,.b-4,.b-6,.b-7,.b-8{grid-column:span 6;grid-row:span 2}
+  .b-2,.b-3,.b-5{grid-column:span 6;grid-row:span 4}
+  .bt-head{padding:0 24px}
+  .wd-inner{grid-template-columns:1fr;padding:12vh 24px;gap:8vh}
+  .wd-scene{height:48vh}
+  .wd-phone{right:50%;transform:translate(50%,-50%) rotate(6deg)}
+  .ml-inner{padding:0 24px}
+  .ml-bar{height:70px;padding:8px 8px 8px 22px}
+  .ml-shard{width:110px;height:180px;top:-8vh}
+  .foot{padding:26px 24px 34px}
+}
+</style>
+</head>
+<body>
+
+<!-- fixed hidden-world film (revealed when the page BG peels away at S3) -->
+<div id="deepfix">
+  <video id="deep-vid" muted loop playsinline preload="auto">
+    <source src="assets/vid/hidden.mp4" type="video/mp4">
+  </video>
+  <div class="d-scrim"></div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="brand"><div class="bmk">U</div><div class="bt">UPSHIFT<span> · AUTOS</span></div></div>
+  <div class="nav-r">
+    <a class="gpill" href="https://www.instagram.com/upshiftautos" target="_blank" rel="noopener"><span class="dot"></span>IG · @UPSHIFTAUTOS</a>
+    <a class="gpill" href="#register">THE REGISTER</a>
+  </div>
+</nav>
+
+<!-- ============ S1 HERO ============ -->
+<section id="hero">
+  <video class="hero-vid" id="hero-vid" muted playsinline preload="auto">
+    <source src="assets/vid/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-fill" id="hero-fill"></div>
+  <div class="hero-sharp" id="hero-sharp"><img id="hero-sharp-img" src="assets/img/car-shark.jpg" alt=""></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-glow"></div>
+
+  <div class="h-ig">EST. THE GARAGE · IG <b>@UPSHIFTAUTOS</b></div>
+
+  <div class="h-copy">
+    <div class="h-kick" id="h-kick">Full-bore rebuilds · one car at a time</div>
+    <h1 class="h-title" id="h-title">
+      <span class="ln"><span>The Art of <b>the</b></span></span>
+      <span class="ln"><span><b>Rebuild</b> <span class="slash">///</span></span></span>
+      <span class="ln"><span class="accw" id="h-model">911 GT3 RS</span></span>
+    </h1>
+    <p class="h-sub" id="h-sub">Every car that enters our shop leaves <b>newer than factory</b>. Chassis reset to zero, driveline re-balanced by hand, paint cured for weeks — <span id="h-story">this one wears shark blue over a full carbon rebuild.</span></p>
+  </div>
+
+  <div class="h-deck">
+    <div class="chip mag"><div class="cl">Peak power</div><div class="cv" id="c-hp">518<small>HP</small></div></div>
+    <div class="chip mag"><div class="cl">0–100 km/h</div><div class="cv" id="c-acc">3.0<small>S</small></div></div>
+    <div class="chip mag"><div class="cl">Build hours</div><div class="cv" id="c-hrs">1,840<small>H</small></div></div>
+    <div class="chip price mag"><div class="cl">Rebuilt · priced</div><div class="cv" id="c-price">$385,000</div></div>
+    <button class="cta mag" id="cta-book">Book the consult</button>
+  </div>
+
+  <aside class="scan mag" id="scan">
+    <div class="sh">Scanning the car</div>
+    <div class="ss" id="scan-state">In progress…</div>
+    <div style="margin-top:12px">
+      <div class="srow"><span class="sk">Chassis</span><span class="sv" id="s-ch">Reset · 0.00 mm</span></div>
+      <div class="srow"><span class="sk">Driveline</span><span class="sv" id="s-dr">Balanced</span></div>
+      <div class="srow"><span class="sk">Paint</span><span class="sv" id="s-pa">11 coats</span></div>
+      <div class="srow"><span class="sk">Reg. N°</span><span class="sv" id="s-no">01 / 07</span></div>
+    </div>
+    <div class="sbar"><i id="s-bar"></i></div>
+  </aside>
+
+  <div class="rail-lbl" id="rail-lbl">Choose your build</div>
+  <div class="rail" id="rail"></div>
+
+  <div class="h-hint">Scroll — the credits are rolling</div>
+</section>
+
+<!-- ============ S2 FOREST CREDITS ============ -->
+<section id="forest">
+  <div class="f-bg"></div>
+  <div class="f-floor"></div>
+  <div class="f-inner">
+    <div class="f-col L">
+      <div class="f-roll" id="rollL">
+        <div class="fb"><div class="fk">Upshift Autos presents</div><div class="fh2">A rebuild is a <b>second life.</b></div></div>
+        <div class="fb"><div class="fp">She arrived on a flatbed at 02:40 — no headlights, no shame. We logged every bolt before the first one moved.</div></div>
+        <div class="fb"><div class="fhr"></div><div class="fq">“You don’t restore a car like this. You <b>answer</b> it.”</div><div class="fsig">— Shop ledger · entry 014</div></div>
+        <div class="fb"><div class="fk">Act I — Teardown</div><div class="fp">Chassis stripped to bare metal. Every panel laid out on felt, photographed, and argued over.</div></div>
+        <div class="fb"><div class="fh2">Eleven coats. <b>Thirty-nine</b> days.</div></div>
+        <div class="fb"><div class="fhr"></div><div class="fq">“The forest at night is the only honest dyno.”</div><div class="fsig">— Road test log · 04:00</div></div>
+        <div class="fb"><div class="fk">Act III — The return</div><div class="fp">Headlights re-lensed and colour-matched to the owner’s order: red for arrival, blue for the long way home.</div></div>
+        <div class="fb"><div class="fh2">Driven out. <b>Never trailered.</b></div></div>
+      </div>
+    </div>
+
+    <div class="f-pane" id="f-pane">
+      <video id="f-vid" muted playsinline preload="auto">
+        <source src="assets/vid/scrub-forest.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="f-col R">
+      <div class="f-roll" id="rollR">
+        <div class="fb"><div class="fk">Subject on file</div><div class="fh2">SRT — <b>widebody.</b></div></div>
+        <div class="fb"><div class="fp">Rebuilt over 2,140 hours. Driveline out, loom re-drawn by hand, every gasket made — not bought.</div></div>
+        <div class="fb"><div class="fhr"></div><div class="fq">“We keep what was correct. Everything else, we make again.”</div><div class="fsig">— Chief of assembly</div></div>
+        <div class="fb"><div class="fk">Parts ledger</div><div class="fp">Fabricated — 412.<br>Retained — 87.<br>Compromises — 0.</div></div>
+        <div class="fb"><div class="fh2">Lights tuned to <b>mood.</b></div></div>
+        <div class="fb"><div class="fp">Red under the pines. Blue through the fog bank. Teal where the river bends. The owner asked for weather, not colours.</div></div>
+        <div class="fb"><div class="fhr"></div><div class="fq">“When we hand back the keys, we hand back a diary.”</div><div class="fsig">— Upshift Autos · @upshiftautos</div></div>
+        <div class="fb"><div class="fk">End of reel</div><div class="fh2">Yours is <b>next.</b></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S3 THE HIDDEN WORLD (transparent — the fixed film shows through) ============ -->
+<section id="deep">
+  <div class="d-cap" id="d-cap">
+    <div class="dk">Beneath every build</div>
+    <div class="dh">There was <b>another world</b> under the paint all along.</div>
+  </div>
+</section>
+
+<!-- ============ S4 SWITCH — light deck hero (BG returns) ============ -->
+<section id="register" class="deck-light">
+  <div class="sw-wrap">
+    <div class="sw-copy">
+      <div class="sw-kick" id="sw-kick">Back above the surface · Upshift Autos</div>
+      <h2 class="sw-title" id="sw-title">
+        <span class="ln"><span>Switch up to</span></span>
+        <span class="ln"><span><b>next</b> <span class="gelw">generati<span class="sw-star">✳</span>n</span></span></span>
+        <span class="ln"><span>of <b>rebuilds.</b></span></span>
+      </h2>
+      <div class="sw-feats">
+        <div class="sw-feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 5.1L20 9l-4 3.9.9 5.6L12 15.8 7.1 18.5 8 12.9 4 9l5.6-.9z"/></svg></div><div class="ft">CUSTOM<br>BUILDS</div></div>
+        <div class="sw-feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0M3 21c0-3.9 4-6 9-6s9 2.1 9 6"/></svg></div><div class="ft">OWNERS'<br>FIRST CHOICE</div></div>
+        <div class="sw-feat"><div class="fi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div><div class="ft">DIFFERENT<br>MARQUES</div></div>
+      </div>
+      <div class="sw-arrow" id="sw-arrow"><svg viewBox="0 0 26 44"><path d="M13 2v38M4 32l9 9 9-9"/></svg></div>
+    </div>
+    <!-- the register — seven cars, airborne like the deck's floating cards -->
+    <div class="stack" id="stack">
+      <div class="scard" data-i="0"><img src="assets/img/car-shark.jpg" alt=""><div class="sn">N°01 · GT3 RS</div></div>
+      <div class="scard" data-i="1"><img src="assets/img/car-r8gt.jpg" alt=""><div class="sn">N°02 · R8 GT</div></div>
+      <div class="scard" data-i="2"><img src="assets/img/car-p1.jpg" alt=""><div class="sn">N°03 · P1</div></div>
+      <div class="scard" data-i="3"><img src="assets/img/car-violet.jpg" alt=""><div class="sn">N°04 · GT3 UV</div></div>
+      <div class="scard" data-i="4"><img src="assets/img/car-gr86.jpg" alt=""><div class="sn">N°05 · GR86</div></div>
+      <div class="scard" data-i="5"><img src="assets/img/car-marble.jpg" alt=""><div class="sn">N°06 · MARBLE</div></div>
+      <div class="scard" data-i="6"><img src="assets/img/car-dune.jpg" alt=""><div class="sn">N°07 · DUNE</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S5 LEARN — dark tiled wall + phone film ============ -->
+<section id="learn" class="deck-dark">
+  <div class="ln-inner">
+    <div class="ln-left">
+      <div class="lt" id="lt">
+        <span class="ln2"><span>Let's</span></span>
+        <span class="ln2"><span>learn</span></span>
+        <span class="ln2"><span><b>more</b></span></span>
+      </div>
+    </div>
+
+    <div class="phone" id="phone">
+      <div class="ph-screen">
+        <video id="v-lambo" muted loop playsinline preload="metadata">
+          <source src="assets/vid/phone-lambo.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="ph-notch"></div>
+      <div class="qe" id="qe">
+        <div class="qt">Quick estimates</div>
+        <div class="qs">Send the car · get the number</div>
+        <div class="qav">
+          <i style="background:#3a5bff">J</i><i style="background:#c44bd8">M</i><i style="background:#ff9a3d">T</i><i class="more">+4</i>
+        </div>
+      </div>
+      <div class="big-arrow" id="big-arrow">
+        <svg viewBox="0 0 120 90"><path d="M45 0h30v42h28L60 90 17 42h28z"/></svg>
+      </div>
+    </div>
+
+    <div class="ln-right" id="ln-right">
+      about
+      <b>upshift <span class="star">✳</span></b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S6 BENTO — assembles as you scroll ============ -->
+<section id="bento" class="deck-light">
+  <div class="bt-head">
+    <h3>Everything the shop does,<br><b>in one glance.</b></h3>
+    <div class="bh-r">SCROLL · THE GRID ASSEMBLES</div>
+  </div>
+  <div class="bento" id="bgrid">
+    <div class="bx blue b-1"><div class="bl"><div class="bk">Trusted by</div><div class="bv">+140 <small>owners</small></div></div></div>
+    <div class="bx v-mauve b-2"><div class="bvid"><video muted loop playsinline preload="metadata" src="assets/vid/bento-mauve.mp4"></video></div><div class="bcap">PAINT LAB · 765LT WIDEBODY</div></div>
+    <div class="bx v-kitty b-3"><div class="bvid"><video muted loop playsinline preload="metadata" src="assets/vid/bento-kitty.mp4"></video></div><div class="bcap dk">DELIVERY DAY · COMMISSION 019</div></div>
+    <div class="bx b-4"><div class="bl"><div class="bk">Average build</div><div class="bv">2,140 <small>hours</small></div></div><div class="pillrow"><span class="pl">CHASSIS</span><span class="pl">LOOM</span><span class="pl">PAINT</span></div></div>
+    <div class="bx dark v-anime b-5"><div class="bvid"><video muted loop playsinline preload="metadata" src="assets/vid/bento-anime.mp4"></video></div><div class="bcap">FUTURE BUILDS · CONCEPT REEL</div></div>
+    <div class="bx b-6"><div class="bl"><div class="bk">3D scans</div><div class="bv">Every panel</div></div><div class="pillrow"><span class="pl">0.01MM</span><span class="pl">ARCHIVED</span></div></div>
+    <div class="bx gel-t gel b-7"><div class="bl"><div class="bk">AI estimator</div><div class="bv">Photo → quote</div></div></div>
+    <div class="bx b-8"><div class="bl"><div class="bk">Scheduled services</div><div class="bv">Collected, rebuilt, returned <small>· door to door</small></div></div></div>
+  </div>
+</section>
+
+<!-- ============ S7 OUR WAITLIST — dark scene ============ -->
+<section id="waitdark" class="deck-dark">
+  <div class="wd-inner">
+    <div>
+      <div class="wd-title" id="wd-title">
+        <span class="ln3"><span>Our</span></span>
+        <span class="ln3"><span><b>Waitlist</b></span></span>
+      </div>
+      <p class="wd-sub" id="wd-sub">One slot opens each quarter. The deposit holds your car's place on the lift — and every hour of the build lands in your pocket, in ink and video.</p>
+    </div>
+    <div class="wd-scene">
+      <div class="wd-arrow" id="wd-arrow">
+        <svg viewBox="0 0 300 200"><path d="M12 178 C 60 60, 150 30, 262 52 M232 30 l32 20 -26 28"/></svg>
+      </div>
+      <div class="wd-phone" id="wd-phone">
+        <div class="wps">
+          <div class="wb1">Slot N°08 · deposit</div>
+          <div class="wb2">$12,544.00</div>
+          <div class="wb3">HOLDS THE LIFT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S8 GIANT WORD ============ -->
+<section id="waitword" class="deck-light">
+  <div class="ww" id="ww" aria-label="Waitlist">
+    <span class="wl"><span>W</span></span><span class="wl"><span>a</span></span><span class="wl"><span>i</span></span><span class="wl"><span>t</span></span><span class="wl"><span>l</span></span><span class="wl"><span>i</span></span><span class="wl"><span>s</span></span><span class="wl"><span>t</span></span>
+  </div>
+</section>
+
+<!-- ============ S9 MAIL ============ -->
+<section id="mailsec" class="deck-light">
+  <div class="ml-inner">
+    <div class="ml-shard gel" id="ml-shard"></div>
+    <div class="ml-title" id="ml-title">
+      <span class="ln4"><span>Enter</span></span>
+      <span class="ln4"><span><b>your mail</b></span></span>
+    </div>
+    <div class="ml-bar gel" id="ml-bar">
+      <input type="email" placeholder="your@mail.com — the shop replies same day" aria-label="email">
+      <button class="ml-go" id="ml-go">Submit →</button>
+    </div>
+    <div class="ml-note" id="ml-note">OR DM THE SHOP · IG @UPSHIFTAUTOS · ONE SLOT PER QUARTER</div>
+  </div>
+
+  <div class="foot">
+    <div>© UPSHIFT AUTOS · REBUILT, NOT RESTORED</div>
+    <div class="fig">IG · <b>@UPSHIFTAUTOS</b></div>
+  </div>
+</section>
+
+<script>
+/* ================= ENGINE ================= */
+gsap.registerPlugin(ScrollTrigger);
+const lenis = new Lenis({ duration:1.2, smoothWheel:true, lerp:.085 });
+window.__lenis = lenis;
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+
+function seg(p,a,b,c,d){
+  if(p<=a) return 0;
+  if(p>=d) return c<d ? 0 : 1;
+  if(p<b) return (p-a)/(b-a);
+  if(p<c) return 1;
+  return 1-(p-c)/(d-c);
+}
+const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+/* ============ CAR DATA ============ */
+const CARS=[
+  {id:'film', name:'911 GT3 RS', story:'this one wears shark blue over a full carbon rebuild.', acc:[56,182,255],  hp:'518', acc100:'3.0', hrs:'1,840', price:'$385,000', ch:'Reset · 0.00 mm', pa:'11 coats', img:'assets/img/car-shark.jpg', video:true},
+  {id:'r8',   name:'R8 GT · ABT', story:'nardo grey, carbon aero, built for a glass showfloor.', acc:[154,164,173],hp:'640', acc100:'3.0', hrs:'2,320', price:'$265,000', ch:'Reset · 0.01 mm', pa:'9 coats',  img:'assets/img/car-r8gt.jpg'},
+  {id:'p1',   name:'McLaren P1', story:'pearl white hybrid — the loom alone took four months.', acc:[223,228,234],hp:'903', acc100:'2.8', hrs:'3,150', price:'$1.35M',   ch:'Reset · 0.00 mm', pa:'13 coats', img:'assets/img/car-p1.jpg'},
+  {id:'vio',  name:'GT3 RS · UV', story:'ultraviolet over magnesium — one of one, by request.', acc:[168,136,240],hp:'518', acc100:'3.0', hrs:'1,960', price:'$410,000', ch:'Reset · 0.00 mm', pa:'12 coats', img:'assets/img/car-violet.jpg'},
+  {id:'gr86', name:'GR86 · WB',  story:'widebody time-attack build on a street title.',         acc:[216,205,189],hp:'465', acc100:'4.1', hrs:'1,210', price:'$96,000',  ch:'Seam-welded',    pa:'7 coats',  img:'assets/img/car-gr86.jpg'},
+  {id:'mar',  name:'911 · Marble',story:'hand-veined carrara wrap over a full mechanical zero.',acc:[205,212,220],hp:'502', acc100:'3.2', hrs:'1,700', price:'$340,000', ch:'Reset · 0.00 mm', pa:'Wrap · 1 of 1', img:'assets/img/car-marble.jpg'},
+  {id:'dune', name:'911 · Dune', story:'commissioned to match one golden hour on the coast.',   acc:[224,185,138],hp:'502', acc100:'3.2', hrs:'1,780', price:'$355,000', ch:'Reset · 0.00 mm', pa:'10 coats', img:'assets/img/car-dune.jpg'},
+];
+
+/* ============ build rail ============ */
+const rail=document.getElementById('rail');
+CARS.forEach((c,i)=>{
+  const el=document.createElement('div');
+  el.className='ritem mag'+(i===0?' on':'');
+  el.dataset.i=i;
+  el.innerHTML=`<img src="${c.img}" alt="${c.name}"><div class="rn">${i===0?'THE FILM':c.name}</div>`;
+  rail.appendChild(el);
+});
+const railItems=[...rail.children];
+
+/* ============ CURSOR SYSTEM (rule 1: glow + position, everything) ============ */
+let mx=innerWidth/2,my=innerHeight/2;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
+const mags=[...document.querySelectorAll('.mag')].map(el=>({el,x:0,y:0,s:1}));
+const glows=[...document.querySelectorAll('.chip,.scan,.bx,.ritem')];
+const RAD=230;
+/* rule 2: idle pendulum for every mag element — phase-offset sine sway */
+const phases=mags.map((_,i)=>i*1.37);
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  for(let i=0;i<mags.length;i++){
+    const m=mags[i];
+    const r=m.el.getBoundingClientRect();
+    if(r.bottom<-80||r.top>innerHeight+80) continue;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy);
+    const f=d<RAD?(1-d/RAD):0;
+    /* magnetic pull + pendulum idle */
+    const px=Math.sin(t*.9+phases[i])*3.2, py=Math.cos(t*.7+phases[i])*2.6;
+    m.x+=((dx*.09*f+px)-m.x)*.11;
+    m.y+=((dy*.09*f+py)-m.y)*.11;
+    m.s+=((1+.028*f)-m.s)*.11;
+    m.el.style.transform=`translate3d(${m.x.toFixed(2)}px,${m.y.toFixed(2)}px,0) scale(${m.s.toFixed(3)})`;
+  }
+  /* glow position + intensity */
+  for(const g of glows){
+    const r=g.getBoundingClientRect();
+    if(r.bottom<-60||r.top>innerHeight+60) continue;
+    const gx=((mx-r.left)/r.width)*100, gy=((my-r.top)/r.height)*100;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const d=Math.hypot(mx-cx,my-cy);
+    const inten=d<RAD*1.4?(1-d/(RAD*1.4)):0;
+    g.style.setProperty('--gx',gx.toFixed(1)+'%');
+    g.style.setProperty('--gy',gy.toFixed(1)+'%');
+    g.style.setProperty('--gI',inten.toFixed(3));
+  }
+});
+
+/* ============ HERO — film plays slow, words organise into place ============ */
+const heroVid=document.getElementById('hero-vid');
+heroVid.playbackRate=.5;                       /* 2.8s film → ~5.6s, unhurried */
+heroVid.addEventListener('ended',()=>{ /* hold the last frame */ },{once:true});
+const introEls={
+  brand:document.querySelector('.brand'), navr:document.querySelector('.nav-r'),
+  ig:document.querySelector('.h-ig'), kick:document.getElementById('h-kick'),
+  lines:[...document.querySelectorAll('#h-title .ln>span')],
+  sub:document.getElementById('h-sub'),
+  chips:[...document.querySelectorAll('.h-deck .chip')],
+  cta:document.getElementById('cta-book'),
+  scan:document.getElementById('scan'),
+  railLbl:document.getElementById('rail-lbl'),
+  hint:document.querySelector('.h-hint'),
+};
+function heroIntro(){
+  const tl=gsap.timeline({defaults:{ease:'power3.out'}});
+  tl.to(introEls.brand,{opacity:1,filter:'blur(0px)',duration:1.4},.4)
+    .to(introEls.navr,{opacity:1,filter:'blur(0px)',duration:1.4},.6)
+    .to(introEls.ig,{opacity:1,filter:'blur(0px)',duration:1.3},.9)
+    .to(introEls.kick,{opacity:1,filter:'blur(0px)',duration:1.4},1.1)
+    .to(introEls.lines,{y:'0%',duration:1.6,stagger:.34,ease:'power4.out'},1.3)
+    .to(introEls.sub,{opacity:1,filter:'blur(0px)',duration:1.5},2.5)
+    .to(introEls.chips,{opacity:1,filter:'blur(0px)',duration:1.2,stagger:.22},3.0)
+    .to(introEls.cta,{opacity:1,filter:'blur(0px)',duration:1.2},3.9)
+    .to(introEls.scan,{opacity:1,filter:'blur(0px)',duration:1.5},3.3)
+    .to(introEls.railLbl,{opacity:1,filter:'blur(0px)',duration:1},4.3)
+    .to([...railItems],{opacity:1,filter:'blur(0px)',duration:.9,stagger:.12},4.4)
+    .to(introEls.hint,{opacity:1,duration:1.2},5.2);
+}
+function startHero(){
+  heroVid.play().catch(()=>{});
+  heroIntro();
+}
+if(heroVid.readyState>=2) startHero();
+else heroVid.addEventListener('loadeddata',startHero,{once:true});
+/* fallback if video never loads */
+setTimeout(()=>{ if(!introEls.brand.style.opacity||introEls.brand.style.opacity==='0') heroIntro(); },2500);
+
+/* scan panel: fake progress that completes, then flips state */
+const sBar=document.getElementById('s-bar'), scanState=document.getElementById('scan-state');
+gsap.to(sBar,{width:'100%',duration:7,ease:'power1.inOut',delay:2,onComplete:()=>{scanState.textContent='Complete · verified';}});
+
+/* ============ CAR TAKEOVER ============ */
+const fillEl=document.getElementById('hero-fill');
+const sharpEl=document.getElementById('hero-sharp');
+const sharpImg=document.getElementById('hero-sharp-img');
+const hModel=document.getElementById('h-model');
+const hStory=document.getElementById('h-story');
+const cHP=document.getElementById('c-hp'), cACC=document.getElementById('c-acc'),
+      cHRS=document.getElementById('c-hrs'), cPRICE=document.getElementById('c-price');
+const sCH=document.getElementById('s-ch'), sPA=document.getElementById('s-pa'), sNO=document.getElementById('s-no');
+const accVar={r:56,g:182,b:255};
+let curCar=0, swapping=false;
+
+function applyAccent(rgb){
+  gsap.to(accVar,{r:rgb[0],g:rgb[1],b:rgb[2],duration:1.1,ease:'power2.inOut',onUpdate:()=>{
+    const st=document.documentElement.style;
+    st.setProperty('--ar',Math.round(accVar.r));
+    st.setProperty('--ag',Math.round(accVar.g));
+    st.setProperty('--ab',Math.round(accVar.b));
+  }});
+}
+function swapCar(i){
+  if(swapping||i===curCar) return;
+  swapping=true; curCar=i;
+  const c=CARS[i];
+  railItems.forEach((r,j)=>r.classList.toggle('on',j===i));
+  applyAccent(c.acc);
+
+  const infoEls=[hModel,introEls.sub,...introEls.chips];
+  const tl=gsap.timeline({onComplete:()=>{swapping=false}});
+  /* words step aside… */
+  tl.to(infoEls,{opacity:0,y:10,filter:'blur(6px)',duration:.45,stagger:.05,ease:'power2.in'},0);
+
+  if(c.video){
+    tl.add(()=>{
+      heroVid.currentTime=0; heroVid.play().catch(()=>{});
+    },.45);
+    tl.to([fillEl,sharpEl],{opacity:0,duration:.8,ease:'power2.inOut'},.45)
+      .to(heroVid,{opacity:1,duration:.8},.45);
+  }else{
+    tl.add(()=>{
+      fillEl.style.backgroundImage=`url("${c.img}")`;
+      sharpImg.src=c.img;
+    },.4);
+    tl.to(heroVid,{opacity:0,duration:.9,ease:'power2.inOut'},.45)
+      .to(fillEl,{opacity:1,duration:1.1,ease:'power2.out'},.55)
+      .fromTo(sharpEl,{opacity:0,scale:1.06,xPercent:3},{opacity:1,scale:1,xPercent:0,duration:1.4,ease:'power3.out'},.65);
+  }
+  /* …then re-organise with the new car's numbers */
+  tl.add(()=>{
+    hModel.textContent=c.name;
+    hStory.textContent=c.story;
+    cHP.innerHTML=c.hp+'<small>HP</small>';
+    cACC.innerHTML=c.acc100+'<small>S</small>';
+    cHRS.innerHTML=c.hrs+'<small>H</small>';
+    cPRICE.textContent=c.price;
+    sCH.textContent=c.ch; sPA.textContent=c.pa;
+    sNO.textContent=String(i+1).padStart(2,'0')+' / 07';
+  },.95);
+  tl.to(infoEls,{opacity:1,y:0,filter:'blur(0px)',duration:1.05,stagger:.09,ease:'power3.out'},1.05);
+}
+railItems.forEach(r=>r.addEventListener('click',()=>swapCar(+r.dataset.i)));
+
+/* ============ S2 — scrub + credit roll + hue-matched BG ============ */
+const fVid=document.getElementById('f-vid');
+let fCur=0;
+function prime(v){ const p=v.play(); if(p&&p.then) p.then(()=>v.pause()).catch(()=>{}); }
+fVid.addEventListener('loadeddata',()=>prime(fVid),{once:true});
+
+const rollL=document.getElementById('rollL'), rollR=document.getElementById('rollR');
+const fbL=[...rollL.children], fbR=[...rollR.children];
+const rootStyle=document.documentElement.style;
+
+/* hue timeline measured from the film: red → blue → teal → smoke → red */
+function forestHue(p){
+  let h,s,l;
+  if(p<.20){ h=352; s=82; l=50; }
+  else if(p<.30){ const t=(p-.20)/.10; h=lerp(352,286,t); s=lerp(82,70,t); l=lerp(50,52,t); } /* pass violet on the way */
+  else if(p<.40){ const t=(p-.30)/.10; h=lerp(286,222,t); s=lerp(70,85,t); l=52; }
+  else if(p<.55){ h=222; s=85; l=52; }
+  else if(p<.65){ const t=(p-.55)/.10; h=lerp(222,172,t); s=85; l=lerp(52,50,t); }
+  else if(p<.76){ h=172; s=80; l=50; }
+  else if(p<.84){ const t=(p-.76)/.08; h=lerp(172,196,t); s=lerp(80,30,t); l=lerp(50,68,t); } /* white smoke */
+  else if(p<.92){ const t=(p-.84)/.08; h=lerp(196,352,t); s=lerp(30,82,t); l=lerp(68,50,t); }
+  else{ h=352; s=82; l=50; }
+  rootStyle.setProperty('--fh',h.toFixed(1)+'deg');
+  rootStyle.setProperty('--fs',s.toFixed(1)+'%');
+  rootStyle.setProperty('--fl',l.toFixed(1)+'%');
+}
+function rollCredits(p){
+  const yv=lerp(20,-170,p);
+  rollL.style.transform=`translateY(${yv.toFixed(2)}vh)`;
+  rollR.style.transform=`translateY(${yv.toFixed(2)}vh)`;
+  const show=(blocks)=>{
+    const n=blocks.length, span=.86/Math.max(1,n-1);
+    blocks.forEach((el,i)=>{
+      const c=.08+i*span;
+      const a=seg(p,c-span*.85,c-span*.3,c+span*.85,c+span*1.4);
+      el.style.opacity=(a*.66+.34).toFixed(3);
+      el.style.transform=`translateY(${((1-a)*10).toFixed(1)}px)`;
+      el.style.filter=`blur(${((1-a)*1.6).toFixed(1)}px)`;
+    });
+  };
+  show(fbL); show(fbR);
+}
+ScrollTrigger.create({
+  trigger:'#forest', start:'top top', end:'+=520%',
+  pin:true, pinSpacing:true, scrub:1.1,
+  onUpdate:self=>{
+    const p=self.progress;
+    if(fVid.readyState>=1&&fVid.duration&&isFinite(fVid.duration)){
+      const target=smooth(p)*(fVid.duration-.06);
+      if(!fVid.seeking&&Math.abs(target-fCur)>.032){ fCur=target; try{fVid.currentTime=fCur}catch(e){} }
+    }
+    forestHue(p);
+    rollCredits(p);
+  }
+});
+
+/* ============ S3 — hidden world reveal ============ */
+const deepFix=document.getElementById('deepfix');
+const deepVid=document.getElementById('deep-vid');
+const dCap=document.getElementById('d-cap');
+ScrollTrigger.create({
+  trigger:'#deep', start:'top bottom', end:'bottom top',
+  onToggle:self=>{
+    deepFix.style.visibility=self.isActive?'visible':'hidden';
+    if(self.isActive){ deepVid.play().catch(()=>{}); } else { deepVid.pause(); }
+  },
+  onUpdate:self=>{
+    const p=self.progress;
+    const a=seg(p,.18,.34,.72,.9);
+    dCap.style.opacity=a.toFixed(3);
+    dCap.style.filter=`blur(${((1-a)*8).toFixed(1)}px)`;
+    dCap.style.transform=`translateY(${((1-a)*16).toFixed(1)}px)`;
+  }
+});
+
+/* ============ S4 SWITCH — deck hero: title lines + feats + floating car stack ============ */
+const swTitleSpans=[...document.querySelectorAll('#sw-title .ln>span')];
+const swKick=document.getElementById('sw-kick');
+const swFeats=[...document.querySelectorAll('.sw-feat')];
+const swArrow=document.getElementById('sw-arrow');
+/* stack cards: deck-style tilted cascade, top-right, staggered depths */
+const scards=[...document.querySelectorAll('.scard')];
+const stackPose=[
+  {x:52,y:2,r:-24,s:1.02,z:7},{x:30,y:10,r:-21,s:.98,z:6},{x:58,y:22,r:-26,s:.94,z:5},
+  {x:36,y:32,r:-19,s:.9,z:4},{x:62,y:44,r:-23,s:.86,z:3},{x:42,y:55,r:-20,s:.82,z:2},
+  {x:66,y:66,r:-25,s:.8,z:1},
+];
+ScrollTrigger.create({
+  trigger:'#register', start:'top 78%', end:'top -15%', scrub:.8,
+  onUpdate:self=>{
+    const p=self.progress;
+    swKick.style.opacity=seg(p,.02,.14,1,1).toFixed(3);
+    swTitleSpans.forEach((el,i)=>{
+      const a=seg(p,.05+i*.09,.3+i*.09,1,1);
+      el.style.transform=`translateY(${((1-a)*112).toFixed(1)}%)`;
+    });
+    swFeats.forEach((el,i)=>{
+      const a=seg(p,.3+i*.07,.48+i*.07,1,1);
+      el.style.opacity=a.toFixed(3);
+      el.style.transform=`translateY(${((1-a)*20).toFixed(1)}px)`;
+    });
+    const aa=seg(p,.5,.66,1,1);
+    swArrow.style.opacity=(aa*.8).toFixed(3);
+    scards.forEach((el,i)=>{
+      const pose=stackPose[i];
+      const a=seg(p,.08+i*.06,.34+i*.06,1,1);
+      el.style.opacity=a.toFixed(3);
+      el.style.zIndex=pose.z;
+      /* fly in from above-right, settle into the tilted cascade */
+      const fx=pose.x+(1-a)*16, fy=pose.y-(1-a)*22;
+      el.dataset.baseTf=`translate(${fx.toFixed(2)}%, ${fy.toFixed(2)}vh) rotate(${pose.r}deg) scale(${pose.s})`;
+      el.style.transform=el.dataset.baseTf;
+    });
+  }
+});
+/* stack cards: cursor pull + pendulum layered on the settled pose */
+const scState=scards.map((el,i)=>({el,phase:i*1.31,x:0,y:0}));
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  for(const s of scState){
+    if(parseFloat(s.el.style.opacity||'0')<.97) continue;
+    const r=s.el.getBoundingClientRect();
+    if(r.bottom<0||r.top>innerHeight) continue;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy);
+    const f=d<240?(1-d/240):0;
+    const tx=dx*.05*f+Math.sin(t*.85+s.phase)*4, ty=dy*.05*f+Math.cos(t*.65+s.phase)*3.4;
+    s.x+=(tx-s.x)*.1; s.y+=(ty-s.y)*.1;
+    s.el.style.transform=(s.el.dataset.baseTf||'')+` translate(${s.x.toFixed(2)}px, ${s.y.toFixed(2)}px)`;
+  }
+});
+/* stack card click → back to hero, select that car */
+scards.forEach(el=>{
+  el.addEventListener('click',()=>{
+    lenis.scrollTo(0,{duration:1.4});
+    setTimeout(()=>swapCar(+el.dataset.i),900);
+  });
+});
+
+/* ============ S5 LEARN — phone rises, texts split, chunky arrow drops ============ */
+const ltSpans=[...document.querySelectorAll('#lt .ln2>span')];
+const lnRight=document.getElementById('ln-right');
+const phone=document.getElementById('phone');
+const qe=document.getElementById('qe');
+const bigArrow=document.getElementById('big-arrow');
+ScrollTrigger.create({
+  trigger:'#learn', start:'top 75%', end:'top -20%', scrub:.8,
+  onUpdate:self=>{
+    const p=self.progress;
+    ltSpans.forEach((el,i)=>{
+      const a=seg(p,.04+i*.08,.3+i*.08,1,1);
+      el.style.transform=`translateY(${((1-a)*112).toFixed(1)}%)`;
+    });
+    const pa=seg(p,.12,.4,1,1);
+    phone.style.opacity=pa.toFixed(3);
+    phone.dataset.baseTf=`translateY(${((1-pa)*11).toFixed(2)}vh)`;
+    phone.style.transform=phone.dataset.baseTf;
+    const ra=seg(p,.3,.5,1,1);
+    lnRight.style.opacity=ra.toFixed(3);
+    lnRight.style.transform=`translateX(${((1-ra)*30).toFixed(1)}px)`;
+    const qa=seg(p,.42,.6,1,1);
+    qe.style.opacity=qa.toFixed(3);
+    qe.style.transform=`translate(${((1-qa)*24).toFixed(1)}px, ${((1-qa)*-14).toFixed(1)}px)`;
+    const ba=seg(p,.55,.75,1,1);
+    bigArrow.style.opacity=ba.toFixed(3);
+    bigArrow.style.transform=`translateX(-50%) translateY(${((1-ba)*-26).toFixed(1)}px)`;
+  }
+});
+/* phone gentle idle bob */
+gsap.ticker.add(()=>{
+  if(parseFloat(phone.style.opacity||'0')>.97){
+    const t=performance.now()*.001;
+    phone.style.transform=(phone.dataset.baseTf||'')+` translateY(${(Math.sin(t*.8)*5).toFixed(2)}px) rotate(${(Math.sin(t*.5)*.5).toFixed(2)}deg)`;
+  }
+});
+
+/* ============ S6 BENTO — tiles assemble from scattered offsets ============ */
+const bts=[...document.querySelectorAll('.bx')];
+const btScatter=[[-60,40],[70,-50],[-40,-60],[50,60],[-70,-30],[60,30],[-50,50],[40,-40]];
+ScrollTrigger.create({
+  trigger:'#bgrid', start:'top 88%', end:'top 6%', scrub:.8,
+  onUpdate:self=>{
+    const p=self.progress;
+    bts.forEach((el,i)=>{
+      const a=seg(p,i*.06,.32+i*.06,1,1);
+      const sc=btScatter[i%btScatter.length];
+      el.style.opacity=a.toFixed(3);
+      el.dataset.baseTf=`translate(${(sc[0]*(1-a)).toFixed(1)}px, ${(sc[1]*(1-a)).toFixed(1)}px) scale(${(0.92+a*.08).toFixed(3)})`;
+      el.style.transform=el.dataset.baseTf;
+    });
+  }
+});
+/* bento idle sway + cursor pull */
+const btState=bts.map((el,i)=>({el,phase:i*2.03,x:0,y:0}));
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  for(const s of btState){
+    if(parseFloat(s.el.style.opacity||'0')<.97) continue;
+    const r=s.el.getBoundingClientRect();
+    if(r.bottom<0||r.top>innerHeight) continue;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy);
+    const f=d<250?(1-d/250):0;
+    const tx=dx*.04*f+Math.sin(t*.75+s.phase)*2.6, ty=dy*.04*f+Math.cos(t*.6+s.phase)*2.2;
+    s.x+=(tx-s.x)*.1; s.y+=(ty-s.y)*.1;
+    s.el.style.transform=(s.el.dataset.baseTf||'')+` translate(${s.x.toFixed(2)}px, ${s.y.toFixed(2)}px)`;
+  }
+});
+
+/* ============ S7 OUR WAITLIST ============ */
+const wdSpans=[...document.querySelectorAll('#wd-title .ln3>span')];
+const wdSub=document.getElementById('wd-sub');
+const wdPhone=document.getElementById('wd-phone');
+const wdArrow=document.getElementById('wd-arrow');
+ScrollTrigger.create({
+  trigger:'#waitdark', start:'top 75%', end:'top -10%', scrub:.8,
+  onUpdate:self=>{
+    const p=self.progress;
+    wdSpans.forEach((el,i)=>{
+      const a=seg(p,.05+i*.1,.34+i*.1,1,1);
+      el.style.transform=`translateY(${((1-a)*112).toFixed(1)}%)`;
+    });
+    const sa=seg(p,.28,.46,1,1);
+    wdSub.style.opacity=sa.toFixed(3);
+    const pa=seg(p,.2,.44,1,1);
+    wdPhone.style.opacity=pa.toFixed(3);
+    wdPhone.dataset.baseTf=`translateY(calc(-50% + ${((1-pa)*9).toFixed(2)}vh)) rotate(${(6+(1-pa)*8).toFixed(1)}deg)`;
+    wdPhone.style.transform=wdPhone.dataset.baseTf;
+    const aa=seg(p,.42,.62,1,1);
+    wdArrow.style.opacity=aa.toFixed(3);
+    wdArrow.style.transform=`translateX(${((1-aa)*-24).toFixed(1)}px)`;
+  }
+});
+gsap.ticker.add(()=>{
+  if(parseFloat(wdPhone.style.opacity||'0')>.97){
+    const t=performance.now()*.001;
+    wdPhone.style.transform=(wdPhone.dataset.baseTf||'')+` translateY(${(Math.sin(t*.7)*6).toFixed(2)}px)`;
+  }
+});
+
+/* ============ S8 GIANT WORD — letters rise ============ */
+const wwLetters=[...document.querySelectorAll('#ww .wl>span')];
+ScrollTrigger.create({
+  trigger:'#waitword', start:'top 85%', end:'top 5%', scrub:.7,
+  onUpdate:self=>{
+    const p=self.progress;
+    wwLetters.forEach((el,i)=>{
+      const a=seg(p,i*.055,.4+i*.055,1,1);
+      el.style.transform=`translateY(${((1-a)*115).toFixed(1)}%)`;
+    });
+  }
+});
+
+/* ============ S9 MAIL ============ */
+const mlSpans=[...document.querySelectorAll('#ml-title .ln4>span')];
+const mlBar=document.getElementById('ml-bar');
+const mlNote=document.getElementById('ml-note');
+const mlShard=document.getElementById('ml-shard');
+ScrollTrigger.create({
+  trigger:'#mailsec', start:'top 80%', end:'top 15%', scrub:.8,
+  onUpdate:self=>{
+    const p=self.progress;
+    mlSpans.forEach((el,i)=>{
+      const a=seg(p,.04+i*.1,.34+i*.1,1,1);
+      el.style.transform=`translateY(${((1-a)*112).toFixed(1)}%)`;
+    });
+    const ba=seg(p,.3,.55,1,1);
+    mlBar.style.opacity=ba.toFixed(3);
+    mlBar.dataset.baseTf=`translateY(${((1-ba)*36).toFixed(1)}px)`;
+    mlBar.style.transform=mlBar.dataset.baseTf;
+    mlNote.style.opacity=seg(p,.5,.7,1,1).toFixed(3);
+    const sa=seg(p,.1,.4,1,1);
+    mlShard.style.opacity=sa.toFixed(3);
+    mlShard.dataset.baseTf=`rotate(${(14+(1-sa)*10).toFixed(1)}deg) translateY(${((1-sa)*-30).toFixed(1)}px)`;
+    mlShard.style.transform=mlShard.dataset.baseTf;
+  }
+});
+/* shard + bar idle */
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  if(parseFloat(mlShard.style.opacity||'0')>.97){
+    mlShard.style.transform=(mlShard.dataset.baseTf||'')+` translateY(${(Math.sin(t*.6)*8).toFixed(2)}px)`;
+  }
+  if(parseFloat(mlBar.style.opacity||'0')>.97){
+    mlBar.style.transform=(mlBar.dataset.baseTf||'')+` translateY(${(Math.sin(t*.5+2)*3).toFixed(2)}px)`;
+  }
+});
+document.getElementById('ml-go').addEventListener('click',()=>{
+  const v=document.querySelector('.ml-bar input').value.trim();
+  window.open('https://www.instagram.com/upshiftautos','_blank');
+});
+
+/* ============ deck videos — play only while on screen ============ */
+const lazyVids=[document.getElementById('v-lambo'),...document.querySelectorAll('.bvid video')];
+const vio=new IntersectionObserver(es=>{
+  es.forEach(e=>{ const v=e.target; if(e.isIntersecting){ v.play().catch(()=>{}); } else v.pause(); });
+},{threshold:.15});
+lazyVids.forEach(v=>vio.observe(v));
+
+/* CTA scroll-to */
+document.getElementById('cta-book').addEventListener('click',()=>{
+  lenis.scrollTo('#register',{duration:1.6});
+});
+
+/* --- refresh fixes (Lenis caches limit before pin spacers exist) --- */
+ScrollTrigger.addEventListener('refresh',()=>lenis.resize());
+ScrollTrigger.refresh();
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(()=>ScrollTrigger.refresh()); }
+</script>
+</body>
+</html>
