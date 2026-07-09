@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MERIDIAN — rare private journeys</title>
+<link rel="icon" href="data:," />
+<meta name="description" content="MERIDIAN plans rare private journeys. A meridian is the line the world measures itself against — yours should run through the few places that change you. Charted by hand, one horizon at a time." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,1,400&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --void:#05070e; --panel:#0a0e18; --panel2:#0d1220;
+  --star:#eef2f8; --brass:#e7b980; --aqua:#6fd6e6; --coral:#ff9b73; --violet:#9b8cff;
+  --grid:rgba(140,170,255,.14); --line:rgba(150,175,225,.18); --mute:#6b768f;
+  --maxw:1280px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--void)}
+body{color:var(--star); font-family:'Inter',system-ui,sans-serif; font-weight:300; line-height:1.7;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(22px,5vw,56px)}
+.serif{font-family:'Fraunces',serif; font-weight:400; letter-spacing:-.02em; line-height:1.04}
+.mono{font-family:'Space Mono',monospace}
+.eyebrow{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.34em; text-transform:uppercase; color:var(--mute)}
+a{color:inherit; text-decoration:none}
+video{display:block}
+
+/* starfield + soft sky wash behind everything */
+#stars{position:fixed; inset:0; z-index:-3; pointer-events:none; display:block}
+.skyveil{position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% -10%,rgba(155,140,255,.10),transparent 55%),
+             radial-gradient(90% 70% at 82% 108%,rgba(111,214,230,.08),transparent 60%)}
+/* dotted great-circle flight paths drifting in the gutters (cartography) */
+.routes{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5}
+
+/* Template One conflict-free transform vars */
+.motion,.fu{transform:translate3d(var(--fx,0px),calc(var(--revY,0px) + var(--fy,0px)),0)
+  perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--s,1)); will-change:transform,opacity}
+.fu{opacity:0}
+
+/* ---------- fixed HUD chrome (chart-table instrument frame) ---------- */
+.hud{position:fixed; inset:0; z-index:60; pointer-events:none; font-family:'Space Mono',monospace}
+.hud .corner{position:absolute; width:26px; height:26px; border:1.5px solid var(--line)}
+.hud .corner.tl{top:16px; left:16px; border-right:none; border-bottom:none}
+.hud .corner.tr{top:16px; right:16px; border-left:none; border-bottom:none}
+.hud .corner.bl{bottom:16px; left:16px; border-right:none; border-top:none}
+.hud .corner.br{bottom:16px; right:16px; border-left:none; border-top:none}
+.hud .read{position:absolute; font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:#9aa6c4}
+.hud .read .dot{display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--brass); margin-right:7px; vertical-align:middle; box-shadow:0 0 8px var(--brass)}
+.hud .r-phase{top:24px; left:56px}
+.hud .r-coord{top:24px; right:56px; text-align:right}
+.hud .r-foot{bottom:26px; right:56px; text-align:right; color:#7c88a6}
+
+/* compass rose (bottom-left) — needle sweeps with scroll heading */
+.compass{position:fixed; left:22px; bottom:34px; width:60px; height:60px; z-index:60; pointer-events:none; color:#9aa6c4}
+.compass svg{display:block; overflow:visible}
+.compass .needle{transform-box:fill-box; transform-origin:50% 50%; transition:transform .25s cubic-bezier(.3,.7,.2,1)}
+.compass .hdg{position:absolute; left:50%; top:calc(100% + 6px); transform:translateX(-50%); font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.18em; color:var(--brass); white-space:nowrap; text-shadow:0 0 8px rgba(231,185,128,.4)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed; inset:0 0 auto 0; z-index:80; display:flex; align-items:center; justify-content:space-between;
+  padding:20px clamp(30px,5vw,64px); transition:background .5s, backdrop-filter .5s, padding .4s, border-color .5s; border-bottom:1px solid transparent}
+.nav.solid{background:rgba(6,8,15,.7); backdrop-filter:blur(14px) saturate(1.25); padding:12px clamp(30px,5vw,64px); border-color:rgba(150,175,225,.12)}
+.brand{display:flex; align-items:center; gap:12px; font-family:'Fraunces',serif; font-size:21px; letter-spacing:.06em}
+.brand .mark{width:24px; height:24px; position:relative; display:inline-block}
+.brand .mark::before{content:''; position:absolute; inset:0; border:1.4px solid var(--aqua); border-radius:50%; box-shadow:0 0 12px rgba(111,214,230,.45)}
+.brand .mark::after{content:''; position:absolute; left:50%; top:0; bottom:0; width:1.4px; margin-left:-.7px; background:var(--brass); box-shadow:0 0 9px var(--brass)}
+.nav .links{display:flex; align-items:center; gap:28px; font-size:14px; color:#c3cbe0}
+.nav .links a{opacity:.82; transition:opacity .3s} .nav .links a:hover{opacity:1}
+.nav .ig{font-family:'Space Mono',monospace; font-size:12.5px; color:var(--aqua); opacity:.9; letter-spacing:.04em}
+.btn{display:inline-flex; align-items:center; gap:9px; cursor:pointer; font-size:14px; font-weight:500;
+  padding:11px 22px; border-radius:100px; border:1px solid transparent; background:var(--star); color:var(--void);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s, background .3s, color .3s;
+  box-shadow:0 10px 30px -12px rgba(111,214,230,.5)}
+.btn:hover{transform:translateY(-2px); box-shadow:0 18px 42px -14px rgba(111,214,230,.7)}
+.btn:focus-visible{outline:2px solid var(--aqua); outline-offset:3px}
+.btn.ghost{background:transparent; color:var(--star); border-color:rgba(150,175,225,.32); box-shadow:none}
+.btn.ghost:hover{background:rgba(150,175,225,.1)}
+.btn .arw{transition:transform .35s cubic-bezier(.2,.7,.2,1)} .btn:hover .arw{transform:translateX(4px)}
+
+/* ---------- scrubbed acts ---------- */
+.scrub{position:relative; min-height:100svh; background:var(--void)}
+.stage{position:relative; height:100svh; width:100%; overflow:hidden}
+.stage .bgv{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.stage .veil{position:absolute; inset:0; pointer-events:none}
+#act1 .veil{background:radial-gradient(120% 80% at 50% 45%,transparent 44%,rgba(5,7,14,.5) 100%),
+  linear-gradient(180deg,rgba(5,7,14,.55) 0%,rgba(5,7,14,0) 24%,rgba(5,7,14,0) 72%,rgba(5,7,14,.6) 100%)}
+#act2 .veil{background:radial-gradient(120% 80% at 50% 45%,transparent 42%,rgba(5,7,14,.5) 100%),
+  linear-gradient(180deg,rgba(5,7,14,.5) 0%,rgba(5,7,14,0) 22%,rgba(5,7,14,0) 78%,rgba(5,7,14,.55) 100%)}
+.grain{position:absolute; inset:0; opacity:.05; mix-blend-mode:overlay; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* captions: outer = position only, inner = animated. A quiet gradient rule beside the text
+   (editorial annotation — never a viewfinder, never over the hero subject) */
+.cap{position:absolute; max-width:min(42vw,470px); z-index:8; pointer-events:none; visibility:hidden}
+.cap.at-tl{top:15%; left:6%}
+.cap.at-tr{top:15%; right:6%; text-align:right}
+.cap.at-l{top:43%; left:6%}
+.cap.at-r{top:41%; right:6%; text-align:right}
+.cap.at-bl{bottom:17%; left:6%}
+.cap-in{position:relative; opacity:0; padding-left:22px; border-left:1.5px solid rgba(231,185,128,.6); box-shadow:-1px 0 22px -6px rgba(231,185,128,.4)}
+/* soft adaptive scrim: invisible on dark beats, seats white text when a beat turns bright */
+.cap-in::before{content:''; position:absolute; z-index:-1; inset:-16px -22px -14px -24px; border-radius:22px; pointer-events:none;
+  background:radial-gradient(130% 130% at 50% 45%,rgba(5,7,14,.5),rgba(5,7,14,.16) 58%,transparent 76%); filter:blur(7px)}
+.cap.at-tr .cap-in,.cap.at-r .cap-in{padding-left:0; padding-right:22px; border-left:none; border-right:1.5px solid rgba(231,185,128,.6); box-shadow:1px 0 22px -6px rgba(231,185,128,.4)}
+.cap .k{display:block; font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--aqua); opacity:.92; margin-bottom:13px; text-shadow:0 1px 4px rgba(5,7,14,.95),0 2px 20px rgba(5,7,14,.9); will-change:opacity,transform}
+.cap h2{font-family:'Fraunces',serif; font-weight:400; font-size:clamp(28px,3.9vw,58px); line-height:1.08; letter-spacing:-.02em;
+  color:#fff; text-shadow:0 2px 8px rgba(5,7,14,.95), 0 6px 44px rgba(5,7,14,.85), 0 0 2px rgba(5,7,14,.9)}
+/* per-word reveal: each word is its own inline-block so it can rise + un-blur on scroll */
+.cap h2 .w{display:inline-block; opacity:0; white-space:pre; will-change:opacity,transform,filter; transform-origin:left bottom}
+.cap.at-tr h2 .w,.cap.at-r h2 .w{transform-origin:right bottom}
+.cap h2 .warm{background:linear-gradient(96deg,var(--brass),#ffd8a0); -webkit-background-clip:text; background-clip:text; color:transparent}
+.cap h2 .cool{background:linear-gradient(96deg,var(--aqua),#bfe9ef); -webkit-background-clip:text; background-clip:text; color:transparent}
+
+.scrollhint{position:absolute; left:clamp(22px,5vw,56px); bottom:26px; z-index:9; display:flex; align-items:center; gap:12px;
+  color:#c3cbe0; font-size:11px; letter-spacing:.28em; text-transform:uppercase; font-family:'Space Mono',monospace}
+.scrollhint .line{width:44px; height:1px; background:linear-gradient(90deg,var(--brass),transparent); position:relative; overflow:hidden}
+.scrollhint .line::after{content:''; position:absolute; inset:0; width:16px; background:var(--star); animation:trail 2.4s cubic-bezier(.7,0,.3,1) infinite}
+@keyframes trail{0%{transform:translateX(-18px)}60%,100%{transform:translateX(46px)}}
+.hero-ig{position:absolute; right:clamp(22px,5vw,56px); bottom:26px; z-index:9; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:var(--aqua); opacity:.85}
+
+/* ---------- the meridian line (manifesto) ---------- */
+#brief{position:relative; padding:19vh 0}
+#brief .wrap{max-width:1060px}
+.b-eyebrow{margin-bottom:36px}
+.constel{display:block; width:100%; max-width:540px; height:70px; margin-bottom:34px; opacity:.9}
+.big-line{font-family:'Fraunces',serif; font-weight:400; font-size:clamp(30px,4.5vw,62px); line-height:1.2; letter-spacing:-.02em; color:#e9eefc}
+.big-line .word{display:inline-block; opacity:0; transform:translateY(.5em) rotate(2deg); transform-origin:left bottom}
+.big-line .em{font-style:italic; background:linear-gradient(92deg,var(--aqua),#bfe9ef); -webkit-background-clip:text; background-clip:text; color:transparent}
+.big-line .em2{font-style:italic; background:linear-gradient(92deg,var(--brass),#ffd8a0); -webkit-background-clip:text; background-clip:text; color:transparent}
+
+/* ---------- the atlas (journeys) ---------- */
+#paths{position:relative; padding:6vh 0 17vh}
+.sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:30px; margin-bottom:58px; flex-wrap:wrap}
+.sec-head h2{font-family:'Fraunces',serif; font-weight:400; font-size:clamp(30px,4.4vw,58px); letter-spacing:-.02em; max-width:15ch; color:#eef2fc}
+.sec-head p{max-width:40ch; color:#8792ac; font-size:16px}
+.chart-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+.chart{position:relative; border:1px solid rgba(150,175,225,.16); border-radius:16px; overflow:hidden;
+  background:linear-gradient(180deg,var(--panel2),var(--panel)); padding:24px 24px 22px}
+.chart .corner{position:absolute; width:11px; height:11px; border:1px solid rgba(150,175,225,.3)}
+.chart .corner.tl{top:11px; left:11px; border-right:none; border-bottom:none}
+.chart .corner.tr{top:11px; right:11px; border-left:none; border-bottom:none}
+.chart .corner.bl{bottom:11px; left:11px; border-right:none; border-top:none}
+.chart .corner.br{bottom:11px; right:11px; border-left:none; border-top:none}
+.chart .idx{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.16em; color:var(--aqua)}
+.chart h3{font-family:'Fraunces',serif; font-weight:400; font-size:23px; margin:12px 0 8px; letter-spacing:-.01em; color:#eef2fc}
+.chart p{font-size:14px; color:#8792ac; min-height:44px}
+.chart .plot{width:100%; height:52px; margin:16px 0 4px; display:block; opacity:.92}
+.chart .meta{display:flex; gap:16px; margin-top:14px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.06em; color:#7a86a2; text-transform:uppercase}
+.chart .glow{position:absolute; inset:-1px; border-radius:16px; pointer-events:none; opacity:0;
+  box-shadow:0 0 0 1px rgba(111,214,230,.5), 0 22px 50px -18px rgba(111,214,230,.4); transition:opacity .3s}
+
+/* ---------- enquire / CTA ---------- */
+#cta{position:relative; padding:19vh 0; overflow:hidden; text-align:center}
+#cta::before{content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(60% 60% at 50% 16%,rgba(231,185,128,.18),transparent 62%),radial-gradient(55% 55% at 50% 46%,rgba(111,214,230,.14),transparent 60%)}
+#cta .wrap{position:relative; z-index:3; max-width:840px}
+#cta .eyebrow{margin-bottom:22px}
+#cta h2{font-family:'Fraunces',serif; font-weight:400; font-size:clamp(34px,6vw,80px); letter-spacing:-.02em; line-height:1.01; color:#f2f5ff}
+#cta h2 .em{font-style:italic; background:linear-gradient(96deg,var(--brass),#ffd8a0,var(--aqua)); -webkit-background-clip:text; background-clip:text; color:transparent}
+#cta p{margin:24px auto 36px; max-width:48ch; color:#aab3c9; font-size:17px}
+.form{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; max-width:520px; margin:0 auto}
+.form input{flex:1; min-width:230px; background:rgba(150,175,225,.06); border:1px solid rgba(150,175,225,.2); color:var(--star); padding:14px 18px; border-radius:100px; font-family:inherit; font-size:15px; outline:none; transition:border-color .3s, background .3s}
+.form input::placeholder{color:#7a86a2}
+.form input:focus-visible{border-color:var(--aqua); background:rgba(150,175,225,.1)}
+
+footer{position:relative; border-top:1px solid rgba(150,175,225,.12); padding:54px 0 40px}
+footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap}
+footer .brand{font-size:18px}
+footer .fnav{display:flex; gap:26px; font-size:13.5px; color:#98a2ba}
+footer .fnav a:hover{color:var(--star)}
+footer .fine{width:100%; margin-top:26px; padding-top:22px; border-top:1px solid rgba(150,175,225,.09); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:12px; color:#66708a; font-family:'Space Mono',monospace}
+
+@media(max-width:1024px){ .compass{display:none} .hud .read{font-size:9.5px} }
+@media(max-width:900px){ .chart-grid{grid-template-columns:1fr 1fr} .nav .links{display:none} .cap{max-width:62vw} }
+@media(max-width:620px){ .chart-grid{grid-template-columns:1fr} .hud .r-coord,.hud .r-foot{display:none}
+  .cap{max-width:80vw} .cap.at-tr,.cap.at-r{right:5%} .cap.at-tl,.cap.at-l,.cap.at-bl{left:5%} .hero-ig{display:none} }
+@media(prefers-reduced-motion:reduce){ .scrollhint .line::after{animation:none} }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="skyveil"></div>
+<svg class="routes" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <path d="M-40,760 C220,560 360,300 760,220 C1080,150 1300,240 1520,120" fill="none" stroke="rgba(231,185,128,.28)" stroke-width="1" stroke-dasharray="2 7"/>
+  <path d="M-40,150 C260,300 520,420 820,600 C1080,760 1280,720 1520,820" fill="none" stroke="rgba(111,214,230,.22)" stroke-width="1" stroke-dasharray="2 7"/>
+  <circle cx="760" cy="220" r="2.6" fill="#e7b980"/><circle cx="820" cy="600" r="2.6" fill="#6fd6e6"/>
+</svg>
+
+<!-- fixed chart-table HUD -->
+<div class="hud" aria-hidden="true">
+  <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+  <div class="read r-phase"><span class="dot"></span><span id="phase">STAGE · DEPARTURE</span></div>
+  <div class="read r-coord" id="coord">64.14°N · 021.94°W</div>
+  <div class="read r-foot" id="foot">MERIDIAN · PRIVATE JOURNEYS · EST. MMXXVI</div>
+</div>
+<div class="compass" aria-hidden="true">
+  <svg width="60" height="60" viewBox="0 0 60 60">
+    <circle cx="30" cy="30" r="27" fill="none" stroke="rgba(150,175,225,.28)" stroke-width="1"/>
+    <circle cx="30" cy="30" r="20" fill="none" stroke="rgba(150,175,225,.14)" stroke-width="1" stroke-dasharray="1 4"/>
+    <g stroke="rgba(150,175,225,.4)" stroke-width="1">
+      <line x1="30" y1="4" x2="30" y2="10"/><line x1="30" y1="50" x2="30" y2="56"/>
+      <line x1="4" y1="30" x2="10" y2="30"/><line x1="50" y1="30" x2="56" y2="30"/>
+    </g>
+    <text x="30" y="16" text-anchor="middle" font-family="Space Mono, monospace" font-size="7" fill="#9aa6c4">N</text>
+    <g class="needle">
+      <polygon points="30,10 34,30 30,26 26,30" fill="#ff9b73"/>
+      <polygon points="30,50 34,30 30,34 26,30" fill="#6fd6e6"/>
+    </g>
+    <circle cx="30" cy="30" r="2" fill="#e7b980"/>
+  </svg>
+  <span class="hdg" id="hdg">HDG 000°</span>
+</div>
+
+<nav class="nav" id="nav">
+  <a class="brand" href="#top"><span class="mark"></span>MERIDIAN</a>
+  <div class="links">
+    <a href="#brief">The line</a>
+    <a href="#paths">The atlas</a>
+    <span class="ig">@meridian.journeys</span>
+    <a class="btn ghost" href="#cta">Enquire</a>
+  </div>
+</nav>
+
+<span id="top"></span>
+
+<!-- ============ ACT I — DEPARTURE (scroll-scrubbed cosmos) ============ -->
+<section class="scrub" id="act1">
+  <div class="stage">
+    <video class="bgv" id="vPurple" muted playsinline preload="auto" poster="assets/ever-poster.jpg">
+      <source src="assets/ever.mp4" type="video/mp4" />
+    </video>
+    <div class="grain"></div>
+    <div class="veil"></div>
+
+    <!-- captions live in the negative space, opposite the hero subject at each beat -->
+    <div class="cap at-bl" data-a=".16" data-b=".22" data-c=".30" data-d=".40"><div class="cap-in">
+      <span class="k">Waypoint · N°01</span>
+      <h2>Somewhere far off,<br/>a light is waiting.</h2></div></div>
+
+    <div class="cap at-tr" data-a=".42" data-b=".48" data-c=".56" data-d=".66"><div class="cap-in">
+      <h2>The pull of<br/><span class="warm">somewhere entirely new.</span></h2></div></div>
+
+    <div class="cap at-bl" data-a=".66" data-b=".72" data-c=".78" data-d=".84"><div class="cap-in">
+      <h2>We plot the route<br/>by hand.</h2></div></div>
+
+    <div class="cap at-tr" data-a=".84" data-b=".89" data-c=".95" data-d="1.0"><div class="cap-in">
+      <h2>Then a new horizon<br/><span class="cool">breaks over you.</span></h2></div></div>
+
+    <div class="scrollhint"><span class="line"></span>Scroll to depart</div>
+    <div class="hero-ig">@meridian.journeys</div>
+  </div>
+</section>
+
+<!-- ============ THE MERIDIAN LINE — manifesto ============ -->
+<section id="brief">
+  <div class="wrap">
+    <div class="b-eyebrow eyebrow">The meridian line</div>
+    <svg class="constel" viewBox="0 0 540 70" fill="none">
+      <polyline points="8,52 84,30 158,46 232,14 306,40 380,24 456,48 532,18" stroke="rgba(111,214,230,.5)" stroke-width="1" stroke-dasharray="3 3"/>
+      <g fill="#eaf2ff">
+        <circle cx="8" cy="52" r="2.4"/><circle cx="84" cy="30" r="2"/><circle cx="158" cy="46" r="2.6"/>
+        <circle cx="232" cy="14" r="3" fill="#e7b980"/><circle cx="306" cy="40" r="2"/><circle cx="380" cy="24" r="2.4"/>
+        <circle cx="456" cy="48" r="2"/><circle cx="532" cy="18" r="3" fill="#6fd6e6"/>
+      </g>
+    </svg>
+    <p class="big-line" id="manifestoLine">A meridian is the one line the whole world agrees to measure itself against. Yours should run through the few places that actually change you — <span class="em2">charted entirely by hand</span>, one rare horizon at a time, until the map becomes a <span class="em">life you truly lived</span>.</p>
+  </div>
+</section>
+
+<!-- ============ ACT II — ARRIVAL (scroll-scrubbed memory) ============ -->
+<section class="scrub" id="act2">
+  <div class="stage">
+    <video class="bgv" id="vMemory" muted playsinline preload="auto" poster="assets/memory-poster.jpg">
+      <source src="assets/memory.mp4" type="video/mp4" />
+    </video>
+    <div class="grain"></div>
+    <div class="veil"></div>
+
+    <div class="cap at-tl" data-a=".03" data-b=".08" data-c=".14" data-d=".20"><div class="cap-in">
+      <span class="k">Arrival · The keepsake</span>
+      <h2>Travel is the one<br/>thing you keep.</h2></div></div>
+
+    <div class="cap at-r" data-a=".28" data-b=".33" data-c=".39" data-d=".46"><div class="cap-in">
+      <h2>A single night<br/><span class="cool">you never forget.</span></h2></div></div>
+
+    <div class="cap at-tr" data-a=".48" data-b=".53" data-c=".59" data-d=".66"><div class="cap-in">
+      <h2>A village that soon<br/>learns your name.</h2></div></div>
+
+    <div class="cap at-bl" data-a=".72" data-b=".78" data-c=".84" data-d=".88"><div class="cap-in">
+      <h2>Light you can find<br/><span class="warm">nowhere else on earth.</span></h2></div></div>
+
+    <div class="cap at-tr" data-a=".88" data-b=".92" data-c=".96" data-d="1.0"><div class="cap-in">
+      <h2>Some places<br/>become memory.</h2></div></div>
+  </div>
+</section>
+
+<!-- ============ THE ATLAS — journeys ============ -->
+<section id="paths">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="serif fu">Six lines across the world.</h2>
+      <p class="fu">Each is a private, hand-plotted journey — a clear departure, a rare place at the far end, and nothing forgettable in between.</p>
+    </div>
+    <div class="chart-grid">
+      <article class="chart fu reactive" data-motion>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><div class="glow"></div>
+        <div class="idx">MER—01</div><h3>The Aurora Line</h3>
+        <p>Far above the Arctic Circle, chasing the light most people only ever see in photographs.</p>
+        <svg class="plot" viewBox="0 0 220 52"><polyline points="4,40 40,30 76,36 112,18 148,26 184,10 214,16" fill="none" stroke="#6fd6e6" stroke-width="1.4"/><circle cx="214" cy="16" r="3" fill="#e7b980"/></svg>
+        <div class="meta"><span>9 NIGHTS</span><span>68°N · WINTER</span></div>
+      </article>
+      <article class="chart fu reactive" data-motion>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><div class="glow"></div>
+        <div class="idx">MER—02</div><h3>Salt &amp; Silk</h3>
+        <p>Overland through Central Asia — walled cities, high passes, and dinners with people who remember you.</p>
+        <svg class="plot" viewBox="0 0 220 52"><polyline points="4,42 46,30 88,34 130,22 172,28 214,14" fill="none" stroke="#e7b980" stroke-width="1.4"/><circle cx="214" cy="14" r="3" fill="#6fd6e6"/></svg>
+        <div class="meta"><span>14 DAYS</span><span>OVERLAND</span></div>
+      </article>
+      <article class="chart fu reactive" data-motion>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><div class="glow"></div>
+        <div class="idx">MER—03</div><h3>Pacific Crossings</h3>
+        <p>Private passage between islands almost no charter reaches — your own water, your own pace.</p>
+        <svg class="plot" viewBox="0 0 220 52"><path d="M4,30 Q54,10 104,30 T214,26" fill="none" stroke="#6fd6e6" stroke-width="1.4"/><circle cx="214" cy="26" r="3" fill="#ff9b73"/></svg>
+        <div class="meta"><span>11 NIGHTS</span><span>BY SEA</span></div>
+      </article>
+      <article class="chart fu reactive" data-motion>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><div class="glow"></div>
+        <div class="idx">MER—04</div><h3>The Long South</h3>
+        <p>Patagonia to the edge of the ice — the quietest, largest emptiness you will ever stand inside.</p>
+        <svg class="plot" viewBox="0 0 220 52"><polyline points="4,16 44,22 84,20 124,32 164,30 214,44" fill="none" stroke="#9b8cff" stroke-width="1.4"/><circle cx="214" cy="44" r="3" fill="#6fd6e6"/></svg>
+        <div class="meta"><span>16 DAYS</span><span>55°S · EXPEDITION</span></div>
+      </article>
+      <article class="chart fu reactive" data-motion>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><div class="glow"></div>
+        <div class="idx">MER—05</div><h3>Desert Meridians</h3>
+        <p>Sand seas by day, a sky with no ceiling by night — and a fire that no one else can see.</p>
+        <svg class="plot" viewBox="0 0 220 52"><path d="M4,38 Q40,36 60,24 T110,26 T160,20 T214,12" fill="none" stroke="#e7b980" stroke-width="1.4"/><circle cx="214" cy="12" r="3" fill="#ff9b73"/></svg>
+        <div class="meta"><span>7 NIGHTS</span><span>UNDER STARS</span></div>
+      </article>
+      <article class="chart fu reactive" data-motion>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><div class="glow"></div>
+        <div class="idx">MER—06</div><h3>Old Europe, Slowly</h3>
+        <p>By private rail through the seams of the continent — the towns the fast trains never stop for.</p>
+        <svg class="plot" viewBox="0 0 220 52"><polyline points="4,44 46,42 46,32 92,30 92,22 138,20 138,12 214,10" fill="none" stroke="#6fd6e6" stroke-width="1.4"/><circle cx="214" cy="10" r="3" fill="#e7b980"/></svg>
+        <div class="meta"><span>10 DAYS</span><span>BY RAIL</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ENQUIRE ============ -->
+<section id="cta">
+  <div class="wrap">
+    <div class="eyebrow fu">Stage · Enquire</div>
+    <h2 class="serif fu">Stop bookmarking the world.<br/><span class="em">Go and meet it.</span></h2>
+    <p class="fu">Tell us the one place that keeps coming back to you. We will plot the rest by hand — quietly, privately, and only for you.</p>
+    <form class="form fu" onsubmit="return false">
+      <input type="email" placeholder="you@email.com" aria-label="Email address" />
+      <button class="btn" type="submit">Request your itinerary <span class="arw">→</span></button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark"></span>MERIDIAN</a>
+    <nav class="fnav">
+      <a href="#brief">The line</a><a href="#paths">The atlas</a><a href="#cta">Enquire</a>
+    </nav>
+    <div class="fine">
+      <span>@meridian.journeys · plot@meridian.journeys</span>
+      <span>© 2026 MERIDIAN — rare private journeys.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+(function(){
+  const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const TOUCH=matchMedia('(pointer:coarse)').matches;
+  const smooth=t=>t*t*(3-2*t);
+  function seg(p,a,b,c,d){ if(p<=a||p>=d) return 0; if(p<b) return smooth((p-a)/(b-a)); if(p<c) return 1; return 1-smooth((p-c)/(d-c)); }
+
+  /* ---- starfield ---- */
+  (function(){
+    const cv=document.getElementById('stars'); if(!cv) return;
+    const ctx=cv.getContext('2d'); let W,H,stars=[];
+    function size(){ W=cv.width=innerWidth; H=cv.height=innerHeight;
+      const n=Math.min(150, Math.round(W*H/14000)); stars=[];
+      for(let i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.3,
+        ph:Math.random()*6.28, sp:.4+Math.random()*1.2, dx:(Math.random()-.5)*.04, dy:(Math.random()-.5)*.04,
+        c:Math.random()<.12?'#e7b980':(Math.random()<.16?'#6fd6e6':'#eaf2ff')}); }
+    size(); addEventListener('resize',size,{passive:true});
+    const t0=performance.now();
+    function draw(now){ const t=(now-t0)/1000; ctx.clearRect(0,0,W,H);
+      for(const s of stars){ s.x+=s.dx; s.y+=s.dy;
+        if(s.x<0)s.x+=W; if(s.x>W)s.x-=W; if(s.y<0)s.y+=H; if(s.y>H)s.y-=H;
+        const a=.35+.45*(Math.sin(t*s.sp+s.ph)*.5+.5);
+        ctx.globalAlpha=a; ctx.fillStyle=s.c; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.28); ctx.fill(); }
+      ctx.globalAlpha=1; if(!RM) requestAnimationFrame(draw);
+    }
+    if(RM){ draw(t0); } else requestAnimationFrame(draw);
+  })();
+
+  /* ---- Lenis smooth scroll ---- */
+  let lenis=null;
+  if(!RM && window.Lenis){
+    lenis=new Lenis({lerp:.09, wheelMultiplier:1}); window.lenis=lenis;
+    (function raf(t){lenis.raf(t); requestAnimationFrame(raf);})();
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{ const el=document.querySelector(a.getAttribute('href')); if(!el) return;
+      e.preventDefault(); if(lenis) lenis.scrollTo(el,{offset:-10}); else el.scrollIntoView({behavior:'smooth'}); });
+  });
+
+  const nav=document.getElementById('nav');
+  const coord=document.getElementById('coord');
+  const needle=document.querySelector('.compass .needle'), hdgEl=document.getElementById('hdg');
+  function onScroll(){
+    const y=scrollY||document.documentElement.scrollTop;
+    nav.classList.toggle('solid', y>40);
+    const max=(document.documentElement.scrollHeight-innerHeight)||1;
+    const dp=Math.min(1,Math.max(0,y/max));
+    if(coord){ const lat=(64.14-dp*41.0).toFixed(2), lon=(21.94-dp*49.0).toFixed(2);
+      coord.textContent=lat+'°N · '+(lon<0?(-lon).toFixed(2)+'°E':lon+'°W'); }
+    if(needle){ const hd=dp*312; needle.style.transform='rotate('+hd.toFixed(0)+'deg)';
+      if(hdgEl) hdgEl.textContent='HDG '+String(Math.round(hd)).padStart(3,'0')+'°'; }
+    updatePhase();
+  }
+
+  /* ---- stage readout: whichever section owns the viewport centre ---- */
+  const phaseEl=document.getElementById('phase');
+  const phaseSecs=[['act1','STAGE · DEPARTURE'],['brief','STAGE · THE LINE'],['act2','STAGE · ARRIVAL'],['paths','STAGE · THE ATLAS'],['cta','STAGE · ENQUIRE']]
+    .map(([id,label])=>({el:document.getElementById(id),label})).filter(s=>s.el);
+  function updatePhase(){
+    const c=(scrollY||document.documentElement.scrollTop)+innerHeight*0.5; let cur=phaseSecs[0];
+    for(const s of phaseSecs){ if(c>=s.el.offsetTop) cur=s; }
+    if(cur && phaseEl.textContent!==cur.label) phaseEl.textContent=cur.label;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  /* ---- scrub acts: pin stage, drive video.currentTime + caption envelopes off the SAME progress ---- */
+  const acts=[];
+  const clamp01=x=>x<0?0:x>1?1:x;
+  /* split an <h2> into per-word spans, preserving <br> and warm/cool accent spans */
+  function splitWords(h2){
+    const kids=[...h2.childNodes]; const out=[]; h2.textContent='';
+    const emit=(text,cls)=>{
+      for(const part of text.split(/(\s+)/)){
+        if(part==='') continue;
+        if(/^\s+$/.test(part)){ h2.appendChild(document.createTextNode(part)); continue; }
+        const s=document.createElement('span'); s.className=cls?('w '+cls):'w'; s.textContent=part;
+        h2.appendChild(s); out.push(s);
+      }
+    };
+    for(const node of kids){
+      if(node.nodeType===3) emit(node.textContent,'');
+      else if(node.nodeName==='BR') h2.appendChild(node);
+      else if(node.nodeType===1) emit(node.textContent, node.className);
+    }
+    return out;
+  }
+  function buildCaps(sec){
+    return [...sec.querySelectorAll('.cap')].map(cap=>{
+      const h2=cap.querySelector('h2'); const kEl=cap.querySelector('.k');
+      return {cap, in:cap.querySelector('.cap-in'), k:kEl, words:h2?splitWords(h2):[],
+        a:+cap.dataset.a, b:+cap.dataset.b, c:+cap.dataset.c, d:+cap.dataset.d};
+    });
+  }
+  function applyCaps(caps,p){
+    for(const c of caps){
+      const e=seg(p,c.a,c.b,c.c,c.d);
+      c.cap.style.visibility = e<0.004?'hidden':'visible';
+      /* group carries the scrim + accent rule; words are revealed individually */
+      c.in.style.opacity=Math.min(1,e*1.5).toFixed(3);
+      const gy=(1-e)*14, gz=(1-e)*-46, sc=0.965+e*0.035;
+      c.in.style.transform=`translate3d(0,${gy.toFixed(1)}px,${gz.toFixed(1)}px) scale(${sc.toFixed(3)})`;
+      const rise=smooth(clamp01((p-c.a)/Math.max(1e-4,c.b-c.a)));
+      const fall=smooth(clamp01((p-c.c)/Math.max(1e-4,c.d-c.c)));
+      if(c.k){ const kv=clamp01(rise*1.2)*(1-clamp01(fall*1.4));
+        c.k.style.opacity=(kv*0.92).toFixed(3);
+        c.k.style.transform=`translateX(${((1-clamp01(rise*1.3))*(c.cap.classList.contains('at-tr')||c.cap.classList.contains('at-r')?10:-10)).toFixed(1)}px)`; }
+      const ws=c.words, n=ws.length;
+      for(let i=0;i<n;i++){
+        const t=n>1?i/(n-1):0;
+        const wIn=clamp01((rise - t*0.55)/0.45);   // staggered entrance, left/first word leads
+        const wOut=clamp01((fall - t*0.4)/0.6);     // staggered exit in the same order
+        const wv=wIn*(1-wOut);
+        const el=ws[i];
+        el.style.opacity=wv.toFixed(3);
+        const wy=(1-wIn)*24 - wOut*12, rot=(1-wIn)*3.5;
+        el.style.transform=`translate3d(0,${wy.toFixed(1)}px,0) rotate(${rot.toFixed(1)}deg)`;
+        el.style.filter=`blur(${((1-wIn)*5).toFixed(1)}px)`;
+      }
+    }
+  }
+
+  if(window.gsap && window.ScrollTrigger){
+    gsap.registerPlugin(ScrollTrigger);
+    if(lenis) lenis.on('scroll',ScrollTrigger.update);
+
+    function makeAct(id, video, startT, endT, len){
+      const sec=document.getElementById(id);
+      const stage=sec.querySelector('.stage');
+      const caps=buildCaps(sec);
+      const A={video, startT, endT, target:startT, cur:startT, caps};
+      video.muted=true;
+      const prime=()=>{ try{ video.pause(); video.currentTime=startT; }catch(e){}
+        video.play().then(()=>{ video.pause(); try{video.currentTime=startT;}catch(e){} }).catch(()=>{}); };
+      video.addEventListener('loadeddata',prime,{once:true});
+      if(video.readyState>=2) prime();
+      applyCaps(caps,0);
+      ScrollTrigger.create({
+        trigger:sec, start:'top top', end:'+='+len, pin:stage, pinSpacing:true, scrub:true,
+        onUpdate:self=>{ const p=self.progress; A.target=startT+p*(endT-startT); applyCaps(caps,p); }
+      });
+      acts.push(A);
+    }
+    makeAct('act1', document.getElementById('vPurple'), 2.0, 42.0, 6000);
+    makeAct('act2', document.getElementById('vMemory'), 1.0, 30.0, 5600);
+
+    (function seekLoop(){
+      for(const A of acts){
+        A.cur += (A.target-A.cur)*0.18;
+        if(A.video.readyState>=2 && Math.abs(A.target-A.cur)>0.004){ try{ A.video.currentTime=A.cur; }catch(e){} }
+      }
+      requestAnimationFrame(seekLoop);
+    })();
+
+    /* ---- Template One assemble-on-scroll (reversible) ---- */
+    gsap.utils.toArray('.fu').forEach(el=>{
+      gsap.fromTo(el,{opacity:0,'--revY':'46px'},{opacity:1,'--revY':'0px',duration:.9,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 90%',toggleActions:'play none none reverse'}});
+    });
+
+    /* ---- word-by-word manifesto line ---- */
+    const line=document.getElementById('manifestoLine');
+    if(line){
+      const frag=[];
+      line.childNodes.forEach(node=>{
+        if(node.nodeType===3){ node.textContent.split(/(\s+)/).forEach(tok=>{
+          if(tok.trim()==='') frag.push(document.createTextNode(tok));
+          else{ const s=document.createElement('span'); s.className='word'; s.textContent=tok; frag.push(s); } });
+        } else { node.classList.add('word'); frag.push(node); }
+      });
+      line.innerHTML=''; frag.forEach(n=>line.appendChild(n));
+      gsap.to(line.querySelectorAll('.word'),{opacity:1,y:0,rotate:0,duration:.7,ease:'power3.out',stagger:.045,
+        scrollTrigger:{trigger:line,start:'top 78%',end:'bottom 60%',toggleActions:'play none none reverse'}});
+    }
+  }
+
+  /* ---- Template One idle drift + cursor proximity for atlas cards ---- */
+  const items=[...document.querySelectorAll('[data-motion]')].map(el=>({
+    el,x:0,y:0,rx:0,ry:0,s:1,tx:0,ty:0,trx:0,try_:0,ts:1,
+    ph:Math.random()*6.28, sp:.5+Math.random()*.5, ax:2+Math.random()*3, ay:3+Math.random()*4,
+    glow:el.querySelector('.glow')}));
+  let mx=-9999,my=-9999;
+  if(!TOUCH){ addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;},{passive:true}); addEventListener('mouseout',()=>{mx=-9999;my=-9999;}); }
+  const PROX=190, t0=performance.now();
+  (function loop(now){
+    const t=(now-t0)/1000;
+    for(const it of items){
+      it.tx=Math.sin(t*it.sp+it.ph)*it.ax; it.ty=Math.cos(t*it.sp*.9+it.ph)*it.ay;
+      it.trx=0; it.try_=0; it.ts=1; let gl=0;
+      if(mx>-9000){ const r=it.el.getBoundingClientRect();
+        const d=Math.hypot(Math.max(r.left-mx,0,mx-r.right),Math.max(r.top-my,0,my-r.bottom));
+        if(d<PROX){ const f=1-d/PROX, cx=r.left+r.width/2, cy=r.top+r.height/2;
+          it.try_=((mx-cx)/r.width)*10*f; it.trx=-((my-cy)/r.height)*10*f; it.ts=1+.03*f; gl=f; } }
+      it.x+=(it.tx-it.x)*.08; it.y+=(it.ty-it.y)*.08; it.rx+=(it.trx-it.rx)*.1; it.ry+=(it.try_-it.ry)*.1; it.s+=(it.ts-it.s)*.1;
+      const el=it.el;
+      el.style.setProperty('--fx',it.x.toFixed(2)+'px'); el.style.setProperty('--fy',it.y.toFixed(2)+'px');
+      el.style.setProperty('--rx',it.rx.toFixed(2)+'deg'); el.style.setProperty('--ry',it.ry.toFixed(2)+'deg');
+      el.style.setProperty('--s',it.s.toFixed(3));
+      if(it.glow) it.glow.style.opacity=gl.toFixed(2);
+    }
+    requestAnimationFrame(loop);
+  })(performance.now());
+})();
+</script>
+</body>
+</html>
