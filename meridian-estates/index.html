@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERIDIAN — We build the homes worth the flight.</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0c'/%3E%3Cpath d='M8 22V10l8 7 8-7v12' fill='none' stroke='%23c9a86a' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0c; --ink:#f2efe8; --mut:#9a978d;
+    --brass:#c9a86a; --brass2:#e6cf9c; --cool:#8b9199;
+    --line:rgba(242,239,232,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.6;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  ::selection{background:rgba(201,168,106,.32)}
+  h1,h2,h3,.disp{font-family:'Fraunces','Georgia',serif;font-weight:500;letter-spacing:-.01em;line-height:1.02}
+  .mono{font-family:'Space Mono',monospace}
+  a{color:inherit;text-decoration:none}
+
+  /* grain */
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.045;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  /* ===== TEMPLATE ONE motion engine — conflict-free transform composition ===== */
+  .fu,.motion,.idle{
+    transform:translate3d(var(--fx,0px), calc(var(--revY,0px) + var(--fy,0px)),0)
+      perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--s,1));
+    will-change:transform,opacity;}
+  .fu{opacity:0;--revY:40px}
+
+  /* nav */
+  nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    padding:20px 30px;transition:background .5s ease,backdrop-filter .5s ease,border-color .5s ease;
+    border-bottom:1px solid transparent}
+  nav.solid{background:rgba(10,10,12,.6);backdrop-filter:blur(16px) saturate(1.2);border-bottom-color:var(--line)}
+  .brand{font-family:'Fraunces';font-weight:600;font-size:20px;letter-spacing:.02em;display:flex;align-items:center;gap:11px}
+  .brand .mk{width:22px;height:22px;display:grid;place-items:center}
+  .brand .mk svg{width:22px;height:22px}
+  .nlinks{display:flex;gap:32px;font-size:13px;letter-spacing:.02em;color:var(--mut);font-family:'Space Mono'}
+  .nlinks a{transition:color .3s} .nlinks a:hover{color:var(--ink)}
+  .ncta{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:10px 20px;border-radius:2px;
+    background:var(--brass);color:#1a1305;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;font-family:'Space Mono'}
+  .ncta:hover{transform:translateY(-2px);box-shadow:0 12px 30px -10px rgba(201,168,106,.6)}
+  @media(max-width:760px){.nlinks{display:none}}
+
+  /* corner viewfinder ticks + telemetry HUD (drone flavour) */
+  .ticks{position:fixed;inset:16px;z-index:34;pointer-events:none}
+  .ticks i{position:absolute;width:16px;height:16px;border:1px solid rgba(242,239,232,.28)}
+  .ticks .a{top:0;left:0;border-right:0;border-bottom:0}
+  .ticks .b{top:0;right:0;border-left:0;border-bottom:0}
+  .ticks .c{bottom:0;left:0;border-right:0;border-top:0}
+  .ticks .d{bottom:0;right:0;border-left:0;border-top:0}
+  .hud{position:fixed;left:24px;bottom:20px;z-index:35;font-family:'Space Mono';font-size:11px;
+    letter-spacing:.16em;color:rgba(242,239,232,.6);display:flex;gap:18px;align-items:center;pointer-events:none}
+  .hud .rec{color:#e06a53;display:inline-flex;align-items:center;gap:7px}
+  .hud .rec b{width:8px;height:8px;border-radius:50%;background:#e06a53;display:inline-block;animation:recblink 1.4s steps(1) infinite}
+  @keyframes recblink{50%{opacity:.15}}
+  .hud .sep{opacity:.4}
+  @media(max-width:640px){.hud{font-size:10px;gap:12px}.ticks{inset:10px}}
+
+  /* ===== single-video pinned journey ===== */
+  .jstage{position:relative}
+  .jpin{position:relative;height:100vh;width:100%;overflow:hidden;background:#050506}
+  .jpin video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    transform:scale(var(--vsc,1.06));will-change:transform}
+  .jpin .grade{position:absolute;inset:0;pointer-events:none;z-index:2;
+    background:radial-gradient(70% 62% at 50% 46%,transparent 0%,rgba(5,5,6,.42) 100%)}
+  .jpin .bleed{position:absolute;inset:0;pointer-events:none;z-index:2;
+    background:linear-gradient(180deg,var(--bg) 0%,transparent 15%,transparent 85%,var(--bg) 100%)}
+
+  /* hero overlay (intro) */
+  .hero{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;justify-content:center;
+    padding:0 8vw;pointer-events:none}
+  .hkick{font-family:'Space Mono';font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:var(--brass2);margin-bottom:26px}
+  .hhead{font-size:clamp(2.6rem,7vw,6rem);max-width:15ch;font-weight:500;
+    text-shadow:0 6px 50px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.5)}
+  .hsub{margin-top:26px;font-size:clamp(1.02rem,1.6vw,1.24rem);max-width:44ch;color:#e4e0d6;
+    text-shadow:0 2px 20px rgba(0,0,0,.7)}
+  .cue{position:absolute;bottom:64px;left:8vw;z-index:7;font-family:'Space Mono';font-size:11px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:14px}
+  .cue .bar{width:44px;height:1px;background:linear-gradient(90deg,var(--brass2),transparent);position:relative;overflow:hidden}
+  .cue .bar::after{content:'';position:absolute;inset:0;width:40%;background:var(--brass2);animation:cueslide 2.2s ease-in-out infinite}
+  @keyframes cueslide{0%{transform:translateX(-120%)}100%{transform:translateX(280%)}}
+
+  /* 3D word entrance (hero) */
+  .reveal3d{perspective:760px}
+  .reveal3d .w{display:inline-block;opacity:0;transform-origin:50% 88%;
+    transform:rotateX(-82deg) translateY(30px) scale(.94);
+    transition:opacity .5s ease,transform .72s cubic-bezier(.18,.86,.24,1)}
+  .reveal3d .w.on{opacity:1;transform:rotateX(0deg) translateY(0) scale(1)}
+  .reveal3d .ln{display:block}
+
+  /* diegetic captions — pre-placed on real surfaces of the house,
+     they sit there "waiting" and materialise (blur->sharp) as the drone nears */
+  .dcap{position:absolute;z-index:6;pointer-events:none;opacity:0;line-height:1.02;
+    max-width:14ch;will-change:opacity,filter}
+  .dcap .dk{display:block;font-family:'Space Mono';font-size:10px;letter-spacing:.44em;
+    text-transform:uppercase;color:var(--brass2);margin-bottom:14px;opacity:.92}
+  .dcap .dh{display:block;font-family:'Fraunces',Georgia,serif;font-weight:400;font-style:italic;
+    font-size:clamp(1.5rem,3.4vw,3rem);letter-spacing:-.01em;color:var(--ink);
+    text-shadow:0 2px 22px rgba(6,7,10,.72),0 1px 4px rgba(6,7,10,.6)}
+  /* dark-on-light variant for bright surfaces (the cream corner wall) */
+  .dcap.ink .dh{color:#191510;text-shadow:0 1px 16px rgba(255,255,255,.4),0 0 1px rgba(255,255,255,.5)}
+  .dcap.ink .dk{color:#6f5d36}
+  /* compact variant for tight surfaces (the island top) */
+  .dcap.sm .dh{font-size:clamp(1.05rem,2vw,1.7rem)}
+  .dcap.sm .dk{font-size:9px;letter-spacing:.38em;margin-bottom:9px}
+
+  /* generic word-assemble — words rush into place, reversible */
+  .aw{display:inline-block;opacity:0;transform:translateY(24px) rotate(3deg) scale(.95);
+    transition:opacity .5s ease,transform .62s cubic-bezier(.2,.9,.25,1)}
+  .aw.on{opacity:1;transform:none}
+
+  /* ===== horizontal "go left" finale ===== */
+  .hstage{height:100vh;overflow:hidden;position:relative;background:#060607}
+  .htrack{display:flex;height:100%;width:max-content}
+  .panel{position:relative;flex:0 0 100vw;width:100vw;height:100%;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;padding:0 8vw}
+  .panel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .panel .pgrade{position:absolute;inset:0;z-index:1;pointer-events:none}
+  .panel .pnum{position:absolute;top:12vh;left:8vw;z-index:3;font-family:'Space Mono';font-size:12px;
+    letter-spacing:.4em;text-transform:uppercase;color:var(--brass2)}
+  .panel .pc{position:relative;z-index:3;max-width:20ch}
+  .pbig{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:clamp(2.4rem,6vw,5rem);font-weight:400;
+    letter-spacing:-.01em;text-shadow:0 3px 30px rgba(6,7,10,.7),0 1px 5px rgba(6,7,10,.6)}
+  .psub{margin-top:20px;font-size:clamp(1rem,1.5vw,1.18rem);color:#e0dcd2;max-width:34ch;text-shadow:0 2px 16px rgba(0,0,0,.7)}
+  .panel.right{align-items:flex-end;text-align:right}
+  .panel.right .pnum{left:auto;right:8vw}
+  /* CTA panel */
+  .panel.cta{background:linear-gradient(135deg,#12100b,#0a0a0c 60%);justify-content:center}
+  .panel.cta .pc{max-width:26ch}
+  .capture{display:flex;gap:12px;max-width:520px;margin-top:32px;pointer-events:auto}
+  .capture input{flex:1;padding:15px 20px;border-radius:2px;background:rgba(242,239,232,.05);border:1px solid var(--line);
+    color:var(--ink);font-family:inherit;font-size:.98rem;outline:none;transition:border-color .3s,box-shadow .3s}
+  .capture input:focus{border-color:var(--brass);box-shadow:0 0 0 4px rgba(201,168,106,.16)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:600;font-size:.82rem;
+    letter-spacing:.12em;text-transform:uppercase;font-family:'Space Mono';
+    padding:15px 26px;border-radius:2px;border:1px solid transparent;background:var(--brass);color:#1a1305;
+    cursor:pointer;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;white-space:nowrap}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(201,168,106,.6)}
+  @media(max-width:520px){.capture{flex-direction:column}}
+
+  .hint{position:absolute;bottom:8vh;left:8vw;z-index:3;font-family:'Space Mono';font-size:11px;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:12px}
+  .hint .ar{color:var(--brass2);animation:arrowpush 1.8s ease-in-out infinite}
+  @keyframes arrowpush{0%,100%{transform:translateX(0)}50%{transform:translateX(-6px)}}
+
+  /* footer */
+  footer{position:relative;z-index:3;border-top:1px solid var(--line);padding:56px 8vw 46px;color:var(--mut)}
+  .frow{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;max-width:1180px;margin:0 auto}
+  .ig{display:inline-flex;align-items:center;gap:10px;font-weight:600;color:var(--ink);font-family:'Space Mono';font-size:.9rem}
+  .ig .g{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--brass2),var(--brass),#7a5e2c)}
+
+  @media(prefers-reduced-motion:reduce){.aw,.reveal3d .w{transition:none}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="brand" href="#top"><span class="mk"><svg viewBox="0 0 32 32"><path d="M6 24V9l10 8 10-8v15" fill="none" stroke="#c9a86a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg></span>MERIDIAN</a>
+  <div class="nlinks">
+    <a href="#more">Portfolio</a><a href="#more">Network</a><a href="#apply">Waitlist</a>
+  </div>
+  <a class="ncta" href="#apply">Apply</a>
+</nav>
+
+<div class="ticks"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div>
+<div class="hud idle float">
+  <span class="rec"><b></b>REC</span>
+  <span class="sep">·</span><span id="tc">ALT 0142M</span>
+  <span class="sep">·</span><span>34.0736°N 118.40°W</span>
+  <span class="sep">·</span><span>MERIDIAN AERIAL</span>
+</div>
+
+<!-- ================= SINGLE-VIDEO JOURNEY ================= -->
+<div class="jstage" id="top">
+  <div class="jpin">
+    <video src="assets/videos/mansion.mp4" poster="assets/img/mansion.jpg" muted playsinline preload="auto"></video>
+    <div class="grade"></div>
+    <div class="bleed"></div>
+
+    <!-- hero intro -->
+    <div class="hero" id="hero">
+      <div class="hkick">Meridian — design · build · sell</div>
+      <h1 class="hhead reveal3d" data-words="We build the|homes worth|the flight."></h1>
+      <p class="hsub">A design-build studio that conceives, constructs, and sells landmark residences. This is one of them — filmed in a single flight.</p>
+    </div>
+    <div class="cue"><span>Scroll to fly through</span><span class="bar"></span></div>
+
+    <!-- diegetic captions: pre-placed on real surfaces of the house.
+         They wait there and materialise (blur->sharp) as the drone nears each stop. -->
+    <div class="dcap" data-stop="4" style="left:6.5vw;top:38%;max-width:11ch;text-align:left">
+      <span class="dk">I</span><span class="dh">Room to dream.</span></div>
+    <div class="dcap sm" data-stop="11" style="left:50%;top:47%;transform:translateX(-50%);max-width:12ch;text-align:center">
+      <span class="dk">II</span><span class="dh">Where we gather.</span></div>
+    <div class="dcap" data-stop="24" style="left:50%;top:12%;transform:translateX(-50%);max-width:15ch;text-align:center">
+      <span class="dk">III</span><span class="dh">Space to breathe.</span></div>
+    <div class="dcap ink" data-stop="32" style="left:3.4vw;top:35%;max-width:8ch;text-align:left;transform:skewY(-4.5deg)">
+      <span class="dk">IV</span><span class="dh">Follow the light.</span></div>
+    <div class="dcap" data-stop="46" style="left:52%;top:21%;max-width:13ch;text-align:left">
+      <span class="dk">V</span><span class="dh">Home at the summit.</span></div>
+  </div>
+</div>
+
+<!-- ================= HORIZONTAL "GO LEFT" FINALE ================= -->
+<section class="hstage" id="more">
+  <div class="htrack">
+
+    <article class="panel">
+      <video src="assets/videos/fpv45.mp4" poster="assets/img/fpv45.jpg" muted loop playsinline preload="auto"></video>
+      <div class="pgrade" style="background:linear-gradient(90deg,rgba(6,7,10,.78),rgba(6,7,10,.15) 55%,rgba(6,7,10,.55))"></div>
+      <div class="pnum">Portfolio / 01</div>
+      <div class="pc idle float"><div class="plate">
+        <h2 class="pbig" data-aw>$45,000,000.</h2>
+        <p class="psub" data-aw>Some homes aren't listings. They're events — and we film them like one.</p>
+      </div></div>
+    </article>
+
+    <article class="panel right">
+      <video src="assets/videos/estate.mp4" poster="assets/img/estate.jpg" muted loop playsinline preload="auto"></video>
+      <div class="pgrade" style="background:linear-gradient(270deg,rgba(6,7,10,.8),rgba(6,7,10,.12) 55%,rgba(6,7,10,.5))"></div>
+      <div class="pnum">Portfolio / 02</div>
+      <div class="pc idle float"><div class="plate">
+        <h2 class="pbig" data-aw>Filmed like cinema.</h2>
+        <p class="psub" data-aw>Buyers fall in love before they ever walk the door. Our estates sell on the first frame.</p>
+      </div></div>
+    </article>
+
+    <article class="panel">
+      <video src="assets/videos/mcclean.mp4" poster="assets/img/mcclean.jpg" muted loop playsinline preload="auto"></video>
+      <div class="pgrade" style="background:linear-gradient(90deg,rgba(6,7,10,.8),rgba(6,7,10,.15) 55%,rgba(6,7,10,.55))"></div>
+      <div class="pnum">The network</div>
+      <div class="pc idle float"><div class="plate">
+        <h2 class="pbig" data-aw>Built with the best in the world.</h2>
+        <p class="psub" data-aw>Through our private build-and-design network — the architects behind homes exactly like these.</p>
+      </div></div>
+    </article>
+
+    <article class="panel cta" id="apply">
+      <div class="pnum">Apply</div>
+      <div class="pc idle float"><div class="plate">
+        <h2 class="pbig" data-aw>Build it. Or own it.</h2>
+        <p class="psub" data-aw>Two waitlists, one studio: design-build your own landmark, or get first access to the ones we sell.</p>
+        <form class="capture" onsubmit="return false">
+          <input type="email" placeholder="you@email.com" aria-label="email">
+          <button class="btn" type="submit">Join the waitlist</button>
+        </form>
+      </div></div>
+      <div class="hint"><span class="ar">←</span> Scroll — we move sideways from here</div>
+    </article>
+
+  </div>
+</section>
+
+<footer>
+  <div class="frow">
+    <div>
+      <a class="brand" href="#top"><span class="mk"><svg viewBox="0 0 32 32"><path d="M6 24V9l10 8 10-8v15" fill="none" stroke="#c9a86a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></svg></span>MERIDIAN</a>
+      <p style="max-width:36ch;font-size:.92rem;margin-top:14px">We design, build, and sell the homes people fly drones through. One flight, one address, no compromises.</p>
+    </div>
+    <div style="text-align:right">
+      <a class="ig" href="#"><span class="g"></span>@meridian.estates</a>
+      <p style="font-size:.82rem;margin-top:14px">© 2026 Meridian Design-Build Studio · Los Angeles</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== libs ===== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---- split [data-words] into 3D spans ---- */
+function splitWords(el){
+  const raw=el.dataset.words; el.innerHTML='';
+  raw.split('|').forEach(line=>{
+    const ln=document.createElement('span'); ln.className='ln';
+    line.trim().split(/\s+/).forEach(tok=>{
+      const w=document.createElement('span'); w.className='w'; w.textContent=tok;
+      ln.appendChild(w); ln.appendChild(document.createTextNode(' '));
+    });
+    el.appendChild(ln);
+  });
+}
+document.querySelectorAll('[data-words]').forEach(splitWords);
+
+/* ---- split [data-aw] into rush-into-place words, return spans ---- */
+function splitAW(el){
+  const t=el.textContent.trim(); el.textContent=''; const arr=[];
+  t.split(/\s+/).forEach(word=>{
+    const w=document.createElement('span'); w.className='aw'; w.textContent=word;
+    el.appendChild(w); el.appendChild(document.createTextNode(' ')); arr.push(w);
+  });
+  return arr;
+}
+
+/* ---- Lenis smooth scroll ---- */
+const lenis=new Lenis({duration:1.15,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+window.lenis=lenis;
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const t=document.querySelector(a.getAttribute('href')); if(t){e.preventDefault();lenis.scrollTo(t,{offset:-10});}
+}));
+
+/* ---- nav solidify ---- */
+const nav=document.getElementById('nav');
+ScrollTrigger.create({start:60,onUpdate:s=>nav.classList.toggle('solid',s.scroll()>60),onToggle:s=>nav.classList.toggle('solid',s.isActive)});
+if(window.scrollY>60)nav.classList.add('solid');
+
+/* ---- HERO words assemble on load ---- */
+const hero=document.getElementById('hero');
+const heroWords=[...hero.querySelectorAll('.reveal3d .w')];
+heroWords.forEach((w,i)=>setTimeout(()=>w.classList.add('on'),260+i*70));
+
+/* ============================================================
+   SINGLE-VIDEO JOURNEY
+   • one pinned clip scrubbed by scroll
+   • at each "hold" the video FREEZES and only words assemble;
+     when the caption is done, scrolling resumes the video
+   ============================================================ */
+const jstage=document.getElementById('top');
+const jvideo=jstage.querySelector('video');
+const jpin=jstage.querySelector('.jpin');
+let dur=47, ready=false, target=0, cur=0;
+jvideo.muted=true; jvideo.defaultMuted=true; jvideo.playsInline=true;
+const prime=()=>{
+  const pr=jvideo.play();
+  if(pr&&pr.then){pr.then(()=>{jvideo.pause();jvideo.currentTime=0.01;ready=true;}).catch(()=>{ready=true;});}
+  else{try{jvideo.pause();}catch(e){}ready=true;}
+};
+jvideo.addEventListener('loadedmetadata',()=>{dur=jvideo.duration||47;});
+jvideo.addEventListener('loadeddata',prime);
+jvideo.addEventListener('canplay',()=>{if(!ready)prime();});
+if(jvideo.readyState>=2)prime();
+
+/* diegetic captions live pre-placed on real surfaces; each is bound to a
+   freeze time (seconds). They materialise as the drone's video time nears it. */
+const dcaps=[...jstage.querySelectorAll('.dcap')];
+const dcapStop=dcaps.map(d=>+d.dataset.stop);
+const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
+
+/* timeline in ABSOLUTE SECONDS: play segments ease the clip forward
+   (smoothstep = velocity 0 at both ends -> the video glides to a gentle
+   stop at each hold and eases back into motion), holds freeze the frame. */
+const SEG=[
+  {t:'play', v0:0.3,  v1:4,    len:1.0},   // fly in to the lit entrance
+  {t:'hold', v:4,     len:1.2},            // I  · left window / blue room
+  {t:'play', v0:4,    v1:11,   len:1.9},   // inside, toward the kitchen
+  {t:'hold', v:11,    len:1.2},            // II · kitchen island
+  {t:'play', v0:11,   v1:24,   len:2.1},   // through to the sunken lounge
+  {t:'hold', v:24,    len:1.2},            // III· grand room / staircase
+  {t:'play', v0:24,   v1:32,   len:1.7},   // round the corner
+  {t:'hold', v:32,    len:1.2},            // IV · cream wall by the LED room
+  {t:'play', v0:32,   v1:46,   len:2.1},   // out of the house and up
+  {t:'hold', v:46,    len:1.3},            // V  · roof gap / summit
+  {t:'play', v0:46,   v1:46.9, len:0.5},   // settle
+];
+const TOTAL=SEG.reduce((a,s)=>a+s.len,0);
+const cue=document.querySelector('.cue');
+
+ScrollTrigger.create({
+  trigger:jstage, start:'top top', end:()=>'+='+(window.innerHeight*TOTAL*0.9),
+  pin:jpin, scrub:1, anticipatePin:1, invalidateOnRefresh:true,
+  onUpdate:self=>{
+    const p=self.progress, P=p*TOTAL;
+    let acc=0, tgt=0;
+    for(let i=0;i<SEG.length;i++){
+      const s=SEG[i];
+      if(P<=acc+s.len || i===SEG.length-1){
+        const local=Math.min(1,Math.max(0,(P-acc)/s.len));
+        tgt = s.t==='play' ? s.v0+(s.v1-s.v0)*smooth(local) : s.v;
+        break;
+      }
+      acc+=s.len;
+    }
+    target=Math.max(0,Math.min(dur,tgt));
+    /* hero fades over the first sliver */
+    hero.style.opacity = p<0.03 ? 1 : Math.max(0,1-(p-0.03)/0.03);
+    hero.style.pointerEvents='none';
+    if(cue) cue.style.opacity = p<0.03?1:Math.max(0,1-(p-0.03)/0.02);
+    jvideo.style.setProperty('--vsc',(1.09-0.07*Math.min(1,p*2)).toFixed(3));
+  }
+});
+
+/* decouple currentTime from rAF so seeks paint smoothly (frozen during holds),
+   and materialise each pre-placed caption by proximity of the live video time. */
+const WIN=3.4;   // seconds of approach over which a caption fades up
+const follow=()=>{
+  if(ready&&jvideo.readyState>=2){
+    cur+=(target-cur)*0.16;
+    if(Math.abs(cur-jvideo.currentTime)>0.02){try{jvideo.currentTime=cur;}catch(e){}}
+  } else { cur=target; }
+  for(let i=0;i<dcaps.length;i++){
+    const d=Math.abs(cur-dcapStop[i]);
+    const op=smooth(1-d/WIN);
+    const dc=dcaps[i];
+    dc.style.opacity=op.toFixed(3);
+    dc.style.filter=op>0.001?'blur('+((1-op)*4).toFixed(2)+'px)':'blur(4px)';
+  }
+  requestAnimationFrame(follow);
+};
+requestAnimationFrame(follow);
+
+/* ---- HUD altitude readout drifts with journey progress ---- */
+const tc=document.getElementById('tc');
+
+/* ============================================================
+   HORIZONTAL "GO LEFT" FINALE
+   scroll down = track slides left, revealing the other clips
+   ============================================================ */
+const track=document.querySelector('.htrack');
+const hTween=gsap.to(track,{x:()=>-(track.scrollWidth-window.innerWidth),ease:'none',
+  scrollTrigger:{trigger:'.hstage',pin:true,scrub:1,
+    end:()=>'+='+(track.scrollWidth-window.innerWidth),invalidateOnRefresh:true}});
+
+gsap.utils.toArray('.panel').forEach(p=>{
+  const groups=[...p.querySelectorAll('[data-aw]')].map(el=>splitAW(el));
+  const all=groups.flat();
+  ScrollTrigger.create({trigger:p,containerAnimation:hTween,start:'left 72%',end:'left 26%',scrub:true,
+    onUpdate:s=>{const n=Math.round(s.progress*all.length);all.forEach((w,i)=>w.classList.toggle('on',i<n));}});
+});
+/* play finale videos only when close (perf) */
+document.querySelectorAll('.panel video').forEach(v=>{
+  ScrollTrigger.create({trigger:v.closest('.panel'),containerAnimation:hTween,start:'left right',end:'right left',
+    onToggle:s=>{ if(s.isActive){const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{});} else v.pause(); }});
+});
+
+/* ---- TEMPLATE ONE: idle micro-motion + cursor proximity (single rAF) ---- */
+const PROX=200;
+const movers=[...document.querySelectorAll('.float,.reactive')].map(el=>({
+  el, reactive:el.classList.contains('reactive'),
+  ph:Math.random()*Math.PI*2, sp:0.4+Math.random()*0.4,
+  ax:3+Math.random()*3, ay:4+Math.random()*3, rAmp:0.6, s:{rx:0,ry:0,sc:1}
+}));
+let mx=-9999,my=-9999;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});
+window.addEventListener('mouseleave',()=>{mx=-9999;my=-9999;});
+const lerp=(a,b,n)=>a+(b-a)*n;
+function motionFrame(t){
+  const time=t*0.001;
+  for(const m of movers){
+    const idleX=Math.sin(time*m.sp+m.ph)*m.ax;
+    const idleY=Math.cos(time*m.sp*0.9+m.ph)*m.ay;
+    const idleR=Math.sin(time*m.sp*0.6+m.ph)*m.rAmp;
+    let tRx=0,tRy=0,tSc=1;
+    if(m.reactive&&mx>-9998){
+      const r=m.el.getBoundingClientRect();
+      const dx=Math.max(r.left-mx,0,mx-r.right), dy=Math.max(r.top-my,0,my-r.bottom);
+      const d=Math.hypot(dx,dy);
+      if(d<PROX){const f=1-d/PROX;const cx=r.left+r.width/2,cy=r.top+r.height/2;
+        tRy=((mx-cx)/r.width)*10*f; tRx=-((my-cy)/r.height)*10*f; tSc=1+0.03*f;}
+    }
+    m.s.rx=lerp(m.s.rx,tRx,0.12); m.s.ry=lerp(m.s.ry,tRy,0.12); m.s.sc=lerp(m.s.sc,tSc,0.12);
+    const st=m.el.style;
+    st.setProperty('--fx',idleX.toFixed(2)+'px');
+    st.setProperty('--fy',idleY.toFixed(2)+'px');
+    st.setProperty('--rx',(m.s.rx+idleR).toFixed(3)+'deg');
+    st.setProperty('--ry',m.s.ry.toFixed(3)+'deg');
+    st.setProperty('--s',m.s.sc.toFixed(4));
+  }
+  requestAnimationFrame(motionFrame);
+}
+requestAnimationFrame(motionFrame);
+
+window.addEventListener('load',()=>ScrollTrigger.refresh());
+</script>
+</body>
+</html>
