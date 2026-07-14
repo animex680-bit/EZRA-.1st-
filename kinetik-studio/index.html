@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KINETIK — Motion, engineered.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#05060a; --ink2:#0a0c14; --panel:#0e1018;
+  --ivory:#f4f1ea; --mut:#9aa0b4;
+  --blue:#3b6dff; --cyan:#46e6ff; --mag:#ff3ea5; --violet:#8a5cff;
+  --pink:#ff2e88; --pinkbg:#f8edf1; --pinkbg2:#fbe6ee;
+  --grad:linear-gradient(115deg,var(--cyan),var(--blue) 38%,var(--violet) 70%,var(--mag));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--ink);color:var(--ivory);font-family:"Inter",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{position:relative}
+h1,h2,h3,.disp{font-family:"Space Grotesk",sans-serif;letter-spacing:-.03em;line-height:.98}
+a{color:inherit;text-decoration:none}
+img,video{display:block;max-width:100%}
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+/* ---------- top bar ---------- */
+.bar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:20px clamp(18px,4vw,54px);mix-blend-mode:difference}
+.bar .logo{font-family:"Space Grotesk";font-weight:700;font-size:19px;letter-spacing:.02em}
+.bar .logo b{color:var(--cyan)}
+.bar .ig{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.9;padding:8px 14px;border:1px solid rgba(255,255,255,.35);border-radius:40px;transition:transform .35s cubic-bezier(.2,.8,.2,1),background .3s}
+.bar .ig:hover{background:#fff;color:#000;transform:translateY(-2px)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:100vh;display:grid;place-items:center;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;z-index:3;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,rgba(5,6,10,.9) 0%,rgba(5,6,10,.5) 26%,transparent 46%),
+             linear-gradient(to top,rgba(5,6,10,.92) 0%,transparent 34%)}
+.hero-halo{position:absolute;z-index:0;width:min(120vh,1100px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(70,230,255,.16),rgba(59,109,255,.08) 38%,transparent 66%);
+  filter:blur(10px);pointer-events:none;will-change:transform}
+.car-wrap{position:relative;z-index:2;width:min(74vw,540px);aspect-ratio:720/800;display:grid;place-items:center;
+  will-change:transform;cursor:grab}
+.car-wrap:active{cursor:grabbing}
+.car-wrap video{width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 0 40px rgba(70,230,255,.35)) drop-shadow(0 0 120px rgba(59,109,255,.22));
+  -webkit-mask:radial-gradient(ellipse 76% 84% at 50% 50%,#000 52%,transparent 90%);
+  mask:radial-gradient(ellipse 76% 84% at 50% 50%,#000 52%,transparent 90%)}
+.car-ring{position:absolute;inset:-6% ;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg,transparent,rgba(70,230,255,.5),transparent 30%,transparent 55%,rgba(255,62,165,.4),transparent 80%);
+  -webkit-mask:radial-gradient(circle,transparent 61%,#000 62%,#000 63%,transparent 64%);
+  mask:radial-gradient(circle,transparent 61%,#000 62%,#000 63%,transparent 64%);opacity:.7;will-change:transform}
+
+.hero-copy{position:absolute;z-index:4;left:clamp(18px,5vw,72px);bottom:clamp(40px,9vh,90px);max-width:min(64vw,760px);pointer-events:none}
+.eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
+.hero h1{font-size:clamp(42px,7.1vw,108px);font-weight:700}
+.hero h1 .ln{display:block;overflow:hidden;padding:0 .06em}
+.hero h1 .w{display:inline-block;will-change:transform,filter}
+.hero h1 em{font-style:italic;font-weight:400;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{margin-top:18px;font-size:clamp(14px,1.5vw,17px);color:var(--mut);max-width:40ch;line-height:1.6}
+.scrollcue{position:absolute;z-index:4;right:clamp(18px,5vw,72px);bottom:clamp(40px,9vh,90px);display:flex;align-items:center;gap:12px;
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut);transition:opacity .5s}
+.scrollcue .track{position:relative;width:88px;height:1px;background:rgba(255,255,255,.2);overflow:hidden}
+.scrollcue .track i{position:absolute;top:0;left:-30%;width:30%;height:100%;background:var(--cyan);animation:slidecue 2.4s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes slidecue{0%{left:-32%}60%,100%{left:104%}}
+
+/* floating car tiles */
+.tiles{position:absolute;inset:0;z-index:1;pointer-events:none}
+.tile{position:absolute;pointer-events:auto;border-radius:14px;overflow:hidden;will-change:transform;
+  box-shadow:0 20px 60px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.06);
+  background:#111;backface-visibility:hidden}
+.tile::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(140px 140px at var(--gx,50%) var(--gy,50%),rgba(70,230,255,calc(var(--glow,0)*.5)),transparent 60%);
+  mix-blend-mode:screen;transition:background .1s}
+.tile img,.tile video{width:100%;height:100%;object-fit:cover}
+.tile .tag{position:absolute;left:8px;bottom:7px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;background:rgba(0,0,0,.5);padding:3px 7px;border-radius:20px;backdrop-filter:blur(4px)}
+.t1{width:172px;aspect-ratio:16/10;top:13%;left:5%}
+.t2{width:120px;aspect-ratio:3/4;top:6%;left:23%}
+.t3{width:150px;aspect-ratio:16/11;top:12%;right:7%}
+.t4{width:118px;aspect-ratio:1;top:50%;right:8%}
+.t5{width:140px;aspect-ratio:16/10;top:75%;right:20%}
+@media(max-width:900px){.tiles{display:none}.hero-copy{max-width:88vw}.scrollcue{display:none}}
+
+/* ---------- generic section ---------- */
+.sec{position:relative;padding:clamp(90px,14vh,180px) clamp(18px,5vw,80px)}
+.kick{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--mut);margin-bottom:20px;display:flex;gap:12px;align-items:center}
+.kick b{color:var(--cyan);font-weight:600}
+.big{font-size:clamp(34px,6vw,88px);font-weight:700;max-width:16ch}
+.big em{font-style:italic;font-weight:400;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- SECTION 2 : finished machine (pink) ---------- */
+.finished{background:var(--pinkbg);color:#161016}
+.finished .stage{position:relative;height:100vh;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(10px,3vw,40px);
+  background:radial-gradient(80% 90% at 50% 40%,var(--pinkbg2),var(--pinkbg));overflow:hidden}
+.pinkglow{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:70vh;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,46,136,.18),transparent 62%);filter:blur(8px);pointer-events:none;will-change:transform}
+.pink-vid{position:relative;z-index:2;width:min(38vh,300px);aspect-ratio:720/1280;border-radius:20px;overflow:hidden;justify-self:center;
+  box-shadow:0 40px 90px -30px rgba(230,79,143,.55),0 0 0 1px rgba(255,255,255,.6);will-change:transform}
+.pink-vid video{width:100%;height:100%;object-fit:cover}
+.fin-copy{position:relative;z-index:3;max-width:34ch;will-change:transform,opacity}
+.fin-copy.left{justify-self:end;text-align:right}
+.fin-copy .lbl{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--pink);margin-bottom:14px}
+.fin-copy h3{font-size:clamp(26px,3.4vw,52px);font-weight:700;color:#171018}
+.fin-copy p{margin-top:14px;font-size:15px;line-height:1.7;color:#5b4a55}
+.fin-copy .stat{margin-top:22px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#8a7580}
+@media(max-width:900px){.finished .stage{grid-template-columns:1fr}.fin-copy{display:none}.pink-vid{width:min(60vw,260px)}}
+
+/* ---------- SHOWCASE (inside a build) ---------- */
+.showcase{background:var(--ink);overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;pointer-events:none;will-change:transform}
+.blob.a{width:520px;height:520px;background:radial-gradient(circle,var(--blue),transparent 65%);top:-8%;right:-6%}
+.blob.b{width:460px;height:460px;background:radial-gradient(circle,var(--mag),transparent 65%);bottom:-10%;left:-8%}
+.deck-stack{position:relative;z-index:2;margin-top:60px;display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+.card{border-radius:18px;overflow:hidden;background:var(--panel);border:1px solid rgba(255,255,255,.07);will-change:transform,opacity;
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.9)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(220px 220px at var(--gx,50%) var(--gy,50%),rgba(70,230,255,calc(var(--glow,0)*.28)),transparent 60%);mix-blend-mode:screen}
+.card{position:relative}
+.card img,.card video{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
+.card .cap{position:absolute;left:16px;bottom:14px;right:16px;z-index:3}
+.card .cap b{display:block;font-family:"Space Grotesk";font-size:18px;font-weight:600}
+.card .cap span{font-size:12px;color:var(--mut)}
+.card .scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,6,10,.82),transparent 55%)}
+.c-hero{grid-column:1/8;grid-row:1}
+.c-a{grid-column:8/13;grid-row:1}
+.c-b{grid-column:1/5}
+.c-c{grid-column:5/9}
+.c-d{grid-column:9/13}
+@media(max-width:900px){.deck-stack{grid-template-columns:1fr}.card{grid-column:1/-1 !important}}
+
+/* bento */
+.bento{position:relative;z-index:2;margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.b{position:relative;border-radius:18px;padding:26px;background:var(--panel);border:1px solid rgba(255,255,255,.07);min-height:190px;
+  display:flex;flex-direction:column;justify-content:space-between;will-change:transform,opacity;overflow:hidden}
+.b::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(200px 200px at var(--gx,50%) var(--gy,50%),rgba(138,92,255,calc(var(--glow,0)*.3)),transparent 60%);mix-blend-mode:screen}
+.b .num{font-family:"Space Grotesk";font-size:15px;color:var(--cyan)}
+.b h4{font-family:"Space Grotesk";font-size:22px;font-weight:600;margin-top:auto}
+.b p{font-size:13.5px;color:var(--mut);margin-top:8px;line-height:1.6}
+.b.wide{grid-column:span 2}
+@media(max-width:900px){.bento{grid-template-columns:1fr}.b.wide{grid-column:span 1}}
+
+/* ---------- COLLECTION (cmyk) ---------- */
+.strata{background:#ece9e2;color:#141414;overflow:hidden}
+.strata .kick{color:#6b6b6b}.strata .kick b{color:#c8455f}
+.strata .big{color:#141414}
+.strata-row{position:relative;z-index:2;margin-top:56px;display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+.strat{position:relative;width:170px;height:230px;border-radius:12px;overflow:hidden;will-change:transform;cursor:pointer;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.4)}
+.strat img,.strat video{width:100%;height:100%;object-fit:cover}
+.strat .band{position:absolute;top:0;left:0;right:0;height:22px;display:flex}
+.strat .band i{flex:1}
+.strat .lab{position:absolute;bottom:10px;left:10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+@media(max-width:900px){.strat{width:132px;height:180px}}
+
+/* ---------- WAITLIST ---------- */
+.wait{background:var(--ink);position:relative;overflow:hidden;text-align:center}
+.giant{position:relative;z-index:2;font-size:clamp(70px,20vw,300px);font-weight:700;line-height:.82;letter-spacing:-.05em;
+  color:transparent;-webkit-text-stroke:1.4px rgba(244,241,234,.5);text-stroke:1.4px rgba(244,241,234,.5)}
+.giant .fill{-webkit-text-stroke:0;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wait p{position:relative;z-index:2;margin:22px auto 30px;max-width:44ch;color:var(--mut);font-size:16px;line-height:1.7}
+.mailbar{position:relative;z-index:2;display:flex;gap:8px;max-width:520px;margin:0 auto;padding:8px;border-radius:60px;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 30px 60px -30px rgba(59,109,255,.5)}
+.mailbar input{flex:1;background:transparent;border:0;outline:0;color:var(--ivory);font-size:15px;padding:0 20px;font-family:inherit}
+.mailbar input::placeholder{color:#7c8298}
+.mailbar button{border:0;cursor:pointer;font-family:"Space Grotesk";font-weight:600;font-size:15px;color:#05060a;
+  padding:15px 28px;border-radius:50px;background:var(--grad);background-size:200% 100%;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),background-position .6s}
+.mailbar button:hover{transform:translateY(-2px);background-position:100% 0}
+.mailbar button:active{transform:translateY(0)}
+
+footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.07);padding:46px clamp(18px,5vw,80px);
+  display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;color:var(--mut);font-size:13px}
+footer .logo{font-family:"Space Grotesk";font-weight:700;font-size:18px;color:var(--ivory)}
+footer a:hover{color:var(--ivory)}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="bar">
+  <div class="logo">KINE<b>T</b>IK</div>
+  <a class="ig" href="https://instagram.com/kinetik.studio" target="_blank" rel="noopener">@kinetik.studio</a>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero-halo" id="halo"></div>
+
+  <div class="tiles" id="tiles">
+    <a class="tile t1 mag"><img src="assets/poster-mclaren.jpg" alt=""><span class="tag">720S · study</span></a>
+    <a class="tile t2 mag"><img src="assets/poster-pink.jpg" alt=""><span class="tag">911 · finish</span></a>
+    <a class="tile t3 mag"><img src="assets/poster-lambo.jpg" alt=""><span class="tag">SVJ · concept</span></a>
+    <a class="tile t4 mag"><video src="assets/car-drift.mp4" autoplay muted loop playsinline></video><span class="tag">track</span></a>
+    <a class="tile t5 mag"><img src="assets/poster-sketch.jpg" alt=""><span class="tag">first lines</span></a>
+  </div>
+
+  <div class="car-wrap mag" id="carWrap">
+    <div class="car-ring" id="carRing"></div>
+    <video id="carVid" src="assets/hero-xray.mp4" muted playsinline preload="auto" poster="assets/poster-xray.jpg"></video>
+  </div>
+
+  <div class="hero-copy">
+    <div class="eyebrow">Automotive design &amp; visualisation</div>
+    <h1>
+      <span class="ln"><span class="w">Engineered</span></span>
+      <span class="ln"><span class="w">in the <em>dark.</em></span></span>
+    </h1>
+    <p class="hero-sub">We build cars before they exist — from the first pencil line to the finished machine under the lights. Drag sideways to rotate the shell.</p>
+  </div>
+
+  <div class="scrollcue" id="cue"><span>drag to rotate</span><span class="track"><i></i></span></div>
+</section>
+
+<!-- ============ SECTION 2 — FINISHED MACHINE (plays on its own) ============ -->
+<section class="finished" id="finished">
+  <div class="stage">
+    <div class="pinkglow" id="pinkglow"></div>
+    <div class="fin-copy left" id="finL">
+      <div class="lbl">The finished machine</div>
+      <h3>Every panel<br>put in its place.</h3>
+      <p>What starts as a wireframe leaves the studio as a showpiece — poised, deliberate, impossible to look away from.</p>
+    </div>
+    <div class="pink-vid mag" id="pinkVid">
+      <video id="finVid" src="assets/finished.mp4" autoplay muted loop playsinline preload="auto" poster="assets/poster-pink.jpg"></video>
+    </div>
+    <div class="fin-copy" id="finR">
+      <div class="lbl">Detail obsessed</div>
+      <h3>Colour, light,<br>and stance.</h3>
+      <p>A car people slow down for. We tune ride height, surface and reflection until it stops the street.</p>
+      <div class="stat">40+ builds visualised · 9 marques</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SHOWCASE — INSIDE A BUILD ============ -->
+<section class="sec showcase" id="showcase">
+  <div class="blob a"></div><div class="blob b"></div>
+  <div class="kick"><b>01</b> Inside a KINETIK build</div>
+  <h2 class="big">A machine, not a <em>render.</em></h2>
+
+  <div class="deck-stack" id="deckStack">
+    <a class="card c-hero"><div class="scrim"></div><img src="assets/poster-sketch.jpg" alt=""><div class="cap"><b>First lines</b><span>Concept sketch · proportion &amp; stance</span></div></a>
+    <a class="card c-a"><div class="scrim"></div><img src="assets/poster-xray.jpg" alt=""><div class="cap"><b>Under the skin</b><span>Structure &amp; packaging</span></div></a>
+    <a class="card c-b"><div class="scrim"></div><video src="assets/car-mclaren.mp4" autoplay muted loop playsinline></video><div class="cap"><b>Surface</b><span>720S widebody</span></div></a>
+    <a class="card c-c"><div class="scrim"></div><video src="assets/car-lambo.mp4" autoplay muted loop playsinline></video><div class="cap"><b>Colour</b><span>SVJ in violet</span></div></a>
+    <a class="card c-d"><div class="scrim"></div><img src="assets/poster-pink.jpg" alt=""><div class="cap"><b>Finished</b><span>911, showroom-ready</span></div></a>
+  </div>
+
+  <div class="bento" id="bento">
+    <div class="b wide"><span class="num">/ 01</span><h4>Photoreal visualisation</h4><p>Every reflection, caustic and clearcoat rendered before a single panel is cut.</p></div>
+    <div class="b"><span class="num">/ 02</span><h4>Stance &amp; surface</h4><p>Ride height, camber and body lines dialled until the silhouette is right.</p></div>
+    <div class="b"><span class="num">/ 03</span><h4>Livery &amp; palette</h4><p>Signature colourways that read under any light.</p></div>
+    <div class="b wide"><span class="num">/ 04</span><h4>Turntable &amp; motion</h4><p>Broadcast-ready loops for launch, socials and the showroom floor.</p></div>
+  </div>
+</section>
+
+<!-- ============ COLLECTION ============ -->
+<section class="sec strata" id="strata">
+  <div class="kick"><b>02</b> The collection</div>
+  <h2 class="big">Pull a car. <br>See the craft.</h2>
+  <div class="strata-row" id="strataRow">
+    <div class="strat mag"><span class="band"><i style="background:#141414"></i><i style="background:#f4f1ea"></i><i style="background:#9aa0b4"></i></span><img src="assets/poster-sketch.jpg" alt=""><span class="lab">Concept · sketch</span></div>
+    <div class="strat mag"><span class="band"><i style="background:#c9a7e6"></i><i style="background:#8a5cff"></i><i style="background:#141414"></i></span><video src="assets/car-mclaren.mp4" autoplay muted loop playsinline></video><span class="lab">720S · widebody</span></div>
+    <div class="strat mag"><span class="band"><i style="background:#8a5cff"></i><i style="background:#5b2ea8"></i><i style="background:#141414"></i></span><img src="assets/poster-lambo.jpg" alt=""><span class="lab">SVJ · violet</span></div>
+    <div class="strat mag"><span class="band"><i style="background:#3b6dff"></i><i style="background:#46e6ff"></i><i style="background:#141414"></i></span><video src="assets/car-drift.mp4" autoplay muted loop playsinline></video><span class="lab">Track · telemetry</span></div>
+    <div class="strat mag"><span class="band"><i style="background:#ff2e88"></i><i style="background:#f8edf1"></i><i style="background:#141414"></i></span><img src="assets/poster-pink.jpg" alt=""><span class="lab">911 · finish</span></div>
+  </div>
+</section>
+
+<!-- ============ WAITLIST ============ -->
+<section class="sec wait" id="wait">
+  <div class="giant"><span class="fill">BUILD</span> IT</div>
+  <p>We take on two builds a month. Get on the list for an open slot and we'll send a free concept frame of your car.</p>
+  <form class="mailbar" onsubmit="return false">
+    <input type="email" placeholder="you@garage.com" aria-label="email" />
+    <button type="submit">Join the waitlist</button>
+  </form>
+</section>
+
+<footer>
+  <div class="logo">KINE<b style="color:var(--cyan)">T</b>IK</div>
+  <div>Motion, engineered. · Concept → visualisation → launch</div>
+  <a href="https://instagram.com/kinetik.studio" target="_blank" rel="noopener">@kinetik.studio</a>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* ============ helpers (declare BEFORE any ScrollTrigger.create — TDZ guard) ============ */
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const lerp=(a,b,t)=>a+(b-a)*t;
+function seg(p,a,b,c,d){ // smoothstep in over a..b, hold, out c..d ; if no d -> reveal & hold
+  if(d===undefined){ if(p<=a)return 0; if(p>=b)return 1; const t=(p-a)/(b-a); return t*t*(3-2*t); }
+  if(p<=a)return 0; if(p>=d)return (c<d)?0:1;
+  if(p<b){const t=(p-a)/(b-a);return t*t*(3-2*t);}
+  if(p<c)return 1;
+  const t=(p-c)/(d-c);return 1-t*t*(3-2*t);
+}
+const mouse={x:innerWidth/2,y:innerHeight/2};
+addEventListener('pointermove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const isMobile=matchMedia('(max-width:900px)').matches;
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* ============ Lenis smooth scroll ============ */
+const lenis=new Lenis({duration:1.1,smoothWheel:true});
+window.__lenis=lenis;
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+ScrollTrigger.addEventListener('refresh',()=>lenis.resize());
+
+/* ============ HERO word pop (independent of scroll — words always arrive smoothly) ============ */
+gsap.set('.hero h1 .w',{yPercent:120,opacity:0,filter:'blur(14px)',scale:.7});
+gsap.set('.hero-copy .eyebrow, .hero-sub',{opacity:0,y:20});
+window.addEventListener('load',()=>{
+  const tl=gsap.timeline({defaults:{ease:'back.out(1.7)'}});
+  tl.to('.hero .eyebrow',{opacity:1,y:0,duration:.6,ease:'power2.out'})
+    .to('.hero h1 .w',{yPercent:0,opacity:1,filter:'blur(0px)',scale:1,duration:1.05,stagger:.14},'-=.2')
+    .to('.hero-sub',{opacity:1,y:0,duration:.7,ease:'power2.out'},'-=.5');
+  ScrollTrigger.refresh();
+});
+
+/* ============ HERO — scroll/drag SIDEWAYS to play the x-ray shell ============
+   scroll / drag RIGHT  -> car rotates forward
+   scroll / drag LEFT   -> car rewinds
+   (vertical scroll still moves the page normally) */
+const carVid=document.getElementById('carVid');
+const cue=document.getElementById('cue');
+let CARDUR=6, hx=0, hxTarget=0, cueHidden=false, heroInView=true;
+carVid.addEventListener('loadedmetadata',()=>{ CARDUR=carVid.duration||6; carVid.currentTime=0.001; });
+new IntersectionObserver(es=>{heroInView=es[0].isIntersecting;},{threshold:.15}).observe(document.getElementById('hero'));
+function pushH(dx){ hxTarget=clamp(hxTarget+dx/1400,0,1);
+  if(!cueHidden && hxTarget>0.015){cueHidden=true;gsap.to(cue,{opacity:0,duration:.5});} }
+// horizontal wheel / trackpad-x / shift-wheel scrubs; plain vertical wheel scrolls the page
+addEventListener('wheel',e=>{
+  if(!heroInView)return;
+  const horiz=Math.abs(e.deltaX)>Math.abs(e.deltaY)+2 || e.shiftKey;
+  if(horiz){ e.preventDefault(); pushH(e.shiftKey? e.deltaY : e.deltaX); }
+},{passive:false});
+// click + drag left<->right scrubs
+let dragging=false,lastX=0;
+const carWrap=document.getElementById('carWrap');
+carWrap.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;carWrap.setPointerCapture(e.pointerId);});
+addEventListener('pointermove',e=>{ if(dragging){ pushH((e.clientX-lastX)*2.2); lastX=e.clientX; }});
+addEventListener('pointerup',()=>dragging=false);
+// touch horizontal swipe (mobile)
+let tX=null;
+carWrap.addEventListener('touchstart',e=>{tX=e.touches[0].clientX;},{passive:true});
+carWrap.addEventListener('touchmove',e=>{ if(tX!==null){const cx=e.touches[0].clientX;pushH((cx-tX)*2.4);tX=cx;} },{passive:true});
+carWrap.addEventListener('touchend',()=>tX=null);
+
+/* ============ cursor-reactive tiles: glow + magnetic (rule 1) + idle pendulum (rule 2) ============ */
+const mags=[...document.querySelectorAll('.mag')].map((el,i)=>{
+  return {el,phase:Math.random()*Math.PI*2,ampX:6+Math.random()*8,ampY:7+Math.random()*10,
+          spd:.5+Math.random()*.5,mx:0,my:0,gx:50,gy:50,glow:0,rot:(Math.random()-.5)*1.4};
+});
+const RADIUS=260;
+let t0=performance.now();
+function frame(now){
+  const dt=(now-t0)/1000; t0=now;
+  // hero car scrub (lerp for buttery seek)
+  hx=lerp(hx,hxTarget,0.12);
+  if(carVid.readyState>=2){ const ct=hx*CARDUR; if(Math.abs(carVid.currentTime-ct)>0.008) carVid.currentTime=ct; }
+  // idle halo/ring float
+  const ph=now*0.001;
+  const halo=document.getElementById('halo');
+  if(halo) halo.style.transform=`translate(${Math.sin(ph*.6)*14}px,${Math.cos(ph*.5)*12}px)`;
+  const ring=document.getElementById('carRing');
+  if(ring) ring.style.transform=`rotate(${ph*10}deg)`;
+  const pg=document.getElementById('pinkglow');
+  if(pg) pg.style.transform=`translate(-50%,-50%) translate(${Math.sin(ph*.5)*16}px,${Math.cos(ph*.6)*14}px)`;
+  // tiles
+  for(const m of mags){
+    const rect=m.el.getBoundingClientRect();
+    const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+    const dx=mouse.x-cx, dy=mouse.y-cy, dist=Math.hypot(dx,dy);
+    const near=clamp(1-dist/RADIUS,0,1);
+    const tmx=(dx)*0.12*near, tmy=(dy)*0.12*near;
+    m.mx=lerp(m.mx,tmx,0.1); m.my=lerp(m.my,tmy,0.1);
+    m.glow=lerp(m.glow,near,0.12);
+    if(near>0.001){ m.gx=lerp(m.gx,clamp((mouse.x-rect.left)/rect.width*100,0,100),0.2);
+                    m.gy=lerp(m.gy,clamp((mouse.y-rect.top)/rect.height*100,0,100),0.2); }
+    m.phase+=dt*m.spd;
+    const ix=Math.sin(m.phase)*m.ampX, iy=Math.cos(m.phase*.85)*m.ampY;
+    const rot=Math.sin(m.phase*.7)*m.rot;
+    m.el.style.transform=`translate(${m.mx+ix}px,${m.my+iy}px) rotate(${rot}deg) scale(${1+m.glow*.03})`;
+    m.el.style.setProperty('--glow',m.glow.toFixed(3));
+    m.el.style.setProperty('--gx',m.gx.toFixed(1)+'%');
+    m.el.style.setProperty('--gy',m.gy.toFixed(1)+'%');
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ============ SECTION 2 — pink car simply PLAYS (NOT scroll-scrubbed) ============ */
+const finVid=document.getElementById('finVid');
+finVid.play().catch(()=>{});
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) finVid.play().catch(()=>{}); });
+// captions assemble in the gutters, off the car (rule 5), floor .34 (rule 9), no overlap (rule 4)
+gsap.set(['#finL','#finR'],{opacity:0});
+ScrollTrigger.create({
+  trigger:'#finished', start:'top 72%', end:'top 12%', scrub:true,
+  onUpdate(self){
+    const p=self.progress;
+    const l=seg(p,.05,.45,1,1), r=seg(p,.34,.74,1,1);
+    const L=document.getElementById('finL'),R=document.getElementById('finR');
+    L.style.opacity=(l*.66+.34).toFixed(3); L.style.transform=`translateX(${(1-l)*-40}px)`;
+    R.style.opacity=(r*.66+.34).toFixed(3); R.style.transform=`translateX(${(1-r)*40}px)`;
+  }
+});
+
+/* ============ build-on-scroll assembly (both directions) for lower sections ============ */
+function assemble(sel,trigger,opt={}){
+  const els=gsap.utils.toArray(sel);
+  ScrollTrigger.create({
+    trigger, start:opt.start||'top 82%', end:opt.end||'top 30%', scrub:true,
+    onUpdate(self){
+      const p=self.progress;
+      els.forEach((el,i)=>{
+        const a=i*(opt.stag??.08);
+        const v=seg(p,a,a+.4,1,1);
+        el.style.opacity=(v*.7+ (p>a*.5?.3:0)).toFixed(3);
+        el.style.transform=`translateY(${(1-v)*(opt.y??60)}px) scale(${lerp(.94,1,v)})`;
+      });
+    }
+  });
+}
+gsap.set('#deckStack .card, #bento .b, #strataRow .strat',{opacity:0});
+assemble('#deckStack .card','#showcase',{start:'top 78%',end:'top 22%',stag:.09,y:70});
+assemble('#bento .b','#bento',{start:'top 88%',end:'top 40%',stag:.08,y:50});
+assemble('#strataRow .strat','#strata',{start:'top 78%',end:'top 30%',stag:.1,y:80});
+
+// section headings assemble
+gsap.utils.toArray('.big, .kick').forEach(el=>{
+  gsap.set(el,{opacity:0,y:40});
+  ScrollTrigger.create({trigger:el,start:'top 88%',end:'top 55%',scrub:true,
+    onUpdate(s){const v=seg(s.progress,0,1);el.style.opacity=(v*.7+.3).toFixed(3);el.style.transform=`translateY(${(1-v)*40}px)`;}});
+});
+
+// giant word assemble
+const giant=document.querySelector('.giant');
+gsap.set(giant,{opacity:0});
+ScrollTrigger.create({trigger:'#wait',start:'top 80%',end:'top 30%',scrub:true,
+  onUpdate(s){const v=seg(s.progress,0,1);giant.style.opacity=(v*.7+.3).toFixed(3);giant.style.transform=`translateY(${(1-v)*60}px) scale(${lerp(.9,1,v)})`;}});
+
+/* collection cards: hovering "pulls the card up" a touch — layered on idle */
+document.querySelectorAll('.strat').forEach(s=>{
+  s.addEventListener('pointerenter',()=>s.style.zIndex=5);
+  s.addEventListener('pointerleave',()=>s.style.zIndex=1);
+});
+
+// Lenis + pin: recompute after everything laid out
+addEventListener('load',()=>{ lenis.resize(); ScrollTrigger.refresh(); });
+</script>
+</body>
+</html>

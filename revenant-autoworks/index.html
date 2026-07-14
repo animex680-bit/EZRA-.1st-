@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REVENANT AUTOWORKS — We don't restore. We resurrect.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --acc:82,140,255;      /* cosmic blue — rebirth */
+  --ember:255,122,60;    /* ember — the wreck */
+  --ink:#0a0b0f;
+  --gx:50%;--gy:50%;--gI:0;
+}
+html,body{background:#06070b;color:#f3f2f0;font-family:'Inter',sans-serif;overflow-x:hidden}
+body{-webkit-font-smoothing:antialiased}
+::selection{background:rgba(var(--acc),.32)}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.mono{font-family:'JetBrains Mono',monospace}
+.disp{font-family:'Space Grotesk',sans-serif}
+
+/* grain */
+body::after{content:"";position:fixed;inset:0;z-index:900;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- NAV ---------- */
+nav{position:fixed;top:0;left:0;width:100%;z-index:700;display:flex;justify-content:space-between;align-items:center;
+  padding:22px 40px;mix-blend-mode:difference;pointer-events:none}
+nav .brand{display:flex;align-items:center;gap:12px;pointer-events:auto}
+nav .brand .mk{width:30px;height:30px;border-radius:8px;border:1.5px solid #fff;display:grid;place-items:center;position:relative;overflow:hidden}
+nav .brand .mk::before{content:"R";font-family:'Space Grotesk';font-weight:700;font-size:16px;color:#fff}
+nav .brand b{font-family:'Space Grotesk';font-weight:600;letter-spacing:.16em;font-size:13px;text-transform:uppercase}
+nav .rt{display:flex;gap:26px;align-items:center;pointer-events:auto}
+nav .rt a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#fff;opacity:.9}
+
+/* ---------- generic layers ---------- */
+section{position:relative}
+.vid-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.vid-wrap video{height:100%;width:auto;max-width:none}
+
+/* soft glow ring behind a contained vertical clip */
+.halo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(46vh,320px);aspect-ratio:9/16;
+  border-radius:40px;pointer-events:none;z-index:1;
+  box-shadow:0 0 120px 40px rgba(255,255,255,.14),0 0 240px 90px rgba(var(--acc),.10)}
+
+/* ============ S1 HERO — fall / wreck→reborn scrub ============ */
+/* NOTE: #hero must stay auto-height so the pin-spacer can add scroll distance */
+#hero-pin{height:100vh;overflow:hidden;
+  background:radial-gradient(125% 92% at 50% 34%, #d3cad2 0%, #a49bab 30%, #5f5768 58%, #241f2c 84%, #16121c 100%)}
+#hero .clip{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  height:min(82vh,640px);aspect-ratio:576/1024;border-radius:26px;overflow:hidden;z-index:2;
+  box-shadow:0 40px 120px -30px rgba(0,0,0,.6)}
+#hero .clip video{width:100%;height:100%;object-fit:cover}
+#hero .clip::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 80px 10px rgba(20,16,24,.35);border-radius:26px}
+/* caption zones — car sits centre, words live in the gutters */
+.hcap{position:absolute;z-index:4;will-change:transform,opacity}
+.hcap .l{display:block;overflow:hidden}
+.hcap .l>span{display:inline-block;will-change:transform,opacity}
+.hz-top{top:12vh;left:0;width:100%;text-align:center}
+.hz-top .k{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:rgba(30,24,34,.72)}
+.hz-left{top:44%;left:5vw;max-width:23vw;text-align:left}
+.hz-right{top:40%;right:5vw;max-width:23vw;text-align:right}
+.hz-left .t,.hz-right .t{font-family:'Space Grotesk';font-weight:600;font-size:clamp(20px,2.1vw,32px);line-height:1.12;letter-spacing:-.02em;color:#1a1520;text-shadow:0 2px 22px rgba(255,255,255,.5)}
+.hz-bot{bottom:8vh;left:0;width:100%;text-align:center}
+.hz-bot .big{font-family:'Space Grotesk';font-weight:700;font-size:clamp(40px,9vw,140px);letter-spacing:-.04em;line-height:.9;
+  color:transparent;-webkit-background-clip:text;background-clip:text;
+  background-image:linear-gradient(180deg,#1c1622,#3a3040)}
+.hz-bot .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:rgba(30,24,34,.62);margin-top:14px}
+.scrollcue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:5;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(28,22,32,.6);display:flex;flex-direction:column;align-items:center;gap:8px}
+.scrollcue i{width:1px;height:34px;background:linear-gradient(rgba(28,22,32,.6),transparent);display:block}
+
+/* ============ S2 — warm cloud credit-roll / process info ============ */
+#proc-pin{height:100vh;overflow:hidden;
+  background:radial-gradient(130% 100% at 50% 38%, #f3e4d4 0%, #e6c1a1 42%, #b9825f 72%, #59372e 100%)}
+#proc .clip{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  height:min(80vh,620px);aspect-ratio:576/1024;border-radius:26px;overflow:hidden;z-index:1;opacity:.9;
+  box-shadow:0 40px 120px -30px rgba(70,40,30,.5)}
+#proc .clip video{width:100%;height:100%;object-fit:cover}
+#proc .clip::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 90px 14px rgba(90,55,40,.4);border-radius:26px}
+#proc .col{position:absolute;z-index:3;will-change:transform,opacity}
+#proc .lead{top:12vh;left:0;width:100%;text-align:center}
+#proc .lead .k{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.4em;text-transform:uppercase;color:rgba(70,42,32,.75)}
+#proc .lead h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,4.4vw,64px);letter-spacing:-.03em;color:#3a221c;margin-top:12px;line-height:1}
+/* stat rails in the side gutters */
+.pstat{position:absolute;z-index:3;will-change:transform,opacity}
+.pstat .n{font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,3.6vw,52px);letter-spacing:-.03em;color:#3a221c;line-height:1}
+.pstat .c{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(70,42,32,.72);margin-top:6px}
+.ps1{top:34%;left:5vw;max-width:22vw;text-align:left}
+.ps2{top:56%;left:5vw;max-width:22vw;text-align:left}
+.ps3{top:34%;right:5vw;max-width:22vw;text-align:right}
+.ps4{top:56%;right:5vw;max-width:22vw;text-align:right}
+/* process word ladder — rises like end-credits */
+.ladder{position:absolute;bottom:9vh;left:0;width:100%;text-align:center;z-index:3}
+.ladder .step{display:inline-block;margin:0 clamp(8px,1.4vw,22px);font-family:'Space Grotesk';font-weight:600;
+  font-size:clamp(15px,1.7vw,26px);letter-spacing:.02em;color:#4a2c22;will-change:transform,opacity}
+.ladder .step b{color:rgba(var(--ember),1);font-weight:700}
+
+/* ============ S3 — hidden world behind the BG ============ */
+#deepfix{position:fixed;inset:0;z-index:0;overflow:hidden;opacity:0;pointer-events:none;background:#04060e}
+#deepfix video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:112%;width:auto;max-width:none;object-fit:cover}
+#deepfix .tint{position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 46%,transparent,rgba(4,6,14,.55) 88%)}
+#deep{height:190vh;position:relative;z-index:2;background:transparent}
+#deep .peel{position:sticky;top:0;height:100vh;overflow:hidden}
+/* solid shells above & below so the transparent zone reads as a hole punched in the page */
+.shell{position:relative;z-index:2;background:#06070b}
+#deep .dcap{position:absolute;left:6vw;bottom:12vh;max-width:32ch;z-index:3;will-change:transform,opacity}
+#deep .dcap .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:rgba(var(--acc),1)}
+#deep .dcap p{font-family:'Space Grotesk';font-weight:500;font-size:clamp(22px,2.6vw,40px);line-height:1.14;letter-spacing:-.02em;color:#eaf1ff;margin-top:14px;text-shadow:0 4px 40px rgba(0,0,0,.6)}
+
+/* ============ S4 — THE COLLECTION ============ */
+#coll{padding:18vh 0 16vh;background:linear-gradient(180deg,#06070b,#0b0d14 40%,#06070b)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+.sect-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:8vh}
+.sect-head .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:rgba(var(--acc),.9)}
+.sect-head h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(34px,5vw,74px);letter-spacing:-.035em;line-height:.96;margin-top:14px}
+.sect-head p{max-width:36ch;font-size:14.5px;line-height:1.7;color:#9aa0ab}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.build{position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.07);
+  background:#0e1017;opacity:0;will-change:transform,opacity;--cr:150;--cg:180;--cb:220}
+.build .frame{position:relative;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 90% at 50% 30%, rgba(var(--cr),var(--cg),var(--cb),.22), #0b0d13 72%)}
+.build .frame img{width:100%;height:100%;object-fit:cover}
+.build.tall .frame{aspect-ratio:3/4}
+.build.wide .frame{aspect-ratio:3/4}
+.build .frame img.contain{object-fit:contain}
+.build::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(260px 260px at var(--gx) var(--gy), rgba(var(--cr),var(--cg),var(--cb),.28), transparent 70%);transition:opacity .3s}
+.build .meta{position:absolute;left:0;bottom:0;width:100%;z-index:5;padding:20px;
+  background:linear-gradient(to top,rgba(6,7,11,.9),transparent)}
+.build .meta .code{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:rgba(var(--cr),var(--cg),var(--cb),1)}
+.build .meta h3{font-family:'Space Grotesk';font-weight:600;font-size:22px;letter-spacing:-.02em;margin-top:6px}
+.build .meta .row{display:flex;gap:16px;margin-top:12px}
+.build .meta .row div{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b909b}
+.build .meta .row b{display:block;font-family:'Space Grotesk';font-size:15px;color:#f3f2f0;margin-top:3px;letter-spacing:0}
+.build .tagline{position:absolute;top:16px;left:16px;z-index:5;font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;color:#fff;background:rgba(var(--cr),var(--cg),var(--cb),.2);
+  border:1px solid rgba(var(--cr),var(--cg),var(--cb),.4);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)}
+
+/* ============ S5 — editorial art feature (BMW poster) ============ */
+#art{position:relative;min-height:150vh;background:#070810;overflow:hidden}
+#art .stage{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;overflow:hidden}
+#art .poster{position:relative;height:100%;overflow:hidden;background:radial-gradient(120% 90% at 40% 40%,#2b3a30,#0c110d 80%)}
+#art .poster img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:118%;width:auto;max-width:none;will-change:transform}
+#art .poster::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,#070810)}
+#art .copy{padding:0 clamp(30px,5vw,90px);position:relative;z-index:3}
+#art .copy .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#8fce9a}
+#art .copy h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(40px,5.4vw,82px);letter-spacing:-.04em;line-height:.94;margin:18px 0 20px}
+#art .copy h2 em{font-style:normal;color:transparent;-webkit-background-clip:text;background-clip:text;background-image:linear-gradient(120deg,#8fce9a,#d7e9c0)}
+#art .copy p{max-width:40ch;font-size:15.5px;line-height:1.75;color:#aab2ab}
+#art .copy .fx{margin-top:34px;display:flex;gap:30px}
+#art .copy .fx div{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7f877f}
+#art .copy .fx b{display:block;font-family:'Space Grotesk';font-weight:700;font-size:26px;color:#eef3ea;margin-top:6px;letter-spacing:-.02em}
+
+/* ============ S6 — waitlist / CTA / footer ============ */
+#end{position:relative;padding:20vh 0 0;background:linear-gradient(180deg,#070810,#04060e 60%,#02030a);overflow:hidden}
+#end .orb{position:absolute;top:8%;right:-8%;width:46vw;height:46vw;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 40% 40%,rgba(var(--acc),.30),transparent 62%);filter:blur(30px)}
+#end .cta{max-width:960px;margin:0 auto;padding:0 40px;text-align:center;position:relative;z-index:3}
+#end .cta .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:rgba(var(--acc),1)}
+#end .cta h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(42px,7vw,110px);letter-spacing:-.045em;line-height:.92;margin:20px 0 10px}
+#end .cta h2 span{display:inline-block;will-change:transform,opacity}
+#end .cta p{max-width:44ch;margin:0 auto;font-size:15.5px;line-height:1.7;color:#9aa0ab}
+.mailbar{display:flex;gap:12px;max-width:520px;margin:44px auto 0;flex-wrap:wrap;justify-content:center}
+.mailbar input{flex:1;min-width:240px;padding:18px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);color:#fff;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.04em;outline:none}
+.mailbar input::placeholder{color:#7a808b}
+.mailbar input:focus{border-color:rgba(var(--acc),.7);box-shadow:0 0 0 4px rgba(var(--acc),.14)}
+.mailbar button{padding:18px 30px;border-radius:999px;border:0;cursor:pointer;
+  background:linear-gradient(120deg,rgb(var(--ember)),rgb(var(--acc)));color:#fff;
+  font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.02em;transition:transform .3s,box-shadow .3s}
+.mailbar button:hover{transform:translateY(-2px);box-shadow:0 16px 40px -14px rgba(var(--acc),.7)}
+footer{margin-top:16vh;border-top:1px solid rgba(255,255,255,.08);padding:34px 40px;
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;position:relative;z-index:3}
+footer .l{font-family:'Space Grotesk';font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+footer .m{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#7a808b}
+footer a.ig{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;color:#f3f2f0}
+footer a.ig:hover{color:rgb(var(--acc))}
+
+@media(max-width:860px){
+  #art .stage{grid-template-columns:1fr}
+  #art .poster{display:none}
+  .grid3{grid-template-columns:1fr}
+  nav{padding:16px 22px}
+  .wrap{padding:0 22px}
+  .hz-left,.hz-right{max-width:38vw}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="#hero"><span class="mk"></span><b>Revenant</b></a>
+  <div class="rt">
+    <a href="#proc">Process</a>
+    <a href="#coll">Collection</a>
+    <a href="https://instagram.com/revenant.autoworks" target="_blank" rel="noopener">@revenant.autoworks</a>
+  </div>
+</nav>
+
+<!-- ============ S1 HERO ============ -->
+<section id="hero" class="shell">
+  <div id="hero-pin">
+    <div class="halo"></div>
+    <div class="clip"><video id="v1" src="assets/vid/s1-fall.mp4" muted playsinline preload="auto"></video></div>
+
+    <div class="hcap hz-top"><div class="l"><span class="k">Revenant Autoworks — Est. resurrection 2019</span></div></div>
+
+    <div class="hcap hz-left"><p class="t" data-words>Every legend arrives in pieces.</p></div>
+    <div class="hcap hz-right"><p class="t" data-words>We strip it down to the bone.</p></div>
+
+    <div class="hcap hz-bot">
+      <div class="big" data-words>RESURRECTED</div>
+      <div class="sub">We don't restore — we resurrect</div>
+    </div>
+
+    <div class="scrollcue">scroll<i></i></div>
+  </div>
+</section>
+
+<!-- ============ S2 PROCESS ============ -->
+<section id="proc" class="shell">
+  <div id="proc-pin">
+    <div class="clip"><video id="v2" src="assets/vid/s2-clouds.mp4" muted playsinline preload="auto"></video></div>
+
+    <div class="col lead">
+      <div class="k">The Ritual</div>
+      <h2 data-words>Death, then the rebuild.</h2>
+    </div>
+
+    <div class="pstat ps1"><div class="n" data-count="412">412</div><div class="c">Builds resurrected</div></div>
+    <div class="pstat ps2"><div class="n" data-count="18">18,000</div><div class="c">Hours under the lift</div></div>
+    <div class="pstat ps3"><div class="n">0.01<span style="font-size:.5em">mm</span></div><div class="c">Every panel 3D-scanned</div></div>
+    <div class="pstat ps4"><div class="n">1 of 1</div><div class="c">No two rebirths alike</div></div>
+
+    <div class="ladder">
+      <span class="step">Salvage</span>
+      <span class="step">Strip</span>
+      <span class="step">Scan</span>
+      <span class="step">Forge</span>
+      <span class="step"><b>Rebirth</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S3 HIDDEN WORLD ============ -->
+<div id="deepfix"><video id="v3" src="assets/vid/s3-orbit.mp4" muted loop playsinline preload="auto"></video><div class="tint"></div></div>
+<section id="deep">
+  <div class="peel">
+    <div class="dcap">
+      <div class="k">// Beyond the atmosphere</div>
+      <p>Peel back the shell and the build was always here — orbiting, waiting to come home.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S4 COLLECTION ============ -->
+<section id="coll" class="shell">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <div class="k">// The Collection</div>
+        <h2>Machines<br>brought back.</h2>
+      </div>
+      <p>Three resurrections from the floor. Each stripped to raw metal, re-engineered, and reborn with a soul it never had when it left the factory.</p>
+    </div>
+    <div class="grid3" id="grid3">
+      <div class="build tall" style="--cr:150;--cg:180;--cb:220">
+        <span class="tagline">Rebirth 07</span>
+        <div class="frame"><img src="assets/img/porsche-white.jpg" alt="white 911 build" class="contain"></div>
+        <div class="meta"><div class="code">REV-07 · GHOST</div><h3>Whiteout 992</h3>
+          <div class="row"><div>Output<b>641 hp</b></div><div>Build<b>2,400 hrs</b></div><div>Weight<b>−180 kg</b></div></div></div>
+      </div>
+      <div class="build wide" style="--cr:220;--cg:64;--cb:64">
+        <span class="tagline">Rebirth 11</span>
+        <div class="frame"><img src="assets/img/lambo-white.jpg" alt="white liberty walk aventador build"></div>
+        <div class="meta"><div class="code">REV-11 · WIDOW</div><h3>LB Aventador</h3>
+          <div class="row"><div>Output<b>780 hp</b></div><div>Track<b>+120 mm</b></div><div>Body<b>Full CF</b></div></div></div>
+      </div>
+      <div class="build tall" style="--cr:224;--cg:150;--cb:90">
+        <span class="tagline">Rebirth 19</span>
+        <div class="frame"><img src="assets/img/lambo-grey.jpg" alt="grey creative bespoke lambo build"></div>
+        <div class="meta"><div class="code">REV-19 · NARDO</div><h3>Bespoke Grey</h3>
+          <div class="row"><div>Output<b>820 hp</b></div><div>Finish<b>Nardo matte</b></div><div>Trim<b>Ember line</b></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S5 ART FEATURE ============ -->
+<section id="art">
+  <div class="stage">
+    <div class="poster"><img id="posterImg" src="assets/img/bmw-green.jpg" alt="green M4 art poster"></div>
+    <div class="copy">
+      <div class="k">// Craft as art</div>
+      <h2>A rebuild is<br><em>a sculpture</em><br>that moves.</h2>
+      <p>We treat every commission the way a gallery treats a canvas — proportion, restraint, obsession. The wing, the stance, the single ember pinstripe: nothing is here by accident.</p>
+      <div class="fx">
+        <div>Bespoke<b>100%</b></div>
+        <div>Paint layers<b>11</b></div>
+        <div>Waitlist<b>14 mo</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S6 END ============ -->
+<section id="end" class="shell">
+  <div class="orb"></div>
+  <div class="cta">
+    <div class="k">// Join the resurrection list</div>
+    <h2 id="endTitle"><span>Bring</span> <span>it</span> <span>back.</span></h2>
+    <p>One build slot opens per quarter. Drop your machine into the queue and we'll tell you when the lift is free.</p>
+    <form class="mailbar" onsubmit="return false">
+      <input type="email" placeholder="your@email.com — we reply same day" aria-label="email">
+      <button onclick="window.open('https://instagram.com/revenant.autoworks','_blank')">Request a slot</button>
+    </form>
+  </div>
+  <footer>
+    <div class="l">Revenant Autoworks</div>
+    <div class="m">Resurrected, not restored · Est. 2019</div>
+    <a class="ig" href="https://instagram.com/revenant.autoworks" target="_blank" rel="noopener">IG · @revenant.autoworks</a>
+  </footer>
+</section>
+
+<script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---- smooth scroll ---- */
+const lenis = new Lenis({lerp:.1, wheelMultiplier:1});
+window.__lenis = lenis;
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+ScrollTrigger.addEventListener('refresh', ()=>lenis.resize());
+
+/* ---- trapezoid envelope (reversible) ---- */
+function seg(p,a,b,c,d){
+  if(p>=d) return c<d?0:1;
+  if(p<=a) return 0;
+  if(p<b){const t=(p-a)/(b-a);return t*t*(3-2*t);}
+  if(p<c) return 1;
+  const t=(p-c)/(d-c);return 1-(t*t*(3-2*t));
+}
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+/* ---- split every [data-words] into word spans (signature reveal) ---- */
+function splitWords(el){
+  const txt=el.textContent.trim();
+  el.textContent='';
+  const words=txt.split(/\s+/);
+  const spans=[];
+  words.forEach((w,i)=>{
+    const wrap=document.createElement('span');
+    wrap.style.display='inline-block';wrap.style.overflow='hidden';wrap.style.verticalAlign='top';
+    const inner=document.createElement('span');
+    inner.style.display='inline-block';inner.style.willChange='transform,opacity';
+    inner.textContent=w;
+    wrap.appendChild(inner);
+    el.appendChild(wrap);
+    if(i<words.length-1) el.appendChild(document.createTextNode('\u00A0'));
+    spans.push(inner);
+  });
+  return spans;
+}
+
+/* =========================================================
+   S1 HERO — scrub the wreck→reborn clip, reveal words in gutters
+   ========================================================= */
+const v1=document.getElementById('v1');
+let v1dur=4.6;
+v1.addEventListener('loadedmetadata',()=>{v1dur=v1.duration||4.6;});
+
+const topWords=splitWords(document.querySelector('.hz-top .k'));
+const leftWords=splitWords(document.querySelector('.hz-left .t'));
+const rightWords=splitWords(document.querySelector('.hz-right .t'));
+const bigWords=splitWords(document.querySelector('.hz-bot .big'));
+const heroSub=document.querySelector('.hz-bot .sub');
+const scrollcue=document.querySelector('.scrollcue');
+
+function revealWords(spans, prog, stagger){
+  // prog 0..1 across the group; each word reveals then HOLDS (assembled, reversible)
+  spans.forEach((s,i)=>{
+    const start=i*stagger;
+    const a=seg(prog, start, start+.18, 1, 1);
+    s.style.opacity=a.toFixed(3);
+    s.style.transform=`translateY(${((1-a)*110).toFixed(1)}%) rotate(${((1-a)*3).toFixed(2)}deg)`;
+    s.style.filter=`blur(${((1-a)*6).toFixed(1)}px)`;
+  });
+}
+
+ScrollTrigger.create({
+  trigger:'#hero', start:'top top', end:'+=320%', pin:'#hero-pin', scrub:.7,
+  onUpdate:self=>{
+    const p=self.progress;
+    if(v1.readyState>=1 && isFinite(v1dur)) v1.currentTime = Math.min(v1dur-.03, p*v1dur);
+    // beats live in different zones → no spatial overlap
+    revealWords(topWords,  seg(p,.0,.14,1,1), .05);
+    revealWords(leftWords, seg(p,.16,.42,1,1), .06);
+    revealWords(rightWords,seg(p,.44,.7,1,1), .06);
+    revealWords(bigWords,  seg(p,.66,.98,1,1), .05);
+    heroSub.style.opacity=seg(p,.82,.95,1,1).toFixed(3);
+    scrollcue.style.opacity=(1-seg(p,.02,.12,1,1)).toFixed(3);
+  }
+});
+
+/* =========================================================
+   S2 PROCESS — warm cloud scrub + credit-roll info
+   ========================================================= */
+const v2=document.getElementById('v2');
+let v2dur=3;
+v2.addEventListener('loadedmetadata',()=>{v2dur=v2.duration||3;});
+const leadWords=splitWords(document.querySelector('#proc .lead h2'));
+const pstats=[...document.querySelectorAll('#proc .pstat')];
+const ladder=[...document.querySelectorAll('#proc .ladder .step')];
+const counters=[...document.querySelectorAll('#proc [data-count]')];
+
+ScrollTrigger.create({
+  trigger:'#proc', start:'top top', end:'+=300%', pin:'#proc-pin', scrub:.7,
+  onUpdate:self=>{
+    const p=self.progress;
+    if(v2.readyState>=1 && isFinite(v2dur)) v2.currentTime=Math.min(v2dur-.03,p*v2dur);
+    revealWords(leadWords, seg(p,.02,.24,1,1), .05);
+    // stat rails rise & fade in staggered, hold, never overlapping (each in own gutter slot)
+    pstats.forEach((el,i)=>{
+      const s=.18+i*.11;
+      const a=seg(p, s, s+.16, 1, 1);
+      el.style.opacity=Math.max(a, .34*Math.min(1,a*3)).toFixed(3);
+      el.style.transform=`translateY(${((1-a)*40).toFixed(1)}px)`;
+    });
+    // process ladder rises like end credits
+    ladder.forEach((el,i)=>{
+      const s=.5+i*.07;
+      const a=seg(p, s, s+.14, 1, 1);
+      el.style.opacity=Math.max(a,.34*Math.min(1,a*3)).toFixed(3);
+      el.style.transform=`translateY(${((1-a)*30).toFixed(1)}px)`;
+    });
+  }
+});
+// live count-up for the two numeric stats (drive off the same trigger visibility)
+let counted=false;
+ScrollTrigger.create({trigger:'#proc',start:'top 40%',onEnter:()=>{
+  if(counted)return;counted=true;
+  counters.forEach(c=>{
+    const target=parseFloat(c.dataset.count);
+    const isK=c.textContent.includes(',');
+    const end= isK?18000:target;
+    gsap.fromTo({n:0},{n:end},{n:end,duration:1.6,ease:'power2.out',onUpdate(){
+      const val=this.targets()[0].n;
+      c.textContent= isK ? Math.round(val).toLocaleString() : Math.round(val);
+    }});
+  });
+}});
+
+/* =========================================================
+   S3 HIDDEN WORLD — peel the page away, reveal fixed orbit clip
+   ========================================================= */
+const deepfix=document.getElementById('deepfix');
+const v3=document.getElementById('v3');
+const dcap=document.querySelector('#deep .dcap');
+ScrollTrigger.create({
+  trigger:'#deep', start:'top bottom', end:'bottom top',
+  onToggle:self=>{ if(self.isActive){ v3.play().catch(()=>{}); } else { v3.pause(); } },
+  onUpdate:self=>{
+    const p=self.progress;
+    // reveal window: fade the cosmic layer in as the transparent section enters, out as it leaves
+    const vis=seg(p,.08,.28,.72,.92);
+    deepfix.style.opacity=vis.toFixed(3);
+    // caption drifts up, opposite the orbiting car (car sits centre-right → caption bottom-left)
+    const ca=seg(p,.3,.46,.74,.9);
+    dcap.style.opacity=Math.max(ca,.34*Math.min(1,ca*3)).toFixed(3);
+    dcap.style.transform=`translateY(${((1-ca)*40).toFixed(1)}px)`;
+  }
+});
+
+/* =========================================================
+   S4 COLLECTION — build tiles assemble on scroll
+   ========================================================= */
+const builds=[...document.querySelectorAll('.build')];
+const bScatter=[[-70,60],[0,80],[70,60]];
+ScrollTrigger.create({
+  trigger:'#grid3', start:'top 85%', end:'top 24%', scrub:.7,
+  onUpdate:self=>{
+    const p=self.progress;
+    builds.forEach((el,i)=>{
+      const a=seg(p, i*.12, .5+i*.12, 1, 1);
+      const sc=bScatter[i];
+      el.style.opacity=a.toFixed(3);
+      el.dataset.base=`translate(${(sc[0]*(1-a)).toFixed(1)}px,${(sc[1]*(1-a)).toFixed(1)}px) scale(${(.92+a*.08).toFixed(3)})`;
+      el.style.transform=el.dataset.base;
+    });
+  }
+});
+
+/* =========================================================
+   S5 ART — poster parallax while copy stays fixed (template-three)
+   ========================================================= */
+const posterImg=document.getElementById('posterImg');
+ScrollTrigger.create({
+  trigger:'#art', start:'top top', end:'bottom bottom', scrub:.7,
+  onUpdate:self=>{
+    const p=self.progress;
+    posterImg.style.transform=`translate(-50%,-50%) translateY(${(-(p-.5)*160).toFixed(1)}px) scale(${(1.06+p*.06).toFixed(3)})`;
+  }
+});
+
+/* =========================================================
+   S6 END — title words rise
+   ========================================================= */
+const endSpans=[...document.querySelectorAll('#endTitle span')];
+ScrollTrigger.create({
+  trigger:'#end', start:'top 72%', end:'top 22%', scrub:.7,
+  onUpdate:self=>{
+    const p=self.progress;
+    endSpans.forEach((s,i)=>{
+      const a=seg(p, i*.16, .5+i*.16, 1, 1);
+      s.style.opacity=a.toFixed(3);
+      s.style.transform=`translateY(${((1-a)*90).toFixed(1)}%)`;
+    });
+  }
+});
+
+/* =========================================================
+   CURSOR + IDLE MOTION — one ticker drives magnetic pull,
+   glow surfaces, and always-on pendulum sway (standing rules 1 & 2)
+   ========================================================= */
+let mx=innerWidth/2, my=innerHeight/2;
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;});
+const glowEls=[...document.querySelectorAll('.build')];
+const swayState=builds.map((el,i)=>({el,phase:i*2.1,x:0,y:0}));
+
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  // build tiles: cursor glow + magnetic pull + idle sway (only once assembled)
+  glowEls.forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.bottom<0||r.top>innerHeight){el.style.setProperty('--gI',0);return;}
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const d=Math.hypot(mx-cx,my-cy);
+    const gI=d<420?(1-d/420):0;
+    el.style.setProperty('--gI',gI.toFixed(3));
+    el.style.setProperty('--gx',(mx-r.left)+'px');
+    el.style.setProperty('--gy',(my-r.top)+'px');
+  });
+  swayState.forEach(s=>{
+    if(parseFloat(s.el.style.opacity||'0')<.97)return;
+    const r=s.el.getBoundingClientRect();
+    if(r.bottom<0||r.top>innerHeight)return;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy);
+    const f=d<300?(1-d/300):0;
+    const tx=dx*.05*f+Math.sin(t*.7+s.phase)*3.0, ty=dy*.05*f+Math.cos(t*.58+s.phase)*2.6;
+    s.x+=(tx-s.x)*.09; s.y+=(ty-s.y)*.09;
+    s.el.style.transform=(s.el.dataset.base||'')+` translate(${s.x.toFixed(2)}px,${s.y.toFixed(2)}px)`;
+  });
+});
+
+/* idle pendulum for the pinned hero/proc clips + halo (rule 2, always-on) */
+const heroClip=document.querySelector('#hero .clip');
+const heroHalo=document.querySelector('.halo');
+const procClip=document.querySelector('#proc .clip');
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  if(heroClip){heroClip.style.transform=`translate(-50%,-50%) translateY(${(Math.sin(t*.6)*7).toFixed(2)}px) rotate(${(Math.sin(t*.45)*.5).toFixed(3)}deg)`;}
+  if(heroHalo){heroHalo.style.transform=`translate(-50%,-50%) translateY(${(Math.sin(t*.6)*7).toFixed(2)}px) scale(${(1+Math.sin(t*.9)*.02).toFixed(4)})`;}
+  if(procClip){procClip.style.transform=`translate(-50%,-50%) translateY(${(Math.sin(t*.5+1)*6).toFixed(2)}px) rotate(${(Math.sin(t*.4)*.45).toFixed(3)}deg)`;}
+});
+
+/* ---- make sure Lenis measures pin-spacers, then refresh ---- */
+window.addEventListener('load',()=>{ lenis.resize(); ScrollTrigger.refresh(); });
+setTimeout(()=>{ lenis.resize(); ScrollTrigger.refresh(); }, 400);
+</script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>APEX FORGE — Automotive Reforging Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#07080c;
+  --ink:#eef1f7;
+  --muted:#8a92a6;
+  --amber:#ff5a1f;      /* molten forge */
+  --cyan:#3ef2ff;
+  --magenta:#ff2d78;
+  --violet:#a06bff;
+  --line:rgba(255,255,255,.08);
+  --disp:'Anton',sans-serif;
+  --sans:'Space Grotesk',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img,video{display:block;max-width:100%}
+::selection{background:var(--amber);color:#07080c}
+
+/* ---------- global ambient / grain ---------- */
+.grain{position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.ambient{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(60vmax 60vmax at var(--mx,50%) var(--my,30%), rgba(255,90,31,.10), transparent 60%),
+    radial-gradient(50vmax 50vmax at 80% 90%, rgba(62,242,255,.06), transparent 60%),
+    #07080c;
+  animation:breathe 14s ease-in-out infinite;}
+@keyframes breathe{0%,100%{filter:saturate(1) brightness(1)}50%{filter:saturate(1.25) brightness(1.08)}}
+.vgrid{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.4;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask:radial-gradient(80vmax 80vmax at 50% 40%,#000 30%,transparent 75%);
+  -webkit-mask:radial-gradient(80vmax 80vmax at 50% 40%,#000 30%,transparent 75%);}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:8000;display:flex;align-items:center;justify-content:space-between;
+  padding:18px clamp(18px,4vw,54px);mix-blend-mode:difference}
+.brand{font-family:var(--disp);font-size:22px;letter-spacing:.06em;line-height:1}
+.brand small{display:block;font-family:var(--mono);font-size:8px;letter-spacing:.5em;opacity:.7;margin-top:3px}
+.nav-r{display:flex;align-items:center;gap:22px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.ig{display:inline-flex;align-items:center;gap:7px}
+.ig .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.res-btn{border:1px solid rgba(255,255,255,.5);padding:8px 16px;border-radius:40px;transition:transform .3s,background .3s,color .3s}
+.res-btn:hover{background:#fff;color:#000;transform:translateY(-2px)}
+.progress{position:fixed;left:0;top:0;height:2px;width:0;z-index:8500;background:linear-gradient(90deg,var(--amber),var(--cyan));box-shadow:0 0 12px var(--amber)}
+
+/* ---------- section frame ---------- */
+.sec{position:relative}
+.stage{position:relative;height:100vh;width:100%;overflow:hidden;perspective:1400px}
+.bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
+.scrim{position:absolute;inset:0;pointer-events:none}
+.edge-l{background:linear-gradient(90deg,rgba(7,8,12,.92) 0%,rgba(7,8,12,.4) 26%,transparent 46%)}
+.edge-b{background:linear-gradient(0deg,rgba(7,8,12,.94) 0%,transparent 42%)}
+.edge-t{background:linear-gradient(180deg,rgba(7,8,12,.85) 0%,transparent 34%)}
+.vign{box-shadow:inset 0 0 240px 60px rgba(0,0,0,.7)}
+
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--amber);display:inline-flex;align-items:center;gap:10px}
+.kick::before{content:"";width:26px;height:1px;background:var(--amber)}
+.giant{font-family:var(--disp);line-height:.86;letter-spacing:.01em;text-transform:uppercase}
+
+/* 3D layer helper */
+.plx{will-change:transform;transform-style:preserve-3d}
+.word{display:inline-block;will-change:transform,opacity}
+@keyframes heroIn{from{opacity:0;transform:translate3d(var(--sx,0),64px,-280px) rotateY(var(--sy,0));filter:blur(7px)}
+  to{opacity:1;transform:translate3d(0,0,0) rotateY(0);filter:blur(0)}}
+
+/* ============ S1 HERO ============ */
+#hero .rig{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:0 clamp(20px,6vw,90px);transform-style:preserve-3d}
+.hero-line{overflow:visible}
+#hero .giant{font-size:clamp(66px,15vw,220px)}
+#hero .l2{color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.8)}
+#hero .sub{max-width:440px;margin-top:22px;color:var(--muted);font-size:15px;line-height:1.7}
+#hero .sub b{color:var(--ink)}
+.hero-hud{position:absolute;right:clamp(20px,5vw,70px);bottom:12vh;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
+.hero-hud .big{font-size:40px;color:var(--ink);letter-spacing:0;line-height:1}
+.scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.4em;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px}
+.scroll-cue i{width:1px;height:34px;background:linear-gradient(var(--amber),transparent);animation:cue 1.8s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ============ S2 MANIFESTO ============ */
+#manifesto .stage{background:#000}
+#manifesto .bgvid{filter:contrast(1.08) brightness(1.05);mix-blend-mode:screen;opacity:.9}
+.mani-wrap{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;align-items:center}
+.mani-l{padding-left:clamp(20px,5vw,80px)}
+.mani-r{padding-right:clamp(20px,5vw,80px);text-align:right;align-self:end;padding-bottom:12vh}
+#manifesto .giant{font-size:clamp(40px,7vw,104px);color:#fff}
+#manifesto .stroke{color:transparent;-webkit-text-stroke:1.4px #fff}
+.mani-r p{max-width:320px;margin-left:auto;color:#b9c0cf;font-size:14px;line-height:1.75}
+.mani-tag{position:absolute;top:14vh;left:clamp(20px,5vw,80px);font-family:var(--mono);font-size:10px;letter-spacing:.4em;color:#fff;opacity:.7}
+
+/* ============ S3 TEARDOWN ============ */
+#teardown .stage{height:auto;min-height:100vh;background:
+  radial-gradient(70vmax 70vmax at 30% 20%,rgba(120,130,150,.10),transparent 60%),#0a0b10;perspective:1600px;display:flex;align-items:center}
+.tear-grid{position:relative;width:100%;max-width:1240px;margin:0 auto;padding:16vh clamp(20px,5vw,60px);
+  display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4vw,60px);align-items:center;transform-style:preserve-3d}
+.tear-copy .giant{font-size:clamp(42px,6.2vw,92px)}
+.tear-copy .kick{margin-bottom:20px}
+.tear-copy p{max-width:400px;margin-top:20px;color:var(--muted);line-height:1.75;font-size:15px}
+.exploded{position:relative;height:min(70vh,620px);transform-style:preserve-3d}
+.tile{position:absolute;border-radius:16px;overflow:hidden;border:1px solid var(--line);
+  background:#0c0e14;box-shadow:0 30px 60px -20px rgba(0,0,0,.8);will-change:transform}
+.tile video,.tile .fill{width:100%;height:100%;object-fit:cover}
+.tile .glow{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(120px 120px at var(--gx,50%) var(--gy,50%),rgba(255,90,31,.5),transparent 70%);transition:opacity .3s}
+.tile .cap{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--ink);text-transform:uppercase}
+.t-wheel{width:56%;height:56%;left:6%;top:20%;z-index:3}
+.t-bolt{width:34%;height:44%;right:4%;top:4%;z-index:4}
+.t-spec{width:40%;height:30%;right:10%;bottom:6%;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:6px}
+.t-spec .n{font-family:var(--disp);font-size:34px;color:var(--amber);line-height:1}
+.t-spec .k{font-family:var(--mono);font-size:9px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+
+/* ============ S4 REFORGE ============ */
+#reforge .stage{background:radial-gradient(80vmax 60vmax at 70% 40%,rgba(255,90,31,.12),transparent 60%),#08090e}
+.reforge-wrap{position:absolute;inset:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(20px,3vw,50px);padding:0 clamp(20px,4vw,70px)}
+.rf-video{position:relative;height:78vh;aspect-ratio:9/16;max-width:38vw;justify-self:center;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line);box-shadow:0 40px 90px -30px rgba(255,90,31,.4),0 0 0 1px rgba(255,90,31,.15);will-change:transform}
+.rf-video video{width:100%;height:100%;object-fit:cover}
+.rf-l .kick{margin-bottom:18px}
+.rf-l .giant{font-size:clamp(38px,5vw,80px)}
+.rf-l p{max-width:340px;margin-top:18px;color:var(--muted);line-height:1.75;font-size:14px}
+.rf-stats{align-self:center;display:flex;flex-direction:column;gap:30px}
+.rf-stat .n{font-family:var(--disp);font-size:clamp(38px,4.4vw,64px);line-height:.9;color:var(--ink)}
+.rf-stat .n em{color:var(--amber);font-style:normal}
+.rf-stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--muted);text-transform:uppercase;margin-top:6px}
+
+/* ============ S5 PROVING GROUND ============ */
+#proving .bgvid{filter:contrast(1.12) saturate(1.1)}
+.hud{position:absolute;font-family:var(--mono);color:var(--cyan);text-transform:uppercase}
+.hud-tl{top:14vh;left:clamp(20px,5vw,70px);font-size:11px;letter-spacing:.32em;line-height:2}
+.hud-tl .giant{font-family:var(--disp);font-size:clamp(40px,6vw,88px);color:var(--ink);letter-spacing:.01em;margin-top:8px}
+.hud-tr{top:14vh;right:clamp(20px,5vw,70px);text-align:right;font-size:11px;letter-spacing:.28em;line-height:2.1;color:var(--muted)}
+.hud-tr b{color:var(--cyan)}
+.hud-bl{bottom:12vh;left:clamp(20px,5vw,70px);font-size:11px;letter-spacing:.28em;color:var(--muted)}
+.readout{font-family:var(--disp);font-size:clamp(56px,10vw,140px);color:var(--ink);line-height:.9;letter-spacing:.01em}
+.readout small{font-size:.22em;color:var(--cyan);letter-spacing:.3em;vertical-align:super;font-family:var(--mono)}
+.frame-corners::before,.frame-corners::after{content:"";position:absolute;width:60px;height:60px;border:1px solid rgba(62,242,255,.4)}
+.frame-corners::before{top:8vh;left:24px;border-right:0;border-bottom:0}
+.frame-corners::after{bottom:8vh;right:24px;border-left:0;border-top:0}
+
+/* ============ S6 REBORN ============ */
+#reborn .stage{height:auto;min-height:100vh;background:radial-gradient(70vmax 60vmax at 20% 20%,rgba(160,107,255,.14),transparent 55%),radial-gradient(60vmax 60vmax at 90% 80%,rgba(62,242,255,.10),transparent 55%),#06060b;perspective:1500px;display:flex;flex-direction:column;justify-content:center}
+.reborn-head{text-align:center;padding:14vh 20px 4vh}
+.reborn-head .giant{font-size:clamp(44px,8vw,120px)}
+.reborn-head .giant span{color:transparent;-webkit-text-stroke:1.4px var(--violet)}
+.reborn-head .kick{justify-content:center;color:var(--violet)}
+.reborn-head .kick::before{background:var(--violet)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,44px);max-width:1180px;margin:0 auto 14vh;padding:0 clamp(20px,4vw,50px);transform-style:preserve-3d}
+.pcard{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#0a0a12;
+  box-shadow:0 40px 90px -30px rgba(0,0,0,.8);will-change:transform;aspect-ratio:3/4}
+.pcard video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pcard .veil{position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,6,11,.92),transparent 55%)}
+.pcard .glow{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .35s;
+  background:radial-gradient(220px 220px at var(--gx,50%) var(--gy,50%),var(--cardglow,rgba(160,107,255,.4)),transparent 70%);mix-blend-mode:screen}
+.pcard .meta{position:absolute;left:22px;right:22px;bottom:22px;z-index:2}
+.pcard .tagn{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--cardaccent,var(--violet));text-transform:uppercase}
+.pcard .name{font-family:var(--disp);font-size:clamp(26px,3vw,44px);line-height:.95;margin-top:6px}
+.pcard .spec{display:flex;gap:22px;margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.pcard .spec b{display:block;color:var(--ink);font-size:15px;font-family:var(--sans);letter-spacing:0}
+
+/* ============ S7 RESERVE ============ */
+#reserve{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:radial-gradient(70vmax 60vmax at 50% 120%,rgba(255,90,31,.18),transparent 60%),#06070b}
+.reserve-mega{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.reserve-mega span{font-family:var(--disp);font-size:min(38vw,520px);color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);letter-spacing:.02em;white-space:nowrap}
+.reserve-inner{position:relative;z-index:2;text-align:center;padding:0 20px;max-width:760px}
+.reserve-inner .kick{justify-content:center}
+.reserve-inner h2{font-family:var(--disp);font-size:clamp(46px,8vw,120px);line-height:.9;margin:18px 0}
+.reserve-inner h2 em{color:var(--amber);font-style:normal}
+.reserve-inner p{color:var(--muted);line-height:1.7;max-width:480px;margin:0 auto 34px}
+.mailbar{display:flex;gap:10px;max-width:520px;margin:0 auto;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:60px;padding:8px 8px 8px 22px;backdrop-filter:blur(10px)}
+.mailbar input{flex:1;background:transparent;border:0;color:var(--ink);font-family:var(--sans);font-size:15px;outline:none}
+.mailbar input::placeholder{color:var(--muted)}
+.mailbar button{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;background:var(--amber);color:#0a0a0a;border:0;padding:14px 26px;border-radius:50px;cursor:pointer;transition:transform .3s,box-shadow .3s;font-weight:700}
+.mailbar button:hover{transform:translateY(-2px);box-shadow:0 12px 30px -8px var(--amber)}
+.queue{margin-top:26px;font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+.queue b{color:var(--cyan)}
+.foot{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:space-between;padding:0 clamp(20px,5vw,54px);font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;z-index:3}
+.foot a:hover{color:var(--amber)}
+
+@media(max-width:860px){
+  .mani-wrap{grid-template-columns:1fr}
+  .mani-r{display:none}
+  .tear-grid,.cards,.reforge-wrap{grid-template-columns:1fr!important}
+  .reforge-wrap{grid-template-columns:1fr!important;gap:26px}
+  .rf-stats,.rf-l{display:none}
+  .rf-video{max-width:70vw;height:70vh}
+  .exploded{height:52vh;margin-top:10px}
+  .hud-tr{display:none}
+  .nav-r .ig-label{display:none}
+}
+.noscroll-note{display:none}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<div class="vgrid"></div>
+<div class="grain"></div>
+<div class="progress" id="prog"></div>
+
+<nav class="nav">
+  <div class="brand">APEX FORGE<small>REFORGING ATELIER</small></div>
+  <div class="nav-r">
+    <a class="ig" href="https://instagram.com/apexforge" target="_blank" rel="noopener"><span class="dot"></span><span class="ig-label">@apexforge</span></a>
+    <a class="res-btn" href="#reserve">Reserve a slot</a>
+  </div>
+</nav>
+
+<!-- ============ S1 HERO ============ -->
+<section class="sec" id="hero">
+  <div class="stage">
+    <video class="bgvid plx" data-scrub id="v-hero" src="assets/car2.mp4" muted playsinline preload="auto"></video>
+    <div class="scrim edge-l"></div>
+    <div class="scrim edge-b"></div>
+    <div class="scrim vign"></div>
+    <div class="rig plx" id="hero-rig">
+      <span class="kick" data-fade>Est. Nowhere — Built Everywhere</span>
+      <div class="hero-line"><h1 class="giant" style="transform:translateZ(60px)"><span class="word" data-hw>A</span><span class="word" data-hw>P</span><span class="word" data-hw>E</span><span class="word" data-hw>X</span></h1></div>
+      <div class="hero-line"><h1 class="giant l2" style="transform:translateZ(20px)"><span class="word" data-hw>F</span><span class="word" data-hw>O</span><span class="word" data-hw>R</span><span class="word" data-hw>G</span><span class="word" data-hw>E</span></h1></div>
+      <p class="sub" data-fade>We don't restore. We <b>reforge</b>. Wrecks, barn-finds and forgotten legends stripped to the last bolt and rebuilt sharper than the day they left the line.</p>
+    </div>
+    <div class="hero-hud" data-fade>
+      <div class="big" id="hero-count">000</div>
+      BUILDS DELIVERED
+    </div>
+    <div class="scroll-cue">SCROLL<i></i></div>
+  </div>
+</section>
+
+<!-- ============ S2 MANIFESTO ============ -->
+<section class="sec" id="manifesto">
+  <div class="stage">
+    <video class="bgvid" data-scrub id="v-mani" src="assets/Pinterest_27.mp4" muted playsinline preload="auto"></video>
+    <div class="scrim vign"></div>
+    <div class="mani-tag" data-fade>[ FILE 001 — THE DOCTRINE ]</div>
+    <div class="mani-wrap">
+      <div class="mani-l">
+        <h2 class="giant"><span class="word" data-mw>EVERY</span><br><span class="word stroke" data-mw>LEGEND</span><br><span class="word" data-mw>WAS ONCE</span><br><span class="word" data-mw>A WRECK.</span></h2>
+      </div>
+      <div class="mani-r">
+        <p data-fade>Rivalries aren't born on showroom floors. They're forged in the hours nobody sees — the teardown, the fabrication, the thousandth bolt torqued to spec. We build the cars that settle arguments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S3 TEARDOWN ============ -->
+<section class="sec" id="teardown">
+  <div class="stage">
+    <div class="tear-grid" id="tear-grid">
+      <div class="tear-copy">
+        <span class="kick" data-fade>Phase 01 — Teardown</span>
+        <h3 class="giant"><span class="word" data-tw>STRIP</span> <span class="word" data-tw>IT</span><br><span class="word" data-tw>TO</span> <span class="word" data-tw>ZERO.</span></h3>
+        <p data-fade>Nothing carries over on trust. Every rotor, rim and fastener comes off, gets catalogued, and earns its place back — or it doesn't return at all. This is where the honest work begins.</p>
+      </div>
+      <div class="exploded" id="exploded">
+        <div class="tile mag t-wheel" data-depth="60">
+          <video class="fill" data-scrub-loop src="assets/Pinterest_43.mp4" muted playsinline preload="auto"></video>
+          <div class="glow"></div><div class="cap">Forged monoblock · Ø19"</div>
+        </div>
+        <div class="tile mag t-bolt" data-depth="110">
+          <video class="fill" data-scrub-loop src="assets/Pinterest_47.mp4" muted playsinline preload="auto"></video>
+          <div class="glow"></div><div class="cap">Titanium hardware</div>
+        </div>
+        <div class="tile mag t-spec" data-depth="150">
+          <div class="n">1,842</div><div class="k">Parts catalogued per build</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S4 REFORGE ============ -->
+<section class="sec" id="reforge">
+  <div class="stage">
+    <div class="reforge-wrap">
+      <div class="rf-l">
+        <span class="kick" data-fade>Phase 02 — The Reforge</span>
+        <h3 class="giant"><span class="word" data-rw>REFORGED,</span><br><span class="word" data-rw>NOT</span> <span class="word" data-rw>REPAIRED.</span></h3>
+        <p data-fade>Billet internals. Balanced to the gram. Assembled by hand and torqued under watch. As you scroll, the heart of the build comes together — one component at a time.</p>
+      </div>
+      <div class="rf-video plx" data-depth="30">
+        <video data-scrub id="v-reforge" src="assets/Pinterest_45.mp4" muted playsinline preload="auto"></video>
+      </div>
+      <div class="rf-stats">
+        <div class="rf-stat"><div class="n" data-count="612"><em>0</em></div><div class="k">Whp reforged output</div></div>
+        <div class="rf-stat"><div class="n" data-count="9"><em>0</em></div><div class="k">Month bare-metal rebuild</div></div>
+        <div class="rf-stat"><div class="n" data-count="100">0<span>%</span></div><div class="k">Blueprinted assembly</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S5 PROVING GROUND ============ -->
+<section class="sec" id="proving">
+  <div class="stage frame-corners">
+    <video class="bgvid" data-scrub id="v-proving" src="assets/Pinterest_28.mp4" muted playsinline preload="auto"></video>
+    <div class="scrim edge-t"></div>
+    <div class="scrim edge-b"></div>
+    <div class="scrim vign"></div>
+    <div class="hud hud-tl">
+      Phase 03 — Proving Ground
+      <div class="giant"><span class="word" data-pw>PROVEN</span><br><span class="word" data-pw>IN THE</span><br><span class="word" data-pw>DARK.</span></div>
+    </div>
+    <div class="hud hud-tr" data-fade>
+      LAT 35.6762 · LON 139.6503<br>
+      SURFACE <b>WET</b> · TEMP 11°C<br>
+      MODE <b>SHAKEDOWN</b>
+    </div>
+    <div class="hud hud-bl">
+      <div class="readout"><span id="speed">0</span><small>KM/H</small></div>
+      REAL STREETS · NO SIMULATION
+    </div>
+  </div>
+</section>
+
+<!-- ============ S6 REBORN ============ -->
+<section class="sec" id="reborn">
+  <div class="stage">
+    <div class="reborn-head">
+      <span class="kick" data-fade>Phase 04 — Delivered</span>
+      <h3 class="giant"><span class="word" data-bw>THE</span> <span class="word" data-bw>REBORN</span> <span class="word" data-bw><span>COLLECTION</span></span></h3>
+    </div>
+    <div class="cards" id="cards">
+      <div class="pcard plx" data-depth="24" style="--cardglow:rgba(160,107,255,.45);--cardaccent:var(--violet)">
+        <video data-scrub-loop src="assets/Pinterest_31.mp4" muted playsinline preload="auto"></video>
+        <div class="veil"></div><div class="glow"></div>
+        <div class="meta">
+          <div class="tagn">Build №047 · Widebody</div>
+          <div class="name">VIOLET<br>WIDOW</div>
+          <div class="spec"><span>Power<b>720whp</b></span><span>Livery<b>Sakura</b></span><span>Status<b>Sold</b></span></div>
+        </div>
+      </div>
+      <div class="pcard plx" data-depth="40" style="--cardglow:rgba(62,242,255,.4);--cardaccent:var(--cyan)">
+        <video data-scrub-loop src="assets/Pinterest_32.mp4" muted playsinline preload="auto"></video>
+        <div class="veil"></div><div class="glow"></div>
+        <div class="meta">
+          <div class="tagn">Build №052 · Restomod</div>
+          <div class="name">NIGHT<br>CITY</div>
+          <div class="spec"><span>Power<b>580whp</b></span><span>Finish<b>Nardo</b></span><span>Status<b>Reserved</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S7 RESERVE ============ -->
+<section id="reserve">
+  <div class="reserve-mega"><span class="idle" id="mega">REFORGE</span></div>
+  <div class="reserve-inner">
+    <span class="kick" data-fade>The Queue — 2026 Intake</span>
+    <h2>RESERVE YOUR<br><em>REFORGE.</em></h2>
+    <p>Four builds a year. No shortcuts, no filler. Drop your details and we'll open a conversation about what your wreck could become.</p>
+    <form class="mailbar" onsubmit="return false">
+      <input type="email" placeholder="you@email.com — tell us the car" aria-label="email" />
+      <button type="submit">Join queue</button>
+    </form>
+    <div class="queue">CURRENT WAITLIST · <b id="wl">031</b> BUILDERS AHEAD OF YOU</div>
+  </div>
+  <div class="foot">
+    <a href="https://instagram.com/apexforge" target="_blank" rel="noopener">@apexforge</a>
+    <span>APEX FORGE — REFORGING ATELIER · MMXXVI</span>
+    <a href="#hero">BACK TO TOP ↑</a>
+  </div>
+</section>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ===================== helpers ===================== */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const smooth=t=>t*t*(3-2*t);
+// ramp up a..b, hold @1, ramp down c..d
+function seg(p,a,b,c,d){
+  if(p<=a) return 0;
+  if(p<b) return smooth((p-a)/(b-a));
+  if(p<c) return 1;
+  if(p>=d) return c<d?0:1;
+  return 1-smooth((p-c)/(d-c));
+}
+// monotonic reveal that holds at 1 (build-on-scroll, reversible)
+// NOTE: clamp the input to [0,1] BEFORE smoothstep — smooth(t) goes negative for t>1.5
+const rev=(p,a,b)=>smooth(clamp((p-a)/(b-a||1e-4),0,1));
+const floor=v=>0.34+0.66*v; // opacity visibility floor (rule 9)
+
+/* ===================== Lenis + GSAP ===================== */
+gsap.registerPlugin(ScrollTrigger);
+const lenis=new Lenis({lerp:0.09,wheelMultiplier:0.95});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+ScrollTrigger.addEventListener('refresh',()=>lenis.resize());
+window.__lenis=lenis;
+
+/* ===================== global pointer + idle ===================== */
+const P={x:0.5,y:0.4,px:0.5,py:0.4}; // normalized pointer (lerped)
+window.addEventListener('pointermove',e=>{
+  P.px=e.clientX/innerWidth; P.py=e.clientY/innerHeight;
+  document.documentElement.style.setProperty('--mx',(P.px*100)+'%');
+  document.documentElement.style.setProperty('--my',(P.py*100)+'%');
+},{passive:true});
+
+const mags=[...document.querySelectorAll('.mag')];
+const plxLayers=[...document.querySelectorAll('.plx[data-depth]')];
+const heroRig=document.getElementById('hero-rig');
+let t0=performance.now();
+function loop(now){
+  const dt=(now-t0)/1000; t0=now;
+  P.x+=(P.px-P.x)*0.08; P.y+=(P.py-P.y)*0.08;
+  const nx=(P.x-0.5), ny=(P.y-0.5); // -0.5..0.5
+  const ph=now/1000;
+
+  // hero 3D rig tilt (cursor parallax on Z-layered title)
+  if(heroRig){
+    heroRig.style.transform=`rotateY(${nx*7}deg) rotateX(${-ny*6}deg) translateX(${nx*14}px)`;
+  }
+  // generic parallax layers: mouse offset + idle sway, depth-scaled
+  plxLayers.forEach(el=>{
+    const d=+el.getAttribute('data-depth')||30;
+    const idx=Math.sin(ph*0.6+d)*3, idy=Math.cos(ph*0.5+d)*4;
+    const rot=Math.sin(ph*0.4+d)*0.6;
+    el.style.transform=`translate3d(${nx*d + idx}px, ${ny*d*0.6 + idy}px, 0) rotate(${rot}deg)`;
+  });
+  // magnetic cursor-reactive tiles (glow + position) + idle pendulum
+  const cx=P.px*innerWidth, cy=P.py*innerHeight;
+  mags.forEach((el,i)=>{
+    const r=el.getBoundingClientRect();
+    const mx=r.left+r.width/2, my=r.top+r.height/2;
+    const dx=cx-mx, dy=cy-my;
+    const dist=Math.hypot(dx,dy);
+    const R=460;
+    const idle=`translate(${Math.sin(ph*0.7+i)*5}px, ${Math.cos(ph*0.6+i*1.3)*7}px) rotate(${Math.sin(ph*0.5+i)*0.8}deg)`;
+    const g=el.querySelector('.glow');
+    if(dist<R){
+      const f=(1-dist/R);
+      const pull=f*26;
+      el.style.transform=`translate(${dx/dist*pull||0}px, ${dy/dist*pull||0}px) scale(${1+f*0.03})`;
+      if(g){g.style.opacity=f; g.style.setProperty('--gx',(P.px*100)+'%'); g.style.setProperty('--gy',((cy-r.top)/r.height*100)+'%');}
+    }else{
+      el.style.transform=idle;
+      if(g)g.style.opacity=0;
+    }
+  });
+  // card glows follow cursor
+  document.querySelectorAll('.pcard').forEach(c=>{
+    const r=c.getBoundingClientRect();
+    const inside=cx>r.left&&cx<r.right&&cy>r.top&&cy<r.bottom;
+    const g=c.querySelector('.glow');
+    if(g){g.style.opacity=inside?1:0; g.style.setProperty('--gx',((cx-r.left)/r.width*100)+'%'); g.style.setProperty('--gy',((cy-r.top)/r.height*100)+'%');}
+  });
+  // progress bar
+  document.getElementById('prog').style.width=(lenis.progress*100||0)+'%';
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ===================== video scrub priming ===================== */
+function prime(v){ // force first frame render in Chromium
+  const go=()=>{ try{v.play().then(()=>v.pause()).catch(()=>{});}catch(e){} v.currentTime=0.01; };
+  if(v.readyState>=1) go(); else v.addEventListener('loadedmetadata',go,{once:true});
+}
+document.querySelectorAll('video[data-scrub],video[data-scrub-loop]').forEach(prime);
+function setTime(v,p){ if(v.readyState>=1 && isFinite(v.duration)) v.currentTime=clamp(p,0,1)*(v.duration-0.05); }
+
+/* ===================== per-section scrub builders ===================== */
+function pinSection(sel,dist,onUpdate){
+  const sec=document.querySelector(sel);
+  const stage=sec.querySelector('.stage')||sec;
+  ScrollTrigger.create({
+    trigger:sec, start:'top top', end:'+='+dist, pin:stage, scrub:true,
+    onUpdate:st=>onUpdate(st.progress)
+  });
+}
+const setOp=(el,p,a,b,cc,d,useFloor)=>{
+  if(!el)return; const s=seg(p,a,b,cc,d); el.style.opacity=useFloor?floor(s):s;
+  el.style.transform=`translateY(${(1-s)*22}px)`;
+};
+function words(container,attr){ return [...container.querySelectorAll('['+attr+']')]; }
+function revealWords(list,p,start,step){
+  list.forEach((w,i)=>{
+    const a=start+i*step, b=a+step*1.3;
+    const s=rev(p,a,b);
+    w.style.opacity=floor(s);
+    w.style.transform=`translateY(${(1-s)*40}px) rotateX(${(1-s)*-70}deg)`;
+    w.style.filter=`blur(${(1-s)*6}px)`;
+  });
+}
+
+/* ---- S1 HERO ---- */
+(function(){
+  const v=document.getElementById('v-hero');
+  const hw=words(document.getElementById('hero-rig'),'data-hw');
+  const rows=[...document.querySelectorAll('#hero .giant')];
+  const countEl=document.getElementById('hero-count');
+  // one-time 3D assembly — letters are visible by default; intro only attaches when the
+  // tab is actually visible, so a throttled/background timeline never leaves the title blank
+  function playHeroIntro(){
+    hw.forEach((w,i)=>{
+      const dir=(i%2?1:-1);
+      w.style.setProperty('--sx',(dir*140)+'px');
+      w.style.setProperty('--sy',(dir*80)+'deg');
+      w.style.animation='heroIn .95s cubic-bezier(.2,.75,.2,1) both';
+      w.style.animationDelay=(0.12+i*0.06)+'s';
+    });
+  }
+  if(document.visibilityState==='visible') playHeroIntro();
+  else document.addEventListener('visibilitychange',function h(){if(document.visibilityState==='visible'){playHeroIntro();document.removeEventListener('visibilitychange',h);}});
+  // scroll drives the video + a gentle depth split (reversible parallax), title stays readable
+  pinSection('#hero',1500,p=>{
+    setTime(v,p);
+    if(rows[0])rows[0].style.transform=`translateZ(60px) translateY(${-p*46}px) translateX(${-p*20}px)`;
+    if(rows[1])rows[1].style.transform=`translateZ(20px) translateY(${p*34}px) translateX(${p*16}px)`;
+    countEl.textContent=String(Math.round((0.2+0.8*p)*147)).padStart(3,'0');
+  });
+})();
+
+/* ---- S2 MANIFESTO ---- */
+(function(){
+  const v=document.getElementById('v-mani');
+  const mw=words(document.querySelector('.mani-l'),'data-mw');
+  const rp=document.querySelector('#manifesto .mani-r p');
+  const tag=document.querySelector('.mani-tag');
+  pinSection('#manifesto',1700,p=>{
+    setTime(v,p);
+    revealWords(mw,p,0.08,0.13);
+    setOp(rp,p,0.62,0.78,1,1,true);
+    if(tag)tag.style.opacity=floor(rev(p,0.02,0.12));
+  });
+})();
+
+/* ---- S3 TEARDOWN ---- */
+(function(){
+  const v=[...document.querySelectorAll('#teardown video')];
+  const tw=words(document.querySelector('.tear-copy'),'data-tw');
+  const p_=document.querySelector('#teardown .tear-copy p');
+  const tiles=[...document.querySelectorAll('#teardown .tile')];
+  pinSection('#teardown',1600,p=>{
+    v.forEach(x=>setTime(x,(p*1.4)%1)); // loop the short part clips across scroll
+    revealWords(tw,p,0.06,0.1);
+    setOp(p_,p,0.4,0.56,1,1,true);
+    // exploded parts assemble in from depth
+    tiles.forEach((t,i)=>{
+      const a=0.12+i*0.1, b=a+0.26;
+      const s=rev(p,a,b);
+      t.dataset.assembled=s.toFixed(3);
+      t.style.opacity=s;
+    });
+  });
+})();
+
+/* ---- S4 REFORGE ---- */
+(function(){
+  const v=document.getElementById('v-reforge');
+  const rw=words(document.querySelector('.rf-l'),'data-rw');
+  const p_=document.querySelector('#reforge .rf-l p');
+  const stats=[...document.querySelectorAll('#reforge .rf-stat')];
+  pinSection('#reforge',1700,p=>{
+    setTime(v,p); // literal assembly of engine as you scroll
+    revealWords(rw,p,0.06,0.12);
+    setOp(p_,p,0.42,0.58,1,1,true);
+    stats.forEach((st,i)=>{
+      const a=0.3+i*0.12, b=a+0.2;
+      const s=rev(p,a,b);
+      st.style.opacity=floor(s);
+      st.style.transform=`translateX(${(1-s)*40}px)`;
+      const nEl=st.querySelector('.n'); const target=+st.querySelector('.n').getAttribute('data-count');
+      const cur=Math.round(s*target);
+      const em=nEl.querySelector('em'); const span=nEl.querySelector('span');
+      if(em)em.textContent=cur; else if(span)nEl.childNodes[0].nodeValue=cur; else nEl.textContent=cur;
+    });
+  });
+})();
+
+/* ---- S5 PROVING GROUND ---- */
+(function(){
+  const v=document.getElementById('v-proving');
+  const pw=words(document.querySelector('.hud-tl'),'data-pw');
+  const tr=document.querySelector('.hud-tr');
+  const bl=document.querySelector('.hud-bl');
+  const speed=document.getElementById('speed');
+  pinSection('#proving',1600,p=>{
+    setTime(v,p);
+    revealWords(pw,p,0.08,0.12);
+    if(tr)tr.style.opacity=floor(rev(p,0.2,0.4));
+    if(bl)bl.style.opacity=floor(rev(p,0.3,0.5));
+    speed.textContent=Math.round(28+Math.abs(Math.sin(p*Math.PI))*169);
+  });
+})();
+
+/* ---- S6 REBORN ---- */
+(function(){
+  const v=[...document.querySelectorAll('#reborn video')];
+  const bw=words(document.querySelector('.reborn-head'),'data-bw');
+  const cards=[...document.querySelectorAll('#reborn .pcard')];
+  ScrollTrigger.create({
+    trigger:'#reborn', start:'top 70%', end:'bottom bottom', scrub:true,
+    onUpdate:st=>{
+      const p=st.progress;
+      v.forEach(x=>setTime(x,(p*1.3)%1));
+      revealWords(bw,p,0.0,0.12);
+      cards.forEach((c,i)=>{
+        const a=0.15+i*0.14, b=a+0.4;
+        const s=rev(p,a,b);
+        c.style.opacity=s;
+        c.dataset.assembled=s.toFixed(3);
+      });
+    }
+  });
+})();
+
+/* ---- S7 RESERVE ---- */
+(function(){
+  const inner=[...document.querySelectorAll('#reserve .reserve-inner > *')];
+  const mega=document.getElementById('mega');
+  const wl=document.getElementById('wl');
+  ScrollTrigger.create({
+    trigger:'#reserve', start:'top 75%', end:'top 20%', scrub:true,
+    onUpdate:st=>{
+      const p=st.progress;
+      inner.forEach((el,i)=>{const s=rev(p,i*0.08,i*0.08+0.4);el.style.opacity=s;el.style.transform=`translateY(${(1-s)*30}px)`;});
+      wl.textContent=String(Math.round(31-rev(p,0.2,1)*4)).padStart(3,'0');
+      if(mega)mega.style.transform=`scale(${0.9+p*0.15})`;
+    }
+  });
+  // idle drift on the mega word
+  (function drift(){const t=performance.now()/1000; if(mega)mega.style.letterSpacing=(0.02+Math.sin(t*0.5)*0.01)+'em'; requestAnimationFrame(drift);})();
+})();
+
+/* refresh after videos know their duration + layout settles */
+window.addEventListener('load',()=>{ ScrollTrigger.refresh(); lenis.resize(); });
+let dcount=0; const di=setInterval(()=>{ScrollTrigger.refresh();lenis.resize();if(++dcount>6)clearInterval(di);},600);
+</script>
+</body>
+</html>
