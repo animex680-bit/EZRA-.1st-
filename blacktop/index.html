@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLACKTOP — Street Garage · Showroom, Repair & Reviews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Semi+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ECEAE3; --concrete:#E4E2DB; --card:#FFFFFF;
+  --ink:#15140F; --ink2:#57554E; --ink3:#8A887F;
+  --line:rgba(21,20,15,.12); --line2:rgba(21,20,15,.07);
+  --accent:#7C3AED; --accent-ink:#5b21b6;
+  --disp:'Anton',sans-serif; --graf:'Permanent Marker',cursive;
+  --cond:'Barlow Semi Condensed',sans-serif; --ui:'Inter',sans-serif;
+  --shadow:0 34px 80px -40px rgba(21,20,15,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--ui);background:var(--paper);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+section[id]{scroll-margin-top:90px}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--accent);color:#fff}
+
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- NAV ---------- */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;
+  padding:16px 30px;background:linear-gradient(var(--paper),rgba(236,234,227,.4) 70%,transparent);backdrop-filter:blur(3px)}
+.brand{font-family:var(--graf);font-size:24px;letter-spacing:.5px;display:flex;align-items:center;gap:9px}
+.brand i{width:12px;height:12px;background:var(--ink);border-radius:2px;transform:rotate(45deg);display:inline-block}
+.navlinks{display:flex;gap:26px;font-family:var(--cond);text-transform:uppercase;font-weight:600;letter-spacing:.11em;font-size:14px}
+.navlinks a{position:relative;color:var(--ink2);transition:color .25s}
+.navlinks a:hover{color:var(--ink)}
+.navlinks a::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:var(--accent);transition:width .3s}
+.navlinks a:hover::after{width:100%}
+.navcta{font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:13px;
+  background:var(--ink);color:var(--paper);padding:11px 20px;border-radius:100px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s}
+.navcta:hover{transform:translateY(-2px);background:var(--accent)}
+@media(max-width:820px){.navlinks{display:none}}
+
+/* ---------- HERO POSTER ---------- */
+.hero{position:relative;min-height:100vh;padding:96px 26px 40px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.hero .scribble{position:absolute;font-family:var(--graf);color:rgba(21,20,15,.05);font-size:200px;white-space:nowrap;pointer-events:none;z-index:0;user-select:none}
+.hero .scribble.s1{top:22%;left:-4%;transform:rotate(-18deg)}
+.hero .scribble.s2{bottom:14%;right:-6%;transform:rotate(-14deg);font-size:170px}
+.posterlabels{width:100%;max-width:940px;display:grid;grid-template-columns:1fr 1fr 1fr;z-index:3;margin-bottom:10px}
+.posterlabels span{font-family:var(--disp);font-size:clamp(22px,4vw,42px);letter-spacing:.02em;text-align:center;color:var(--ink);display:inline-block;
+  transition:opacity .45s ease,transform .5s cubic-bezier(.2,.85,.25,1)}
+.posterlabels span.swap{opacity:0;transform:translateY(-18px) skewX(-7deg)}
+.posterlabels span:nth-child(1){text-align:left;padding-left:6%}
+.posterlabels span:nth-child(3){text-align:right;padding-right:6%}
+.panelbox{position:relative;width:100%;max-width:940px;height:clamp(210px,30vw,300px);z-index:2;perspective:1300px}
+.cpanel{position:absolute;top:0;overflow:hidden;background:#0c0c0e;border-radius:5px;cursor:pointer;transform-style:preserve-3d;will-change:transform;
+  box-shadow:0 24px 44px -22px rgba(21,20,15,.6);transition:box-shadow .45s ease}
+.cpanel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease}
+.cpanel img.show{opacity:1;animation:ken 9s ease-out forwards}
+@keyframes ken{from{transform:scale(1.09)}to{transform:scale(1)}}
+.cpanel::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 60px rgba(0,0,0,.5);pointer-events:none;border-radius:5px}
+.cpanel.p1{left:2%;width:30%;height:78%}
+.cpanel.p2{left:36%;width:28%;height:100%;z-index:2}
+.cpanel.p3{right:2%;width:30%;height:82%}
+.cpanel:hover{box-shadow:0 40px 66px -24px rgba(21,20,15,.55),0 0 0 2px var(--accent),0 0 46px -6px var(--accent)}
+.herocar{position:relative;width:min(720px,94vw);height:clamp(300px,40vw,450px);margin-top:-4%;z-index:4;overflow:hidden;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 34px 36px rgba(21,20,15,.3))}
+.herocar img{width:100%;height:100%;object-fit:cover;object-position:50% 54%;-webkit-mask:radial-gradient(ellipse 74% 92% at 50% 50%,#000 52%,transparent 78%);mask:radial-gradient(ellipse 74% 92% at 50% 50%,#000 52%,transparent 78%);animation:bob 6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.grafname{position:relative;z-index:5;font-family:var(--graf);font-size:clamp(56px,13vw,150px);line-height:.8;margin-top:-4%;color:var(--ink);text-align:center;filter:drop-shadow(2px 3px 0 rgba(124,58,237,.18))}
+.grafname .m{font-size:.5em;color:var(--accent);margin-left:.1em;vertical-align:.35em;-webkit-text-stroke:1px var(--ink)}
+.herofoot{width:100%;max-width:940px;display:grid;grid-template-columns:1.4fr auto;gap:24px;margin-top:22px;z-index:5;align-items:end}
+.herodesc{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;line-height:1.65;color:var(--ink2);max-width:520px}
+.herodesc .dash{display:block;height:0;border-top:2px dashed var(--ink);width:120px;margin-top:14px;opacity:.5}
+.specbox{border:2px dashed var(--ink);border-radius:6px;padding:14px 20px;min-width:200px;background:rgba(255,255,255,.35)}
+.specbox .k{font-family:var(--cond);text-transform:lowercase;font-size:12px;letter-spacing:.14em;color:var(--ink3)}
+.specbox .v{font-family:var(--disp);font-size:26px;line-height:1.15;margin-bottom:8px}
+.specbox .v small{font-size:14px;color:var(--ink2)}
+.brandmark{margin:26px auto 0;font-family:var(--graf);font-size:20px;letter-spacing:1px;color:var(--ink);opacity:.7;z-index:5;text-align:center}
+.brandmark span{display:block;font-family:var(--cond);font-size:10px;letter-spacing:.4em;opacity:.6;text-transform:uppercase}
+@media(max-width:640px){.herofoot{grid-template-columns:1fr}.posterlabels span{font-size:20px}}
+
+/* ---------- SECTION HEADS ---------- */
+.shead{max-width:1180px;margin:0 auto;padding:0 26px}
+.shead .eyebrow{font-family:var(--cond);text-transform:uppercase;letter-spacing:.28em;font-size:13px;font-weight:700;color:var(--accent-ink);display:inline-flex;align-items:center;gap:10px}
+.shead .eyebrow::before{content:"";width:26px;height:2px;background:var(--accent)}
+.shead h2{font-family:var(--disp);font-size:clamp(38px,6vw,78px);line-height:.94;letter-spacing:.005em;margin:16px 0 12px}
+.shead p{max-width:560px;color:var(--ink2);line-height:1.7;font-size:16px}
+
+/* ---------- CONSOLE (pinterest_25) ---------- */
+.console{position:relative;padding:60px 22px 90px;background:linear-gradient(180deg,var(--paper),#DEDCD4 40%,#DEDCD4 60%,var(--paper))}
+.console .blob{position:absolute;filter:blur(50px);opacity:.5;border-radius:50%;z-index:0;transition:background 1.1s;will-change:transform}
+.console .blob.b1{width:520px;height:520px;top:-6%;left:-8%;animation:blobA 19s ease-in-out infinite}
+.console .blob.b2{width:600px;height:600px;bottom:-12%;right:-10%;animation:blobB 23s ease-in-out infinite}
+@keyframes blobA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(46px,34px) scale(1.14)}}
+@keyframes blobB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-54px,-26px) scale(1.1)}}
+.win{position:relative;z-index:2;max-width:1220px;margin:34px auto 0;background:linear-gradient(160deg,#fff,#F6F5F1);border:1px solid var(--line);border-radius:26px;
+  box-shadow:var(--shadow);display:grid;grid-template-columns:78px 1fr;min-height:600px;overflow:hidden}
+.rail{border-right:1px solid var(--line2);display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 0;background:#faf9f6;position:relative;z-index:6}
+.rail .logo{width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--graf);font-size:15px;margin-bottom:14px}
+.railbtn{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;color:var(--ink3);transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s,color .25s;position:relative}
+.railbtn svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.railbtn:hover{color:#fff;transform:translateY(-3px);background:linear-gradient(140deg,var(--accent),var(--accent-ink));box-shadow:0 12px 24px -9px var(--accent),0 0 22px -4px var(--accent)}
+.railbtn.on{background:linear-gradient(140deg,var(--accent),var(--accent-ink));color:#fff;box-shadow:0 12px 24px -8px var(--accent),0 0 26px -6px var(--accent)}
+.railbtn .tip{position:absolute;left:56px;top:50%;transform:translateY(-50%) scale(.9);transform-origin:left center;background:var(--ink);color:var(--paper);
+  font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:600;padding:6px 10px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s;z-index:5}
+.railbtn:hover .tip{opacity:1;transform:translateY(-50%) scale(1)}
+.rail .spacer{flex:1}
+
+.stage{position:relative;padding:26px;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto 1fr;gap:20px;grid-template-areas:"vis title" "vis cards"}
+.stagevis{grid-area:vis;position:relative;border-radius:20px;min-height:460px;overflow:hidden;transition:background 1.1s ease,color .6s}
+.stagevis .ghost{position:absolute;top:5%;right:5%;font-family:var(--disp);font-size:150px;line-height:.8;color:rgba(255,255,255,.09);z-index:1;pointer-events:none;
+  animation:ghostDrift 13s ease-in-out infinite}
+@keyframes ghostDrift{0%,100%{transform:translate(0,0);opacity:.09}50%{transform:translate(-16px,12px);opacity:.15}}
+.floatwrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+.floatcar{width:88%;filter:drop-shadow(0 30px 26px rgba(0,0,0,.3))}
+.floatcar img{width:100%;-webkit-mask:radial-gradient(ellipse 78% 80% at 50% 47%,#000 54%,transparent 80%);mask:radial-gradient(ellipse 78% 80% at 50% 47%,#000 54%,transparent 80%);animation:fbob 6.8s ease-in-out infinite}
+@keyframes fbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.visinfo{position:absolute;top:18px;left:18px;z-index:4;display:flex;flex-direction:column;gap:10px;max-width:58%;pointer-events:none}
+.viscard{background:rgba(255,255,255,.14);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;padding:13px 16px;color:inherit;align-self:flex-start}
+.viscard .vk{font-family:var(--cond);text-transform:uppercase;letter-spacing:.16em;font-size:10px;opacity:.7}
+.viscard .vv{font-family:var(--disp);font-size:24px}
+.bars{display:flex;gap:6px;align-items:flex-end;height:44px}
+.bars i{width:12px;background:currentColor;opacity:.35;border-radius:3px 3px 0 0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.bars i.hot{opacity:1;background:var(--accent)}
+.swatches{position:absolute;left:18px;bottom:18px;z-index:5;display:flex;gap:9px;flex-wrap:wrap;max-width:66%}
+.swatch{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.65);cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;box-shadow:0 2px 6px rgba(0,0,0,.25);padding:0}
+.swatch:hover{transform:scale(1.28);box-shadow:0 0 0 2px #fff,0 0 14px -2px #fff}
+.swatch.on{transform:scale(1.32);box-shadow:0 0 0 2px #fff,0 0 16px -2px rgba(255,255,255,.7)}
+.visarrows{position:absolute;right:18px;bottom:18px;z-index:5;display:flex;gap:8px}
+.visarrows button{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.16);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);
+  display:grid;place-items:center;color:inherit;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .3s,box-shadow .3s}
+.visarrows button:hover{background:linear-gradient(140deg,var(--accent),var(--accent-ink));color:#fff;transform:translateY(-2px);box-shadow:0 0 18px -3px var(--accent)}
+.visarrows svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+.stitle{grid-area:title;align-self:end}
+.stitle .kicker{font-family:var(--cond);text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:700;color:var(--accent-ink)}
+.stitle h3{font-family:var(--disp);font-size:clamp(34px,5vw,58px);line-height:.9;margin:8px 0 12px}
+.stitle p{color:var(--ink2);line-height:1.6;max-width:400px;font-size:15px}
+.stitle .price{font-family:var(--disp);font-size:30px;margin-top:14px;color:var(--ink)}
+.stitle .price small{font-size:14px;color:var(--ink3);font-family:var(--ui);font-weight:600}
+.stitle .cta{margin-top:16px;display:inline-flex;align-items:center;gap:9px;background:var(--ink);color:var(--paper);font-family:var(--cond);
+  text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:13px;padding:12px 22px;border-radius:100px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s}
+.stitle .cta:hover{transform:translateY(-2px);background:linear-gradient(140deg,var(--accent),var(--accent-ink));box-shadow:0 14px 30px -12px var(--accent),0 0 26px -6px var(--accent)}
+
+.scards{grid-area:cards;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start}
+.mini{background:linear-gradient(160deg,#fff,#F7F6F2);border:1px solid var(--line2);border-radius:15px;padding:15px;position:relative;overflow:hidden;transition:transform .2s ease-out,box-shadow .4s,background .4s,border-color .4s;transform-style:preserve-3d}
+.mini::before{content:"";position:absolute;width:180px;height:180px;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 40%,transparent),transparent 70%);
+  left:var(--mx,50%);top:var(--my,50%);transform:translate(-50%,-50%);opacity:0;transition:opacity .3s;pointer-events:none}
+.mini:hover{background:linear-gradient(160deg,#fff,color-mix(in srgb,var(--accent) 12%,#fff));border-color:color-mix(in srgb,var(--accent) 32%,transparent);box-shadow:0 20px 44px -22px var(--accent),0 0 24px -10px var(--accent)}
+.mini:active,.mini.tap{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 20%,#fff),#fff);box-shadow:0 10px 30px -16px var(--accent),0 0 0 1px color-mix(in srgb,var(--accent) 40%,transparent)}
+.mini:hover::before{opacity:.5}
+.mini .mk{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:10px;color:var(--ink3);position:relative}
+.mini .mv{font-family:var(--disp);font-size:30px;line-height:1;margin-top:6px;position:relative;display:block}
+.mini .mv small{font-size:14px;color:var(--ink2);font-family:var(--ui);font-weight:600}
+.mini .mnote{font-size:12.5px;color:var(--ink2);margin-top:7px;position:relative;line-height:1.45}
+.mini.wide{grid-column:1/3}
+.mini .stars{color:var(--accent);letter-spacing:2px;font-size:15px;position:relative}
+.mini .who{display:flex;align-items:center;gap:10px;margin-top:10px;position:relative}
+.mini .who .av{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.mini .who b{font-size:13px}.mini .who span{font-size:11px;color:var(--ink3);display:block}
+.svc{display:flex;align-items:center;justify-content:space-between}
+.svc .p{font-family:var(--disp);font-size:22px}
+.svc .p small{font-size:11px;color:var(--ink3);font-family:var(--ui)}
+.pill{display:inline-block;font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:10px;font-weight:700;
+  background:color-mix(in srgb,var(--accent) 16%,#fff);color:var(--accent-ink);padding:4px 9px;border-radius:100px;margin-top:8px}
+.bkrow{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;position:relative}
+.bkrow label{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--ink3)}
+.bkrow select,.bkrow input{font-family:var(--ui);font-size:13px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.bkrow select:focus,.bkrow input:focus{outline:none;border-color:var(--accent)}
+
+.assemble .stagevis{animation:dropIn 1.15s cubic-bezier(.16,.9,.3,1.04) both}
+.assemble .stitle{animation:rise 1s .1s cubic-bezier(.16,.92,.28,1.05) both}
+.assemble .mini{animation:rise .9s cubic-bezier(.16,.92,.28,1.05) both}
+.assemble .mini:nth-child(1){animation-delay:.1s}.assemble .mini:nth-child(2){animation-delay:.22s}
+.assemble .mini:nth-child(3){animation-delay:.34s}.assemble .mini:nth-child(4){animation-delay:.46s}
+.assemble .floatcar{animation:carDrop 1.2s cubic-bezier(.16,.9,.3,1.02) both}
+@keyframes dropIn{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@keyframes carDrop{from{opacity:0;transform:translateY(-44px) rotate(-3deg) scale(.9)}to{opacity:1;transform:none}}
+.swapout{animation:sOut .46s cubic-bezier(.6,0,.9,.4) forwards}
+.swapin{animation:sIn .85s cubic-bezier(.16,.9,.3,1.02) both}
+@keyframes sOut{to{opacity:0;transform:translateX(-40px) scale(.86)}}
+@keyframes sIn{from{opacity:0;transform:translateX(46px) scale(.9)}to{opacity:1;transform:none}}
+@media(max-width:900px){.stage{grid-template-columns:1fr;grid-template-areas:"vis" "title" "cards"}.stagevis{min-height:320px}.win{grid-template-columns:64px 1fr}}
+
+/* ---------- MARQUEE ---------- */
+.marq{overflow:hidden;padding:28px 0;background:var(--ink);color:var(--paper);border-top:3px solid var(--accent);border-bottom:3px solid var(--accent)}
+.marqtrack{display:flex;gap:44px;width:max-content;animation:scrollx 26s linear infinite;will-change:transform}
+.marq:hover .marqtrack{animation-play-state:paused}
+.marqtrack span{font-family:var(--graf);font-size:34px;white-space:nowrap;opacity:.92;display:flex;align-items:center;gap:44px}
+.marqtrack span::after{content:"◆";color:var(--accent);font-family:var(--ui);font-size:20px}
+@keyframes scrollx{to{transform:translateX(-50%)}}
+
+/* ---------- PROOF ---------- */
+.proof{max-width:1180px;margin:90px auto;padding:0 26px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.stat{text-align:center;padding:26px 14px;border:1px solid var(--line);border-radius:18px;background:#fff;position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;width:180px;height:180px;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 34%,transparent),transparent 70%);left:var(--mx,50%);top:var(--my,50%);transform:translate(-50%,-50%);opacity:0;transition:opacity .3s;pointer-events:none}
+.stat:hover::before{opacity:.45}
+.stat .n{font-family:var(--disp);font-size:clamp(42px,6vw,68px);line-height:1;color:var(--ink);position:relative}
+.stat .n .suf{color:var(--accent)}
+.stat .l{font-family:var(--cond);text-transform:uppercase;letter-spacing:.15em;font-size:12px;color:var(--ink2);margin-top:8px;position:relative}
+@media(max-width:760px){.proof{grid-template-columns:1fr 1fr}}
+
+/* ---------- TESTIMONIALS ---------- */
+.testis{max-width:1180px;margin:0 auto 90px;padding:0 26px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.testi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;transition:transform .16s ease-out,box-shadow .35s;transform-style:preserve-3d;position:relative;overflow:hidden}
+.testi::before{content:"";position:absolute;width:220px;height:220px;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 30%,transparent),transparent 70%);left:var(--mx,50%);top:var(--my,50%);transform:translate(-50%,-50%);opacity:0;transition:opacity .3s;pointer-events:none}
+.testi:hover::before{opacity:.4}
+.testi .stars{color:var(--accent);letter-spacing:3px;position:relative}
+.testi q{display:block;font-family:var(--cond);font-size:19px;line-height:1.45;margin:12px 0 16px;font-weight:500;position:relative}
+.testi .who{display:flex;align-items:center;gap:11px;position:relative}
+.testi .av{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:700}
+.testi .who b{font-size:14px}.testi .who span{font-size:12px;color:var(--ink3)}
+@media(max-width:840px){.testis{grid-template-columns:1fr}}
+
+/* ---------- RESERVE ---------- */
+.reserve{position:relative;background:var(--ink);color:var(--paper);padding:80px 26px 40px;overflow:hidden}
+.reserve .scribble{position:absolute;font-family:var(--graf);color:rgba(255,255,255,.04);font-size:220px;top:-10%;right:-4%;pointer-events:none;white-space:nowrap}
+.rwrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.1fr .9fr;gap:50px;position:relative;z-index:2}
+.rwrap h2{font-family:var(--disp);font-size:clamp(40px,7vw,86px);line-height:.9}
+.rwrap h2 em{font-family:var(--graf);font-style:normal;color:var(--accent)}
+.rwrap p{color:rgba(236,234,227,.7);line-height:1.7;margin:16px 0;max-width:440px}
+.rform{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:26px}
+.rform .fr{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.rform label{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:rgba(236,234,227,.6)}
+.rform input,.rform select{font-family:var(--ui);font-size:14px;padding:12px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);color:var(--paper)}
+.rform input:focus,.rform select:focus{outline:none;border-color:var(--accent)}
+.rform button{width:100%;margin-top:8px;background:var(--accent);color:#fff;font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;
+  font-weight:700;font-size:15px;padding:15px;border-radius:12px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),filter .25s}
+.rform button:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.footer{max-width:1180px;margin:60px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;flex-wrap:wrap;gap:14px}
+.footer .fb{font-family:var(--graf);font-size:24px}
+.footer .fs{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:rgba(236,234,227,.5)}
+@media(max-width:840px){.rwrap{grid-template-columns:1fr}}
+
+/* ---------- reveal + parallax ---------- */
+.reveal{opacity:0;transform:translateY(46px);transition:opacity .6s cubic-bezier(.2,.75,.25,1),transform .72s cubic-bezier(.16,.92,.28,1.08)}
+.reveal.in{opacity:1;transform:none}
+.pop{opacity:0;transform:translateY(60px) scale(.955);filter:blur(6px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1),filter .7s}
+.pop.in{opacity:1;transform:none;filter:none}
+[data-rise]{opacity:0;transform:translateY(40px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+[data-rise].in{opacity:1;transform:none}
+[data-par]{will-change:transform}
+
+/* ---------- text assemble / typing ---------- */
+.u{display:inline-block;opacity:0;transform:translateY(.5em) rotate(4deg);filter:blur(4px);
+  transition:opacity .42s ease,transform .55s cubic-bezier(.16,1,.3,1),filter .42s ease;will-change:transform,opacity}
+.u.on{opacity:1;transform:none;filter:none}
+.tchar .u{transform:translateY(.55em) scale(.6);filter:blur(2px);transition:opacity .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1),filter .3s}
+.tchar .u.on{transform:none}
+.typing{position:relative}
+.typing::after{content:"";display:inline-block;width:.5ch;height:1em;transform:translateY(.12em);margin-left:.02em;
+  background:currentColor;opacity:.85;animation:caretBlink .7s steps(1) infinite}
+@keyframes caretBlink{50%{opacity:0}}
+.flex-tile{will-change:transform,opacity}
+
+/* ---------- shared section shell ---------- */
+.sxn{position:relative;max-width:1220px;margin:0 auto;padding:96px 26px 30px}
+.sxn .shead{max-width:1180px;margin:0 auto 34px}
+
+/* ---------- BUY A CAR (Pinterest_50 configurator) ---------- */
+.buy{position:relative;overflow:hidden}
+.buy::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(60% 55% at 22% 18%,var(--accent) 0,transparent 60%),radial-gradient(55% 60% at 88% 82%,var(--accent-ink) 0,transparent 62%);
+  opacity:.14;transition:opacity 1.1s,background 1.1s;filter:blur(10px)}
+.buywrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:stretch}
+.buystage{position:relative;border-radius:20px;overflow:hidden;min-height:440px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,var(--accent),var(--accent-ink));transition:background 1.1s;box-shadow:var(--shadow)}
+.buystage::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 120%,rgba(0,0,0,.42),transparent 60%);pointer-events:none}
+.buyghost{position:absolute;font-family:var(--disp);font-size:clamp(120px,20vw,240px);color:rgba(255,255,255,.12);pointer-events:none;user-select:none;letter-spacing:-.03em;z-index:1}
+.buyhero{position:relative;z-index:2;width:86%;height:clamp(230px,26vw,330px);display:flex;align-items:center;justify-content:center}
+.buyhero img{width:100%;height:100%;object-fit:cover;object-position:50% 54%;border-radius:12px;
+  -webkit-mask:radial-gradient(120% 120% at 50% 48%,#000 55%,transparent 82%);mask:radial-gradient(120% 120% at 50% 48%,#000 55%,transparent 82%);
+  will-change:transform,opacity}
+.buytag{position:absolute;top:18px;left:18px;z-index:3;font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-weight:700;font-size:12px;
+  background:rgba(0,0,0,.4);color:#fff;padding:8px 14px;border-radius:100px;backdrop-filter:blur(6px)}
+.buyside{display:flex;flex-direction:column;gap:16px}
+.buyinfo{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.buyinfo .bk{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-weight:700;font-size:12px;color:var(--accent)}
+.buyinfo h3{font-family:var(--disp);font-size:clamp(28px,3.4vw,42px);line-height:.96;margin:6px 0 12px;text-transform:uppercase}
+.buyspecs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.buyspecs div{background:var(--concrete);border-radius:12px;padding:12px}
+.buyspecs .k{font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--ink3)}
+.buyspecs .v{font-family:var(--disp);font-size:22px;margin-top:2px}
+.buyspecs .v small{font-family:var(--ui);font-size:11px;color:var(--ink2);font-weight:600}
+.buyprice{display:flex;align-items:baseline;gap:8px;font-family:var(--disp);font-size:34px;margin:8px 0 16px}
+.buyprice small{font-family:var(--ui);font-size:13px;color:var(--ink2);font-weight:600}
+.bbtn{width:100%;font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:14px;color:#fff;
+  background:linear-gradient(140deg,var(--accent),var(--accent-ink));padding:15px;border-radius:100px;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,filter .25s;box-shadow:0 14px 30px -14px var(--accent)}
+.bbtn:hover{transform:translateY(-2px);box-shadow:0 22px 44px -16px var(--accent);filter:brightness(1.06)}
+.bbtn:active{transform:translateY(0) scale(.98)}
+.buyrail{display:flex;gap:12px;overflow-x:auto;padding:14px 4px 8px;scroll-snap-type:x mandatory;grid-column:1/-1;margin-top:6px}
+.buyrail::-webkit-scrollbar{height:6px}.buyrail::-webkit-scrollbar-thumb{background:var(--line);border-radius:100px}
+.buythumb{flex:0 0 128px;height:82px;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;scroll-snap-align:center;
+  border:2px solid transparent;transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s;background:#0c0c0e}
+.buythumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.buythumb span{position:absolute;left:8px;bottom:6px;font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.08em;color:#fff;text-shadow:0 1px 4px #000;text-transform:uppercase}
+.buythumb:hover{transform:translateY(-4px)}.buythumb:hover img{transform:scale(1.08)}
+.buythumb.on{border-color:var(--accent);box-shadow:0 10px 26px -12px var(--accent)}
+.garage{background:var(--ink);color:var(--paper);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow)}
+.garage h4{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:rgba(236,234,227,.6);margin-bottom:12px;display:flex;justify-content:space-between}
+.garagelist{display:flex;flex-direction:column;gap:8px;max-height:150px;overflow:auto}
+.gitem{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);animation:gin .5s cubic-bezier(.16,1,.3,1)}
+@keyframes gin{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+.gitem b{font-family:var(--cond);font-weight:600}
+.gitem .x{color:rgba(236,234,227,.5);font-size:16px;transition:color .2s}.gitem .x:hover{color:var(--accent)}
+.gempty{font-size:13px;color:rgba(236,234,227,.4);padding:6px 0}
+.gtotal{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding-top:12px;border-top:2px solid var(--accent)}
+.gtotal .gt{font-family:var(--disp);font-size:26px;color:var(--accent)}
+@media(max-width:900px){.buywrap{grid-template-columns:1fr}}
+
+/* ---------- CAR PARTS STORE ---------- */
+.parts{position:relative;background:var(--concrete);overflow:hidden}
+.partswrap{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.2fr;gap:34px;align-items:start}
+.shopfeat{position:sticky;top:100px;border-radius:20px;overflow:hidden;background:linear-gradient(160deg,var(--accent),var(--accent-ink));
+  transition:background 1.1s;box-shadow:var(--shadow);min-height:360px;display:flex;flex-direction:column}
+.shopfeatimg{position:relative;flex:1;min-height:230px;overflow:hidden}
+.shopfeatimg img{width:100%;height:100%;object-fit:cover;will-change:transform,opacity}
+.shopfeatimg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent 55%)}
+.shopfeatbody{position:relative;z-index:2;padding:18px 22px;background:var(--card)}
+.shopfeatbody .bk{font-family:var(--cond);text-transform:uppercase;letter-spacing:.13em;font-weight:700;font-size:11px;color:var(--accent)}
+.shopfeatbody h3{font-family:var(--disp);font-size:26px;text-transform:uppercase;line-height:1;margin:4px 0 8px}
+.shopfeatbody p{font-size:13px;color:var(--ink2);line-height:1.55}
+.shopfeatbuy{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:12px}
+.shopfeatbuy .pp{font-family:var(--disp);font-size:30px}
+.shopgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.shopcard{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s,border-color .3s;box-shadow:0 20px 40px -30px rgba(21,20,15,.6)}
+.shopcard:hover{transform:translateY(-6px);box-shadow:0 30px 56px -28px rgba(21,20,15,.55);border-color:var(--accent)}
+.shopcard.on{border-color:var(--accent);box-shadow:0 24px 50px -24px var(--accent)}
+.shopcard .im{height:130px;overflow:hidden;background:#0c0c0e}
+.shopcard .im img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.shopcard:hover .im img{transform:scale(1.07)}
+.shopcard .bd{padding:12px 14px 14px}
+.shopcard .nm{font-family:var(--cond);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.04em}
+.shopcard .ct{font-size:11px;color:var(--ink3);margin:2px 0 8px}
+.shopcard .rw{display:flex;align-items:center;justify-content:space-between}
+.shopcard .pr{font-family:var(--disp);font-size:20px}
+.addbtn{font-family:var(--cond);text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:11px;color:#fff;
+  background:var(--ink);padding:9px 14px;border-radius:100px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s}
+.addbtn:hover{transform:translateY(-2px);background:var(--accent)}.addbtn:active{transform:scale(.95)}
+.cart{position:sticky;bottom:16px;margin-top:20px;grid-column:1/-1;background:var(--ink);color:var(--paper);border-radius:18px;
+  padding:18px 22px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.cart h4{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:rgba(236,234,227,.6);margin-bottom:8px}
+.cartlist{display:flex;flex-wrap:wrap;gap:8px}
+.cchip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:6px 8px 6px 12px;font-size:12px;animation:gin .4s cubic-bezier(.16,1,.3,1)}
+.cchip .q{font-family:var(--disp);color:var(--accent)}
+.cchip button{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.1);font-size:14px;line-height:1;transition:background .2s}
+.cchip button:hover{background:var(--accent)}
+.cempty{font-size:13px;color:rgba(236,234,227,.4)}
+.cartright{text-align:right}
+.cartright .tt{font-family:var(--disp);font-size:32px;color:var(--accent);line-height:1}
+.cartright .cbtn{margin-top:8px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:12px;color:var(--ink);
+  background:var(--paper);padding:11px 18px;border-radius:100px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .25s,color .25s}
+.cartright .cbtn:hover{transform:translateY(-2px);background:var(--accent);color:#fff}
+@media(max-width:900px){.partswrap{grid-template-columns:1fr}.shopfeat{position:relative;top:0}.cart{grid-template-columns:1fr}.cartright{text-align:left}}
+
+/* ---------- REVIEWS WALL ---------- */
+.revs{position:relative}
+.revgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1180px;margin:0 auto}
+.revcard{position:relative;border-radius:16px;overflow:hidden;cursor:pointer;aspect-ratio:3/4;background:#0c0c0e;
+  transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;box-shadow:0 24px 46px -30px rgba(21,20,15,.6)}
+.revcard img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1),filter .4s;filter:grayscale(.35) contrast(1.02)}
+.revcard::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,9,7,.86),rgba(10,9,7,.1) 55%,transparent);transition:opacity .4s}
+.revcard:hover{transform:translateY(-6px)}
+.revcard:hover img{transform:scale(1.06);filter:grayscale(0) contrast(1.05)}
+.revcard .rc{position:absolute;left:14px;right:14px;bottom:14px;z-index:2;color:#fff}
+.revcard .rc .st{color:#ffd25e;font-size:13px;letter-spacing:2px}
+.revcard .rc b{display:block;font-family:var(--cond);font-weight:700;font-size:15px;margin-top:4px}
+.revcard .rc span{font-size:11px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.08em}
+.revcard .tapc{position:absolute;top:12px;right:12px;z-index:2;font-family:var(--cond);text-transform:uppercase;letter-spacing:.08em;font-size:10px;font-weight:700;
+  color:#fff;background:rgba(0,0,0,.4);padding:6px 10px;border-radius:100px;backdrop-filter:blur(4px);opacity:0;transition:opacity .3s}
+.revcard:hover .tapc{opacity:1}
+@media(max-width:960px){.revgrid{grid-template-columns:repeat(2,1fr)}}
+/* review lightbox */
+.revopen{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(10,9,7,.72);backdrop-filter:blur(8px);opacity:0;transition:opacity .4s}
+.revopen.show{display:flex;opacity:1}
+.revpanel{position:relative;display:grid;grid-template-columns:.9fr 1.1fr;max-width:840px;width:100%;background:var(--card);border-radius:22px;overflow:hidden;
+  box-shadow:0 60px 120px -40px rgba(0,0,0,.7);transform:translateY(30px) scale(.96);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.revopen.show .revpanel{transform:none}
+.revpanel .rimg{position:relative;min-height:360px;background:#0c0c0e}
+.revpanel .rimg img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.revpanel .rbody{padding:34px 30px}
+.revpanel .rbody .st{color:#ffb703;font-size:18px;letter-spacing:3px}
+.revpanel .rbody q{display:block;font-family:var(--disp);font-size:clamp(22px,2.6vw,30px);line-height:1.08;text-transform:uppercase;margin:14px 0 18px}
+.revpanel .rbody p{font-size:14px;color:var(--ink2);line-height:1.6}
+.revpanel .rbody .who{display:flex;align-items:center;gap:12px;margin-top:20px}
+.revpanel .rbody .who b{font-family:var(--cond);font-weight:700;font-size:16px}
+.revpanel .rbody .who span{display:block;font-size:12px;color:var(--ink3)}
+.revclose{position:absolute;top:14px;right:14px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font-size:20px;
+  display:flex;align-items:center;justify-content:center;transition:background .25s,transform .25s}
+.revclose:hover{background:var(--accent);transform:rotate(90deg)}
+@media(max-width:720px){.revpanel{grid-template-columns:1fr}.revpanel .rimg{min-height:240px}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand"><i></i>BLACKTOP</div>
+  <div class="navlinks">
+    <a href="#console" data-mode="showroom">Console</a>
+    <a href="#buy">Buy</a>
+    <a href="#parts">Parts</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#reserve">Book</a>
+  </div>
+  <a href="#reserve" class="navcta">Book a Slot</a>
+</nav>
+
+<!-- ================= HERO POSTER ================= -->
+<header class="hero">
+  <div class="scribble s1">BLACKTOP</div>
+  <div class="scribble s2">M4 // G82</div>
+
+  <div class="posterlabels" id="plabels">
+    <span data-l="0">BMW</span><span data-l="1">M4</span><span data-l="2">G82</span>
+  </div>
+
+  <div class="panelbox" id="panelbox">
+    <div class="cpanel p1" data-panel="0"><img class="pa" alt=""><img class="pb" alt=""></div>
+    <div class="cpanel p2" data-panel="1"><img class="pa" alt=""><img class="pb" alt=""></div>
+    <div class="cpanel p3" data-panel="2"><img class="pa" alt=""><img class="pb" alt=""></div>
+  </div>
+
+  <div class="herocar"><img src="assets/car-01.jpg" alt="BMW M4 G82"></div>
+
+  <div class="grafname">BMW<span class="m">M4</span></div>
+
+  <div class="herofoot">
+    <div class="herodesc" data-par="-10">
+      The BMW G82 M4 is the current generation of the M4 Coupe, known for its
+      M TwinPower Turbo 6-cylinder engine, aggressive design with the large kidney
+      grille, and options for track-focused features. Built, tuned and restored
+      in-house at Blacktop — motorsport DNA, street attitude, competition results.
+      <span class="dash"></span>
+    </div>
+    <div class="specbox" data-par="14">
+      <div class="k">power</div>
+      <div class="v">503 HP <small>(375 kW)</small></div>
+      <div class="k">0-100 km/h</div>
+      <div class="v">3.5-3.8 <small>seconds</small></div>
+    </div>
+  </div>
+
+  <div class="brandmark">BLACKTOP<span>street garage · est. 2014</span></div>
+</header>
+
+<!-- ================= CONSOLE (pinterest_25) ================= -->
+<section id="console" class="console">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="shead reveal">
+    <span class="eyebrow" data-par="-20">The Blacktop Console</span>
+    <h2 data-par="18">ONE GARAGE.<br>EVERYTHING CARS.</h2>
+    <p data-par="-12">Flip through the whole shop from one panel — browse the showroom, price a repair,
+      read the receipts, or book a slot. Tap an icon on the left. Everything reassembles as you go.</p>
+  </div>
+
+  <div class="win reveal">
+    <div class="rail">
+      <div class="logo">B</div>
+      <button class="railbtn on" data-mode="showroom" aria-label="Showroom">
+        <svg viewBox="0 0 24 24"><path d="M3 13l2-5a3 3 0 0 1 3-2h8a3 3 0 0 1 3 2l2 5"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><circle cx="7" cy="15.5" r="1"/><circle cx="17" cy="15.5" r="1"/></svg>
+        <span class="tip">Showroom</span>
+      </button>
+      <button class="railbtn" data-mode="repair" aria-label="Repair">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2z"/></svg>
+        <span class="tip">Repair</span>
+      </button>
+      <button class="railbtn" data-mode="reviews" aria-label="Reviews">
+        <svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19l1-5.8L3.5 9.2l5.9-.9z"/></svg>
+        <span class="tip">Reviews</span>
+      </button>
+      <button class="railbtn" data-mode="book" aria-label="Book">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+        <span class="tip">Book</span>
+      </button>
+      <div class="spacer"></div>
+      <button class="railbtn" data-mode="showroom" aria-label="Reset">
+        <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 2.3 5.6"/><path d="M4 20v-4h4"/></svg>
+      </button>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="stagevis" id="stagevis">
+        <div class="ghost" id="ghost">M</div>
+        <div class="floatwrap"><div class="floatcar" id="floatcar"><img id="floatimg" src="assets/car-01.jpg" alt=""></div></div>
+        <div class="visinfo">
+          <div class="viscard" id="viscard"></div>
+          <div class="bars" id="bars"></div>
+        </div>
+        <div class="swatches" id="swatches"></div>
+        <div class="visarrows" id="visarrows">
+          <button id="prevBtn" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button id="nextBtn" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="stitle" id="stitle"></div>
+      <div class="scards" id="scards"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BUY A CAR ================= -->
+<section id="buy" class="buy sxn">
+  <div class="shead pop">
+    <span class="eyebrow" data-par="-18">The Showroom Floor — for keeps</span>
+    <h2 data-par="14">BUILD YOUR<br>DREAM GARAGE</h2>
+    <p data-par="-10">Not just browsing — buying. Flick through the floor, drop the ones you want into your garage,
+      and watch the whole room change colour to match your pick. Real cars, real prices, real delivery.</p>
+  </div>
+
+  <div class="buywrap">
+    <div class="buystage pop">
+      <div class="buyghost" id="buyGhost">M4</div>
+      <div class="buytag" id="buyTag">Track Coupe</div>
+      <div class="buyhero"><img id="buyImg" src="assets/car-01.jpg" alt=""></div>
+    </div>
+
+    <div class="buyside">
+      <div class="buyinfo pop">
+        <div class="bk" id="buyKick">BMW · Ultraviolet</div>
+        <h3 id="buyName">M4<br>Competition</h3>
+        <div class="buyspecs" id="buySpecs"></div>
+        <div class="buyprice"><span id="buyPrice">$84k</span> <small>drive-away</small></div>
+        <button class="bbtn" id="buyAdd">Add to my garage +</button>
+      </div>
+      <div class="garage pop">
+        <h4>Your Garage <span id="gCount">0 cars</span></h4>
+        <div class="garagelist" id="garageList"><div class="gempty">Nothing parked yet — tap a car below.</div></div>
+        <div class="gtotal"><span style="font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:rgba(236,234,227,.6)">Garage total</span><span class="gt" id="gTotal">$0</span></div>
+      </div>
+    </div>
+
+    <div class="buyrail" id="buyRail"></div>
+  </div>
+</section>
+
+<!-- ================= CAR PARTS STORE ================= -->
+<section id="parts" class="parts sxn">
+  <div class="shead pop">
+    <span class="eyebrow" data-par="-18">The Parts Counter</span>
+    <h2 data-par="14">SHOP THE<br>HARD BITS</h2>
+    <p data-par="-10">Wheels, coils, forced induction, full crate motors — pick exactly what your build needs and
+      see the total climb in real time. Tap any part to bring it up big; add what you want, in the quantity you want.</p>
+  </div>
+
+  <div class="partswrap">
+    <aside class="shopfeat pop">
+      <div class="shopfeatimg"><img id="shopImg" src="assets/parts/part-01.jpg" alt=""></div>
+      <div class="shopfeatbody">
+        <div class="bk" id="shopKick">Wheels &amp; Tyres</div>
+        <h3 id="shopName">Forged Wheel Set</h3>
+        <p id="shopDesc">Lightweight forged monoblocks, fully load-rated and finished in-house to any colour on the wall.</p>
+        <div class="shopfeatbuy"><span class="pp" id="shopPrice">$3,200</span><button class="addbtn" id="shopAdd">Add to cart +</button></div>
+      </div>
+    </aside>
+
+    <div class="shopgrid" id="shopGrid"></div>
+
+    <div class="cart">
+      <div>
+        <h4>Your Parts Cart</h4>
+        <div class="cartlist" id="cartList"><span class="cempty">Cart's empty — tap “Add” on any part.</span></div>
+      </div>
+      <div class="cartright">
+        <div class="tt" id="cartTotal">$0</div>
+        <button class="cbtn" id="cartCheckout">Checkout &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REVIEWS WALL ================= -->
+<section id="reviews" class="revs sxn">
+  <div class="shead pop" style="text-align:center;margin-left:auto;margin-right:auto">
+    <span class="eyebrow" data-par="-18">Owners &amp; Tastemakers</span>
+    <h2 data-par="14">THE PEOPLE<br>BEHIND THE BUILDS</h2>
+    <p data-par="-10" style="margin-left:auto;margin-right:auto">Tap any face to read their full story — the car, the work, and why they keep coming back to the Blacktop.</p>
+  </div>
+  <div class="revgrid" id="revGrid"></div>
+</section>
+
+<div class="revopen" id="revOpen">
+  <div class="revpanel">
+    <button class="revclose" id="revClose" aria-label="Close">×</button>
+    <div class="rimg"><img id="roImg" src="" alt=""></div>
+    <div class="rbody">
+      <div class="st" id="roStars">★★★★★</div>
+      <q id="roQuote"></q>
+      <p id="roText"></p>
+      <div class="who"><div><b id="roName"></b><span id="roMeta"></span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marq"><div class="marqtrack" id="marq"></div></div>
+
+<!-- ================= PROOF ================= -->
+<div class="shead reveal" style="max-width:1180px;margin:90px auto 0">
+  <span class="eyebrow" data-par="-18">Receipts, not promises</span>
+  <h2 data-par="16">THE NUMBERS DON'T LIE</h2>
+</div>
+<div class="proof">
+  <div class="stat reveal"><div class="n"><span data-count="2140" data-par="8">0</span><span class="suf">+</span></div><div class="l">Builds Delivered</div></div>
+  <div class="stat reveal"><div class="n"><span data-count="11" data-par="8">0</span><span class="suf">yr</span></div><div class="l">On The Blacktop</div></div>
+  <div class="stat reveal"><div class="n"><span data-count="4.9" data-dec="1" data-par="8">0</span><span class="suf">★</span></div><div class="l">Avg. Owner Rating</div></div>
+  <div class="stat reveal"><div class="n"><span data-count="63" data-par="8">0</span><span class="suf">k</span></div><div class="l">Track Miles Tuned</div></div>
+</div>
+
+<!-- ================= TESTIMONIALS ================= -->
+<div class="shead reveal" style="max-width:1180px;margin:0 auto 30px">
+  <span class="eyebrow" data-par="-18">The work speaks</span>
+  <h2 data-par="16">STRAIGHT FROM<br>THE OWNERS</h2>
+</div>
+<div class="testis">
+  <div class="testi reveal"><div class="stars">★★★★★</div><q>Dropped my M4 in for a full rebuild and it came back sharper than factory. These people actually care.</q><div class="who"><div class="av">DL</div><div><b>Deon L.</b><span>BMW M4 Competition</span></div></div></div>
+  <div class="testi reveal"><div class="stars">★★★★★</div><q>Track-day damage sorted in a week. Panel gaps perfect, paint flawless. Nobody else touches my GT3.</q><div class="who"><div class="av">SM</div><div><b>Sara M.</b><span>Porsche 911 GT3 RS</span></div></div></div>
+  <div class="testi reveal"><div class="stars">★★★★★</div><q>Bought my GT-R off the Blacktop floor. Full history, honest pricing, delivered on a trailer to my door.</q><div class="who"><div class="av">RK</div><div><b>Rashid K.</b><span>Nissan GT-R</span></div></div></div>
+</div>
+
+<!-- ================= RESERVE ================= -->
+<section id="reserve" class="reserve">
+  <div class="scribble">BLACKTOP</div>
+  <div class="rwrap">
+    <div class="reveal">
+      <h2 data-par="12">PULL UP TO<br>THE <em>BLACKTOP</em></h2>
+      <p data-par="-10">Book a showroom viewing, a repair estimate, or a full build consult. Tell us the car
+        and what it needs — we'll come back with a real plan and a real number. No runaround.</p>
+      <div class="brandmark" style="margin:20px 0 0;text-align:left;color:var(--paper);opacity:.8">BLACKTOP<span>street garage · est. 2014</span></div>
+    </div>
+    <form class="rform reveal" id="rform" onsubmit="return false">
+      <div class="fr"><label>Your Name</label><input type="text" placeholder="First & last" required></div>
+      <div class="fr"><label>Interested In</label><select id="rfCar"></select></div>
+      <div class="fr"><label>What Do You Need</label><select id="rfNeed"><option>Showroom viewing</option><option>Repair / restoration</option><option>Full custom build</option><option>Valuation / trade-in</option></select></div>
+      <div class="fr"><label>Email</label><input type="email" placeholder="you@email.com" required></div>
+      <button type="submit">Request My Slot</button>
+    </form>
+  </div>
+  <div class="footer">
+    <div class="fb">BLACKTOP</div>
+    <div class="fs">@blacktop.garage · 24 Foundry Row · +1 (555) 042-9930</div>
+  </div>
+</section>
+
+<script>
+/* ================= DATA ================= */
+const CARS=[
+ {id:'m4',brand:'BMW',name:'M4 Competition',clr:'Ultraviolet',img:'assets/car-01.jpg',hp:503,zero:3.5,top:250,price:84300,tag:'Track Coupe',use:'track',accent:'#7C3AED',aink:'#5b21b6',bg:['#efeef2','#e2e0e8','#d3d0dc'],ghost:'M4',dark:false},
+ {id:'gt3rs',brand:'Porsche',name:'911 GT3 RS',clr:'Chalk White',img:'assets/car-02.jpg',hp:518,zero:3.2,top:296,price:241000,tag:'Homologation',use:'track',accent:'#C81E3A',aink:'#8f1226',bg:['#f2f0ec','#e7e4de','#d8d4cc'],ghost:'RS',dark:false},
+ {id:'gtr',brand:'Nissan',name:'GT-R Nismo',clr:'Gunmetal / Blue',img:'assets/car-03.jpg',hp:565,zero:2.9,top:315,price:115000,tag:'Godzilla',use:'track',accent:'#2563EB',aink:'#1e3a8a',bg:['#8f8f92','#7c7c80','#6a6a6e'],ghost:'GTR',dark:true},
+ {id:'aventador',brand:'Lamborghini',name:'Aventador SVJ',clr:'Nero Aldebaran',img:'assets/car-04.jpg',hp:769,zero:2.8,top:355,price:517000,tag:'V12 Icon',use:'show',accent:'#F59E0B',aink:'#b45309',bg:['#141416','#0e0e10','#080809'],ghost:'SVJ',dark:true},
+ {id:'battista',brand:'Pininfarina',name:'Battista',clr:'Iconica Blue',img:'assets/car-05.jpg',hp:1877,zero:1.9,top:350,price:2200000,tag:'Electric Halo',use:'show',accent:'#38BDF8',aink:'#0369a1',bg:['#0d1e40','#0a1730','#070f22'],ghost:'EV',dark:true},
+ {id:'gt500',brand:'Ford',name:'Mustang GT500',clr:'Shadow Black',img:'assets/car-06.jpg',hp:760,zero:3.3,top:290,price:80000,tag:'American V8',use:'daily',accent:'#DC2626',aink:'#991b1b',bg:['#c9c9cd','#b6b6bb','#a2a2a8'],ghost:'GT',dark:false},
+ {id:'mclaren',brand:'McLaren',name:'765LT',clr:'Amethyst',img:'assets/car-07.jpg',hp:755,zero:2.7,top:330,price:400000,tag:'Longtail',use:'track',accent:'#A855F7',aink:'#7e22ce',bg:['#2a1440','#1f0f30','#150a22'],ghost:'LT',dark:true},
+ {id:'amggt',brand:'Mercedes-AMG',name:'GT 63',clr:'Diamond White',img:'assets/car-08.jpg',hp:577,zero:3.1,top:315,price:140000,tag:'Grand Tourer',use:'daily',accent:'#E11D74',aink:'#9d1050',bg:['#efe6ea','#e6d3db','#dcc0cc'],ghost:'GT',dark:false},
+ {id:'gt3',brand:'Porsche',name:'911 GT3',clr:'Violet Neon',img:'assets/car-09.jpg',hp:502,zero:3.4,top:318,price:170000,tag:'Naturally Asp.',use:'track',accent:'#6366F1',aink:'#4338ca',bg:['#171533','#10102a','#0a0a1e'],ghost:'GT3',dark:true},
+ {id:'amgone',brand:'Mercedes-AMG',name:'ONE',clr:'Alpine White',img:'assets/car-10.jpg',hp:1049,zero:2.9,top:352,price:2700000,tag:'F1 Hypercar',use:'show',accent:'#2DD4BF',aink:'#0f766e',bg:['#132038','#0e192b','#091120'],ghost:'F1',dark:true},
+ {id:'bugatti',brand:'Bugatti',name:'Chiron',clr:'Magenta Carbon',img:'assets/car-11.jpg',hp:1479,zero:2.4,top:420,price:3000000,tag:'W16 Quad-Turbo',use:'show',accent:'#EC4899',aink:'#9d174d',bg:['#e9dfe8','#dcccdd','#cbb6cd'],ghost:'W16',dark:false},
+ {id:'carrera',brand:'Porsche',name:'911 Carrera',clr:'Crayon Sand',img:'assets/car-12.jpg',hp:473,zero:3.7,top:308,price:130000,tag:'Everyday 911',use:'daily',accent:'#B45309',aink:'#78350f',bg:['#eeece7','#e3e0d8','#d6d2c8'],ghost:'911',dark:false},
+ {id:'zr1',brand:'Chevrolet',name:'Corvette ZR1',clr:'Hypersonic Grey',img:'assets/car-13.jpg',hp:1064,zero:2.3,top:375,price:180000,tag:'Twin-Turbo V8',use:'track',accent:'#0EA5E9',aink:'#0369a1',bg:['#16171b','#101115','#0a0b0e'],ghost:'ZR1',dark:true},
+ {id:'defender',brand:'Land Rover',name:'Defender V8',clr:'Carpathian Grey',img:'assets/car-14.jpg',hp:518,zero:4.8,top:240,price:110000,tag:'Luxury 4x4',use:'daily',accent:'#10B981',aink:'#047857',bg:['#1c1e22','#15171b','#0e1013'],ghost:'4x4',dark:true},
+ {id:'m-red',brand:'BMW',name:'M8 Competition',clr:'Toronto Red',img:'assets/car-15.jpg',hp:617,zero:3.0,top:305,price:180000,tag:'Super GT',use:'daily',accent:'#EF4444',aink:'#b91c1c',bg:['#2a0f12','#20090c','#160507'],ghost:'M8',dark:true},
+ {id:'merc-blue',brand:'Mercedes-AMG',name:'GT R Pro',clr:'Brilliant Blue',img:'assets/car-16.jpg',hp:603,zero:3.4,top:318,price:200000,tag:'Green Hell',use:'track',accent:'#3B82F6',aink:'#1d4ed8',bg:['#101a2e','#0b1322','#070d18'],ghost:'PRO',dark:true},
+ {id:'mclgt',brand:'McLaren',name:'GT',clr:'Cerulean Blue',img:'assets/car-17.jpg',hp:612,zero:3.1,top:326,price:210000,tag:'Super Tourer',use:'daily',accent:'#14B8A6',aink:'#0f766e',bg:['#14171c','#0e1116','#080a0e'],ghost:'GT',dark:true},
+ {id:'mclred',brand:'McLaren',name:'Artura',clr:'Onyx / Flare',img:'assets/car-18.jpg',hp:690,zero:3.0,top:330,price:250000,tag:'Hybrid V6',use:'track',accent:'#F43F5E',aink:'#be123c',bg:['#2c0d13','#20080d','#150407'],ghost:'V6',dark:true},
+ {id:'concept',brand:'Blacktop',name:'Vantablack Concept',clr:'Prototype',img:'assets/car-19.jpg',hp:800,zero:2.5,top:300,price:250000,tag:'In-House Build',use:'show',accent:'#8B5CF6',aink:'#6d28d9',bg:['#e6e4ea','#d8d5df','#c8c4d2'],ghost:'X',dark:false},
+ {id:'phantom',brand:'Rimac',name:'Nevera',clr:'Midnight',img:'assets/car-20.jpg',hp:1888,zero:1.9,top:412,price:2200000,tag:'Electric Beast',use:'show',accent:'#64748B',aink:'#334155',bg:['#131519','#0d0f13','#08090c'],ghost:'EV',dark:true}
+];
+
+/* ================= HERO PANEL CYCLER (smooth crossfade + label sync) ================= */
+const cpanels=[...document.querySelectorAll('.cpanel')];
+(function heroPanels(){
+  const labels=[...document.querySelectorAll('#plabels span')];
+  cpanels.forEach((p,i)=>{
+    const imgs=[p.querySelector('.pa'),p.querySelector('.pb')];
+    let seq=CARS.map((_,k)=>k).sort(()=>Math.random()-.5);
+    let pos=(i*4)%seq.length, cur=0;
+    function labelText(c){return [c.brand,c.name.split(' ')[0],c.ghost][i]||c.brand;}
+    function show(){
+      const c=CARS[seq[pos%seq.length]]; p._car=c;
+      const nx=imgs[cur^1];
+      const flip=()=>{nx.classList.add('show');imgs[cur].classList.remove('show');cur^=1;};
+      nx.onload=flip; nx.src=c.img; if(nx.complete&&nx.naturalWidth)flip();
+      const lb=labels[i]; lb.classList.add('swap');
+      setTimeout(()=>{lb.textContent=(labelText(c)||'').toUpperCase();lb.classList.remove('swap');},280);
+    }
+    show();
+    setInterval(()=>{pos=(pos+1)%seq.length;show();},4400+i*950);
+    p.addEventListener('click',()=>{stopAuto();const id=p._car.id;setMode('showroom');go(CARS.findIndex(c=>c.id===id));document.getElementById('console').scrollIntoView({behavior:'smooth'});});
+  });
+})();
+
+/* ================= FLEXIBLE TILE MOTION ENGINE =================
+   Every image/card tile: soft always-on idle drift + springy cursor tilt/lift
+   + a smooth arrange-in entrance. One rAF loop drives them all. */
+let FLEX=[];
+const fio=new IntersectionObserver(es=>es.forEach(e=>{
+  const st=e.target._flex; if(!st)return;
+  if(e.isIntersecting){clearTimeout(st._t);st._t=setTimeout(()=>{st.tent=1;},st.delay||0);}
+  else st.tent=0;
+}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+function makeFlex(el,o){
+  o=o||{}; if(!el||el._flex)return;
+  el.classList.add('flex-tile');
+  el.classList.remove('reveal'); el.removeAttribute('data-rise');
+  el.style.transition='box-shadow .35s ease,border-color .3s ease,filter .35s ease';
+  const st={baseRot:o.baseRot||0,ampY:o.ampY==null?6:o.ampY,ampR:o.ampR==null?1.3:o.ampR,
+    tilt:o.tilt==null?9:o.tilt,lift:o.lift==null?-8:o.lift,sc:o.sc==null?1.035:o.sc,
+    persp:o.persp==null?900:o.persp,ph:Math.random()*6.283,spd:.72+Math.random()*.34,
+    cx:0,cy:0,tx:0,ty:0,hv:0,thv:0,ent:o.entrance?0:1,tent:o.entrance?0:1,delay:o.delay||0,console:!!o.console};
+  el._flex=st;
+  el.addEventListener('mousemove',ev=>{const r=el.getBoundingClientRect();st.tx=(ev.clientX-r.left)/r.width-.5;st.ty=(ev.clientY-r.top)/r.height-.5;});
+  el.addEventListener('mouseenter',()=>st.thv=1);
+  el.addEventListener('mouseleave',()=>{st.thv=0;st.tx=0;st.ty=0;});
+  FLEX.push({el,st});
+  if(o.entrance){el.style.opacity='0';fio.observe(el);}
+}
+function flexTick(now){
+  const s=now*.001;
+  for(let k=0;k<FLEX.length;k++){
+    const el=FLEX[k].el,st=FLEX[k].st;
+    st.cx+=(st.tx-st.cx)*.09; st.cy+=(st.ty-st.cy)*.09;
+    st.hv+=(st.thv-st.hv)*.12; st.ent+=(st.tent-st.ent)*.085;
+    const e=st.ent,ee=e*e*(3-2*e);
+    const bob=Math.sin(s*st.spd+st.ph)*st.ampY;
+    const sway=Math.sin(s*st.spd*.82+st.ph*1.3)*st.ampR;
+    const ry=st.cx*st.tilt, rx=-st.cy*st.tilt;
+    const lift=st.hv*st.lift, sc=1+st.hv*(st.sc-1);
+    const entY=(1-ee)*54, pp=st.persp?('perspective('+st.persp+'px) '):'';
+    el.style.transform='translateY('+(bob+lift+entY).toFixed(2)+'px) '+pp+'rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) rotate('+(st.baseRot+sway).toFixed(2)+'deg) scale('+(sc*(.94+ee*.06)).toFixed(3)+')';
+    el.style.opacity=ee.toFixed(3);
+  }
+  requestAnimationFrame(flexTick);
+}
+requestAnimationFrame(flexTick);
+/* hero poster panels — flexible, springy, never rigid */
+cpanels.forEach((p,i)=>makeFlex(p,{baseRot:[-4,1,4][i],persp:0,ampY:7,ampR:2.2,tilt:12,lift:-11,sc:1.055}));
+
+/* ================= TEXT ASSEMBLE / TYPING ================= */
+function splitUnits(el,mode){
+  if(el._units)return; const bucket=[];
+  (function walk(node){[...node.childNodes].forEach(ch=>{
+    if(ch.nodeType===3){
+      const frag=document.createDocumentFragment();
+      if(mode==='char'){[...ch.textContent].forEach(c=>{const s=document.createElement('span');s.className='u';
+        if(c===' ')s.innerHTML='&nbsp;';else s.textContent=c;frag.appendChild(s);bucket.push(s);});}
+      else{ch.textContent.split(/(\s+)/).forEach(p=>{if(p==='')return;
+        if(/^\s+$/.test(p)){frag.appendChild(document.createTextNode(p));return;}
+        const s=document.createElement('span');s.className='u';s.textContent=p;frag.appendChild(s);bucket.push(s);});}
+      ch.replaceWith(frag);
+    }else if(ch.nodeType===1&&ch.tagName!=='BR')walk(ch);
+  });})(el);
+  el._units=bucket; el._mode=mode; if(mode==='char')el.classList.add('tchar');
+}
+function playUnits(el){
+  if(!el._units)return; const step=el._mode==='char'?24:52;
+  if(el._mode==='char')el.classList.add('typing');
+  el._units.forEach((u,i)=>{clearTimeout(u._d);u._d=setTimeout(()=>u.classList.add('on'),i*step);});
+  clearTimeout(el._done); el._done=setTimeout(()=>el.classList.remove('typing'),el._units.length*step+500);
+}
+function resetUnits(el){if(!el._units)return;el.classList.remove('typing');el._units.forEach(u=>{clearTimeout(u._d);u.classList.remove('on');});}
+function typeInto(el,str,mode){el._units=null;el.classList.remove('tchar','typing');el.textContent=str;splitUnits(el,mode);playUnits(el);}
+const tio=new IntersectionObserver(es=>es.forEach(e=>{e.isIntersecting?playUnits(e.target):resetUnits(e.target);}),{threshold:.25});
+function registerText(sel,mode){document.querySelectorAll(sel).forEach(el=>{splitUnits(el,mode);tio.observe(el);});}
+
+/* ================= CONSOLE ENGINE ================= */
+const stage=document.getElementById('stage');
+const stagevis=document.getElementById('stagevis');
+const floatcar=document.getElementById('floatcar');
+const floatimg=document.getElementById('floatimg');
+const ghost=document.getElementById('ghost');
+const viscard=document.getElementById('viscard');
+const bars=document.getElementById('bars');
+const swatches=document.getElementById('swatches');
+const stitle=document.getElementById('stitle');
+const scards=document.getElementById('scards');
+const visarrows=document.getElementById('visarrows');
+let idx=0, mode='showroom', busy=false, hover=false;
+
+function hexA(h,a){const n=parseInt(h.slice(1),16);return'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')';}
+function money(n){return n>=1000000?'$'+(n/1000000).toFixed(1)+'M':'$'+Math.round(n/1000)+'k';}
+function applyTheme(c){
+  const r=document.documentElement.style;
+  r.setProperty('--accent',c.accent);
+  r.setProperty('--accent-ink',c.aink);
+  stagevis.style.background='linear-gradient(160deg,'+c.bg[0]+','+c.bg[1]+' 55%,'+c.bg[2]+')';
+  stagevis.style.color=c.dark?'#f4f3ef':'#15140f';
+  document.querySelectorAll('.console .blob').forEach(b=>b.style.background='radial-gradient(circle,'+hexA(c.accent,.5)+',transparent 68%)');
+}
+function buildSwatches(){
+  swatches.innerHTML='';
+  CARS.forEach((c,i)=>{
+    const s=document.createElement('button');
+    s.className='swatch'+(i===idx?' on':'');
+    s.style.background=c.accent;s.title=c.brand+' '+c.name;
+    s.onclick=()=>{stopAuto();go(i);};
+    swatches.appendChild(s);
+  });
+}
+function card(k,v){return '<div class="mini"><div class="mk">'+k+'</div>'+v+'</div>';}
+
+function renderShowroom(){
+  const c=CARS[idx];
+  ghost.textContent=c.ghost;
+  viscard.innerHTML='<div class="vk">'+c.clr+'</div><div class="vv">'+c.brand+'</div>';
+  const heights=[c.hp/20, c.top/6, (400-c.zero*80), c.hp/16, c.top/5.4];
+  bars.innerHTML=heights.map((h,i)=>'<i class="'+(i===2?'hot':'')+'" style="height:'+Math.min(44,Math.max(10,h))+'px"></i>').join('');
+  stitle.innerHTML='<div class="kicker">'+c.tag+'</div><h3>'+c.brand+'<br>'+c.name+'</h3>'
+    +'<p>'+c.clr+' · '+c.hp+' hp · '+c.top+' km/h top speed. Fully inspected, documented and detailed on the Blacktop floor.</p>'
+    +'<div class="price">'+money(c.price)+' <small>drive-away</small></div>'
+    +'<a class="cta" href="#reserve">Enquire &rarr;</a>';
+  scards.innerHTML=
+    card('Power','<span class="mv">'+c.hp+' <small>hp</small></span>')
+   +card('0-100 km/h','<span class="mv">'+c.zero.toFixed(1)+' <small>s</small></span>')
+   +card('Top Speed','<span class="mv">'+c.top+' <small>km/h</small></span>')
+   +card('Category','<span class="mv" style="font-size:18px">'+c.use.toUpperCase()+'</span><div class="pill">Available now</div>');
+  swatches.style.display='';visarrows.style.display='';
+  swatches.querySelectorAll('.swatch').forEach((s,i)=>s.classList.toggle('on',i===idx));
+  applyTheme(c);
+}
+function renderRepair(){
+  const c=CARS[idx];
+  ghost.textContent='FIX';
+  viscard.innerHTML='<div class="vk">In the bay</div><div class="vv">'+c.brand+'</div>';
+  bars.innerHTML='';swatches.style.display='none';visarrows.style.display='none';
+  stitle.innerHTML='<div class="kicker">Repair &amp; Restoration</div><h3>WE PUT IT<br>BACK RIGHT</h3>'
+    +'<p>Collision, mechanical, cosmetic or a full nut-and-bolt restoration — OEM-grade parts, in-house paint booth, and a written guarantee on every job.</p>'
+    +'<a class="cta" href="#reserve">Get an estimate &rarr;</a>';
+  const svc=[['Diagnostic & Health Check','from $90','1 hr'],['Paint & Panel Correction','from $650','3-5 days'],
+    ['Performance Tune / Remap','from $480','1 day'],['Full Restoration Build','by quote','custom']];
+  scards.innerHTML=svc.map(s=>
+    '<div class="mini"><div class="svc"><div><div class="mk">'+s[2]+'</div><b style="font-size:15px">'+s[0]+'</b></div><div class="p">'+s[1]+'</div></div><div class="pill">Book this</div></div>'
+  ).join('');
+  applyTheme(c);
+}
+function renderReviews(){
+  const c=CARS[idx];
+  ghost.textContent='4.9';
+  viscard.innerHTML='<div class="vk">Owner verified</div><div class="vv">★ 4.9 / 5</div>';
+  bars.innerHTML='';swatches.style.display='none';visarrows.style.display='none';
+  stitle.innerHTML='<div class="kicker">The Work Speaks</div><h3>2,140 CARS<br>NEVER LIE</h3>'
+    +'<p>Real owners, real builds. Every job is photographed start to finish and signed off by the customer before it leaves the blacktop.</p>'
+    +'<a class="cta" href="#reserve">Add yours &rarr;</a>';
+  const rv=[['★★★★★','Rebuilt my M4 sharper than factory. These people care.','DL','Deon L.'],
+    ['★★★★★','Track damage sorted in a week. Flawless paint.','SM','Sara M.'],
+    ['★★★★★','Honest pricing, delivered to my door on a trailer.','RK','Rashid K.'],
+    ['★★★★★','Only shop I trust with the GT3. Period.','AN','Ada N.']];
+  scards.innerHTML=rv.map(r=>
+    '<div class="mini"><div class="stars">'+r[0]+'</div><div class="mnote">"'+r[1]+'"</div><div class="who"><div class="av">'+r[2]+'</div><div><b>'+r[3]+'</b><span>Verified owner</span></div></div></div>'
+  ).join('');
+  applyTheme(c);
+}
+function renderBook(){
+  const c=CARS[idx];
+  ghost.textContent='SLOT';
+  viscard.innerHTML='<div class="vk">Next opening</div><div class="vv">THIS WEEK</div>';
+  bars.innerHTML='';swatches.style.display='none';visarrows.style.display='none';
+  stitle.innerHTML='<div class="kicker">Book A Slot</div><h3>LOCK IN<br>YOUR SPOT</h3>'
+    +'<p>Pick what you need and we\'ll confirm within the hour. Showroom viewings, estimates and build consults all start here.</p>'
+    +'<a class="cta" href="#reserve">Full form &rarr;</a>';
+  scards.innerHTML=
+    '<div class="mini wide"><div class="bkrow"><label>Service</label><select><option>Showroom viewing</option><option>Repair estimate</option><option>Performance tune</option><option>Full build consult</option></select></div>'
+   +'<div class="bkrow"><label>Preferred day</label><input type="date"></div></div>'
+   +'<div class="mini"><div class="mk">Turnaround</div><span class="mv">&lt;1 <small>hr reply</small></span></div>'
+   +'<div class="mini"><div class="mk">Deposit</div><span class="mv">$0 <small>to hold</small></span></div>';
+  applyTheme(c);
+}
+const RENDER={showroom:renderShowroom,repair:renderRepair,reviews:renderReviews,book:renderBook};
+
+function assemble(){
+  stage.classList.remove('assemble');void stage.offsetWidth;stage.classList.add('assemble');
+  FLEX=FLEX.filter(f=>document.contains(f.el));           /* drop the minis we just replaced */
+  clearTimeout(assemble._t);
+  assemble._t=setTimeout(()=>{
+    stage.classList.remove('assemble');                  /* release fill:both so JS idle can take over */
+    document.querySelectorAll('#scards .mini').forEach(m=>makeFlex(m,{ampY:3.5,ampR:.6,tilt:7,lift:-6,sc:1.03,persp:700}));
+  },1500);
+}
+function setMode(m){
+  if(!RENDER[m])return; mode=m; busy=false;
+  idx=(idx+1)%CARS.length;                 /* auto-change the pictured car on every mode switch */
+  floatcar.classList.remove('swapout','swapin');
+  floatimg.src=CARS[idx].img;
+  document.querySelectorAll('.railbtn').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  RENDER[m]();assemble();
+}
+function go(n){
+  if(busy)return; const N=CARS.length; idx=(n+N)%N;
+  if(mode!=='showroom'){mode='showroom';document.querySelectorAll('.railbtn').forEach(b=>b.classList.toggle('on',b.dataset.mode==='showroom'));}
+  busy=true;
+  floatcar.classList.remove('swapin');floatcar.classList.add('swapout');
+  setTimeout(()=>{
+    renderShowroom();
+    floatimg.src=CARS[idx].img;
+    floatcar.classList.remove('swapout');floatcar.classList.add('swapin');
+    setTimeout(()=>{floatcar.classList.remove('swapin');busy=false;},840);
+  },460);
+}
+function adv(d){go(idx+d);}
+
+let auto=null;
+function stopAuto(){if(auto){clearInterval(auto);auto=null;}}
+document.querySelectorAll('.railbtn').forEach(b=>b.addEventListener('click',()=>{stopAuto();setMode(b.dataset.mode);}));
+document.getElementById('nextBtn').onclick=()=>{stopAuto();adv(1);};
+document.getElementById('prevBtn').onclick=()=>{stopAuto();adv(-1);};
+document.querySelectorAll('.navlinks a[data-mode]').forEach(a=>a.addEventListener('click',()=>{stopAuto();setTimeout(()=>setMode(a.dataset.mode),50);}));
+window.addEventListener('keydown',e=>{
+  const t=(e.target.tagName||'');if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT')return;
+  if(mode==='showroom'){if(e.key==='ArrowRight'){stopAuto();adv(1);}else if(e.key==='ArrowLeft'){stopAuto();adv(-1);}}
+});
+buildSwatches();renderShowroom();
+
+auto=setInterval(()=>{if(mode==='showroom'&&!busy&&!hover)adv(1);},8500);
+stagevis.addEventListener('mouseenter',()=>hover=true);
+stagevis.addEventListener('mouseleave',()=>hover=false);
+
+/* reserve dropdown */
+const rfCar=document.getElementById('rfCar');
+CARS.forEach(c=>{const o=document.createElement('option');o.textContent=c.brand+' '+c.name;rfCar.appendChild(o);});
+document.getElementById('rform').addEventListener('submit',function(){
+  const btn=this.querySelector('button');btn.textContent='Request sent ✓';btn.style.background='var(--accent-ink)';
+});
+
+/* marquee */
+const words=['BUILT ON THE BLACKTOP','SHOWROOM','REPAIR','RESTORATION','TUNING','STREET + TRACK','SINCE 2014','NO RUNAROUND'];
+document.getElementById('marq').innerHTML=(words.concat(words)).map(w=>'<span>'+w+'</span>').join('');
+
+/* ================= MOTION SYSTEM ================= */
+function runCount(el){
+  const t=parseFloat(el.dataset.count)||0,dec=+(el.dataset.dec||0),dur=1200,t0=performance.now();
+  function step(now){const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3),v=t*e;
+    el.textContent=dec?v.toFixed(dec):Math.round(v).toLocaleString();
+    if(k<1)el._cf=requestAnimationFrame(step);}
+  cancelAnimationFrame(el._cf||0);el._cf=requestAnimationFrame(step);
+}
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  const on=e.isIntersecting;e.target.classList.toggle('in',on);
+  if(e.target.dataset.count!==undefined){
+    if(on)runCount(e.target);
+    else{cancelAnimationFrame(e.target._cf||0);e.target.textContent=(+(e.target.dataset.dec||0))?'0.0':'0';}
+  }
+}),{threshold:.18,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.reveal,[data-count]').forEach(el=>io.observe(el));
+
+const parEls=[...document.querySelectorAll('[data-par]')];
+function frame(){
+  const vh=innerHeight;
+  for(const el of parEls){const r=el.getBoundingClientRect();
+    if(r.bottom<-140||r.top>vh+140)continue;
+    const off=((r.top+r.height/2)-vh/2)/vh;
+    el.style.transform='translateY('+(off*(+el.dataset.par)).toFixed(1)+'px)';}
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* cursor glow + tilt */
+document.body.addEventListener('mousemove',e=>{const c=e.target.closest('.mini,.testi,.stat');if(!c)return;
+  const r=c.getBoundingClientRect();
+  c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+  c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');});
+document.querySelectorAll('.stat').forEach((el,i)=>makeFlex(el,{ampY:4,ampR:.5,tilt:6,lift:-5,sc:1.03,persp:900,entrance:true,delay:i*60}));
+document.querySelectorAll('.testi').forEach((el,i)=>makeFlex(el,{ampY:5,ampR:.7,tilt:7,lift:-6,sc:1.03,persp:900,entrance:true,delay:i*70}));
+
+/* ================= PINTEREST_50 GROW-FROM-THUMBNAIL (FLIP) ================= */
+function flipGrow(fromEl,img,src){
+  const nr=img.getBoundingClientRect();
+  if(src&&img.getAttribute('src')!==src)img.src=src;
+  const fr=fromEl.getBoundingClientRect();
+  const sx=Math.max(.05,fr.width/nr.width), sy=Math.max(.05,fr.height/nr.height);
+  const dx=(fr.left+fr.width/2)-(nr.left+nr.width/2);
+  const dy=(fr.top+fr.height/2)-(nr.top+nr.height/2);
+  img.style.transition='none';
+  img.style.transformOrigin='center';
+  img.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px) scale('+sx.toFixed(3)+','+sy.toFixed(3)+')';
+  img.style.opacity='.35';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    img.style.transition='transform .74s cubic-bezier(.16,1,.3,1),opacity .5s ease';
+    img.style.transform='';img.style.opacity='1';
+  }));
+}
+function usd(n){return '$'+Math.round(n).toLocaleString();}
+
+/* ================= BUY A CAR ================= */
+(function buyCar(){
+  const railEl=document.getElementById('buyRail');
+  const img=document.getElementById('buyImg'), ghostEl=document.getElementById('buyGhost'),
+        tagEl=document.getElementById('buyTag'), kick=document.getElementById('buyKick'),
+        nameEl=document.getElementById('buyName'), specsEl=document.getElementById('buySpecs'),
+        priceEl=document.getElementById('buyPrice'), addBtn=document.getElementById('buyAdd'),
+        listEl=document.getElementById('garageList'), totalEl=document.getElementById('gTotal'),
+        countEl=document.getElementById('gCount');
+  let cur=0; const garage=[];
+  CARS.forEach((c,i)=>{
+    const t=document.createElement('button');
+    t.className='buythumb'+(i===0?' on':'');
+    t.innerHTML='<img src="'+c.img+'" alt=""><span>'+c.brand.split(/[\s-]/)[0]+' '+c.ghost+'</span>';
+    t.addEventListener('click',()=>select(i,t));
+    railEl.appendChild(t);
+    makeFlex(t,{ampY:4,ampR:1.4,tilt:11,lift:-9,sc:1.06,persp:700,entrance:true,delay:i*40});
+  });
+  makeFlex(document.querySelector('.buyhero'),{ampY:5,ampR:.55,tilt:5,lift:-4,sc:1.02,persp:1100});
+  function select(i,thumb){
+    cur=i; const c=CARS[i];
+    railEl.querySelectorAll('.buythumb').forEach(el=>el.classList.remove('on'));
+    (thumb||railEl.children[i]).classList.add('on');
+    flipGrow(thumb||railEl.children[i],img,c.img);
+    ghostEl.textContent=c.ghost; tagEl.textContent=c.tag; kick.textContent=c.brand+' · '+c.clr;
+    nameEl.innerHTML=c.name.replace(' ','<br>');
+    specsEl.innerHTML='<div><div class="k">Power</div><div class="v">'+c.hp+'<small> hp</small></div></div>'
+      +'<div><div class="k">0-100</div><div class="v">'+c.zero.toFixed(1)+'<small> s</small></div></div>'
+      +'<div><div class="k">Top</div><div class="v">'+c.top+'<small> km/h</small></div></div>';
+    priceEl.textContent=money(c.price);
+    applyTheme(c);                                   /* whole room recolours to the pick */
+  }
+  function renderGarage(){
+    if(!garage.length){listEl.innerHTML='<div class="gempty">Nothing parked yet — tap a car below.</div>';}
+    else{listEl.innerHTML=garage.map((gi,k)=>{const c=CARS[gi];
+      return '<div class="gitem"><b>'+c.brand+' '+c.name+'</b><span style="display:flex;gap:12px;align-items:center">'+money(c.price)+'<button class="x" data-k="'+k+'" aria-label="Remove">×</button></span></div>';}).join('');}
+    const tot=garage.reduce((s,gi)=>s+CARS[gi].price,0);
+    totalEl.textContent=usd(tot);
+    countEl.textContent=garage.length+(garage.length===1?' car':' cars');
+    listEl.querySelectorAll('.x').forEach(b=>b.addEventListener('click',()=>{garage.splice(+b.dataset.k,1);renderGarage();}));
+  }
+  addBtn.addEventListener('click',()=>{
+    garage.push(cur);renderGarage();
+    addBtn.textContent='Parked ✓';addBtn.style.filter='brightness(1.15)';
+    setTimeout(()=>{addBtn.textContent='Add to my garage +';addBtn.style.filter='';},1100);
+  });
+  select(0,railEl.children[0]);
+})();
+
+/* ================= CAR PARTS STORE ================= */
+(function partsStore(){
+  const PARTS=[
+    {img:'assets/parts/part-01.jpg',name:'Forged Wheel Set',cat:'Wheels & Tyres',price:3200,desc:'Lightweight forged monoblocks, fully load-rated and finished in-house to any colour on the wall.'},
+    {img:'assets/parts/part-02.jpg',name:'Coilover Kit',cat:'Suspension',price:1850,desc:'30-way adjustable coilovers — corner-balanced and set to your ride height on our alignment rack.'},
+    {img:'assets/parts/part-03.jpg',name:'VTEC Head Package',cat:'Engine',price:2400,desc:'Ported head, upgraded cams and valvetrain — built and flow-tested for reliable top-end power.'},
+    {img:'assets/parts/part-04.jpg',name:'S85 V10 Crate Motor',cat:'Engine',price:18500,desc:'Fully rebuilt high-revving V10 on a stand, ready to drop — rod bearings and VANOS sorted.'},
+    {img:'assets/parts/part-05.jpg',name:'EV Drive Module',cat:'Electric',price:9900,desc:'Complete swap-ready electric drive unit with inverter and cooling — for the silent sleeper build.'},
+    {img:'assets/parts/part-06.jpg',name:'Quad-Turbo Kit',cat:'Forced Induction',price:12000,desc:'Billet turbochargers, manifolds and intercooling — the loud-and-fast route to four-figure power.'},
+    {img:'assets/parts/part-07.jpg',name:'Big-Bore Stroker Kit',cat:'Engine',price:4300,desc:'Forged pistons, rods and a stroker crank — more displacement, more torque, fully balanced.'},
+    {img:'assets/parts/part-08.jpg',name:'Carbon Aero Pack',cat:'Aero',price:2750,desc:'Splitter, diffuser and swan-neck wing in dry carbon — downforce that actually does something.'}
+  ];
+  const grid=document.getElementById('shopGrid');
+  const fImg=document.getElementById('shopImg'),fKick=document.getElementById('shopKick'),
+        fName=document.getElementById('shopName'),fDesc=document.getElementById('shopDesc'),
+        fPrice=document.getElementById('shopPrice'),fAdd=document.getElementById('shopAdd');
+  const cartList=document.getElementById('cartList'),cartTotal=document.getElementById('cartTotal');
+  let cur=0; const cart={};
+  PARTS.forEach((p,i)=>{
+    const c=document.createElement('div');
+    c.className='shopcard'+(i===0?' on':'');
+    c.innerHTML='<div class="im"><img src="'+p.img+'" alt=""></div><div class="bd"><div class="nm">'+p.name+'</div><div class="ct">'+p.cat+'</div>'
+      +'<div class="rw"><div class="pr">'+usd(p.price)+'</div><button class="addbtn" data-i="'+i+'">Add +</button></div></div>';
+    c.addEventListener('click',e=>{if(!e.target.closest('.addbtn'))feature(i,c.querySelector('.im img'));});
+    c.querySelector('.addbtn').addEventListener('click',e=>{e.stopPropagation();add(i);});
+    grid.appendChild(c);
+    makeFlex(c,{ampY:5,ampR:.9,tilt:9,lift:-7,sc:1.04,persp:900,entrance:true,delay:i*50});
+  });
+  makeFlex(document.querySelector('.shopfeatimg'),{ampY:5,ampR:.5,tilt:5,lift:-4,sc:1.02,persp:1100});
+  function feature(i,srcEl){
+    cur=i;const p=PARTS[i];
+    grid.querySelectorAll('.shopcard').forEach((el,k)=>el.classList.toggle('on',k===i));
+    flipGrow(srcEl||grid.children[i].querySelector('.im img'),fImg,p.img);
+    fKick.textContent=p.cat;fName.textContent=p.name;fDesc.textContent=p.desc;fPrice.textContent=usd(p.price);
+  }
+  function add(i){cart[i]=(cart[i]||0)+1;renderCart();
+    const btn=grid.children[i].querySelector('.addbtn');btn.textContent='Added ✓';setTimeout(()=>btn.textContent='Add +',900);}
+  function renderCart(){
+    const keys=Object.keys(cart);
+    if(!keys.length){cartList.innerHTML='<span class="cempty">Cart\'s empty — tap “Add” on any part.</span>';cartTotal.textContent='$0';return;}
+    cartList.innerHTML=keys.map(i=>{const p=PARTS[i];
+      return '<span class="cchip"><span class="q">'+cart[i]+'×</span> '+p.name+' <button data-i="'+i+'" aria-label="Remove">×</button></span>';}).join('');
+    cartTotal.textContent=usd(keys.reduce((s,i)=>s+PARTS[i].price*cart[i],0));
+    cartList.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const i=b.dataset.i;if(--cart[i]<=0)delete cart[i];renderCart();}));
+  }
+  fAdd.addEventListener('click',()=>{add(cur);});
+  document.getElementById('cartCheckout').addEventListener('click',function(){this.textContent='Order placed ✓';this.style.background='var(--accent)';this.style.color='#fff';});
+  feature(0,grid.children[0].querySelector('.im img'));
+})();
+
+/* ================= REVIEWS WALL ================= */
+(function reviewsWall(){
+  const REV=[
+    {img:'assets/reviews/rev-01.jpg',name:'Jenn K.',car:'BMW M4 Competition',stars:5,quote:'Sharper than factory',text:'They took my M4 apart to the shell and put it back better than the day I bought it. Panel gaps, paint, tune — flawless. This is the only garage that touches it now.'},
+    {img:'assets/reviews/rev-02.jpg',name:'Jena O.',car:'Porsche 911 GT3 RS',stars:5,quote:'They actually care',text:'Track damage sorted in a week with zero drama. They photographed every step and walked me through the whole build. Honest, fast, obsessive about the details.'},
+    {img:'assets/reviews/rev-03.jpg',name:'Rafa G.',car:'Nissan GT-R Nismo',stars:5,quote:'Godzilla reborn',text:'Bought my GT-R straight off the Blacktop floor — full history, fair price, delivered on a trailer to my door. Then they built it to 700whp. Bulletproof.'},
+    {img:'assets/reviews/rev-04.jpg',name:'Artem S.',car:'McLaren 765LT',stars:5,quote:'No runaround',text:'Every other shop gave me excuses. Blacktop gave me a plan, a real number, and a car that came back perfect. I drove four hours to use them and I would do it again.'},
+    {img:'assets/reviews/rev-05.jpg',name:'Marcus V.',car:'Mercedes-AMG GT 63',stars:5,quote:'Concours finish',text:'The paint correction is genuinely the best I have ever seen. Under the booth lights it looks liquid. They treat a daily driver like a show car.'},
+    {img:'assets/reviews/rev-06.jpg',name:'Sofia R.',car:'Lamborghini Aventador SVJ',stars:5,quote:'Trusted with the V12',text:'Nobody wanted to touch the SVJ. Blacktop had it apart, serviced and back together with a written guarantee. Total confidence, start to finish.'},
+    {img:'assets/reviews/rev-07.jpg',name:'Kojo A.',car:'Ford Mustang GT500',stars:5,quote:'Made real power',text:'Supercharger, fuel system, the works — dyno numbers matched exactly what they promised. And it still idles like stock. Proper engineering, not guesswork.'},
+    {img:'assets/reviews/rev-08.jpg',name:'Lena P.',car:'Porsche 911 GT3',stars:5,quote:'Only shop I trust',text:'Been coming here for six years across three cars. They remember every build, every preference. It stopped being a garage and started being my crew.'}
+  ];
+  const grid=document.getElementById('revGrid');
+  const ov=document.getElementById('revOpen');
+  REV.forEach((r,i)=>{
+    const st='★★★★★'.slice(0,r.stars);
+    const c=document.createElement('div');
+    c.className='revcard';
+    c.innerHTML='<img src="'+r.img+'" alt=""><span class="tapc">Tap to read</span>'
+      +'<div class="rc"><div class="st">'+st+'</div><b>'+r.name+'</b><span>'+r.car+'</span></div>';
+    c.addEventListener('click',()=>open(r));
+    grid.appendChild(c);
+    makeFlex(c,{ampY:5,ampR:1.1,tilt:9,lift:-7,sc:1.045,persp:850,entrance:true,delay:i*45});
+  });
+  function open(r){
+    document.getElementById('roImg').src=r.img;
+    document.getElementById('roStars').textContent='★★★★★'.slice(0,r.stars);
+    typeInto(document.getElementById('roQuote'),r.quote,'char');
+    typeInto(document.getElementById('roText'),r.text,'word');
+    document.getElementById('roName').textContent=r.name;
+    document.getElementById('roMeta').textContent=r.car+' · Verified owner';
+    ov.classList.add('show');
+  }
+  function close(){ov.classList.remove('show');}
+  document.getElementById('revClose').addEventListener('click',close);
+  ov.addEventListener('click',e=>{if(e.target===ov)close();});
+  window.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+})();
+
+/* observe the new reveal elements */
+document.querySelectorAll('.pop,[data-rise]').forEach(el=>io.observe(el));
+
+/* every section: headings type char-by-char, body/eyebrows assemble word-by-word */
+registerText('.shead h2, .reserve h2','char');
+registerText('.eyebrow, .shead p, .herodesc, .reserve p','word');
+
+window.__blacktop={go,setMode,state:()=>({idx,mode,car:CARS[idx].id})};
+</script>
+</body>
+</html>
