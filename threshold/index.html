@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>THRESHOLD Garage — Cross into the build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --pearl:#0C0D11; --ink:#F2F1EC; --ink2:#9A9CA6; --line:rgba(255,255,255,.13);
+  --surface:#16171D; --surface2:#101116;
+  --accent:#F5B31C; --accent-ink:#F5B31C;
+  --disp:'Sora',sans-serif; --sans:'Inter',sans-serif;
+  --r:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{background:#0C0D11 radial-gradient(120% 80% at 82% -8%, #1a1b23 0%, rgba(12,13,17,0) 52%) fixed;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--accent);color:#111}
+.wrap{max-width:1240px;margin:0 auto;padding:0 26px}
+h1,h2,h3{font-family:var(--disp);letter-spacing:-.03em;line-height:1.02;font-weight:700}
+.eyebrow{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink2)}
+.grain{position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* ---------- top nav ---------- */
+.topnav{position:fixed;top:16px;left:0;right:0;z-index:100;display:flex;justify-content:center;pointer-events:none}
+.topnav .bar{pointer-events:auto;display:flex;align-items:center;gap:26px;background:rgba(22,23,29,.72);backdrop-filter:blur(18px);
+  border:1px solid var(--line);border-radius:100px;padding:9px 10px 9px 20px;box-shadow:0 12px 40px -18px rgba(0,0,0,.7)}
+.topnav .brand{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;font-size:17px;display:flex;align-items:center;gap:8px}
+.topnav .brand i{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;transition:background .5s}
+.topnav .links{display:flex;gap:22px;font-size:13.5px;font-weight:500;color:var(--ink2)}
+.topnav .links a{transition:color .2s}
+.topnav .links a:hover{color:var(--ink)}
+.topnav .cta{background:var(--accent);color:#111;font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:100px;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.topnav .cta:hover{transform:translateY(-2px)}
+@media(max-width:820px){.topnav .links{display:none}}
+
+/* ---------- HERO (Pinterest_50 switcher) ---------- */
+.hero{padding:78px 16px 26px}
+.stage{position:relative;max-width:1300px;margin:0 auto;border-radius:34px;overflow:hidden;min-height:88vh;
+  display:grid;grid-template-rows:auto 1fr auto;isolation:isolate;
+  background:radial-gradient(120% 130% at 50% 12%, var(--hb1) 0%, var(--hb2) 62%, var(--hb3) 100%);
+  transition:background .9s cubic-bezier(.6,0,.2,1);box-shadow:0 40px 90px -50px rgba(20,21,26,.6)}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:34px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14), inset 0 -140px 160px -80px rgba(0,0,0,.28)}
+.hero.dark{color:#F3F1EC}
+.hero .pilltxt{color:var(--h-ink)}
+
+/* hero inner pill nav */
+.hnav{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:20px 26px}
+.hnav .seg{display:flex;gap:4px;background:var(--h-seg);border:1px solid var(--h-line);border-radius:100px;padding:4px}
+.hnav .seg a{font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:100px;color:var(--h-ink2);transition:.2s}
+.hnav .seg a.on{background:var(--h-chip);color:var(--h-ink)}
+.hnav .hbrand{font-family:var(--disp);font-weight:800;font-size:16px;color:var(--h-ink);letter-spacing:-.02em}
+.hnav .hicons{display:flex;gap:14px;color:var(--h-ink2);font-size:13px}
+@media(max-width:760px){.hnav .seg,.hnav .hicons{display:none}}
+
+/* hero body 3-col */
+.hbody{position:relative;z-index:4;display:grid;grid-template-columns:1.05fr 1.5fr 1fr;align-items:center;gap:10px;padding:0 40px}
+.hleft{max-width:340px}
+.hleft .kicker{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--h-ink2);margin-bottom:14px}
+.hleft h1{font-size:clamp(34px,4.4vw,58px);color:var(--h-ink);line-height:.98}
+.hleft h1 .thin{font-weight:300;font-style:normal;opacity:.9}
+.hleft p{margin-top:18px;font-size:14px;line-height:1.7;color:var(--h-ink2);max-width:300px}
+.hleft .row{display:flex;align-items:center;gap:14px;margin-top:26px}
+.hbtn{background:var(--h-ink);color:var(--h-bg-ink);font-weight:600;font-size:14px;padding:14px 24px;border-radius:100px;display:inline-flex;align-items:center;gap:9px;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s}
+.hbtn:hover{transform:translateY(-3px)}
+.arrows{display:flex;gap:8px}
+.arrows button{width:44px;height:44px;border-radius:50%;border:1px solid var(--h-line);color:var(--h-ink);display:grid;place-items:center;background:var(--h-seg);transition:.25s}
+.arrows button:hover{background:var(--h-chip);transform:scale(1.06)}
+
+/* center car */
+.hcenter{position:relative;align-self:stretch;display:grid;place-items:center;min-height:60vh}
+.carFloat{position:relative;width:100%;height:100%;display:grid;place-items:center;animation:floaty 7s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(-8px)}50%{transform:translateY(10px)}}
+.carShadow{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);width:52%;height:42px;border-radius:50%;
+  background:radial-gradient(closest-side, rgba(0,0,0,.34), transparent 78%);filter:blur(3px);animation:shd 7s ease-in-out infinite}
+@keyframes shd{0%,100%{transform:translateX(-50%) scale(1.02);opacity:.85}50%{transform:translateX(-50%) scale(.9);opacity:.6}}
+.carImg{max-width:96%;max-height:66vh;object-fit:contain;will-change:transform,opacity;
+  -webkit-mask-image:radial-gradient(ellipse 78% 82% at 50% 47%, #000 52%, transparent 80%);
+          mask-image:radial-gradient(ellipse 78% 82% at 50% 47%, #000 52%, transparent 80%);
+  filter:drop-shadow(0 40px 44px rgba(0,0,0,.28))}
+.badge{position:absolute;top:6%;left:50%;transform:translateX(-50%);font-family:var(--disp);font-weight:800;
+  font-size:clamp(60px,12vw,150px);letter-spacing:-.04em;color:var(--h-ghost);z-index:-1;white-space:nowrap;transition:color .9s}
+
+/* right specs */
+.hright{justify-self:end;text-align:right;max-width:230px}
+.hright .price{font-family:var(--disp);font-weight:800;font-size:clamp(26px,3vw,38px);color:var(--h-ink)}
+.hright .was{font-size:14px;color:var(--h-ink2);text-decoration:line-through;margin-top:2px}
+.hright .lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--h-ink2);margin:22px 0 10px}
+.trims{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.trims button{min-width:46px;padding:9px 4px;border-radius:12px;border:1px solid var(--h-line);background:var(--h-seg);color:var(--h-ink2);font-size:12px;font-weight:600;transition:.2s}
+.trims button.on{background:var(--h-ink);color:var(--h-bg-ink);border-color:transparent}
+.hright .cname{margin-top:26px;font-family:var(--disp);font-weight:700;font-size:17px;color:var(--h-ink)}
+.hright .cclr{font-size:12px;color:var(--h-ink2);margin-top:3px}
+
+/* hero footer row */
+.hfoot{position:relative;z-index:4;display:flex;align-items:flex-end;justify-content:space-between;padding:8px 40px 30px}
+.hcap{flex:1;text-align:center;font-size:13px;letter-spacing:.02em;color:var(--h-ink2)}
+.hcap b{color:var(--h-ink);font-weight:600}
+.dots{display:flex;gap:7px;align-items:center}
+.dots button{width:8px;height:8px;border-radius:50%;background:var(--h-line);transition:.3s}
+.dots button.on{background:var(--h-ink);width:26px;border-radius:6px}
+.thumb{width:112px;height:78px;border-radius:16px;overflow:hidden;border:1px solid var(--h-line);background:var(--h-seg);
+  position:relative;cursor:pointer;transition:transform .3s}
+.thumb:hover{transform:translateY(-3px)}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:center;opacity:.9}
+.thumb .tnext{position:absolute;left:8px;top:6px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+@media(max-width:900px){
+  .hbody{grid-template-columns:1fr;justify-items:center;text-align:center;gap:6px;padding:0 20px}
+  .hleft,.hright{max-width:420px;text-align:center}.hright{justify-self:center}
+  .hleft .row,.trims{justify-content:center}
+  .hcenter{min-height:44vh}.carImg{max-height:40vh}
+  .hfoot{flex-direction:column;gap:16px;align-items:center}.thumb{display:none}
+}
+
+/* ---------- generic section ---------- */
+section.blk{padding:118px 0}
+section[id]{scroll-margin-top:96px}
+.shead{max-width:720px;margin-bottom:54px}
+.shead h2{font-size:clamp(32px,4.4vw,54px)}
+.shead p{margin-top:16px;font-size:16px;line-height:1.7;color:var(--ink2);max-width:560px}
+.reveal{opacity:0;transform:translateY(48px);transition:opacity .6s cubic-bezier(.2,.75,.25,1),transform .72s cubic-bezier(.16,.92,.28,1.08)}
+.reveal.in{opacity:1;transform:none}
+
+/* selector / qualifier */
+.match{background:var(--surface);border-radius:30px;padding:44px;border:1px solid var(--line);box-shadow:0 40px 90px -60px rgba(20,21,26,.5)}
+.match .q{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);margin-bottom:16px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:34px}
+.chip{padding:14px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface2);font-weight:600;font-size:15px;transition:.22s;display:flex;align-items:center;gap:10px}
+.chip .em{font-size:18px}
+.chip:hover{transform:translateY(-2px)}
+.chip.on{background:var(--accent);color:#111;border-color:transparent}
+.matchOut{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;margin-top:8px;padding-top:34px;border-top:1px solid var(--line)}
+.matchOut .rec .lbl{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink);font-weight:700}
+.matchOut .rec h3{font-size:34px;margin:10px 0 12px}
+.matchOut .rec p{font-size:15px;line-height:1.7;color:var(--ink2);max-width:420px}
+.matchOut .rec .go{margin-top:22px;background:var(--accent);color:#111;font-weight:700;padding:14px 24px;border-radius:100px;display:inline-flex;gap:8px;align-items:center;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.matchOut .rec .go:hover{transform:translateY(-3px)}
+.matchOut .rec .alt{margin-top:14px;margin-left:12px;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink2);background:var(--surface2);border:1px solid var(--line);padding:11px 16px;border-radius:100px;transition:transform .25s cubic-bezier(.34,1.56,.64,1),color .2s}
+.matchOut .rec .alt:hover{transform:translateY(-2px);color:var(--ink)}
+.matchOut .rec .alt b{color:var(--accent-ink);font-weight:700}
+@media(max-width:520px){.matchOut .rec .alt{margin-left:0}}
+.matchOut .recImg{border-radius:20px;overflow:hidden;aspect-ratio:16/11;background:var(--surface2);position:relative}
+.matchOut .recImg img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+@media(max-width:760px){.matchOut{grid-template-columns:1fr}.match{padding:26px}}
+
+/* featured detail with tilt */
+.feature{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+.fcanvas{border-radius:26px;background:linear-gradient(150deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid var(--line);
+  padding:30px;position:relative;overflow:hidden;perspective:1100px;min-height:400px;display:grid;place-items:center}
+.fcanvas .fglow{position:absolute;width:60%;height:60%;border-radius:50%;background:var(--accent);opacity:.16;filter:blur(70px);left:20%;top:18%;transition:.4s;pointer-events:none}
+.fcanvas img{max-width:92%;max-height:340px;object-fit:contain;transform-style:preserve-3d;transition:transform .2s ease-out;
+  -webkit-mask-image:radial-gradient(ellipse 82% 84% at 50% 48%, #000 55%, transparent 82%);
+  filter:drop-shadow(0 30px 40px rgba(0,0,0,.25))}
+.fmeta .tag{display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 24%,transparent);padding:6px 12px;border-radius:100px}
+.fmeta h2{font-size:clamp(30px,4vw,48px);margin:16px 0 12px}
+.fmeta .sub{font-size:15px;line-height:1.7;color:var(--ink2);max-width:400px}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
+.spec{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.spec .n{font-family:var(--disp);font-weight:800;font-size:30px;line-height:1}
+.spec .n small{font-size:14px;font-weight:600;color:var(--ink2);margin-left:3px}
+.spec .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-top:8px}
+@media(max-width:860px){.feature{grid-template-columns:1fr}}
+
+/* problems -> solutions */
+.probs{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.prob{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:transform .3s}
+.prob::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:var(--accent);opacity:0;filter:blur(50px);left:var(--mx,50%);top:var(--my,50%);transform:translate(-50%,-50%);transition:opacity .4s;pointer-events:none}
+.prob:hover{transform:translateY(-4px)}
+.prob:hover::before{opacity:.14}
+.prob .pn{font-size:13px;font-weight:700;color:var(--accent-ink);letter-spacing:.05em}
+.prob h3{font-size:22px;margin:12px 0 10px;font-family:var(--disp)}
+.prob .ps{font-size:14.5px;line-height:1.65;color:var(--ink2)}
+.prob .fix{margin-top:16px;font-size:13.5px;font-weight:600;display:flex;gap:8px;align-items:flex-start}
+.prob .fix i{color:var(--accent-ink);font-style:normal}
+@media(max-width:720px){.probs{grid-template-columns:1fr}}
+
+/* lineup */
+.filters{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.filters button{padding:10px 18px;border-radius:100px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:13.5px;color:var(--ink2);transition:.2s}
+.filters button.on{background:var(--accent);color:#111;border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .16s ease-out,box-shadow .35s;cursor:pointer;transform-style:preserve-3d}
+.card:hover{box-shadow:0 34px 70px -34px rgba(0,0,0,.7)}
+.card .ph{aspect-ratio:16/11;overflow:hidden;position:relative;background:var(--surface2)}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.card:hover .ph img{transform:scale(1.06)}
+.card .ph .pill{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.9);color:#111;backdrop-filter:blur(6px);padding:6px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.card .body{padding:20px}
+.card .body .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.card .body h3{font-size:20px;font-family:var(--disp)}
+.card .body .pr{font-family:var(--disp);font-weight:800;font-size:18px}
+.card .body .mini{display:flex;gap:16px;margin-top:14px;font-size:12.5px;color:var(--ink2)}
+.card .body .mini b{color:var(--ink);font-family:var(--disp);font-size:15px}
+.card .body .pick{margin-top:16px;width:100%;padding:11px;border-radius:12px;background:var(--surface2);font-weight:600;font-size:13px;transition:.2s}
+.card:hover .body .pick{background:var(--accent);color:#111}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+.step{position:relative;padding-top:26px}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:var(--disp);font-weight:800;font-size:15px;color:var(--accent-ink)}
+.step .bar{height:3px;background:var(--line);border-radius:3px;margin:12px 0 18px;overflow:hidden}
+.step .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width 1s ease}
+.step.in .bar i{width:100%}
+.step h3{font-size:20px;font-family:var(--disp);margin-bottom:8px}
+.step p{font-size:14px;line-height:1.6;color:var(--ink2)}
+@media(max-width:820px){.steps{grid-template-columns:repeat(2,1fr)}}
+
+/* proof */
+.proof{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:center}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.stat .n{font-family:var(--disp);font-weight:800;font-size:clamp(36px,5vw,56px);line-height:1}
+.stat .k{font-size:13px;color:var(--ink2);margin-top:6px}
+.quotes{display:flex;flex-direction:column;gap:16px}
+.quote{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+.quote p{font-size:15px;line-height:1.6}
+.quote .who{margin-top:14px;font-size:13px;color:var(--ink2);font-weight:600}
+@media(max-width:820px){.proof{grid-template-columns:1fr}}
+
+/* reserve */
+.reserve{background:#16171D;color:#F3F1EC;border-radius:30px;padding:56px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.reserve::before{content:"";position:absolute;width:400px;height:400px;border-radius:50%;background:var(--accent);opacity:.2;filter:blur(90px);right:-80px;top:-80px}
+.reserve .rgrid{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.reserve h2{font-size:clamp(30px,4vw,46px);color:#fff}
+.reserve p{margin-top:14px;color:#B9BAC0;line-height:1.7;font-size:15px;max-width:380px}
+.form{display:grid;gap:14px}
+.form label{font-size:12px;color:#9A9BA2;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.form input,.form select{width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:15px;margin-top:6px}
+.form input::placeholder{color:#7C7D85}
+.form select option{color:#111}
+.form .submit{margin-top:8px;background:var(--accent);color:#111;font-weight:700;padding:15px;border-radius:14px;font-size:15px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.form .submit:hover{transform:translateY(-3px)}
+.form .note{font-size:12px;color:#8A8B92;text-align:center;margin-top:2px}
+@media(max-width:760px){.reserve{padding:30px}.reserve .rgrid{grid-template-columns:1fr}}
+
+/* footer */
+footer{padding:60px 0 44px;border-top:1px solid var(--line);margin-top:20px}
+footer .frow{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer .fb{font-family:var(--disp);font-weight:800;font-size:22px;display:flex;align-items:center;gap:9px}
+footer .fb i{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+footer .flinks{display:flex;gap:22px;font-size:13.5px;color:var(--ink2)}
+footer .ig{font-size:13.5px;color:var(--ink2)}
+footer .fine{margin-top:26px;font-size:12px;color:var(--ink2)}
+
+.cursor-glow{position:fixed;width:340px;height:340px;border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(closest-side, color-mix(in srgb,var(--accent) 22%,transparent), transparent);
+  transform:translate(-50%,-50%);left:50%;top:50%;opacity:0;transition:opacity .5s;mix-blend-mode:screen;filter:blur(10px)}
+
+/* hero auto-advance progress + grab affordance */
+.hprog{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:6;background:var(--h-line);border-radius:0 0 34px 34px;overflow:hidden}
+.hprog i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px}
+.hprog i.run{animation:hp 5s linear forwards}
+@keyframes hp{from{width:0}to{width:100%}}
+.hcenter{cursor:grab}.hcenter:active{cursor:grabbing}
+
+/* ---------- collection marquee band ---------- */
+.floorband{background:#0F1016;color:#F3F1EC;padding:96px 0;overflow:hidden;position:relative;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.floorband::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 60% at 50% -10%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 60%);opacity:.6;pointer-events:none}
+.floorband .fhead{position:relative;max-width:1240px;margin:0 auto 44px;padding:0 26px}
+.floorband .eyebrow{color:color-mix(in srgb,var(--accent) 88%,#fff)}
+.floorband h2{font-size:clamp(30px,4.4vw,52px);color:#fff;margin-top:12px}
+.floorband h2 .thin{font-weight:300;color:#9A9CA6}
+.track{display:flex;gap:20px;width:max-content;will-change:transform}
+.track.a{animation:mq 46s linear infinite}
+.track.b{animation:mq 58s linear infinite reverse;margin-top:20px}
+.floorband:hover .track{animation-play-state:paused}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mtile{position:relative;width:340px;height:212px;border-radius:20px;overflow:hidden;flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;background:#0c0d11}
+.mtile img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1);opacity:.9}
+.mtile:hover img{transform:scale(1.07);opacity:1}
+.mtile::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(6,7,10,.85),transparent 52%)}
+.mtile .cap{position:absolute;left:16px;bottom:14px;z-index:2}
+.mtile .cap b{font-family:var(--disp);font-weight:700;font-size:17px;color:#fff;display:block}
+.mtile .cap span{font-size:12px;color:#B9BAC0}
+.mtile .cap i{font-style:normal;color:var(--accent)}
+@media(max-width:600px){.mtile{width:260px;height:164px}}
+
+/* ---------- parallax leaves + 3 signature scroll transitions ---------- */
+[data-par]{will-change:transform}
+/* #1 feature = 3D Y-swing + specs rush up */
+#feature .fcanvas{transform:perspective(1300px) rotateY(calc((1 - var(--sp,1)) * -24deg)) scale(calc(.84 + var(--sp,1)*.16));opacity:calc(.12 + var(--sp,1)*.88);transform-origin:72% 50%;transition:transform .18s linear,opacity .18s linear;will-change:transform,opacity}
+#feature .spec{transform:translateY(calc((1 - var(--sp,1))*40px));opacity:var(--sp,1);transition:transform .22s cubic-bezier(.16,.92,.28,1.08),opacity .22s linear}
+#feature .spec:nth-child(2){transform:translateY(calc((1 - var(--sp,1))*56px))}
+#feature .spec:nth-child(3){transform:translateY(calc((1 - var(--sp,1))*72px))}
+#feature .spec:nth-child(4){transform:translateY(calc((1 - var(--sp,1))*88px))}
+/* #2 floor = curtain clip-path wipe + heading slides in from left */
+#floor{clip-path:inset(calc((1 - var(--sp,1)) * 46%) 0% round 0);transition:clip-path .2s linear}
+#floor .fhead{transform:translateX(calc((1 - var(--sp,1)) * -70px));opacity:var(--sp,1);transition:transform .24s cubic-bezier(.16,.92,.28,1.08),opacity .24s linear}
+/* #3 reserve = focus-pull bloom (scale up out of blur) */
+#reserve .reserve{transform:scale(calc(.9 + var(--sp,1)*.1));filter:blur(calc((1 - var(--sp,1)) * 8px));opacity:calc(.18 + var(--sp,1)*.82);transform-origin:50% 62%;transition:transform .2s linear,filter .2s linear,opacity .2s linear;will-change:transform,filter}
+#reserve .reserve::before{transform:scale(calc(.4 + var(--sp,1)*.6))}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="cursor-glow" id="cglow"></div>
+
+<!-- top nav -->
+<div class="topnav"><div class="bar">
+  <div class="brand"><i id="navdot"></i>THRESHOLD</div>
+  <div class="links">
+    <a href="#match">Find your match</a><a href="#lineup">The lineup</a><a href="#process">How it works</a><a href="#proof">Owners</a>
+  </div>
+  <a href="#reserve" class="cta">Reserve a viewing</a>
+</div></div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="stage" id="stage">
+    <div class="hnav">
+      <div class="hbrand">THRESHOLD GARAGE</div>
+      <div class="seg">
+        <a class="on" href="#top">Showroom</a><a href="#match">Match</a><a href="#lineup">Lineup</a><a href="#reserve">Reserve</a>
+      </div>
+      <div class="hicons"><span>Search</span><span>Saved</span><span>Menu</span></div>
+    </div>
+
+    <div class="hbody">
+      <div class="hleft">
+        <div class="kicker" id="hKicker">Track Weapon</div>
+        <h1>Built to<br><span class="thin">cross any</span> line</h1>
+        <p id="hBlurb">A homologated track car you can actually drive home. Precision you feel in your hands.</p>
+        <div class="row">
+          <a href="#match" class="hbtn">Find your fit <span>&rarr;</span></a>
+          <div class="arrows">
+            <button id="prev" aria-label="Previous car">&larr;</button>
+            <button id="next" aria-label="Next car">&rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="hcenter">
+        <div class="badge" id="hBadge">GT3 RS</div>
+        <div class="carFloat">
+          <div class="carShadow"></div>
+          <img class="carImg" id="carImg" src="assets/car-1.jpg" alt="Featured car" />
+        </div>
+      </div>
+
+      <div class="hright">
+        <div class="price" id="hPrice">$219,900</div>
+        <div class="was" id="hWas">$241,300 MSRP</div>
+        <div class="lbl">Choose your spec</div>
+        <div class="trims" id="hTrims">
+          <button class="on">Base</button><button>Sport</button><button>Track</button>
+        </div>
+        <div class="cname" id="hName">Porsche 911 GT3 RS</div>
+        <div class="cclr" id="hClr">Racing Yellow</div>
+      </div>
+    </div>
+
+    <div class="hfoot">
+      <div class="dots" id="hDots"></div>
+      <div class="hcap">Some cars you drive. These you <b>cross into</b>.</div>
+      <div class="thumb" id="hThumb"><span class="tnext">Next</span><img id="thumbImg" src="assets/car-2.jpg" alt="Next car"/></div>
+    </div>
+    <div class="hprog"><i id="hProg"></i></div>
+  </div>
+</section>
+
+<!-- ================= MATCH / QUALIFIER ================= -->
+<section class="blk" id="match">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">Step 01 — Tell us about you</div>
+      <h2>Pick the car that fits<br>your actual life.</h2>
+      <p>Most people buy the wrong car for their situation. Answer two quick questions and we'll point you to the one that solves your problem — not the one with the loudest ad.</p>
+    </div>
+    <div class="match reveal">
+      <div class="q">What will you use it for most?</div>
+      <div class="chips" id="useChips">
+        <button class="chip on" data-use="daily"><span class="em">🌦️</span>Daily driver</button>
+        <button class="chip" data-use="track"><span class="em">🏁</span>Track days</button>
+        <button class="chip" data-use="show"><span class="em">✨</span>Weekend / shows</button>
+        <button class="chip" data-use="value"><span class="em">📈</span>Investment</button>
+      </div>
+      <div class="q">What's the problem you keep running into?</div>
+      <div class="chips" id="probChips">
+        <button class="chip on" data-prob="usability"><span class="em">🛞</span>Too impractical to enjoy</button>
+        <button class="chip" data-prob="budget"><span class="em">💸</span>Supercar looks, real budget</button>
+        <button class="chip" data-prob="reliability"><span class="em">🔧</span>Always in the shop</button>
+        <button class="chip" data-prob="value"><span class="em">🪙</span>Loses value the day I buy</button>
+      </div>
+      <div class="matchOut">
+        <div class="rec">
+          <div class="lbl">Your match</div>
+          <h3 id="mName">Porsche 911 Turbo S</h3>
+          <p id="mWhy">640hp that still behaves in rain and traffic — the all-weather rocket for people who want to actually drive it every day.</p>
+          <button class="go" id="mGo">See this build <span>&rarr;</span></button>
+          <button class="alt" id="mAlt"></button>
+        </div>
+        <div class="recImg"><img id="mImg" src="assets/car-2.jpg" alt="Matched car"/></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURED DETAIL ================= -->
+<section class="blk" id="feature" style="padding-top:0">
+  <div class="wrap">
+    <div class="feature">
+      <div class="fcanvas reveal" id="tilt">
+        <div class="fglow" id="fglow"></div>
+        <img id="fImg" src="assets/car-2.jpg" alt="Featured build"/>
+      </div>
+      <div class="fmeta reveal">
+        <span class="tag" id="fTag">All-Weather Rocket</span>
+        <h2 id="fName">911 Turbo S</h2>
+        <p class="sub" id="fSub">The one you can launch in the wet and still take to dinner. Nothing on this list is more usable at this pace.</p>
+        <div class="specs">
+          <div class="spec"><div class="n" id="sHp">640<small>hp</small></div><div class="k">Max power</div></div>
+          <div class="spec"><div class="n" id="sZero">2.6<small>s</small></div><div class="k">0–60 mph</div></div>
+          <div class="spec"><div class="n" id="sTop">205<small>mph</small></div><div class="k">Top speed</div></div>
+          <div class="spec"><div class="n" id="sPrice">$230k</div><div class="k">From price</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLLECTION MARQUEE ================= -->
+<section class="floorband" id="floor">
+  <div class="fhead reveal">
+    <div class="eyebrow">The showroom floor</div>
+    <h2>Every car on the floor,<br><span class="thin">already inspected and priced.</span></h2>
+  </div>
+  <div class="track a" id="trackA"></div>
+  <div class="track b" id="trackB"></div>
+</section>
+
+<!-- ================= PROBLEMS -> SOLUTIONS ================= -->
+<section class="blk" id="why">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">Step 02 — Why buyers get burned</div>
+      <h2>The four things that ruin<br>the ownership dream.</h2>
+      <p>We built THRESHOLD around the problems people actually complain about after they buy. Here's how each one is handled before you ever sign.</p>
+    </div>
+    <div class="probs" id="probsGrid">
+      <div class="prob reveal"><div class="pn">Problem 01</div><h3>Depreciation anxiety</h3><div class="ps">You drive it off the lot and watch $30k evaporate. Enthusiasm dies with the resale value.</div><div class="fix"><i>✓</i><span>Every THRESHOLD car is value-graded. We only list models with proven residuals and give you the 3-year projection up front.</span></div></div>
+      <div class="prob reveal"><div class="pn">Problem 02</div><h3>Constantly in the shop</h3><div class="ps">Exotic on paper, tow-truck in practice. Downtime kills the joy of owning something fast.</div><div class="fix"><i>✓</i><span>Full mechanical inspection + 2-year THRESHOLD aftercare on every build. Reliability score published on the listing.</span></div></div>
+      <div class="prob reveal"><div class="pn">Problem 03</div><h3>Hidden costs after signing</h3><div class="ps">The price is never the price. Fees, prep, delivery, and "market adjustment" pile up.</div><div class="fix"><i>✓</i><span>One out-the-door number. Prep, detail, and delivery included — no dealer markup games.</span></div></div>
+      <div class="prob reveal"><div class="pn">Problem 04</div><h3>Bought the wrong car</h3><div class="ps">A track weapon stuck in traffic, or a cruiser you find boring. Wrong tool for your life.</div><div class="fix"><i>✓</i><span>The matcher above pairs you to fit — daily, track, show, or investment. Test the match before you commit.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LINEUP ================= -->
+<section class="blk" id="lineup">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">Step 03 — Pick the one you love</div>
+      <h2>The lineup.</h2>
+      <p>Filter by how you'll use it, then tap any car to load it into the showroom and the build detail above.</p>
+    </div>
+    <div class="filters reveal" id="filters">
+      <button class="on" data-f="all">All</button>
+      <button data-f="daily">Daily</button>
+      <button data-f="track">Track</button>
+      <button data-f="show">Show</button>
+      <button data-f="value">Investment</button>
+    </div>
+    <div class="grid" id="lineGrid"></div>
+  </div>
+</section>
+
+<!-- ================= PROCESS ================= -->
+<section class="blk" id="process" style="background:var(--surface2)">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">Step 04 — How it works</div>
+      <h2>Four steps. No games.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="bar"><i></i></div><h3>Match</h3><p>Answer two questions. We shortlist the cars that actually fit your life and budget.</p></div>
+      <div class="step reveal"><div class="bar"><i></i></div><h3>Configure</h3><p>Pick spec and colour. See the out-the-door number — every cost, no surprises.</p></div>
+      <div class="step reveal"><div class="bar"><i></i></div><h3>Reserve</h3><p>Lock it with a refundable deposit. We inspect, detail, and value-grade the car.</p></div>
+      <div class="step reveal"><div class="bar"><i></i></div><h3>Delivered</h3><p>Doorstep delivery with 2-year aftercare. Drive it, don't babysit it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROOF ================= -->
+<section class="blk" id="proof">
+  <div class="wrap">
+    <div class="proof">
+      <div class="stats reveal">
+        <div class="stat"><div class="n" data-count="1200">0</div><div class="k">Cars delivered</div></div>
+        <div class="stat"><div class="n" data-count="98">0</div><div class="k">% would buy again</div></div>
+        <div class="stat"><div class="n" data-count="4.9" data-dec="1">0.0</div><div class="k">Average rating</div></div>
+        <div class="stat"><div class="n" data-count="24">0</div><div class="k">Month aftercare</div></div>
+      </div>
+      <div class="quotes reveal">
+        <div class="quote"><p>"I told them I wanted presence without a monthly repair bill. They put me in the Turbo S — 8 months, zero drama."</p><div class="who">— Marcus D., 911 Turbo S owner</div></div>
+        <div class="quote"><p>"The matcher talked me OUT of the GT3 RS because I commute daily. Honest sales? Never seen it. Bought the Carrera instead — perfect."</p><div class="who">— Priya S., 911 Carrera owner</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESERVE ================= -->
+<section class="blk" id="reserve" style="padding-bottom:40px">
+  <div class="wrap">
+    <div class="reserve reveal">
+      <div class="rgrid">
+        <div>
+          <h2>Reserve your viewing.</h2>
+          <p>Tell us the car and the problem you're solving. We'll prep the right build and have it ready — no pressure, no markup surprises.</p>
+        </div>
+        <form class="form" id="resForm" onsubmit="return false">
+          <div><label>Name</label><input required placeholder="Your name"/></div>
+          <div><label>Car you're eyeing</label>
+            <select id="resCar"></select></div>
+          <div><label>Biggest problem you want solved</label>
+            <select>
+              <option>Practicality — I want to drive it daily</option>
+              <option>Budget — supercar looks, real money</option>
+              <option>Reliability — no more shop visits</option>
+              <option>Value — something that holds its price</option>
+            </select></div>
+          <button class="submit" id="resBtn">Reserve my viewing</button>
+          <div class="note">Refundable deposit • one honest out-the-door price</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="frow">
+    <div class="fb"><i></i>THRESHOLD GARAGE</div>
+    <div class="flinks"><a href="#match">Match</a><a href="#lineup">Lineup</a><a href="#process">Process</a><a href="#reserve">Reserve</a></div>
+    <div class="ig">@threshold.garage</div>
+  </div>
+  <div class="fine">Cross into the build. © THRESHOLD Garage — a concept showroom.</div>
+</div></footer>
+
+<script>
+const CARS=[
+  {id:'gt3rs',brand:'Porsche',name:'911 GT3 RS',short:'GT3 RS',img:'assets/car-1.jpg',clr:'Racing Yellow',
+   accent:'#F5B31C',aink:'#7a5300',hp:518,zero:3.0,top:184,price:219900,was:241300,tag:'Track Weapon',use:'track',
+   blurb:'A homologated track car you can actually drive home. Precision you feel in your hands.',
+   sub:'Wing, aero and a screaming flat-six. Built for lap times first, everything else second.',
+   bg:['#fdfaf2','#f2e6c6','#e7d6a6'],ghost:'rgba(20,21,26,.05)',dark:false},
+  {id:'turbos',brand:'Porsche',name:'911 Turbo S',short:'TURBO S',img:'assets/car-2.jpg',clr:'Chalk White',
+   accent:'#7C93B4',aink:'#3d5578',hp:640,zero:2.6,top:205,price:219000,was:230400,tag:'All-Weather Rocket',use:'daily',
+   blurb:'640hp that still behaves in rain and traffic — the all-weather rocket you can drive every day.',
+   sub:'The one you can launch in the wet and still take to dinner. Nothing here is more usable at this pace.',
+   bg:['#f6f8fb','#e2e9f1','#cfd9e5'],ghost:'rgba(20,21,26,.05)',dark:false},
+  {id:'mustang',brand:'Ford',name:'Mustang GT',short:'MUSTANG',img:'assets/car-3.jpg',clr:'Shadow Black',
+   accent:'#E23B3B',aink:'#a81f1f',hp:486,zero:4.2,top:166,price:58400,was:64900,tag:'V8 Presence',use:'show',
+   blurb:'A naturally-aspirated V8 with real presence — supercar drama without the supercar bill.',
+   sub:'Loud, planted and honest. The most car-per-dollar on the floor and it still turns every head.',
+   bg:['#f4f5f7','#e0e3e8','#cfd3da'],ghost:'rgba(20,21,26,.05)',dark:false},
+  {id:'gtr',brand:'Nissan',name:'GT-R Nismo',short:'GT-R',img:'assets/car-5.jpg',clr:'Gunmetal / Blue',
+   accent:'#2E6FE0',aink:'#1a4aa8',hp:600,zero:2.9,top:196,price:122000,was:135000,tag:'Giant Killer',use:'track',
+   blurb:'Cult-hero AWD launch control that humbles cars twice its price — in any weather.',
+   sub:'Point, squeeze, gone. The GT-R turns bad weather and slow reactions into a non-issue.',
+   bg:['#eef0f2','#dfe2e7','#cdd2d9'],ghost:'rgba(20,21,26,.05)',dark:false},
+  {id:'revuelto',brand:'Lamborghini',name:'Revuelto',short:'REVUELTO',img:'assets/car-6.jpg',clr:'Viola Pasifae',
+   accent:'#A64BD3',aink:'#6d2a94',hp:1001,zero:2.5,top:217,price:608000,was:640000,tag:'Show Stopper',use:'show',
+   blurb:'A 1,001hp V12 hybrid that stops traffic before it ever moves — pure theatre.',
+   sub:'The one people photograph at every light. Hybrid V12 drama with usable electric range.',
+   bg:['#d3d1d6','#b1aeb8','#8a8792'],ghost:'rgba(20,21,26,.05)',dark:false},
+  {id:'eqs',brand:'Mercedes-Benz',name:'EQS 580',short:'EQS',img:'assets/car-7.jpg',clr:'Hyper Silver',
+   accent:'#5B8DC9',aink:'#2f5a8f',hp:751,zero:3.4,top:155,price:147000,was:158000,tag:'Silent Luxury',use:'daily',
+   blurb:'Silent, 450-mile luxury that opens its own doors — the future you can daily right now.',
+   sub:'Whisper-quiet, self-parking, cheaper to run than anything here. Luxury without the fuel bill.',
+   bg:['#1c2530','#141b24','#0c1118'],ghost:'rgba(255,255,255,.06)',dark:true},
+  {id:'urus',brand:'Lamborghini',name:'Urus S',short:'URUS',img:'assets/car-8.jpg',clr:'Nero Noctis',
+   accent:'#C99A3B',aink:'#8a6a26',hp:657,zero:3.5,top:190,price:245000,was:262000,tag:'Do-Everything Bull',use:'daily',
+   blurb:'Supercar pace, four real seats, room for the dogs — the only exotic you can use daily.',
+   sub:'School run at 8am, back road at 8pm. The Urus refuses to make you choose practicality or drama.',
+   bg:['#1a1b1f','#131418','#0b0c0f'],ghost:'rgba(255,255,255,.06)',dark:true},
+  {id:'carrera',brand:'Porsche',name:'911 Carrera',short:'CARRERA',img:'assets/car-4.jpg',clr:'Sand Beige',
+   accent:'#C9A24B',aink:'#8a6a26',hp:473,zero:3.3,top:191,price:135000,was:148000,tag:'Timeless Value',use:'value',
+   blurb:'Timeless lines that hold their value — the smart-money 911 that appreciates while you enjoy it.',
+   sub:'Understated, bulletproof, and blue-chip. The 911 that quietly out-earns the flashier options.',
+   bg:['#38322b','#2a2620','#1d1a15'],ghost:'rgba(255,255,255,.06)',dark:true},
+  {id:'mclaren',brand:'McLaren',name:'650S',short:'650S',img:'assets/car-12.jpg',clr:'Aurora Blue',
+   accent:'#5A63D8',aink:'#2f3596',hp:641,zero:2.9,top:207,price:265000,was:285000,tag:'Analog Supercar',use:'track',
+   blurb:'A twin-turbo V8 with real feedback through the wheel — supercar theatre you can still read the road in.',
+   sub:'Light, planted and honest at the limit. The exotic that talks to you instead of numbing everything out.',
+   bg:['#eef0f3','#dde2e8','#cbd1da'],ghost:'rgba(20,21,26,.05)',dark:false},
+  {id:'battista',brand:'Pininfarina',name:'Battista',short:'BATTISTA',img:'assets/car-13.jpg',clr:'Iconica Blue',
+   accent:'#2FA8F0',aink:'#12628f',hp:1877,zero:1.9,top:217,price:2200000,was:2350000,tag:'Electric Halo',use:'show',
+   blurb:'1,877hp of silent electric violence — the halo car that quietly rewrites what fast even means.',
+   sub:'Zero noise, zero delay, 1.9s to 60. The flagship that makes every combustion number look quaint.',
+   bg:['#0d1e40','#0a1730','#070f22'],ghost:'rgba(255,255,255,.06)',dark:true},
+];
+/* extra showroom-floor imagery (not switchable, for the collection band) */
+const FLOOR=[
+  {img:'assets/car-9.jpg',name:'BMW M8 Competition',note:'Golden hour showroom'},
+  {img:'assets/car-11.jpg',name:'911 GT3 — Chalk',note:'Widebody profile'},
+  {img:'assets/car-10.jpg',name:'Defender 110 X',note:'All-terrain luxury'},
+];
+
+/* ---------- HERO SWITCHER ---------- */
+const stage=document.getElementById('stage'),hero=document.querySelector('.hero');
+const carImg=document.getElementById('carImg'),thumbImg=document.getElementById('thumbImg');
+let idx=0,busy=false,timer=null;
+const money=n=>'$'+n.toLocaleString();
+
+function paintHeroText(c){
+  document.getElementById('hKicker').textContent=c.tag;
+  document.getElementById('hBlurb').textContent=c.blurb;
+  document.getElementById('hPrice').textContent=money(c.price);
+  document.getElementById('hWas').textContent=money(c.was)+' MSRP';
+  document.getElementById('hName').textContent=c.brand+' '+c.name;
+  document.getElementById('hClr').textContent=c.clr;
+  document.getElementById('hBadge').textContent=c.short;
+}
+function applyTheme(c){
+  const s=stage.style;
+  s.setProperty('--hb1',c.bg[0]);s.setProperty('--hb2',c.bg[1]);s.setProperty('--hb3',c.bg[2]);
+  s.setProperty('--accent',c.accent);
+  const ink=c.dark?'#F3F1EC':'#14151A', ink2=c.dark?'rgba(243,241,236,.62)':'rgba(20,21,26,.6)';
+  const line=c.dark?'rgba(255,255,255,.16)':'rgba(20,21,26,.14)';
+  const seg=c.dark?'rgba(255,255,255,.08)':'rgba(255,255,255,.5)';
+  const chip=c.dark?'rgba(255,255,255,.16)':'#fff';
+  s.setProperty('--h-ink',ink);s.setProperty('--h-ink2',ink2);s.setProperty('--h-line',line);
+  s.setProperty('--h-seg',seg);s.setProperty('--h-chip',chip);s.setProperty('--h-ghost',c.ghost);
+  s.setProperty('--h-bg-ink',c.dark?'#14151A':'#fff');
+  hero.classList.toggle('dark',c.dark);
+  document.getElementById('navdot').style.background=c.accent;
+}
+function buildDots(){
+  const d=document.getElementById('hDots');d.innerHTML='';
+  CARS.forEach((c,i)=>{const b=document.createElement('button');if(i===0)b.className='on';
+    b.onclick=()=>go(i);d.appendChild(b);});
+}
+function markDots(){document.querySelectorAll('#hDots button').forEach((b,i)=>b.classList.toggle('on',i===idx));}
+
+function go(to,dir){
+  if(busy||to===idx)return;busy=true;
+  dir=dir||(to>idx?1:-1);
+  const nc=CARS[to];
+  // outgoing clone -> shrink toward thumb
+  const out=carImg.cloneNode(true);out.style.position='absolute';out.style.pointerEvents='none';
+  carImg.parentElement.appendChild(out);
+  out.animate([{transform:'translate(0,0) scale(1)',opacity:1},
+    {transform:'translate('+(dir>0?'46%':'-46%')+',36%) scale(.28)',opacity:0}],
+    {duration:820,easing:'cubic-bezier(.7,0,.2,1)'}).onfinish=()=>out.remove();
+  // incoming
+  carImg.src=nc.img;
+  carImg.animate([{transform:'translate('+(dir>0?'-42%':'42%')+',34%) scale(.3)',opacity:0},
+    {transform:'translate(0,0) scale(1)',opacity:1}],
+    {duration:900,easing:'cubic-bezier(.5,0,.15,1)'});
+  applyTheme(nc);paintHeroText(nc);
+  // update thumb to the NEXT-next car
+  const nextI=(to+1)%CARS.length;
+  thumbImg.style.opacity=0;
+  setTimeout(()=>{thumbImg.src=CARS[nextI].img;thumbImg.style.opacity=.9;},250);
+  idx=to;markDots();
+  setTimeout(()=>busy=false,760);
+  restart();
+}
+function adv(dir){go((idx+dir+CARS.length)%CARS.length,dir);}
+const prog=document.getElementById('hProg');
+function restart(){
+  clearInterval(timer);timer=setInterval(()=>adv(1),5000);
+  prog.classList.remove('run');void prog.offsetWidth;prog.classList.add('run');
+}
+
+document.getElementById('next').onclick=()=>adv(1);
+document.getElementById('prev').onclick=()=>adv(-1);
+document.getElementById('hThumb').onclick=()=>adv(1);
+
+/* drag / swipe the showroom */
+const hcenter=document.querySelector('.hcenter');
+let dragX=null;
+hcenter.addEventListener('pointerdown',e=>{dragX=e.clientX;});
+window.addEventListener('pointerup',e=>{
+  if(dragX===null)return;const dx=e.clientX-dragX;dragX=null;
+  if(Math.abs(dx)>55)adv(dx<0?1:-1);
+});
+document.querySelectorAll('.trims button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.trims button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const c=CARS[idx],mult=b.textContent==='Sport'?1.06:b.textContent==='Track'?1.14:1;
+  document.getElementById('hPrice').textContent=money(Math.round(c.price*mult));
+});
+/* keyboard arrows drive the showroom */
+window.addEventListener('keydown',e=>{
+  const t=(e.target.tagName||'');if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT')return;
+  if(e.key==='ArrowRight'){adv(1);}else if(e.key==='ArrowLeft'){adv(-1);}
+});
+stage.addEventListener('mouseenter',()=>{clearInterval(timer);prog.style.animationPlayState='paused';});
+stage.addEventListener('mouseleave',()=>{prog.style.animationPlayState='';restart();});
+
+/* init hero */
+applyTheme(CARS[0]);paintHeroText(CARS[0]);buildDots();restart();
+
+/* ---------- MATCH / QUALIFIER ---------- */
+let selUse='daily',selProb='usability';
+function recommend(){
+  // score every car against use-case + the problem the buyer keeps hitting
+  const probIdeal={usability:['urus','turbos','eqs'],budget:['mustang','gtr'],
+    reliability:['gtr','eqs','turbos'],value:['carrera','revuelto']};
+  const scored=CARS.map(x=>{
+    let s=0;
+    if(x.use===selUse)s+=3;
+    const rank=(probIdeal[selProb]||[]).indexOf(x.id);
+    if(rank>=0)s+=(4-rank);
+    return{c:x,s};
+  }).sort((a,b)=>b.s-a.s);
+  const c=scored[0].c, alt=(scored.find(o=>o.c.id!==c.id)||scored[1]).c;
+  document.getElementById('mName').textContent=c.brand+' '+c.name;
+  document.getElementById('mWhy').textContent=c.blurb;
+  document.getElementById('mImg').src=c.img;
+  document.getElementById('mGo').dataset.id=c.id;
+  const ma=document.getElementById('mAlt');
+  ma.innerHTML='Also worth a look &middot; <b>'+alt.brand+' '+alt.name+'</b>';
+  ma.dataset.id=alt.id;
+}
+document.querySelectorAll('#useChips .chip').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#useChips .chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  selUse=b.dataset.use;recommend();});
+document.querySelectorAll('#probChips .chip').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#probChips .chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  selProb=b.dataset.prob;recommend();});
+document.getElementById('mGo').onclick=()=>{loadFeature(document.getElementById('mGo').dataset.id||'turbos');
+  document.getElementById('feature').scrollIntoView({behavior:'smooth'});};
+document.getElementById('mAlt').onclick=()=>{const id=document.getElementById('mAlt').dataset.id;if(!id)return;
+  loadFeature(id);document.getElementById('feature').scrollIntoView({behavior:'smooth'});};
+recommend();
+
+/* ---------- FEATURE DETAIL ---------- */
+function loadFeature(id){
+  const c=CARS.find(x=>x.id===id)||CARS[0];
+  document.getElementById('fImg').src=c.img;
+  document.getElementById('fTag').textContent=c.tag;
+  document.getElementById('fName').textContent=c.name;
+  document.getElementById('fSub').textContent=c.sub;
+  document.getElementById('sHp').innerHTML=c.hp+'<small>hp</small>';
+  document.getElementById('sZero').innerHTML=c.zero+'<small>s</small>';
+  document.getElementById('sTop').innerHTML=c.top+'<small>mph</small>';
+  document.getElementById('sPrice').textContent='$'+Math.round(c.price/1000)+'k';
+  document.getElementById('fglow').style.background=c.accent;
+  document.documentElement.style.setProperty('--accent',c.accent);
+  document.documentElement.style.setProperty('--accent-ink',c.aink);
+}
+loadFeature('turbos');
+
+/* tilt on featured */
+const tilt=document.getElementById('tilt'),fImg=document.getElementById('fImg'),fglow=document.getElementById('fglow');
+tilt.addEventListener('mousemove',e=>{
+  const r=tilt.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+  fImg.style.transform='rotateY('+(x*14)+'deg) rotateX('+(-y*12)+'deg) translateZ(30px)';
+  fglow.style.left=(20+x*30)+'%';fglow.style.top=(18+y*30)+'%';
+});
+tilt.addEventListener('mouseleave',()=>{fImg.style.transform='rotateY(0) rotateX(0)';});
+
+/* ---------- LINEUP GRID ---------- */
+const grid=document.getElementById('lineGrid');
+function useLabel(u){return{daily:'Daily',track:'Track',show:'Show',value:'Investment'}[u]||u;}
+function buildGrid(f){
+  grid.innerHTML='';
+  CARS.filter(c=>f==='all'||c.use===f).forEach(c=>{
+    const el=document.createElement('div');el.className='card reveal in';
+    el.innerHTML=`<div class="ph"><span class="pill">${useLabel(c.use)}</span><img src="${c.img}"/></div>
+      <div class="body"><div class="top"><h3>${c.name}</h3><span class="pr">$${Math.round(c.price/1000)}k</span></div>
+      <div class="mini"><span><b>${c.hp}</b> hp</span><span><b>${c.zero}</b>s 0-60</span><span><b>${c.top}</b> mph</span></div>
+      <button class="pick">Load in showroom</button></div>`;
+    el.querySelector('.pick').onclick=(ev)=>{ev.stopPropagation();
+      const i=CARS.findIndex(x=>x.id===c.id);go(i);loadFeature(c.id);
+      document.getElementById('top').scrollIntoView({behavior:'smooth'});};
+    el.onclick=()=>{loadFeature(c.id);document.getElementById('feature').scrollIntoView({behavior:'smooth'});};
+    grid.appendChild(el);
+  });
+}
+document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  buildGrid(b.dataset.f);});
+buildGrid('all');
+
+/* ---------- COLLECTION MARQUEE ---------- */
+(function(){
+  const items=[...CARS.map(c=>({img:c.img,name:c.brand+' '+c.name,note:c.tag,id:c.id})),
+    ...FLOOR.map(f=>({img:f.img,name:f.name,note:f.note,id:null}))];
+  function tile(it){
+    const el=document.createElement('div');el.className='mtile';
+    el.innerHTML=`<img src="${it.img}" alt="${it.name}"/><div class="cap"><b>${it.name}</b><span><i>●</i> ${it.note}</span></div>`;
+    if(it.id)el.onclick=()=>{const i=CARS.findIndex(x=>x.id===it.id);go(i);loadFeature(it.id);
+      document.getElementById('top').scrollIntoView({behavior:'smooth'});};
+    return el;
+  }
+  function fill(track,list){[...list,...list].forEach(it=>track.appendChild(tile(it)));}
+  fill(document.getElementById('trackA'),items);
+  fill(document.getElementById('trackB'),[...items].reverse());
+})();
+
+/* reserve car dropdown */
+const resCar=document.getElementById('resCar');
+CARS.forEach(c=>{const o=document.createElement('option');o.textContent=c.brand+' '+c.name;resCar.appendChild(o);});
+document.getElementById('resBtn').onclick=()=>{document.getElementById('resBtn').textContent='Reserved — we\u2019ll be in touch ✓';};
+
+/* ---------- SCROLL REVEAL (re-triggers both directions) + count re-run ---------- */
+function runCount(el){
+  const t=parseFloat(el.dataset.count)||0,dec=+(el.dataset.dec||0),dur=1150,t0=performance.now();
+  function step(now){const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3),v=t*e;
+    el.textContent=dec?v.toFixed(dec):Math.round(v).toLocaleString();
+    if(k<1){el._cf=requestAnimationFrame(step);}}
+  cancelAnimationFrame(el._cf||0);el._cf=requestAnimationFrame(step);
+}
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  const on=e.isIntersecting;e.target.classList.toggle('in',on);
+  if(e.target.dataset.count!==undefined){
+    if(on)runCount(e.target);
+    else{cancelAnimationFrame(e.target._cf||0);e.target.textContent=(+(e.target.dataset.dec||0))?'0.0':'0';}
+  }
+}),{threshold:.2,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.reveal,.step,[data-count]').forEach(el=>io.observe(el));
+
+/* ---------- PARALLAX drift on words/numbers + 3 signature transitions ---------- */
+[['.shead .eyebrow',-40],['.shead h2',30],['.shead p',-18],['.stat .n',36],
+ ['.fmeta .tag',-26],['.fmeta h2',22],['.quote',-12],['.step h3',20],['.step p',-14],
+ ['.prob h3',18],['.prob .ps',-12]].forEach(([sel,sp])=>
+  document.querySelectorAll(sel).forEach(el=>el.dataset.par=sp));
+const parEls=[...document.querySelectorAll('[data-par]')];
+const sigEls=['feature','floor','reserve'].map(id=>document.getElementById(id)).filter(Boolean);
+function frame(){
+  const vh=innerHeight;
+  for(const el of parEls){const r=el.getBoundingClientRect();
+    if(r.bottom<-120||r.top>vh+120)continue;
+    const off=((r.top+r.height/2)-vh/2)/vh;
+    el.style.transform='translateY('+(off*(+el.dataset.par)).toFixed(1)+'px)';}
+  for(const el of sigEls){const r=el.getBoundingClientRect();
+    let p=(vh-r.top)/(vh*0.72);p=p<0?0:p>1?1:p;
+    el.style.setProperty('--sp',p.toFixed(3));}
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- interactive tile tilt (lineup + marquee) ---------- */
+function tiltDelegate(host,sel,deg){
+  host.addEventListener('mousemove',e=>{const c=e.target.closest(sel);if(!c)return;
+    const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform='perspective(760px) rotateY('+(x*deg).toFixed(2)+'deg) rotateX('+(-y*deg).toFixed(2)+'deg) translateY(-6px)';});
+  host.addEventListener('mouseout',e=>{const c=e.target.closest(sel);if(c&&!c.contains(e.relatedTarget))c.style.transform='';});
+}
+tiltDelegate(grid,'.card',7);
+
+/* ---------- CURSOR GLOW ---------- */
+const cg=document.getElementById('cglow');
+window.addEventListener('mousemove',e=>{cg.style.left=e.clientX+'px';cg.style.top=e.clientY+'px';cg.style.opacity=.7;
+  cg.style.setProperty('--accent',getComputedStyle(document.documentElement).getPropertyValue('--accent'));});
+window.addEventListener('mouseleave',()=>cg.style.opacity=0);
+document.querySelectorAll('.prob').forEach(p=>p.addEventListener('mousemove',e=>{
+  const r=p.getBoundingClientRect();p.style.setProperty('--mx',(e.clientX-r.left)+'px');p.style.setProperty('--my',(e.clientY-r.top)+'px');}));
+
+/* expose for verification */
+window.__threshold={go,loadFeature,state:()=>({idx,car:CARS[idx].id,dark:CARS[idx].dark})};
+</script>
+</body>
+</html>
