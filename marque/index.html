@@ -68,8 +68,9 @@ nav.solid{background:rgba(243,240,232,.82);backdrop-filter:blur(14px);border-bot
 .btn.solid:hover{background:var(--accent);border-color:var(--accent);color:#100e0b}
 .btn.ghost:hover{background:var(--ink);color:var(--paper)}
 
-/* the cover object */
-.cover{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;background:var(--ink-panel);
+.hright{display:flex;flex-direction:column;align-items:center}
+/* the cover object — height-capped so the thumbnail options stay in view */
+.cover{position:relative;aspect-ratio:3/4;height:min(58vh,560px);width:auto;max-width:100%;border-radius:6px;overflow:hidden;background:var(--ink-panel);
   box-shadow:0 40px 90px -40px rgba(20,16,10,.6),0 8px 20px -10px rgba(20,16,10,.4);
   border:1px solid rgba(255,255,255,.06)}
 .cover .mat{position:absolute;inset:0;transition:background .8s var(--ease)}
@@ -294,6 +295,114 @@ section{padding:clamp(70px,10vw,140px) 0}
 .kbd{display:inline-flex;gap:6px;align-items:center;margin-left:14px;color:var(--dim);font-family:var(--ff-s);font-size:10px;letter-spacing:.12em}
 .kbd b{border:1px solid currentColor;border-radius:5px;padding:2px 7px;font-weight:400;opacity:.7}
 
+/* ===== DEEP — THE HIDDEN WORLD (adapted from upshift S3; no video, no upscale) ===== */
+/* every real block sits above the fixed film; the #deep window is the only hole */
+.hero,section:not(#deep),.marq,footer{position:relative;z-index:2}
+#deepfix{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .7s var(--ease);overflow:hidden}
+#deepfix.live{visibility:visible}
+#deepfix .dscene{position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 50% 32%, rgba(255,255,255,.05), transparent 60%),
+  radial-gradient(90% 70% at 80% 90%, var(--accent-soft), transparent 60%),
+  linear-gradient(180deg,#0a0806 0%,#0d0b08 45%,#080706 100%)}
+#deepfix .dgrid{position:absolute;inset:0;opacity:.5;background-image:
+  linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:64px 64px;background-position:center;
+  -webkit-mask:radial-gradient(70% 60% at 50% 45%,#000,transparent 78%);mask:radial-gradient(70% 60% at 50% 45%,#000,transparent 78%)}
+#deepfix .dcar{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
+  height:min(70vh,660px);width:auto;max-width:86vw;object-fit:contain;
+  filter:drop-shadow(0 40px 70px rgba(0,0,0,.6));
+  -webkit-mask:radial-gradient(75% 80% at 50% 50%,#000 60%,transparent 96%);mask:radial-gradient(75% 80% at 50% 50%,#000 60%,transparent 96%)}
+#deepfix .dglow{position:absolute;left:50%;top:48%;width:64vh;height:64vh;transform:translate(-50%,-50%);pointer-events:none;
+  background:radial-gradient(circle, var(--accent-soft), transparent 62%);mix-blend-mode:screen;opacity:.8;transition:background .6s}
+#deepfix .dscrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,5,.4),transparent 26%,transparent 72%,rgba(8,7,5,.72))}
+#deepfix .dvig{position:absolute;inset:0;background:radial-gradient(120% 82% at 50% 46%,transparent 42%,rgba(8,7,5,.66))}
+#deep{position:relative;z-index:1;min-height:170vh;background:transparent;padding:0}
+.dcap{position:sticky;top:34vh;margin:0 auto;max-width:820px;text-align:center;color:#f6f3ec;padding:0 24px;z-index:2;
+  opacity:0;transform:translateY(30px);will-change:opacity,transform}
+.dcap .dk{font-family:var(--ff-s);font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);transition:color .6s}
+.dcap .dh{margin-top:18px;font-weight:500;font-size:clamp(32px,5.6vw,66px);line-height:1.06;letter-spacing:-.01em}
+.dcap .dh b{font-style:italic;color:var(--accent);font-weight:600;transition:color .6s}
+.dcap .dsub{margin:22px auto 0;color:#cfc8b7;font-size:15px;line-height:1.7;max-width:46ch}
+@media(max-width:640px){#deepfix .dcar{height:44vh}.dcap{top:30vh}}
+
+/* ===== PROCESS — interactive stepper ===== */
+.pstepper{display:grid;gap:22px}
+.ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ptab{position:relative;text-align:left;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:16px 16px 18px;cursor:pointer;overflow:hidden;transition:.35s var(--ease);color:var(--paper)}
+.ptab:hover{background:rgba(255,255,255,.05)}
+.ptab .ptn{font-family:var(--ff-d);font-style:italic;font-weight:500;font-size:26px;color:var(--dim);transition:color .35s}
+.ptab .ptt{font-family:var(--ff-s);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-top:10px;color:#b9b2a1;transition:color .35s}
+.ptab .ptbar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--accent);transition:width .1s linear}
+.ptab.active{background:rgba(255,255,255,.06);border-color:var(--accent-line)}
+.ptab.active .ptn{color:var(--accent)}.ptab.active .ptt{color:var(--paper)}
+.ptab.done .ptn{color:#6f695b}
+.ppanel{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center;border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;padding:38px clamp(24px,4vw,54px);background:
+  radial-gradient(120% 160% at 0% 0%, var(--accent-soft), transparent 55%),rgba(255,255,255,.015);min-height:220px}
+.ppnum{font-weight:600;font-size:clamp(80px,12vw,150px);line-height:.8;color:var(--accent);opacity:.9;transition:color .5s}
+.ppbody{max-width:60ch}
+.ppkick{color:var(--accent);transition:color .5s}
+.ppbody h3{font-family:var(--ff-d);font-weight:600;font-size:clamp(26px,3.4vw,40px);line-height:1.02;margin:10px 0 12px}
+.ppbody p{color:#c4bdac;font-size:15px;line-height:1.7}
+.ppkey{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.ppkey.show{opacity:1;transform:none}
+.ppnav{display:flex;align-items:center;gap:12px;margin-top:22px}
+.ppbtn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--paper);
+  cursor:pointer;font-size:15px;transition:.3s var(--ease)}
+.ppbtn:hover{background:var(--accent);border-color:var(--accent);color:#100e0b}
+.ppcount{color:var(--dim)}
+@media(max-width:860px){.ptabs{grid-template-columns:1fr 1fr}.ppanel{grid-template-columns:1fr;text-align:left}}
+
+/* ===== LINEUP price tag + open cue ===== */
+.plate{cursor:pointer}
+.plate .ptag{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--ff-d);font-weight:600;font-size:14px;color:#f6f3ec;
+  background:rgba(8,7,5,.6);backdrop-filter:blur(4px);padding:5px 11px;border-radius:30px;border:1px solid rgba(255,255,255,.14)}
+.plate .cap .open{display:block;margin-top:6px;font-family:var(--ff-s);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#e9e3d4}
+.plate .psold{position:absolute;top:10px;left:10px;z-index:3;font-family:var(--ff-s);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;background:rgba(187,51,68,.9);padding:4px 9px;border-radius:30px}
+.plate:has(.psold)::after{display:none}
+.plate::after{content:"↗";position:absolute;left:12px;top:10px;z-index:2;color:#f6f3ec;font-size:14px;opacity:0;transform:translateY(-4px);
+  background:rgba(8,7,5,.5);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;transition:.35s var(--ease)}
+.plate:hover::after{opacity:1;transform:none}
+
+/* ===== MINI detail page (lineup → tap) ===== */
+.mini{position:fixed;inset:0;z-index:10002;background:var(--paper);overflow-y:auto;
+  opacity:0;pointer-events:none;transform:translateY(3%);transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.mini.open{opacity:1;pointer-events:auto;transform:none}
+.minibar{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;
+  padding:16px clamp(20px,4vw,54px);background:rgba(243,240,232,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.miniback{font-family:var(--ff-s);font-size:12px;letter-spacing:.16em;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--ink);transition:color .3s}
+.miniback:hover{color:var(--accent)}
+.minibrandmark{font-family:var(--ff-d);font-weight:800;font-size:20px;letter-spacing:.14em}
+.minibrandmark span{color:var(--accent);transition:color .5s}
+.miniclose{background:var(--ink);color:var(--paper);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;transition:.3s}
+.miniclose:hover{background:var(--accent);color:#100e0b}
+.minisheet{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,60px);max-width:1240px;margin:0 auto;
+  padding:clamp(30px,5vw,68px) clamp(20px,4vw,54px)}
+.minifig{position:relative;border-radius:12px;overflow:hidden;min-height:60vh;display:grid;place-items:center;
+  background:radial-gradient(130% 100% at 50% 0%, var(--accent-soft), var(--paper2) 72%);border:1px solid var(--line)}
+.minifig img{width:100%;height:100%;max-height:78vh;object-fit:contain}
+.ministatus{position:absolute;top:16px;left:16px;font-family:var(--ff-s);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  padding:6px 12px;border-radius:30px;background:rgba(243,240,232,.9);border:1px solid var(--line)}
+.ministatus.sold{color:#b34;border-color:rgba(187,51,68,.4)}
+.ministatus.avail{color:#2c7a4b;border-color:rgba(44,122,75,.4)}
+.minibody{align-self:center}
+.minikick{color:var(--accent);transition:color .5s}
+.minibody h3{font-family:var(--ff-d);font-weight:600;font-size:clamp(34px,5vw,58px);line-height:.98;margin:12px 0 6px}
+.miniprice{font-size:clamp(24px,3vw,34px);color:var(--ink);margin-bottom:26px}
+.minispecs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px;max-width:440px}
+.minispecs .ms{background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:14px 10px;text-align:center}
+.minispecs .ms b{font-family:var(--ff-d);font-weight:600;font-size:22px;display:block;line-height:1}
+.minispecs .ms span{font-family:var(--ff-s);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:block;margin-top:6px}
+.minidesc{color:var(--ink2);font-size:15px;line-height:1.75;max-width:52ch;margin-bottom:30px}
+.minicta-row{display:flex;gap:12px;flex-wrap:wrap}
+.minicta{font-family:var(--ff-s);font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:15px 26px;border-radius:44px;cursor:pointer;transition:.3s var(--ease);border:1px solid var(--ink)}
+.minicta.solid{background:var(--ink);color:var(--paper)}.minicta.solid:hover{background:var(--accent);border-color:var(--accent);color:#100e0b}
+.minicta.ghost:hover{background:var(--ink);color:var(--paper)}
+@media(max-width:820px){.minisheet{grid-template-columns:1fr}.minifig{min-height:44vh}}
+
 /* marquee */
 .marq{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;background:var(--paper2)}
 .marqin{display:flex;gap:44px;width:max-content;animation:slide 32s linear infinite}
@@ -360,10 +469,37 @@ footer{padding:60px 0 40px;border-top:1px solid var(--line)}
   </div>
 </div></header>
 
-<!-- CASTING -->
+<!-- SHOWROOM / THE FLOOR (§02) -->
+<section id="floor" data-k="floor"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 02 — The Floor</div>
+      <h2 data-split="word">Cars for <em>sale.</em></h2></div>
+    <div class="r rise">A rotating floor of finished builds and hand-picked stock, each inspected, documented and ready to drive. Enquire to reserve a viewing.</div>
+  </div>
+  <div class="fgrid" id="fGrid"></div>
+</div></section>
+
+<!-- DEEP / THE HIDDEN WORLD (§03) — fixed cinematic layer revealed through a transparent window -->
+<div id="deepfix" aria-hidden="true">
+  <div class="dscene"></div>
+  <div class="dgrid"></div>
+  <img class="dcar" id="deepCar" alt="">
+  <div class="dglow"></div>
+  <div class="dscrim"></div>
+  <div class="dvig"></div>
+</div>
+<section id="deep" data-k="deep">
+  <div class="dcap" id="dCap">
+    <div class="dk">§ 03 — Beneath every build</div>
+    <div class="dh serif">There was <b>another world</b><br>under the paint all along.</div>
+    <div class="dsub">Strip back the couture and you find the machine — forged, balanced and obsessed over long before it ever wore a colour.</div>
+  </div>
+</section>
+
+<!-- CASTING (§04) -->
 <section id="casting" data-k="cast"><div class="wrap">
   <div class="shead">
-    <div class="l"><div class="mono no">§ 01 — The Casting</div>
+    <div class="l"><div class="mono no">§ 04 — The Casting</div>
       <h2 data-split="word">This season's <em>pairings.</em></h2></div>
     <div class="r rise">Every build is styled like an editorial. We pair the machine with the mood — the look, the palette, the attitude it was made to wear.</div>
   </div>
@@ -385,30 +521,36 @@ footer{padding:60px 0 40px;border-top:1px solid var(--line)}
   </div>
 </div></section>
 
-<!-- SHOWROOM / THE FLOOR -->
-<section id="floor" data-k="floor"><div class="wrap">
-  <div class="shead">
-    <div class="l"><div class="mono no">§ 02 — The Floor</div>
-      <h2 data-split="word">Cars for <em>sale.</em></h2></div>
-    <div class="r rise">A rotating floor of finished builds and hand-picked stock, each inspected, documented and ready to drive. Enquire to reserve a viewing.</div>
-  </div>
-  <div class="fgrid" id="fGrid"></div>
-</div></section>
-
 <!-- PROCESS -->
 <section id="process" data-k="process"><div class="wrap">
   <div class="shead">
-    <div class="l"><div class="mono no">§ 03 — The Process</div>
+    <div class="l"><div class="mono no">§ 05 — The Process</div>
       <h2 data-split="word">Keys in <em>four steps.</em></h2></div>
     <div class="r rise">Buying, selling or commissioning — the path is the same. No pressure, no guesswork, everything documented and signed off before a wheel turns.</div>
   </div>
-  <div class="psteps" id="pSteps"></div>
+  <div class="pstepper">
+    <div class="ptabs" id="pTabs"></div>
+    <div class="ppanel" id="pPanel">
+      <div class="ppnum serif" id="ppNum">01</div>
+      <div class="ppbody">
+        <div class="ppkick mono" id="ppKick"></div>
+        <h3 class="serif" id="ppTitle"></h3>
+        <p id="ppDesc"></p>
+        <div class="ppnav">
+          <button class="ppbtn" id="ppPrev" aria-label="Previous step">←</button>
+          <span class="ppcount mono" id="ppCount"></span>
+          <button class="ppbtn" id="ppNext" aria-label="Next step">→</button>
+          <span class="kbd" style="color:#8b8474;margin-left:8px"><b>auto</b> · tap a step</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div></section>
 
 <!-- SERVICES / ATELIER -->
 <section id="svc"><div class="wrap">
   <div class="shead">
-    <div class="l"><div class="mono no">§ 04 — The Atelier</div>
+    <div class="l"><div class="mono no">§ 06 — The Atelier</div>
       <h2 data-split="word">Commissions &amp; <em>repairs.</em></h2></div>
     <div class="r rise">Four workrooms under one roof. Bring a wreck, a dream, or a service light — we document every panel and dyno every claim.</div>
   </div>
@@ -418,7 +560,7 @@ footer{padding:60px 0 40px;border-top:1px solid var(--line)}
 <!-- PARTS -->
 <section id="parts"><div class="wrap">
   <div class="shead">
-    <div class="l"><div class="mono no">§ 05 — The Parts Counter</div>
+    <div class="l"><div class="mono no">§ 07 — The Parts Counter</div>
       <h2 data-split="word">Forged, not <em>ordered.</em></h2></div>
     <div class="r rise">A curated counter of the pieces we fit in-house — wheels, coilovers, cams and carbon. Every part fitted and mapped by our own techs.</div>
   </div>
@@ -430,9 +572,9 @@ footer{padding:60px 0 40px;border-top:1px solid var(--line)}
 <!-- LINEUP -->
 <section id="lineup"><div class="wrap">
   <div class="shead">
-    <div class="l"><div class="mono no">§ 06 — The Lineup</div>
+    <div class="l"><div class="mono no">§ 08 — The Lineup</div>
       <h2 data-split="word">The house <em>collection.</em></h2></div>
-    <div class="r rise">A rolling portfolio of finished commissions and muses that walk through the shop. Hover for the credit.</div>
+    <div class="r rise">Every car in the collection is for sale. Tap any plate to open its page — full specs, price and a direct line to reserve.</div>
   </div>
   <div class="masonry" id="masonry"></div>
 </div></section>
@@ -440,7 +582,7 @@ footer{padding:60px 0 40px;border-top:1px solid var(--line)}
 <!-- REVIEWS -->
 <section id="reviews"><div class="wrap">
   <div class="shead">
-    <div class="l"><div class="mono no">§ 07 — The Word</div>
+    <div class="l"><div class="mono no">§ 09 — The Word</div>
       <h2 data-split="word">Straight from the <em>owners.</em></h2></div>
     <div class="r rise">The people who trusted us with the keys. Tap any cover to read the full story.</div>
   </div>
@@ -475,6 +617,28 @@ footer{padding:60px 0 40px;border-top:1px solid var(--line)}
     © 2026 Marque House — All rights reserved
   </div>
 </div></footer>
+
+<!-- mini detail page (lineup) -->
+<div class="mini" id="mini">
+  <div class="minibar"><button class="miniback" id="miniBack">← The collection</button>
+    <div class="minibrandmark">MAR<span>Q</span>UE</div>
+    <button class="miniclose" id="miniClose">✕</button></div>
+  <div class="minisheet">
+    <div class="minifig"><img id="miniImg" alt="">
+      <span class="ministatus" id="miniStatus"></span></div>
+    <div class="minibody">
+      <div class="minikick mono" id="miniKick"></div>
+      <h3 class="serif" id="miniModel"></h3>
+      <div class="miniprice serif" id="miniPrice"></div>
+      <div class="minispecs" id="miniSpecs"></div>
+      <p class="minidesc" id="miniDesc"></p>
+      <div class="minicta-row">
+        <button class="minicta solid" id="miniEnq">Enquire · reserve</button>
+        <a href="#reserve" class="minicta ghost" id="miniBook">Book a viewing</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- enquiry modal -->
 <div class="enq" id="enq"><div class="enqcard">
@@ -552,15 +716,24 @@ const PARTS=[
   {file:'parts/parts-04.jpg',name:'Carbon Cold-Air Intake',spec:'sealed airbox · high-flow',price:980},
 ];
 const LINEUP=[
-  {file:'pics/pics-42.jpg',n:'Porsche',s:'911 GT3'},{file:'pics/pics-33.jpg',n:'Koenigsegg',s:'Hypercar'},
-  {file:'pics/pics-53.jpg',n:'Dodge',s:'Hellcat'},{file:'pics/pics-38.jpg',n:'Ford',s:'Mustang GT'},
-  {file:'pics/pics-44.jpg',n:'Porsche',s:'911 GT3 R'},{file:'pics/pics-36.jpg',n:'Lamborghini',s:'Urus'},
-  {file:'pics/pics-41.jpg',n:'Pininfarina',s:'Battista'},{file:'pics/pics-55.jpg',n:'Concept',s:'Violet'},
-  {file:'pics/pics-05.jpg',n:'House',s:'Coupe'},{file:'pics/pics-08.jpg',n:'Grand',s:'Tourer'},
-  {file:'pics/pics-40.jpg',n:'Mercedes-AMG',s:'E63'},{file:'pics/pics-47.jpg',n:'Bentley',s:'Bentayga'},
-  {file:'pics/pics-22.jpg',n:'Nissan',s:'GT-R'},{file:'pics/pics-45.jpg',n:'Luxury',s:'Collection'},
-  {file:'pics/pics-18.jpg',n:'Night',s:'Runner'},{file:'pics/pics-50.jpg',n:'Studio',s:'Series'},
-  {file:'pics/pics-56.jpg',n:'Marque',s:'Masterpieces'},{file:'pics/pics-13.jpg',n:'Atelier',s:'Detail'},
+  {file:'pics/pics-42.jpg',n:'Porsche',s:'911 GT3',yr:'2023',hp:'503',zero:'3.2s',top:'197',p:'£168,000',st:'avail'},
+  {file:'pics/pics-33.jpg',n:'Koenigsegg',s:'Jesko',yr:'2024',hp:'1280',zero:'2.5s',top:'300',p:'P.O.A.',st:'avail'},
+  {file:'pics/pics-53.jpg',n:'Dodge',s:'Hellcat',yr:'2022',hp:'717',zero:'3.6s',top:'199',p:'£92,000',st:'avail'},
+  {file:'pics/pics-38.jpg',n:'Ford',s:'Mustang GT',yr:'2023',hp:'486',zero:'4.2s',top:'166',p:'£64,500',st:'sold'},
+  {file:'pics/pics-44.jpg',n:'Porsche',s:'911 GT3 R',yr:'2023',hp:'557',zero:'3.0s',top:'190',p:'£398,000',st:'avail'},
+  {file:'pics/pics-36.jpg',n:'Lamborghini',s:'Urus',yr:'2024',hp:'657',zero:'3.5s',top:'190',p:'£214,000',st:'avail'},
+  {file:'pics/pics-41.jpg',n:'Pininfarina',s:'Battista',yr:'2024',hp:'1877',zero:'1.9s',top:'217',p:'P.O.A.',st:'avail'},
+  {file:'pics/pics-55.jpg',n:'Concept',s:'Violet',yr:'2025',hp:'830',zero:'2.7s',top:'211',p:'£0.9M',st:'avail'},
+  {file:'pics/pics-05.jpg',n:'House Build',s:'Coupe',yr:'2024',hp:'640',zero:'3.1s',top:'196',p:'£155,000',st:'avail'},
+  {file:'pics/pics-08.jpg',n:'Grand',s:'Tourer',yr:'2023',hp:'591',zero:'3.4s',top:'208',p:'£182,000',st:'sold'},
+  {file:'pics/pics-40.jpg',n:'Mercedes-AMG',s:'E63',yr:'2023',hp:'603',zero:'3.3s',top:'186',p:'£118,000',st:'avail'},
+  {file:'pics/pics-47.jpg',n:'Bentley',s:'Bentayga',yr:'2024',hp:'542',zero:'4.4s',top:'180',p:'£196,000',st:'avail'},
+  {file:'pics/pics-22.jpg',n:'Nissan',s:'GT-R',yr:'2022',hp:'565',zero:'2.9s',top:'196',p:'£108,000',st:'avail'},
+  {file:'pics/pics-45.jpg',n:'Luxury',s:'Collection',yr:'2024',hp:'612',zero:'3.2s',top:'201',p:'£174,000',st:'avail'},
+  {file:'pics/pics-18.jpg',n:'Night',s:'Runner',yr:'2024',hp:'670',zero:'3.0s',top:'205',p:'£188,000',st:'avail'},
+  {file:'pics/pics-50.jpg',n:'Studio',s:'Series',yr:'2025',hp:'720',zero:'2.8s',top:'212',p:'£240,000',st:'avail'},
+  {file:'pics/pics-56.jpg',n:'Marque',s:'Masterpieces',yr:'2025',hp:'900',zero:'2.6s',top:'217',p:'P.O.A.',st:'avail'},
+  {file:'pics/pics-13.jpg',n:'Atelier',s:'Detail',yr:'2024',hp:'560',zero:'3.4s',top:'193',p:'£146,000',st:'avail'},
 ];
 const REVIEWS=[
   {face:'faces/faces-19.jpg',name:'Jennie K.',car:'GT3 RS Build',text:'They treated my GT3 RS like a couture piece. Every bolt catalogued, the gold centre-locks are unreal in person. It doesn\u2019t just drive better — it walks into a room.'},
@@ -716,9 +889,49 @@ const words=['Bespoke Builds','Forged Parts','Factory Repairs','Concours Restora
 $('#marq').innerHTML=(()=>{const one=words.map(w=>`<span>${w}</span>`).join('');return one+one;})();
 
 /* ---------- LINEUP ---------- */
-$('#masonry').innerHTML=LINEUP.map(l=>`
-  <div class="plate flexel"><img src="${A+l.file}" alt="${l.n} ${l.s}" loading="lazy">
-    <div class="cap"><b class="serif">${l.n}</b><span>${l.s}</span></div></div>`).join('');
+$('#masonry').innerHTML=LINEUP.map((l,i)=>`
+  <div class="plate flexel" data-i="${i}" tabindex="0" role="button" aria-label="${l.n} ${l.s} — ${l.p}, open details">
+    <span class="ptag serif">${l.p}</span>
+    ${l.st==='sold'?'<span class="psold mono">Sold</span>':''}
+    <img src="${A+l.file}" alt="${l.n} ${l.s}" loading="lazy">
+    <div class="cap"><b class="serif">${l.n}</b><span>${l.s}</span><em class="open">Tap to open →</em></div>
+  </div>`).join('');
+$$('#masonry .plate').forEach(p=>{
+  const open=()=>openMini(+p.dataset.i);
+  p.onclick=open;
+  p.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}};
+});
+
+/* ---------- MINI detail page (lineup) ---------- */
+const mini=$('#mini');
+const DESC={
+  avail:'Presented in the house collection and available now. Every panel documented, paint-depth mapped and the full history file ready for inspection. Reserve a private viewing or a live video walk-round.',
+  sold:'Delivered to its new owner from the house collection. Looking for something similar? Join the waitlist and we\u2019ll call you the moment the right example lands on the floor.'
+};
+function openMini(i){
+  const l=LINEUP[i]; if(!l)return;
+  applyAccentTo(mini,LINEUP_ACCENTS[i%LINEUP_ACCENTS.length]);
+  const im=$('#miniImg'); im.src=A+l.file; im.alt=`${l.n} ${l.s}`;
+  const st=$('#miniStatus'); st.textContent=l.st==='sold'?'Sold':'Available';
+  st.className='ministatus '+l.st;
+  $('#miniKick').textContent=`${l.yr} · The house collection`;
+  $('#miniModel').textContent=`${l.n} ${l.s}`;
+  $('#miniPrice').textContent=l.p;
+  $('#miniSpecs').innerHTML=[['BHP',l.hp],['0–60',l.zero],['MPH',l.top]]
+    .map(([k,v])=>`<div class="ms"><b class="serif">${v}</b><span>${k}</span></div>`).join('');
+  $('#miniDesc').textContent=DESC[l.st]||DESC.avail;
+  $('#miniEnq').textContent=l.st==='sold'?'Join the waitlist':'Enquire · reserve';
+  mini.classList.add('open'); document.body.style.overflow='hidden';
+  mini.dataset.i=String(i);
+}
+function closeMini(){mini.classList.remove('open');document.body.style.overflow='';}
+$('#miniBack').onclick=closeMini;
+$('#miniClose').onclick=closeMini;
+$('#miniBook').onclick=closeMini;
+$('#miniEnq').onclick=()=>{closeMini();openEnq(null);};
+mini.onclick=e=>{if(e.target===mini)closeMini();};
+addEventListener('keydown',e=>{if(e.key==='Escape'&&mini.classList.contains('open'))closeMini();});
+const LINEUP_ACCENTS=['#e6b422','#8bd44a','#e5323a','#ff6a2b','#3f7dff','#9070d8','#d84f9a','#38b8a0'];
 
 /* ---------- REVIEWS ---------- */
 $('#rGrid').innerHTML=REVIEWS.map((r,i)=>`
@@ -760,14 +973,49 @@ $('#fGrid').innerHTML=CARSALE.map((c,i)=>`
 $$('#fGrid .rise').forEach(el=>rio.observe(el));
 $$('#fGrid .fcta').forEach(b=>b.onclick=e=>{e.stopPropagation();openEnq(+b.dataset.i);});
 
-/* ---------- PROCESS ---------- */
-$('#pSteps').innerHTML=PROCESS.map((p,i)=>`
-  <div class="pstep rise">
-    <div class="pn serif">${p.n}</div>
-    <h4 class="serif">${p.t}</h4><p>${p.d}</p>
-    ${i<PROCESS.length-1?'<div class="parrow">→</div>':''}
-  </div>`).join('');
-$$('#pSteps .rise').forEach(el=>rio.observe(el));
+/* ---------- PROCESS (interactive stepper) ---------- */
+$('#pTabs').innerHTML=PROCESS.map((p,i)=>`
+  <button class="ptab" data-i="${i}">
+    <span class="ptn mono">${p.n}</span>
+    <span class="ptt serif">${p.t}</span>
+    <span class="ptbar"></span>
+  </button>`).join('');
+const pTabs=$$('#pTabs .ptab');
+const PROC_DWELL=5200; let procI=-1, procElapsed=0, procLast=0, procPaused=false, procVis=false;
+function setProcess(i){
+  i=(i+PROCESS.length)%PROCESS.length;
+  if(i===procI)return;
+  procI=i; procElapsed=0;
+  const p=PROCESS[i];
+  pTabs.forEach((t,k)=>{t.classList.toggle('active',k===i);t.classList.toggle('done',k<i);
+    const bar=t.querySelector('.ptbar'); if(bar)bar.style.width=(k<i?100:0)+'%';});
+  const panel=$('#pPanel'); panel.classList.remove('in');
+  setTimeout(()=>{
+    $('#ppNum').textContent=p.n; $('#ppKick').textContent=`Step ${p.n} of 0${PROCESS.length}`;
+    $('#ppTitle').textContent=p.t; $('#ppDesc').textContent=p.d;
+    $('#ppCount').textContent=`0${i+1} / 0${PROCESS.length}`;
+    panel.classList.add('in');
+  },150);
+}
+$('#ppPrev').onclick=()=>{setProcess(procI-1);procElapsed=0;};
+$('#ppNext').onclick=()=>{setProcess(procI+1);procElapsed=0;};
+pTabs.forEach(t=>t.onclick=()=>{setProcess(+t.dataset.i);procElapsed=0;});
+const pstepper=$('.pstepper');
+pstepper.addEventListener('pointerenter',()=>procPaused=true);
+pstepper.addEventListener('pointerleave',()=>procPaused=false);
+new IntersectionObserver(es=>es.forEach(e=>procVis=e.isIntersecting),{threshold:.25}).observe($('#process'));
+function procTick(t){
+  const dt=t-procLast; procLast=t;
+  const cur=pTabs[procI]&&pTabs[procI].querySelector('.ptbar');
+  if(procVis&&!procPaused){
+    procElapsed+=dt;
+    if(cur)cur.style.width=(clamp(procElapsed/PROC_DWELL,0,1)*100)+'%';
+    if(procElapsed>=PROC_DWELL){setProcess(procI+1);procElapsed=0;}
+  }
+  requestAnimationFrame(procTick);
+}
+setProcess(0);
+requestAnimationFrame(t=>{procLast=t;procTick(t);});
 
 /* ---------- ENQUIRY modal ---------- */
 const enq=$('#enq');
@@ -858,11 +1106,37 @@ function flexTick(t){
 }
 requestAnimationFrame(flexTick);
 
+/* ---------- DEEP / hidden world (§03) ---------- */
+const deepfix=$('#deepfix'), deepSec=$('#deep'), deepCar=$('#deepCar'), dCap=$('#dCap');
+deepCar.src=A+'pics/pics-01.jpg';
+new IntersectionObserver(es=>es.forEach(e=>{
+  deepfix.classList.toggle('live',e.isIntersecting);
+}),{threshold:0,rootMargin:'0px'}).observe(deepSec);
+let deepP=0;
+function deepTick(){
+  const r=deepSec.getBoundingClientRect();
+  const span=r.height-innerHeight;
+  const p=span>0?clamp(-r.top/span,0,1):0;
+  deepP=lerp(deepP,p,0.16);
+  // caption: fade in early, hold, fade out at the very end (opacity+translate only, NO blur)
+  const a=deepP<0.5?clamp((deepP-0.08)/0.16,0,1):clamp((0.94-deepP)/0.12,0,1);
+  dCap.style.opacity=a.toFixed(3);
+  dCap.style.transform=`translateY(${((1-a)*30).toFixed(1)}px)`;
+  // parallax the machine slowly upward as you pass through
+  deepCar.style.transform=`translate(-50%,-50%) translateY(${(-(deepP-0.5)*70).toFixed(1)}px) scale(${(1+deepP*0.06).toFixed(3)})`;
+  deepfix.style.opacity=deepfix.classList.contains('live')?clamp(a*1.6+0.25,0,1).toFixed(3):'0';
+  requestAnimationFrame(deepTick);
+}
+requestAnimationFrame(deepTick);
+
 /* ---------- verification hook ---------- */
 window.__marque={
   cover:()=>({i:covI,model:COVERS[covI].model,accent:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}),
   setCover, cast:()=>({i:castI,mood:CAST[castI].mood.replace(/<[^>]+>/g,' ').trim()}),
   setCast, openEnq, closeEnq, enqOpen:()=>enq.classList.contains('open'),
+  openMini, closeMini, miniOpen:()=>mini.classList.contains('open'),
+  process:()=>({i:procI,step:PROCESS[procI].t}), setProcess,
+  deep:()=>({p:+deepP.toFixed(3),live:deepfix.classList.contains('live'),capA:+dCap.style.opacity}),
   activeK:()=>currentK(),
   counts:{covers:COVERS.length,cast:CAST.length,cars:CARSALE.length,process:PROCESS.length,parts:PARTS.length,lineup:LINEUP.length,reviews:REVIEWS.length}
 };
