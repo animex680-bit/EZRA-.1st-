@@ -7,7 +7,10 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230d0c0b'/><text x='16' y='23' font-family='Georgia,serif' font-size='22' font-weight='bold' fill='%23c9a25e' text-anchor='middle'>S</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Archivo:wght@300..700&family=Inter:wght@300..600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Archivo:wght@300..700&family=Inter:wght@300..600&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
 :root{
   --paper:#0d0c0b; --paper2:#16130f; --ink:#efe9dd; --ink2:#b3ab9a;
@@ -16,6 +19,9 @@
   --ink-panel:#ece6d9;
   --ff-d:'Cormorant Garamond',serif; --ff-s:'Archivo',sans-serif; --ff-b:'Inter',sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
+  /* UPSHIFT accent triplet — drives the spliced hero + section 3 tinting */
+  --ar:56; --ag:182; --ab:255;
+  --mute:rgba(244,242,238,.52); --faint:rgba(244,242,238,.28);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -51,85 +57,109 @@ nav.solid{background:rgba(13,12,11,.88);backdrop-filter:blur(14px);border-bottom
 .rise{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .rise.on{opacity:1;transform:none}
 
-/* ===== HERO — video/image podium + car switcher + tattoo overlay words ===== */
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:100px 0 40px;
-  background:radial-gradient(ellipse 90% 70% at 50% 50%,#221a10 0%,#120c07 55%,#080604 100%);transition:background 1.2s var(--ease)}
-.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:
-  radial-gradient(60% 60% at 50% 40%,var(--accent-soft),transparent 70%);opacity:.7;transition:background .8s var(--ease)}
-.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:
-  linear-gradient(180deg,transparent 60%,rgba(8,6,4,.7) 100%)}
+/* ===== HERO (spliced from UPSHIFT AUTOS) ===== */
+#hero{position:relative;height:100vh;min-height:700px;overflow:hidden;background:#050507}
+.hero-vid,.hero-still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-still{opacity:0;pointer-events:none}
+.hero-fill{position:absolute;inset:-6%;background-size:cover;background-position:center;filter:blur(70px) saturate(1.35) brightness(.5);opacity:0;transform:scale(1.1)}
+.hero-sharp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:9vh 4vw 12vh 26vw;opacity:0;pointer-events:none;}
+.hero-sharp img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 50px 60px rgba(0,0,0,.55))}
+.hero-scrim{position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(105deg, rgba(5,5,7,.78) 0%, rgba(5,5,7,.35) 26%, transparent 48%),
+    linear-gradient(0deg, rgba(5,5,7,.72) 0%, transparent 30%),
+    linear-gradient(180deg, rgba(5,5,7,.5) 0%, transparent 22%);
+}
+.hero-glow{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.5;
+  background:radial-gradient(52vw 40vh at 74% 62%, rgba(var(--ar),var(--ag),var(--ab),.20), transparent 65%);
+  transition:background 1.2s;
+}
+.h-copy{position:absolute;left:5vw;top:15vh;z-index:12;max-width:44vw}
+.h-kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.4em;text-transform:uppercase;
+  color:rgb(var(--ar),var(--ag),var(--ab));display:flex;align-items:center;gap:14px;transition:color .8s;
+  opacity:0;filter:blur(10px);}
+.h-kick::before{content:"";width:44px;height:1px;background:currentColor}
+.h-title{margin-top:20px;font-family:'Space Grotesk';font-weight:300;
+  font-size:clamp(44px,4.6vw,74px);line-height:1.02;letter-spacing:-.03em;color:#efe9dd;}
+.h-title .ln{display:block;overflow:hidden}
+.h-title .ln>span{display:inline-block;transform:translateY(110%);will-change:transform}
+.h-title b{font-weight:700}
+.h-title .accw{color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.h-title .slash{font-weight:300;opacity:.4;letter-spacing:-.06em}
+.h-sub{margin-top:22px;max-width:400px;font-size:14px;line-height:1.75;font-weight:300;color:var(--mute);
+  opacity:0;filter:blur(8px);}
+.h-sub b{color:#efe9dd;font-weight:500}
+.h-deck{position:absolute;left:5vw;bottom:7vh;z-index:12;display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;max-width:46vw}
+.chip{border-radius:16px;padding:14px 18px;
+  background:linear-gradient(140deg,rgba(255,255,255,.10),rgba(255,255,255,.028));
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13), 0 18px 44px -22px rgba(0,0,0,.8);
+  opacity:0;filter:blur(8px);position:relative;overflow:hidden;
+  will-change:transform;}
+.chip::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(120px 120px at var(--gx,50%) var(--gy,50%), rgba(var(--ar),var(--ag),var(--ab),.28), transparent 70%);
+  transition:opacity .25s;}
+.chip .cl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.chip .cv{font-family:'Space Grotesk';font-weight:500;font-size:21px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;color:#efe9dd}
+.chip .cv small{font-size:11px;opacity:.5;font-family:'JetBrains Mono',monospace;margin-left:3px}
+.chip.price .cv{color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.cta{display:flex;align-items:center;gap:12px;padding:0 26px;border-radius:16px;
+  background:rgba(244,242,238,.94);color:#0a0a0c;height:52px;
+  font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.04em;
+  opacity:0;filter:blur(8px);position:relative;overflow:hidden;
+  transition:box-shadow .4s;will-change:transform;border:0;cursor:pointer}
+.cta:hover{box-shadow:0 0 44px -8px rgba(var(--ar),var(--ag),var(--ab),.85)}
+.cta::after{content:"→";font-weight:400}
+.scan{position:absolute;right:8.5vw;top:16vh;z-index:12;width:250px;
+  border-radius:22px;padding:20px;
+  background:linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 30px 70px -30px rgba(0,0,0,.9);
+  opacity:0;filter:blur(10px);position:absolute;overflow:hidden;will-change:transform;color:#efe9dd;}
+.scan::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(160px 160px at var(--gx,50%) var(--gy,50%), rgba(var(--ar),var(--ag),var(--ab),.22), transparent 70%);
+  transition:opacity .25s;}
+.scan .sh{font-family:'Space Grotesk';font-weight:500;font-size:15px;margin-bottom:2px}
+.scan .ss{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.scan .srow{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.scan .srow:last-child{border-bottom:0;padding-bottom:0}
+.scan .sk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.scan .sv{font-family:'Space Grotesk';font-weight:500;font-size:13px;font-variant-numeric:tabular-nums}
+.scan .sbar{height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:14px;overflow:hidden}
+.scan .sbar i{display:block;height:100%;width:38%;border-radius:2px;background:rgb(var(--ar),var(--ag),var(--ab));box-shadow:0 0 12px rgba(var(--ar),var(--ag),var(--ab),.7);transition:background .8s}
+.rail{position:absolute;right:8.5vw;bottom:7vh;z-index:14;display:flex;gap:10px;align-items:flex-end;}
+.ritem{width:74px;height:52px;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;
+  border:1px solid rgba(255,255,255,.16);background:#101014;
+  opacity:0;filter:blur(8px);
+  transition:border-color .35s, box-shadow .35s;
+  will-change:transform;}
+.ritem img{width:100%;height:100%;object-fit:cover;filter:grayscale(.75) brightness(.8);transition:filter .45s}
+.ritem .rn{position:absolute;left:0;right:0;bottom:0;padding:3px 6px;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;
+  background:linear-gradient(0deg,rgba(0,0,0,.8),transparent);color:rgba(255,255,255,.85);
+  opacity:0;transition:opacity .3s;}
+.ritem:hover .rn{opacity:1}
+.ritem.on{border-color:rgb(var(--ar),var(--ag),var(--ab));box-shadow:0 0 22px -4px rgba(var(--ar),var(--ag),var(--ab),.75)}
+.ritem.on img{filter:grayscale(0) brightness(1)}
+.rail-lbl{position:absolute;right:8.5vw;bottom:calc(7vh + 64px);z-index:14;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);
+  opacity:0;filter:blur(6px);}
+.h-ig{position:absolute;left:5vw;top:calc(15vh - 46px);z-index:12;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);
+  opacity:0;filter:blur(6px);}
+.h-ig b{color:rgb(var(--ar),var(--ag),var(--ab));font-weight:500;transition:color .8s}
+.h-hint{position:absolute;left:50%;bottom:3.4vh;transform:translateX(-50%);z-index:12;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--faint);
+  opacity:0;}
 
-/* podium — the star of the hero */
-.hpodium{position:relative;z-index:3;width:min(80vw,880px);aspect-ratio:16/9;border-radius:18px;overflow:hidden;
-  background:#0a0806;box-shadow:0 40px 130px -20px var(--accent-line),0 0 0 1px rgba(255,255,255,.06);
-  transition:transform .8s var(--ease),box-shadow .8s var(--ease)}
-.hpodium .pmedia{position:absolute;inset:0;opacity:0;transition:opacity .7s var(--ease)}
-.hpodium .pmedia.active{opacity:1}
-.hpodium video,.hpodium img{width:100%;height:100%;object-fit:cover;display:block}
-.hpodium img{object-fit:contain;background:radial-gradient(120% 100% at 50% 40%,var(--accent-soft),#0a0806 75%)}
-.hpodium .pvignette{position:absolute;inset:0;pointer-events:none;background:
-  linear-gradient(180deg,transparent 60%,rgba(0,0,0,.55) 100%),
-  radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.35) 100%)}
-/* overlay info bottom of podium */
-.hpodium-info{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:22px 26px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;pointer-events:none}
-.hpodium-info .pl .brand{font-family:var(--ff-s);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);transition:color .6s;margin-bottom:6px}
-.hpodium-info .pl .model{font-family:var(--ff-d);font-weight:600;font-size:clamp(22px,3vw,36px);line-height:1;color:#fff}
-.hpodium-info .pr{text-align:right;font-family:var(--ff-d);font-weight:700;font-size:clamp(20px,2.4vw,32px);color:#fff}
-.hpodium-info .pr small{display:block;font-family:var(--ff-s);font-size:9px;letter-spacing:.2em;color:rgba(255,255,255,.55);margin-top:4px}
-
-/* title above / lead copy */
-.hlead-top{position:relative;z-index:3;width:min(94vw,1080px);display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:24px;padding:0 6px}
-.hlead-top .htitle{font-family:var(--ff-d);font-weight:500;line-height:.92;letter-spacing:-.02em;font-size:clamp(38px,5.8vw,84px);color:var(--ink)}
-.hlead-top .htitle em{font-style:italic;color:var(--accent);transition:color .6s}
-.hlead-top .hmeta{text-align:right;max-width:34ch;color:var(--ink2);font-size:13px;line-height:1.6}
-.hlead-top .hmeta .kicker{display:flex;align-items:center;justify-content:flex-end;gap:10px;color:var(--dim);margin-bottom:10px}
-.hlead-top .hmeta .kicker .rule{height:1px;width:32px;background:rgba(255,255,255,.22)}
-
-/* CTA row above switcher */
-.hbtns-row{position:relative;z-index:3;display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;justify-content:center}
-.btn{font-family:var(--ff-s);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:13px 22px;border-radius:44px;transition:.3s var(--ease);cursor:pointer;border:1px solid var(--ink);color:var(--ink);background:transparent}
-.btn.solid{background:var(--ink);color:var(--paper)}
-.btn.solid:hover{background:var(--accent);border-color:var(--accent);color:#100e0b}
-.btn.ghost:hover{background:var(--ink);color:var(--paper)}
-
-/* car switcher — thumbnails below podium */
-.hswitcher{position:relative;z-index:3;width:min(94vw,1080px);margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.hswitcher .hs-label{font-family:var(--ff-s);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
-.hs-track{display:flex;gap:12px;overflow-x:auto;padding:6px 4px 14px;scrollbar-width:none;max-width:100%}
-.hs-track::-webkit-scrollbar{display:none}
-.hs-thumb{flex:0 0 auto;width:100px;height:64px;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;
-  border:1px solid rgba(255,255,255,.1);background:#0a0806;transition:.4s var(--ease);opacity:.55}
-.hs-thumb:hover{opacity:1;transform:translateY(-2px)}
-.hs-thumb.active{opacity:1;border-color:var(--accent);box-shadow:0 8px 22px -8px var(--accent-line);transform:translateY(-3px)}
-.hs-thumb video,.hs-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.hs-thumb img{object-fit:contain;background:radial-gradient(120% 100% at 50% 40%,var(--accent-soft),#0a0806 75%)}
-.hs-thumb .tlbl{position:absolute;left:0;right:0;bottom:0;font-family:var(--ff-s);font-size:8px;letter-spacing:.16em;text-transform:uppercase;
-  color:#fff;background:linear-gradient(0deg,rgba(0,0,0,.72),transparent);padding:8px 6px 4px;text-align:center}
-
-/* IG handle bottom-left */
-.hig{position:absolute;left:clamp(20px,3vw,40px);bottom:24px;z-index:4;font-family:var(--ff-s);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
-.hig .ig-handle{color:var(--accent);transition:color .6s}
-
-/* TATTOO overlay words — decorative stroke-only text scattered around the hero */
-.htattoo{position:absolute;z-index:2;font-family:var(--ff-d);font-weight:700;line-height:.85;pointer-events:none;
-  -webkit-text-stroke:1px var(--accent-line);color:transparent;opacity:.55;letter-spacing:-.02em;font-style:italic;
-  transition:color .6s,-webkit-text-stroke .6s,opacity .6s}
-.htattoo.t1{top:8%;left:-2%;font-size:clamp(70px,12vw,180px);transform:rotate(-8deg)}
-.htattoo.t2{top:14%;right:-4%;font-size:clamp(50px,8vw,120px);transform:rotate(6deg)}
-.htattoo.t3{bottom:8%;left:3%;font-size:clamp(60px,9vw,140px);transform:rotate(-4deg)}
-.htattoo.t4{bottom:14%;right:2%;font-size:clamp(50px,7vw,110px);transform:rotate(3deg);font-style:normal}
-
-@media(max-width:860px){
-  .hero{padding:88px 0 30px}
-  .hlead-top{flex-direction:column;align-items:flex-start;text-align:left;gap:14px}
-  .hlead-top .hmeta{text-align:left}
-  .hlead-top .hmeta .kicker{justify-content:flex-start}
-  .hpodium{width:94vw;aspect-ratio:4/5}
-  .hpodium img,.hpodium video{object-fit:cover}
-  .hs-thumb{width:80px;height:54px}
-  .htattoo.t1{top:5%;font-size:80px}.htattoo.t2{top:11%;font-size:60px}
-  .htattoo.t3{bottom:5%;font-size:70px}.htattoo.t4{bottom:10%;font-size:56px}
-  .hig{position:relative;left:auto;bottom:auto;margin-top:16px}
+@media(max-width:900px){
+  .h-copy{max-width:82vw}
+  .h-deck{max-width:90vw}
+  .scan{right:5vw;top:12vh;width:200px}
+  .rail{right:5vw}
+  .rail-lbl{right:5vw}
 }
 
 /* ==== SCROLL-ASSEMBLE (bidirectional) — chars/words translate + fade based on IO ==== */
@@ -209,28 +239,23 @@ section{padding:clamp(60px,8vw,120px) 0}
   .filters{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
 }
 
-/* ===== SECTION 3 — DEEPFIX HIDDEN WORLD (fixed video behind page, transparent window reveals it) ===== */
-#deepfix{position:fixed;top:0;left:0;width:100%;height:100vh;z-index:0;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse 80% 70% at 50% 50%,#0a1628 0%,#050d1a 40%,#030810 70%,#020408 100%);
-  opacity:0;pointer-events:none;transition:opacity .6s}
-#deepfix.visible{opacity:1}
-#deepfix video{display:block;width:60vw;height:auto;object-fit:contain}
-#deepfix .dfglow{position:absolute;width:70%;height:70%;top:15%;left:15%;
-  background:radial-gradient(circle,rgba(30,80,160,.1),transparent 65%);pointer-events:none}
-/* the transparent window section — sits at z-index:1 so the fixed layer shows through */
-#deep{position:relative;z-index:1;height:100vh;background:transparent;pointer-events:none}
-#deep::before,#deep::after{content:"";position:absolute;left:0;right:0;height:clamp(80px,12vh,140px);z-index:3;pointer-events:none}
-#deep::before{top:0;background:linear-gradient(180deg,var(--paper) 0%,transparent 100%)}
-#deep::after{bottom:0;background:linear-gradient(0deg,var(--ink-panel) 0%,transparent 100%)}
+/* ===== SECTION 3 — HIDDEN WORLD (spliced from UPSHIFT AUTOS) ===== */
+#deepfix{position:fixed;inset:0;z-index:0;pointer-events:none;visibility:hidden}
+#deepfix video{width:100%;height:100%;object-fit:cover}
+#deepfix .d-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,6,10,.24),transparent 30%,transparent 70%,rgba(3,6,10,.3))}
+#deep{position:relative;height:150vh;background:transparent;z-index:1}
+.d-cap{position:sticky;top:74vh;margin-left:5vw;max-width:340px;z-index:2;opacity:0;filter:blur(8px);}
+.d-cap .dk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:rgba(190,230,255,.85);text-shadow:0 1px 10px rgba(0,0,0,.7)}
+.d-cap .dh{margin-top:12px;font-family:'Space Grotesk';font-weight:300;font-size:clamp(26px,2.4vw,38px);line-height:1.1;letter-spacing:-.02em;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.d-cap .dh b{font-weight:600}
 /* all other sections need z-index:2 + solid background to cover the fixed layer */
 nav{z-index:9000}
-.hero,#garage,#casting,#svc,#parts,#reviews,#reserve,#process,.marq,footer{position:relative;z-index:2;background-color:var(--paper)}
+#hero,#garage,#casting,#svc,#parts,#reviews,#reserve,#process,.marq,footer{position:relative;z-index:2}
+#garage,#svc,#parts,#reviews,footer{background-color:var(--paper)}
 #casting{background-color:var(--ink-panel)}
 #process{background-color:var(--ink-panel)}
 #reserve{background-color:var(--ink-panel)}
 .marq{background-color:var(--paper2)}
-
-@media(max-width:640px){#deepfix video{width:85vw}#deep{height:80vh}}
 
 /* ===== CASTING (luminous LIGHT editorial band) ===== */
 #casting{background:var(--ink-panel);color:#17140f}
@@ -406,55 +431,53 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
   <a href="#reserve" class="navcta">Request access</a>
 </nav>
 
-<!-- HERO — video/image podium + car switcher + tattoo overlay words -->
-<header class="hero" id="hero" data-k="hero">
+<!-- HERO — spliced from UPSHIFT AUTOS -->
+<section id="hero">
+  <video class="hero-vid" id="hero-vid" muted playsinline preload="auto" loop>
+    <source src="assets/upshift-vid/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-fill" id="hero-fill"></div>
+  <div class="hero-sharp" id="hero-sharp"><img id="hero-sharp-img" src="assets/upshift-img/car-shark.jpg" alt=""></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-glow"></div>
 
-  <!-- decorative tattoo words -->
-  <div class="htattoo t1 serif tu-scope" data-split="char" data-tattoo="1">SABLE</div>
-  <div class="htattoo t2 serif tu-scope" data-split="char" data-tattoo="1">FORGED</div>
-  <div class="htattoo t3 serif tu-scope" data-split="char" data-tattoo="1">by keys</div>
-  <div class="htattoo t4 tu-scope" data-split="char" data-tattoo="1" style="font-family:var(--ff-s);font-weight:700;letter-spacing:.24em">PRIVATE</div>
+  <div class="h-ig">EST. THE HOUSE · IG <b>@SABLE.COLLECTION</b></div>
 
-  <!-- title + meta above the podium -->
-  <div class="hlead-top">
-    <h1 class="htitle" data-split="word">Find your<br><em>machine.</em></h1>
-    <div class="hmeta">
-      <div class="kicker mono"><span class="rule"></span><span>The Private Collection · Est. 2011</span></div>
-      <p class="rise">Built for obsession and refined taste — every car combines provenance, power and the rarest finish. Sourced discreetly, delivered by appointment.</p>
+  <div class="h-copy">
+    <div class="h-kick" id="h-kick">Full-bore rebuilds · one car at a time</div>
+    <h1 class="h-title" id="h-title">
+      <span class="ln"><span>The Art of <b>the</b></span></span>
+      <span class="ln"><span><b>Rebuild</b> <span class="slash">///</span></span></span>
+      <span class="ln"><span class="accw" id="h-model">911 GT3 RS</span></span>
+    </h1>
+    <p class="h-sub" id="h-sub">Every car that enters our house leaves <b>newer than factory</b>. Chassis reset to zero, driveline re-balanced by hand, paint cured for weeks — <span id="h-story">this one wears shark blue over a full carbon rebuild.</span></p>
+  </div>
+
+  <div class="h-deck">
+    <div class="chip mag"><div class="cl">Peak power</div><div class="cv" id="c-hp">518<small>HP</small></div></div>
+    <div class="chip mag"><div class="cl">0–100 km/h</div><div class="cv" id="c-acc">3.0<small>S</small></div></div>
+    <div class="chip mag"><div class="cl">Build hours</div><div class="cv" id="c-hrs">1,840<small>H</small></div></div>
+    <div class="chip price mag"><div class="cl">Rebuilt · priced</div><div class="cv" id="c-price">$385,000</div></div>
+    <button class="cta mag" id="cta-book">Book the consult</button>
+  </div>
+
+  <aside class="scan mag" id="scan">
+    <div class="sh">Scanning the car</div>
+    <div class="ss" id="scan-state">In progress…</div>
+    <div style="margin-top:12px">
+      <div class="srow"><span class="sk">Chassis</span><span class="sv" id="s-ch">Reset · 0.00 mm</span></div>
+      <div class="srow"><span class="sk">Driveline</span><span class="sv" id="s-dr">Balanced</span></div>
+      <div class="srow"><span class="sk">Paint</span><span class="sv" id="s-pa">11 coats</span></div>
+      <div class="srow"><span class="sk">Reg. N°</span><span class="sv" id="s-no">01 / 07</span></div>
     </div>
-  </div>
+    <div class="sbar"><i id="s-bar"></i></div>
+  </aside>
 
-  <!-- THE PODIUM — video first, images swap in on selection -->
-  <div class="hpodium" id="hpodium">
-    <div class="pmedia active" id="pmVid"><video src="assets/hero-porsche.mp4" muted loop playsinline autoplay></video></div>
-    <div class="pmedia" id="pmImg"><img id="podiumImg" alt=""></div>
-    <div class="pvignette"></div>
-    <div class="hpodium-info">
-      <div class="pl">
-        <div class="brand" id="podiumBrand">PORSCHE · FEATURE FILM</div>
-        <div class="model serif" id="podiumModel">911 GT3 · Blue</div>
-      </div>
-      <div class="pr">
-        <span class="serif" id="podiumPrice">In motion</span>
-        <small id="podiumSpec">Now playing · loop</small>
-      </div>
-    </div>
-  </div>
+  <div class="rail-lbl" id="rail-lbl">Choose your build</div>
+  <div class="rail" id="rail"></div>
 
-  <!-- CTAs -->
-  <div class="hbtns-row">
-    <a href="#garage" class="btn solid">Browse the garage</a>
-    <a href="#reserve" class="btn ghost">Request access</a>
-  </div>
-
-  <!-- car switcher — tap to change podium & hero aesthetic -->
-  <div class="hswitcher" id="hstage">
-    <div class="hs-label">Choose your podium</div>
-    <div class="hs-track" id="hsTrack"></div>
-  </div>
-
-  <div class="hig"><span>@</span><span class="ig-handle">sable.collection</span></div>
-</header>
+  <div class="h-hint">Scroll — the collection awaits</div>
+</section>
 
 <!-- §02 — THE GARAGE (browse, search, filter) -->
 <section id="garage" data-k="garage"><div class="wrap">
@@ -474,12 +497,20 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
   <div class="garage-grid" id="garageGrid"></div>
 </div></section>
 
-<!-- §03 — DEEPFIX HIDDEN WORLD (fixed layer behind the page, transparent window reveals it) -->
+<!-- §03 — HIDDEN WORLD (spliced from UPSHIFT AUTOS) -->
 <div id="deepfix">
-  <div class="dfglow"></div>
-  <video src="assets/deep.mp4" loop muted playsinline></video>
+  <video id="deep-vid" muted loop playsinline preload="auto">
+    <source src="assets/upshift-vid/hidden.mp4" type="video/mp4">
+  </video>
+  <div class="d-scrim"></div>
 </div>
-<div id="deep"></div>
+
+<section id="deep">
+  <div class="d-cap" id="d-cap">
+    <div class="dk">Beneath every build</div>
+    <div class="dh">There was <b>another world</b> under the paint all along.</div>
+  </div>
+</section>
 
 <!-- §04 — PARTS COUNTER (moved from §07 per user request) -->
 <section id="parts"><div class="wrap">
@@ -749,63 +780,174 @@ $$('[data-count]').forEach(el=>cio.observe(el));
 /* ---------- nav solidify ---------- */
 addEventListener('scroll',()=>{$('#nav').classList.toggle('solid',scrollY>60);},{passive:true});
 
-/* ---------- HERO PODIUM — video slot 0 + image car slots 1..N + full aesthetic swap ---------- */
-// slot 0 is the featured video, remaining slots are cars from VAULT
-const VAULT=CARS.slice(0,6);
-const HERO_SLOTS=[
-  {kind:'video',accent:'#3f7dff',brand:'PORSCHE · FEATURE FILM',model:'911 GT3 · Blue',price:'In motion',spec:'Now playing · loop',thumb:'video',video:'assets/hero-porsche.mp4'},
-  ...VAULT.map(c=>({kind:'image',accent:c.accent,brand:`${c.brand} · ${c.year}`,model:c.model,price:c.price,
-    spec:`${c.hp}bhp · 0–60 ${c.zero} · ${c.top}mph`,thumb:c.file,car:c}))
-];
-let heroI=0;
-const podiumImg=$('#podiumImg'), pmVid=$('#pmVid'), pmImg=$('#pmImg'), heroVideo=pmVid.querySelector('video');
+/* ---------- HERO — spliced UPSHIFT engine (Lenis + GSAP + rail switcher) ---------- */
+gsap.registerPlugin(ScrollTrigger);
+const lenis = new Lenis({ duration:1.2, smoothWheel:true, lerp:.085 });
+window.__lenis = lenis;
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
 
-// build switcher thumbnails
-$('#hsTrack').innerHTML=HERO_SLOTS.map((s,i)=>{
-  const media=s.kind==='video'
-    ? `<video src="${s.video}" muted loop playsinline></video>`
-    : `<img src="${A+s.thumb}" alt="${s.model}">`;
-  return `<div class="hs-thumb${i===0?' active':''}" data-i="${i}">${media}<div class="tlbl">${s.kind==='video'?'FILM':(s.car.brand.split(' ')[0])}</div></div>`;
-}).join('');
-const hsThumbs=$$('#hsTrack .hs-thumb');
-
-function setHero(i){
-  heroI=(i+HERO_SLOTS.length)%HERO_SLOTS.length;
-  const s=HERO_SLOTS[heroI];
-  applyAccent(s.accent);
-  // swap podium content
-  if(s.kind==='video'){
-    pmImg.classList.remove('active'); pmVid.classList.add('active');
-    heroVideo.play().catch(()=>{});
-  } else {
-    podiumImg.src=A+s.thumb; podiumImg.alt=s.model;
-    pmVid.classList.remove('active'); pmImg.classList.add('active');
-    heroVideo.pause();
-  }
-  // podium info
-  $('#podiumBrand').textContent=s.brand;
-  $('#podiumModel').textContent=s.model;
-  $('#podiumPrice').textContent=s.price;
-  $('#podiumSpec').textContent=s.spec;
-  // active thumb
-  hsThumbs.forEach((t,idx)=>t.classList.toggle('active',idx===heroI));
-  // hero bg tint to match selection
-  const [r,g,b]=hexToRgb(s.accent);
-  document.querySelector('.hero').style.background=
-    `radial-gradient(ellipse 90% 70% at 50% 50%,rgba(${r},${g},${b},.14) 0%,#120c07 55%,#080604 100%)`;
+function seg(p,a,b,c,d){
+  if(p<=a) return 0;
+  if(p>=d) return c<d ? 0 : 1;
+  if(p<b) return (p-a)/(b-a);
+  if(p<c) return 1;
+  return 1-(p-c)/(d-c);
 }
-hsThumbs.forEach(t=>t.onclick=()=>{setHero(+t.dataset.i);restartHero();});
-// drag on switcher
-let vDragX=null;
-const hstage=$('#hstage');
-hstage.addEventListener('pointerdown',e=>{vDragX=e.clientX;});
-addEventListener('pointerup',e=>{if(vDragX===null)return;const dx=e.clientX-vDragX;if(Math.abs(dx)>50){setHero(heroI+(dx<0?1:-1));restartHero();}vDragX=null;});
-let heroTimer;
-function restartHero(){clearInterval(heroTimer);heroTimer=setInterval(()=>setHero(heroI+1),7800);}
-// legacy aliases so keyboard/other code keeps working
-const setVault=setHero, restartVault=restartHero;
-Object.defineProperty(window,'vaultI',{get:()=>heroI});
-setHero(0); restartHero();
+const uLerp=(a,b,t)=>a+(b-a)*t;
+
+/* CAR DATA — UPSHIFT rail cars (film + 6 rebuilds), mapped to sable/assets/upshift-* */
+const UCARS=[
+  {id:'film', name:'911 GT3 RS', story:'this one wears shark blue over a full carbon rebuild.', acc:[56,182,255],  hp:'518', acc100:'3.0', hrs:'1,840', price:'$385,000', ch:'Reset · 0.00 mm', pa:'11 coats', img:'assets/upshift-img/car-shark.jpg', video:true},
+  {id:'r8',   name:'R8 GT · ABT', story:'nardo grey, carbon aero, built for a glass showfloor.', acc:[154,164,173],hp:'640', acc100:'3.0', hrs:'2,320', price:'$265,000', ch:'Reset · 0.01 mm', pa:'9 coats',  img:'assets/upshift-img/car-r8gt.jpg'},
+  {id:'p1',   name:'McLaren P1', story:'pearl white hybrid — the loom alone took four months.', acc:[223,228,234],hp:'903', acc100:'2.8', hrs:'3,150', price:'$1.35M',   ch:'Reset · 0.00 mm', pa:'13 coats', img:'assets/upshift-img/car-p1.jpg'},
+  {id:'vio',  name:'GT3 RS · UV', story:'ultraviolet over magnesium — one of one, by request.', acc:[168,136,240],hp:'518', acc100:'3.0', hrs:'1,960', price:'$410,000', ch:'Reset · 0.00 mm', pa:'12 coats', img:'assets/upshift-img/car-violet.jpg'},
+  {id:'gr86', name:'GR86 · WB',  story:'widebody time-attack build on a street title.',         acc:[216,205,189],hp:'465', acc100:'4.1', hrs:'1,210', price:'$96,000',  ch:'Seam-welded',    pa:'7 coats',  img:'assets/upshift-img/car-gr86.jpg'},
+  {id:'mar',  name:'911 · Marble',story:'hand-veined carrara wrap over a full mechanical zero.',acc:[205,212,220],hp:'502', acc100:'3.2', hrs:'1,700', price:'$340,000', ch:'Reset · 0.00 mm', pa:'Wrap · 1 of 1', img:'assets/upshift-img/car-marble.jpg'},
+  {id:'dune', name:'911 · Dune', story:'commissioned to match one golden hour on the coast.',   acc:[224,185,138],hp:'502', acc100:'3.2', hrs:'1,780', price:'$355,000', ch:'Reset · 0.00 mm', pa:'10 coats', img:'assets/upshift-img/car-dune.jpg'},
+];
+
+/* build rail */
+const rail=document.getElementById('rail');
+UCARS.forEach((c,i)=>{
+  const el=document.createElement('div');
+  el.className='ritem mag'+(i===0?' on':'');
+  el.dataset.i=i;
+  el.innerHTML=`<img src="${c.img}" alt="${c.name}"><div class="rn">${i===0?'THE FILM':c.name}</div>`;
+  rail.appendChild(el);
+});
+const railItems=[...rail.children];
+
+/* CURSOR SYSTEM — magnetic + glow on .mag/.chip/.scan/.ritem */
+let mx=innerWidth/2,my=innerHeight/2;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
+const mags=[...document.querySelectorAll('.mag')].map(el=>({el,x:0,y:0,s:1}));
+const glows=[...document.querySelectorAll('.chip,.scan,.ritem')];
+const RAD=230;
+const phases=mags.map((_,i)=>i*1.37);
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  for(let i=0;i<mags.length;i++){
+    const m=mags[i];
+    const r=m.el.getBoundingClientRect();
+    if(r.bottom<-80||r.top>innerHeight+80) continue;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy);
+    const f=d<RAD?(1-d/RAD):0;
+    const px=Math.sin(t*.9+phases[i])*3.2, py=Math.cos(t*.7+phases[i])*2.6;
+    m.x+=((dx*.09*f+px)-m.x)*.11;
+    m.y+=((dy*.09*f+py)-m.y)*.11;
+    m.s+=((1+.028*f)-m.s)*.11;
+    m.el.style.transform=`translate3d(${m.x.toFixed(2)}px,${m.y.toFixed(2)}px,0) scale(${m.s.toFixed(3)})`;
+  }
+  for(const g of glows){
+    const r=g.getBoundingClientRect();
+    if(r.bottom<-60||r.top>innerHeight+60) continue;
+    const gx=((mx-r.left)/r.width)*100, gy=((my-r.top)/r.height)*100;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const d=Math.hypot(mx-cx,my-cy);
+    const inten=d<RAD*1.4?(1-d/(RAD*1.4)):0;
+    g.style.setProperty('--gx',gx.toFixed(1)+'%');
+    g.style.setProperty('--gy',gy.toFixed(1)+'%');
+    g.style.setProperty('--gI',inten.toFixed(3));
+  }
+});
+
+/* HERO — film plays slow, words organise into place */
+const heroVid=document.getElementById('hero-vid');
+heroVid.playbackRate=.5;
+const introEls={
+  ig:document.querySelector('.h-ig'), kick:document.getElementById('h-kick'),
+  lines:[...document.querySelectorAll('#h-title .ln>span')],
+  sub:document.getElementById('h-sub'),
+  chips:[...document.querySelectorAll('.h-deck .chip')],
+  cta:document.getElementById('cta-book'),
+  scan:document.getElementById('scan'),
+  railLbl:document.getElementById('rail-lbl'),
+  hint:document.querySelector('.h-hint'),
+};
+function heroIntro(){
+  const tl=gsap.timeline({defaults:{ease:'power3.out'}});
+  tl.to(introEls.ig,{opacity:1,filter:'blur(0px)',duration:1.3},.4)
+    .to(introEls.kick,{opacity:1,filter:'blur(0px)',duration:1.4},.6)
+    .to(introEls.lines,{y:'0%',duration:1.6,stagger:.34,ease:'power4.out'},.8)
+    .to(introEls.sub,{opacity:1,filter:'blur(0px)',duration:1.5},2.0)
+    .to(introEls.chips,{opacity:1,filter:'blur(0px)',duration:1.2,stagger:.22},2.5)
+    .to(introEls.cta,{opacity:1,filter:'blur(0px)',duration:1.2},3.4)
+    .to(introEls.scan,{opacity:1,filter:'blur(0px)',duration:1.5},2.8)
+    .to(introEls.railLbl,{opacity:1,filter:'blur(0px)',duration:1},3.8)
+    .to([...railItems],{opacity:1,filter:'blur(0px)',duration:.9,stagger:.12},3.9)
+    .to(introEls.hint,{opacity:1,duration:1.2},4.6);
+}
+function startHero(){
+  heroVid.play().catch(()=>{});
+  heroIntro();
+}
+if(heroVid.readyState>=2) startHero();
+else heroVid.addEventListener('loadeddata',startHero,{once:true});
+setTimeout(()=>{ if(!introEls.kick.style.opacity||introEls.kick.style.opacity==='0') heroIntro(); },2500);
+
+/* scan panel progress */
+const sBar=document.getElementById('s-bar'), scanState=document.getElementById('scan-state');
+gsap.to(sBar,{width:'100%',duration:7,ease:'power1.inOut',delay:2,onComplete:()=>{scanState.textContent='Complete · verified';}});
+
+/* CAR TAKEOVER — swap film to rebuild image, retint sitewide */
+const fillEl=document.getElementById('hero-fill');
+const sharpEl=document.getElementById('hero-sharp');
+const sharpImg=document.getElementById('hero-sharp-img');
+const hModel=document.getElementById('h-model');
+const hStory=document.getElementById('h-story');
+const cHP=document.getElementById('c-hp'), cACC=document.getElementById('c-acc'),
+      cHRS=document.getElementById('c-hrs'), cPRICE=document.getElementById('c-price');
+const sCH=document.getElementById('s-ch'), sPA=document.getElementById('s-pa'), sNO=document.getElementById('s-no');
+const accVar={r:56,g:182,b:255};
+let curCar=0, swapping=false;
+const rgbToHex=(r,g,b)=>'#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+
+function applyAccentRGB(rgb){
+  gsap.to(accVar,{r:rgb[0],g:rgb[1],b:rgb[2],duration:1.1,ease:'power2.inOut',onUpdate:()=>{
+    const st=document.documentElement.style;
+    const r=Math.round(accVar.r), g=Math.round(accVar.g), b=Math.round(accVar.b);
+    st.setProperty('--ar',r); st.setProperty('--ag',g); st.setProperty('--ab',b);
+    /* bridge into SABLE's sitewide --accent so nav brandmark, casting tags etc retint */
+    applyAccent(rgbToHex(r,g,b));
+  }});
+}
+function swapCar(i){
+  if(swapping||i===curCar) return;
+  swapping=true; curCar=i;
+  const c=UCARS[i];
+  railItems.forEach((r,j)=>r.classList.toggle('on',j===i));
+  applyAccentRGB(c.acc);
+
+  const infoEls=[hModel,introEls.sub,...introEls.chips];
+  const tl=gsap.timeline({onComplete:()=>{swapping=false}});
+  tl.to(infoEls,{opacity:0,y:10,filter:'blur(6px)',duration:.45,stagger:.05,ease:'power2.in'},0);
+
+  if(c.video){
+    tl.add(()=>{ heroVid.currentTime=0; heroVid.play().catch(()=>{}); },.45);
+    tl.to([fillEl,sharpEl],{opacity:0,duration:.8,ease:'power2.inOut'},.45)
+      .to(heroVid,{opacity:1,duration:.8},.45);
+  }else{
+    tl.add(()=>{ fillEl.style.backgroundImage=`url("${c.img}")`; sharpImg.src=c.img; },.4);
+    tl.to(heroVid,{opacity:0,duration:.9,ease:'power2.inOut'},.45)
+      .to(fillEl,{opacity:1,duration:1.1,ease:'power2.out'},.55)
+      .fromTo(sharpEl,{opacity:0,scale:1.06,xPercent:3},{opacity:1,scale:1,xPercent:0,duration:1.4,ease:'power3.out'},.65);
+  }
+  tl.add(()=>{
+    hModel.textContent=c.name;
+    hStory.textContent=c.story;
+    cHP.innerHTML=c.hp+'<small>HP</small>';
+    cACC.innerHTML=c.acc100+'<small>S</small>';
+    cHRS.innerHTML=c.hrs+'<small>H</small>';
+    cPRICE.textContent=c.price;
+    sCH.textContent=c.ch; sPA.textContent=c.pa;
+    sNO.textContent=String(i+1).padStart(2,'0')+' / 07';
+  },.95);
+  tl.to(infoEls,{opacity:1,y:0,filter:'blur(0px)',duration:1.05,stagger:.09,ease:'power3.out'},1.05);
+}
+railItems.forEach(r=>r.addEventListener('click',()=>swapCar(+r.dataset.i)));
 
 /* ---------- §02 THE GARAGE — search, filter, browse ---------- */
 const TYPES=[...new Set(CARS.map(c=>c.type))];
@@ -877,15 +1019,24 @@ scrollTrack.addEventListener('pointerleave',()=>{isDragging=false;scrollTrack.st
 scrollTrack.addEventListener('pointerup',()=>{isDragging=false;scrollTrack.style.cursor='grab';});
 scrollTrack.addEventListener('pointermove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-scrollTrack.offsetLeft;scrollTrack.scrollLeft=scrollLeft-(x-startX)*1.2;});
 
-/* ---------- §03 DEEPFIX — hidden world reveal ---------- */
-const deepfix=$('#deepfix'), deepVid=deepfix.querySelector('video');
-const deepIO=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(e.isIntersecting){deepfix.classList.add('visible');deepVid.play().catch(()=>{});}
-    else{deepfix.classList.remove('visible');deepVid.pause();}
-  });
-},{threshold:0.05});
-deepIO.observe($('#deep'));
+/* ---------- §03 HIDDEN WORLD — UPSHIFT ScrollTrigger reveal ---------- */
+const deepFix=document.getElementById('deepfix');
+const deepVid=document.getElementById('deep-vid');
+const dCap=document.getElementById('d-cap');
+ScrollTrigger.create({
+  trigger:'#deep', start:'top bottom', end:'bottom top',
+  onToggle:self=>{
+    deepFix.style.visibility=self.isActive?'visible':'hidden';
+    if(self.isActive){ deepVid.play().catch(()=>{}); } else { deepVid.pause(); }
+  },
+  onUpdate:self=>{
+    const p=self.progress;
+    const a=seg(p,.18,.34,.72,.9);
+    dCap.style.opacity=a.toFixed(3);
+    dCap.style.filter=`blur(${((1-a)*8).toFixed(1)}px)`;
+    dCap.style.transform=`translateY(${((1-a)*16).toFixed(1)}px)`;
+  }
+});
 
 /* ---------- CASTING ---------- */
 let castI=0;
@@ -1000,13 +1151,12 @@ addEventListener('keydown',e=>{
   if(enq.classList.contains('open')||$('#lb').classList.contains('open'))return;
   const dir=e.key==='ArrowRight'?1:-1, k=currentK();
   if(k==='cast'){setCast(castI+dir);e.preventDefault();}
-  else if(k==='hero'){setHero(heroI+dir);restartHero();e.preventDefault();}
+  else if(k==='hero'){swapCar((curCar+dir+UCARS.length)%UCARS.length);e.preventDefault();}
 });
 
 /* ---------- FLEX ENGINE (cursor-reactive tiles + idle motion) ---------- */
+/* NOTE: mx/my already declared + tracked by the UPSHIFT cursor system above */
 rebuildFlex();
-let mx=innerWidth/2,my=innerHeight/2;
-addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});
 function flexTick(t){
   const tv=t*0.001;
   for(const o of flexEls){
@@ -1044,11 +1194,11 @@ setInterval(manageVideos,2000);
 
 /* ---------- hook ---------- */
 window.__sable={
-  hero:()=>({i:heroI,kind:HERO_SLOTS[heroI].kind,model:HERO_SLOTS[heroI].model,accent:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}),
-  setHero, cast:()=>({i:castI,mood:CAST[castI].mood.replace(/<[^>]+>/g,' ').trim()}),
+  hero:()=>({i:curCar,name:UCARS[curCar].name,accent:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}),
+  swapCar, cast:()=>({i:castI,mood:CAST[castI].mood.replace(/<[^>]+>/g,' ').trim()}),
   setCast, openEnq, closeEnq, enqOpen:()=>enq.classList.contains('open'),
   garage:()=>({filter:activeFilter,search:searchQ,count:+$('#garageCount').textContent.match(/\d+/)[0]}),
-  counts:{hero:HERO_SLOTS.length,cast:CAST.length,cars:CARS.length,process:PROCESS.length,parts:PARTS.length,reviews:REVIEWS.length}
+  counts:{hero:UCARS.length,cast:CAST.length,cars:CARS.length,process:PROCESS.length,parts:PARTS.length,reviews:REVIEWS.length}
 };
 </script>
 </body>
