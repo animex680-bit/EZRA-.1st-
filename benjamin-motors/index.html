@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BENJAMIN MOTORS — Curated Luxury &amp; Performance · Dublin</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230d0c0b'/><text x='16' y='23' font-family='Georgia,serif' font-size='22' font-weight='bold' fill='%23c9a25e' text-anchor='middle'>B</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Archivo:wght@300..700&family=Inter:wght@300..600&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --paper:#0d0c0b; --paper2:#16130f; --ink:#efe9dd; --ink2:#b3ab9a;
+  --line:rgba(255,255,255,.1); --dim:#8a8272;
+  --accent:#c9a25e; --accent-soft:rgba(201,162,94,.16); --accent-line:rgba(201,162,94,.5);
+  --ink-panel:#ece6d9;
+  --ff-d:'Cormorant Garamond',serif; --ff-s:'Archivo',sans-serif; --ff-b:'Inter',sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  /* UPSHIFT accent triplet — drives the spliced hero + section 3 tinting */
+  --ar:56; --ag:182; --ab:255;
+  --mute:rgba(244,242,238,.52); --faint:rgba(244,242,238,.28);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--ff-b);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.04;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#100e0b}
+.wrap{max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,64px)}
+.mono{font-family:var(--ff-s);font-weight:400;letter-spacing:.32em;text-transform:uppercase;font-size:11px}
+.serif{font-family:var(--ff-d)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:9000;display:flex;align-items:center;justify-content:space-between;
+  padding:16px clamp(20px,4vw,64px);transition:background .4s,border-color .4s,backdrop-filter .4s;border-bottom:1px solid transparent}
+nav.solid{background:rgba(13,12,11,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brandmark{font-family:var(--ff-d);font-weight:800;font-size:23px;letter-spacing:.14em}
+.brandmark span{color:var(--accent);transition:color .5s}
+.navlinks{display:flex;gap:30px}
+.navlinks a{font-family:var(--ff-s);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);position:relative;padding:4px 0}
+.navlinks a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--accent);transition:width .3s var(--ease)}
+.navlinks a:hover{color:var(--ink)}.navlinks a:hover::after{width:100%}
+.navcta{font-family:var(--ff-s);font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--ink);
+  padding:9px 16px;border-radius:40px;transition:.3s var(--ease)}
+.navcta:hover{background:var(--ink);color:var(--paper)}
+@media(max-width:860px){.navlinks{display:none}}
+
+/* text-assemble units */
+.tu{display:inline-block;overflow:hidden;vertical-align:top}
+.tu>i{display:inline-block;font-style:inherit;transform:translateY(110%);transition:transform .7s var(--ease)}
+.on .tu>i{transform:translateY(0)}
+.rise{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rise.on{opacity:1;transform:none}
+
+/* ===== HERO (spliced from UPSHIFT AUTOS) ===== */
+#hero{position:relative;height:100vh;min-height:700px;overflow:hidden;background:#050507}
+.hero-vid,.hero-still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-still{opacity:0;pointer-events:none}
+.hero-fill{position:absolute;inset:-6%;background-size:cover;background-position:center;filter:blur(70px) saturate(1.35) brightness(.5);opacity:0;transform:scale(1.1)}
+.hero-sharp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:9vh 4vw 12vh 26vw;opacity:0;pointer-events:none;}
+.hero-sharp img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 50px 60px rgba(0,0,0,.55))}
+.hero-scrim{position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(105deg, rgba(5,5,7,.78) 0%, rgba(5,5,7,.35) 26%, transparent 48%),
+    linear-gradient(0deg, rgba(5,5,7,.72) 0%, transparent 30%),
+    linear-gradient(180deg, rgba(5,5,7,.5) 0%, transparent 22%);
+}
+.hero-glow{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.5;
+  background:radial-gradient(52vw 40vh at 74% 62%, rgba(var(--ar),var(--ag),var(--ab),.20), transparent 65%);
+  transition:background 1.2s;
+}
+.h-copy{position:absolute;left:5vw;top:15vh;z-index:12;max-width:44vw}
+.h-kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.4em;text-transform:uppercase;
+  color:rgb(var(--ar),var(--ag),var(--ab));display:flex;align-items:center;gap:14px;transition:color .8s;
+  opacity:0;filter:blur(10px);}
+.h-kick::before{content:"";width:44px;height:1px;background:currentColor}
+.h-title{margin-top:20px;font-family:'Space Grotesk';font-weight:300;
+  font-size:clamp(44px,4.6vw,74px);line-height:1.02;letter-spacing:-.03em;color:#efe9dd;}
+.h-title .ln{display:block;overflow:hidden}
+.h-title .ln>span{display:inline-block;transform:translateY(110%);will-change:transform}
+.h-title b{font-weight:700}
+.h-title .accw{color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.h-title .slash{font-weight:300;opacity:.4;letter-spacing:-.06em}
+.h-sub{margin-top:22px;max-width:400px;font-size:14px;line-height:1.75;font-weight:300;color:var(--mute);
+  opacity:0;filter:blur(8px);}
+.h-sub b{color:#efe9dd;font-weight:500}
+.h-deck{position:absolute;left:5vw;bottom:7vh;z-index:12;display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;max-width:46vw}
+.chip{border-radius:16px;padding:14px 18px;
+  background:linear-gradient(140deg,rgba(255,255,255,.10),rgba(255,255,255,.028));
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13), 0 18px 44px -22px rgba(0,0,0,.8);
+  opacity:0;filter:blur(8px);position:relative;overflow:hidden;
+  will-change:transform;}
+.chip::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(120px 120px at var(--gx,50%) var(--gy,50%), rgba(var(--ar),var(--ag),var(--ab),.28), transparent 70%);
+  transition:opacity .25s;}
+.chip .cl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.chip .cv{font-family:'Space Grotesk';font-weight:500;font-size:21px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;color:#efe9dd}
+.chip .cv small{font-size:11px;opacity:.5;font-family:'JetBrains Mono',monospace;margin-left:3px}
+.chip.price .cv{color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.cta{display:flex;align-items:center;gap:12px;padding:0 26px;border-radius:16px;
+  background:rgba(244,242,238,.94);color:#0a0a0c;height:52px;
+  font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.04em;
+  opacity:0;filter:blur(8px);position:relative;overflow:hidden;
+  transition:box-shadow .4s;will-change:transform;border:0;cursor:pointer}
+.cta:hover{box-shadow:0 0 44px -8px rgba(var(--ar),var(--ag),var(--ab),.85)}
+.cta::after{content:"→";font-weight:400}
+.scan{position:absolute;right:8.5vw;top:16vh;z-index:12;width:250px;
+  border-radius:22px;padding:20px;
+  background:linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 30px 70px -30px rgba(0,0,0,.9);
+  opacity:0;filter:blur(10px);position:absolute;overflow:hidden;will-change:transform;color:#efe9dd;}
+.scan::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--gI,0);
+  background:radial-gradient(160px 160px at var(--gx,50%) var(--gy,50%), rgba(var(--ar),var(--ag),var(--ab),.22), transparent 70%);
+  transition:opacity .25s;}
+.scan .sh{font-family:'Space Grotesk';font-weight:500;font-size:15px;margin-bottom:2px}
+.scan .ss{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgb(var(--ar),var(--ag),var(--ab));transition:color .8s}
+.scan .srow{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.scan .srow:last-child{border-bottom:0;padding-bottom:0}
+.scan .sk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.scan .sv{font-family:'Space Grotesk';font-weight:500;font-size:13px;font-variant-numeric:tabular-nums}
+.scan .sbar{height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:14px;overflow:hidden}
+.scan .sbar i{display:block;height:100%;width:38%;border-radius:2px;background:rgb(var(--ar),var(--ag),var(--ab));box-shadow:0 0 12px rgba(var(--ar),var(--ag),var(--ab),.7);transition:background .8s}
+.rail{position:absolute;right:8.5vw;bottom:7vh;z-index:14;display:flex;gap:10px;align-items:flex-end;}
+.ritem{width:74px;height:52px;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;
+  border:1px solid rgba(255,255,255,.16);background:#101014;
+  opacity:0;filter:blur(8px);
+  transition:border-color .35s, box-shadow .35s;
+  will-change:transform;}
+.ritem img{width:100%;height:100%;object-fit:cover;filter:grayscale(.75) brightness(.8);transition:filter .45s}
+.ritem .rn{position:absolute;left:0;right:0;bottom:0;padding:3px 6px;
+  font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;
+  background:linear-gradient(0deg,rgba(0,0,0,.8),transparent);color:rgba(255,255,255,.85);
+  opacity:0;transition:opacity .3s;}
+.ritem:hover .rn{opacity:1}
+.ritem.on{border-color:rgb(var(--ar),var(--ag),var(--ab));box-shadow:0 0 22px -4px rgba(var(--ar),var(--ag),var(--ab),.75)}
+.ritem.on img{filter:grayscale(0) brightness(1)}
+.rail-lbl{position:absolute;right:8.5vw;bottom:calc(7vh + 64px);z-index:14;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);
+  opacity:0;filter:blur(6px);}
+.h-ig{position:absolute;left:5vw;top:calc(15vh - 46px);z-index:12;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);
+  opacity:0;filter:blur(6px);}
+.h-ig b{color:rgb(var(--ar),var(--ag),var(--ab));font-weight:500;transition:color .8s}
+.h-hint{position:absolute;left:50%;bottom:3.4vh;transform:translateX(-50%);z-index:12;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--faint);
+  opacity:0;}
+
+@media(max-width:900px){
+  .h-copy{max-width:82vw}
+  .h-deck{max-width:90vw}
+  .scan{right:5vw;top:12vh;width:200px}
+  .rail{right:5vw}
+  .rail-lbl{right:5vw}
+}
+
+/* ==== MOBILE HERO — restack, no overlap, no quality loss ==== */
+@media(max-width:720px){
+  #hero{height:auto;min-height:100vh;padding-bottom:26px}
+  .hero-sharp{padding:6vh 4vw 44vh 4vw}
+  .h-ig{left:5vw;top:16px;font-size:9px;letter-spacing:.18em}
+  .h-copy{position:relative;top:auto;left:auto;max-width:none;padding:64px 5vw 0}
+  .h-title{font-size:36px !important;line-height:1.05}
+  .h-sub{max-width:none;font-size:13px;margin-top:16px}
+  /* hide the scan panel — its data is already in the chips + rail */
+  .scan{display:none}
+  .h-deck{position:relative;left:auto;bottom:auto;max-width:none;padding:22px 5vw 0;
+    display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .h-deck .chip{padding:12px 14px}
+  .chip .cv{font-size:18px}
+  .cta{grid-column:1/-1;justify-content:center;height:48px;font-size:13px}
+  .rail-lbl{position:relative;right:auto;bottom:auto;padding:22px 5vw 6px;top:auto}
+  .rail{position:relative;right:auto;bottom:auto;padding:0 5vw 16px;
+    overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;
+    -webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+  .rail::-webkit-scrollbar{display:none}
+  .ritem{flex:0 0 68px;scroll-snap-align:start}
+  .h-hint{display:none}
+  /* soften scrim so the car photo still reads */
+  .hero-scrim{background:
+    linear-gradient(180deg, rgba(5,5,7,.85) 0%, rgba(5,5,7,.15) 26%, rgba(5,5,7,.55) 62%, rgba(5,5,7,.92) 100%)}
+}
+
+/* ==== MOBILE SECTIONS — tighten, keep crisp ==== */
+@media(max-width:720px){
+  section{padding:56px 0}
+  .shead h2{font-size:32px}
+  .shead .r{font-size:13px}
+  .navcta{padding:8px 12px;font-size:10px;letter-spacing:.14em}
+  nav{padding:12px 5vw}
+  .brandmark{font-size:17px !important}
+  /* casting: stack the two frames */
+  .cast{grid-template-columns:1fr;gap:12px}
+  .castframe:nth-child(2){display:none} /* keep just the owner frame, mood word over it */
+  .castmid{width:78%}
+  .castmid .mood{font-size:36px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+  /* parts + reviews already stack via existing rules */
+  .rmeta{gap:20px;text-align:center}
+  .rmeta span{width:100%}
+  /* garage cards stay horizontal scroll — good on mobile */
+  .garage-count{padding:0 5vw}
+  #reserve h2{font-size:42px}
+  #reserve p{font-size:14px}
+}
+@media(max-width:520px){
+  .h-title{font-size:32px !important}
+  .shead h2{font-size:26px}
+}
+
+/* ==== SCROLL-ASSEMBLE (bidirectional) — chars/words translate + fade based on IO ==== */
+/* headings use larger stagger + tattoo-like slower reveal */
+.tu>i{transition:transform .9s var(--ease),opacity .9s var(--ease);opacity:.14}
+.on .tu>i{opacity:1}
+.tu.tattoo>i{transition-duration:1.2s}
+
+/* section heading */
+.shead{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:44px;border-bottom:1px solid var(--line);padding-bottom:20px}
+.shead .l .no{color:var(--accent);transition:color .6s}
+.shead h2{font-family:var(--ff-d);font-weight:500;font-size:clamp(30px,5vw,60px);line-height:.98;letter-spacing:-.01em;margin-top:12px}
+.shead h2 em{font-style:italic}
+.shead .r{max-width:34ch;color:var(--ink2);font-size:14px;line-height:1.65;text-align:right}
+@media(max-width:720px){.shead{flex-direction:column;align-items:flex-start}.shead .r{text-align:left}}
+
+section{padding:clamp(60px,8vw,120px) 0}
+
+/* ===== SECTION 2 — THE GARAGE (search/filter/browse) ===== */
+#garage{background:linear-gradient(180deg,var(--paper) 0%,var(--paper2) 100%)}
+.garage-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px;align-items:center}
+.garage-search{flex:1;min-width:200px;position:relative}
+.garage-search input{width:100%;font-family:var(--ff-b);font-size:14px;padding:14px 18px 14px 44px;border:1px solid var(--line);
+  border-radius:44px;background:var(--paper2);color:var(--ink);outline:none;transition:border-color .3s}
+.garage-search input:focus{border-color:var(--accent)}
+.garage-search input::placeholder{color:var(--dim)}
+.garage-search .ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:16px;pointer-events:none}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.fbtn{font-family:var(--ff-s);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px;border-radius:44px;
+  border:1px solid var(--line);background:transparent;color:var(--ink2);cursor:pointer;transition:.3s var(--ease);white-space:nowrap}
+.fbtn:hover,.fbtn.active{background:var(--accent);border-color:var(--accent);color:#100e0b}
+.garage-count{font-family:var(--ff-s);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+
+/* horizontal scroll track */
+.garage-scroll{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;padding-bottom:20px;cursor:grab}
+.garage-scroll:active{cursor:grabbing}
+.garage-scroll::-webkit-scrollbar{height:4px}
+.garage-scroll::-webkit-scrollbar-track{background:var(--paper2);border-radius:4px}
+.garage-scroll::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+.garage-track{display:flex;gap:18px;width:max-content;padding:0 clamp(20px,4vw,64px)}
+.gcard{flex:0 0 min(82vw,340px);scroll-snap-align:start;position:relative;background:var(--paper);border:1px solid var(--line);
+  border-radius:14px;overflow:hidden;transition:transform .5s var(--ease),box-shadow .5s var(--ease);will-change:transform}
+.gcard:hover{transform:translateY(-6px);box-shadow:0 24px 60px -20px rgba(201,162,94,.18)}
+.gcard .gimg{position:relative;aspect-ratio:4/5;overflow:hidden;display:grid;place-items:center;
+  background:radial-gradient(130% 100% at 50% 0%,var(--accent-soft),var(--paper2) 70%);transition:background .5s}
+.gcard .gimg img{width:100%;height:100%;object-fit:contain;transition:transform .8s var(--ease)}
+.gcard:hover .gimg img{transform:scale(1.04)}
+.gcard .gstatus{position:absolute;top:12px;left:12px;z-index:2;font-family:var(--ff-s);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  padding:5px 10px;border-radius:30px;background:rgba(243,240,232,.92);backdrop-filter:blur(4px)}
+.gcard .gstatus.sold{color:#b34;border-color:rgba(187,51,68,.4)}
+.gcard .gstatus.avail{color:#2c7a4b}
+.gcard .gstatus.avail::before{content:"● ";color:#2c9b57}
+.gcard .gprice-tag{position:absolute;top:12px;right:12px;z-index:2;font-family:var(--ff-d);font-weight:600;font-size:15px;color:#f6f3ec;
+  background:rgba(8,7,5,.6);backdrop-filter:blur(4px);padding:5px 11px;border-radius:30px}
+.gcard .gbody{padding:16px 18px 20px}
+.gcard .gbrand{font-family:var(--ff-s);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);transition:color .5s}
+.gcard .gmodel{font-family:var(--ff-d);font-weight:600;font-size:22px;line-height:1;margin:6px 0 12px}
+.gcard .gspecs{display:flex;gap:6px;margin-bottom:14px}
+.gcard .gspec{flex:1;text-align:center;background:var(--paper2);border:1px solid var(--line);border-radius:8px;padding:8px 4px}
+.gcard .gspec b{font-family:var(--ff-d);font-weight:600;font-size:15px;display:block;line-height:1}
+.gcard .gspec span{font-family:var(--ff-s);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);display:block;margin-top:4px}
+.gcard .gcta{width:100%;font-family:var(--ff-s);font-size:11px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--ink);
+  background:transparent;color:var(--ink);border-radius:44px;padding:12px;cursor:pointer;transition:.3s var(--ease)}
+.gcard .gcta:hover{background:var(--ink);color:var(--paper)}
+.gcard.hidden{display:none}
+
+/* grid mode for search results */
+.garage-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.garage-grid .gcard{flex:none;width:100%}
+.garage-grid.active{display:grid}
+.garage-scroll.hidden{display:none}
+
+@media(max-width:640px){
+  .gcard{flex:0 0 min(85vw,300px)}
+  .garage-controls{flex-direction:column;align-items:stretch}
+  .filters{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+}
+
+/* ===== SECTION 3 — HIDDEN WORLD (spliced from UPSHIFT AUTOS) ===== */
+#deepfix{position:fixed;inset:0;z-index:0;pointer-events:none;visibility:hidden}
+#deepfix video{width:100%;height:100%;object-fit:cover}
+#deepfix .d-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,6,10,.24),transparent 30%,transparent 70%,rgba(3,6,10,.3))}
+#deep{position:relative;height:150vh;background:transparent;z-index:1}
+.d-cap{position:sticky;top:74vh;margin-left:5vw;max-width:340px;z-index:2;opacity:0;filter:blur(8px);}
+.d-cap .dk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:rgba(190,230,255,.85);text-shadow:0 1px 10px rgba(0,0,0,.7)}
+.d-cap .dh{margin-top:12px;font-family:'Space Grotesk';font-weight:300;font-size:clamp(26px,2.4vw,38px);line-height:1.1;letter-spacing:-.02em;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.d-cap .dh b{font-weight:600}
+/* all other sections need z-index:2 + solid background to cover the fixed layer */
+nav{z-index:9000}
+#hero,#garage,#casting,#svc,#parts,#reviews,#reserve,#process,.marq,footer{position:relative;z-index:2}
+#garage,#svc,#parts,#reviews,footer{background-color:var(--paper)}
+#casting{background-color:var(--ink-panel)}
+#process{background-color:var(--ink-panel)}
+#reserve{background-color:var(--ink-panel)}
+.marq{background-color:var(--paper2)}
+
+/* ===== CASTING (luminous LIGHT editorial band) ===== */
+#casting{background:var(--ink-panel);color:#17140f}
+#casting .shead{border-color:rgba(0,0,0,.14)}
+#casting .shead .no{color:#a07a2e}
+#casting .shead .r{color:#5a5344}
+.castwrap{position:relative}
+.cast{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;max-width:860px;margin:0 auto}
+.castframe{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;
+  background:radial-gradient(135% 105% at 50% 0%, var(--accent-soft), #ddd6c6 72%);border:1px solid rgba(0,0,0,.08);transition:background .7s var(--ease)}
+.castframe img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .7s var(--ease)}
+.castframe img.show{opacity:1}
+.castframe .tag{position:absolute;top:14px;left:14px;z-index:2;color:#f3f0e8;font-family:var(--ff-s);font-size:10px;letter-spacing:.26em;background:rgba(8,7,5,.55);padding:6px 10px;border-radius:30px;backdrop-filter:blur(4px)}
+.castmid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;text-align:center;pointer-events:none;width:min(46%,340px)}
+.castmid .mood{font-family:var(--ff-d);font-style:italic;font-weight:600;font-size:clamp(28px,4.5vw,60px);line-height:.94;
+  color:#17140f;text-shadow:0 4px 24px rgba(240,236,226,.7)}
+.castmid .mood b{color:var(--accent);font-style:normal;transition:color .6s;-webkit-text-stroke:.5px rgba(0,0,0,.18)}
+.castmeta{display:flex;justify-content:space-between;align-items:center;margin-top:26px;gap:20px}
+.castmeta .look{color:#5a5344;font-size:14px;line-height:1.6;max-width:52ch}
+.castmeta .look span{color:#a07a2e;font-family:var(--ff-s);font-size:10px;letter-spacing:.24em;display:block;margin-bottom:8px;transition:color .6s}
+.castnav{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.cbtn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(0,0,0,.24);background:transparent;color:#17140f;
+  cursor:pointer;font-size:15px;transition:.3s var(--ease);display:grid;place-items:center}
+.cbtn:hover{background:#17140f;border-color:#17140f;color:var(--ink-panel)}
+.dots{display:flex;gap:8px;margin-left:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,.2);cursor:pointer;transition:.3s}
+.dot.active{background:var(--accent);width:22px;border-radius:6px}
+@media(max-width:640px){.castmid{width:70%}.castmeta{flex-direction:column;align-items:flex-start}.cast{gap:10px}}
+
+/* ===== SERVICES ===== */
+.svc{border-top:1px solid var(--line)}
+.srow{display:grid;grid-template-columns:80px 1fr auto;gap:28px;align-items:center;padding:30px 0;border-bottom:1px solid var(--line);cursor:default;transition:padding .4s var(--ease)}
+.srow .k{font-family:var(--ff-d);font-style:italic;font-weight:500;font-size:34px;color:var(--dim);transition:color .4s}
+.srow h3{font-family:var(--ff-d);font-weight:500;font-size:clamp(22px,3vw,36px);line-height:1.05}
+.srow p{color:var(--ink2);font-size:14px;line-height:1.6;max-width:60ch;margin-top:8px}
+.srow .go{font-family:var(--ff-s);font-size:22px;color:var(--dim);transition:.4s var(--ease)}
+.srow:hover{padding-left:14px}.srow:hover .k{color:var(--accent)}.srow:hover .go{color:var(--accent);transform:translateX(6px)}
+@media(max-width:640px){.srow{grid-template-columns:50px 1fr;gap:14px}.srow .go{display:none}}
+
+/* ===== PARTS ===== */
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pcard{background:var(--paper2);border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:.4s var(--ease);will-change:transform}
+.pcard .pimg{aspect-ratio:1/1;display:grid;place-items:center;padding:14px;position:relative;transition:background .5s}
+.pcard .pimg img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 12px 22px rgba(20,16,10,.28))}
+.pcard .pmeta{padding:14px 14px 16px;border-top:1px solid var(--line)}
+.pcard .pmeta h4{font-family:var(--ff-d);font-weight:600;font-size:16px;line-height:1.1}
+.pcard .pmeta .spec{color:var(--dim);font-family:var(--ff-s);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin:6px 0 10px}
+.pcard .prow{display:flex;align-items:center;justify-content:space-between}
+.pcard .price{font-family:var(--ff-d);font-weight:600;font-size:18px}
+.pcard .add{font-family:var(--ff-s);font-size:10px;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--ink);border-radius:30px;padding:7px 13px;cursor:pointer;transition:.3s}
+.pcard .add:hover{background:var(--accent);border-color:var(--accent)}
+@media(max-width:1000px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.pgrid{grid-template-columns:1fr}}
+
+/* ===== REVIEWS ===== */
+.rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.rc{background:var(--paper2);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:.4s var(--ease);will-change:transform}
+.rc .rf{aspect-ratio:4/5;overflow:hidden;position:relative}
+.rc .rf img{width:100%;height:100%;object-fit:cover;object-position:center 22%;transition:transform .7s var(--ease)}
+.rc:hover .rf img{transform:scale(1.05)}
+.rc .rf .stars{position:absolute;top:12px;left:12px;color:var(--accent);font-size:12px;letter-spacing:2px;background:rgba(8,7,5,.45);padding:5px 9px;border-radius:20px;backdrop-filter:blur(4px);transition:color .6s}
+.rc .rb{padding:14px}
+.rc .rb p{font-family:var(--ff-d);font-weight:500;font-size:14px;line-height:1.4}
+.rc .rb .who{margin-top:10px;display:flex;justify-content:space-between;align-items:baseline}
+.rc .rb .who b{font-family:var(--ff-s);font-size:12px;letter-spacing:.06em}
+.rc .rb .who span{font-family:var(--ff-s);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+@media(max-width:1000px){.rgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.rgrid{grid-template-columns:1fr}}
+
+/* ===== LIGHTBOX ===== */
+.lb{position:fixed;inset:0;z-index:10000;background:rgba(14,12,9,.72);backdrop-filter:blur(8px);display:grid;place-items:center;
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease);padding:20px}
+.lb.open{opacity:1;pointer-events:auto}
+.lbcard{background:var(--paper);border-radius:12px;max-width:760px;width:100%;display:grid;grid-template-columns:280px 1fr;overflow:hidden;
+  transform:translateY(18px) scale(.98);transition:transform .4s var(--ease);border:1px solid var(--line)}
+.lb.open .lbcard{transform:none}
+.lbcard .limg{position:relative}
+.lbcard .limg img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.lbcard .lbody{padding:28px}
+.lbcard .lbody .stars{color:var(--accent);letter-spacing:3px;font-size:15px}
+.lbcard .lbody blockquote{font-family:var(--ff-d);font-weight:500;font-size:20px;line-height:1.4;margin:16px 0 20px}
+.lbcard .lbody .who b{font-family:var(--ff-s);font-size:14px;letter-spacing:.05em;display:block}
+.lbcard .lbody .who span{font-family:var(--ff-s);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.lbclose{position:absolute;top:14px;right:16px;z-index:2;color:#fff;background:rgba(8,7,5,.5);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px}
+@media(max-width:600px){.lbcard{grid-template-columns:1fr}.lbcard .limg{aspect-ratio:16/10}}
+
+/* ===== RESERVE ===== */
+#reserve{background:var(--ink-panel);color:var(--paper);text-align:center}
+#reserve h2{font-family:var(--ff-d);font-weight:500;font-size:clamp(36px,7vw,88px);line-height:.98;letter-spacing:-.01em}
+#reserve h2 em{font-style:italic;color:var(--accent);transition:color .6s}
+#reserve p{color:#b9b2a1;max-width:46ch;margin:22px auto 0;font-size:16px;line-height:1.7}
+.mailbar{display:flex;gap:10px;max-width:520px;margin:38px auto 0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);
+  border-radius:50px;padding:7px 7px 7px 22px}
+.mailbar input{flex:1;background:transparent;border:none;outline:none;color:var(--paper);font-family:var(--ff-s);font-size:13px;letter-spacing:.04em}
+.mailbar input::placeholder{color:#8b8474}
+.mailbar button{font-family:var(--ff-s);font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--accent);color:#100e0b;border:none;border-radius:44px;padding:13px 22px;cursor:pointer;transition:.3s;white-space:nowrap}
+.mailbar button:hover{filter:brightness(1.08)}
+.mailnote{margin-top:16px;color:var(--accent);font-family:var(--ff-s);font-size:11px;letter-spacing:.16em;text-transform:uppercase;height:16px;opacity:0;transition:opacity .4s}
+.mailnote.show{opacity:1}
+.rmeta{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin-top:44px;color:#b9b2a1;font-family:var(--ff-s);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.rmeta span b{color:var(--paper);display:block;font-family:var(--ff-d);font-size:15px;letter-spacing:0;margin-bottom:5px;text-transform:none}
+@media(max-width:520px){.mailbar{flex-direction:column;border-radius:16px;padding:14px}.mailbar button{width:100%}.rmeta{flex-direction:column;align-items:center}}
+
+/* ===== PROCESS ===== */
+#process{background:var(--ink-panel);color:var(--paper)}
+#process .shead{border-color:rgba(255,255,255,.14)}
+#process .shead .r{color:#b9b2a1}
+.psteps{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden}
+.pstep{padding:30px 22px 36px;background:rgba(255,255,255,.015);transition:background .4s var(--ease);position:relative;min-height:200px}
+.pstep:hover{background:rgba(255,255,255,.05)}
+.pstep .pn{font-family:var(--ff-d);font-style:italic;font-weight:500;font-size:48px;color:var(--accent);line-height:1;transition:color .5s}
+.pstep h4{font-family:var(--ff-d);font-weight:600;font-size:20px;margin:14px 0 10px}
+.pstep p{color:#b9b2a1;font-size:13px;line-height:1.65}
+.pstep .parrow{position:absolute;right:18px;bottom:18px;color:rgba(255,255,255,.2);font-size:16px}
+@media(max-width:860px){.psteps{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.psteps{grid-template-columns:1fr}}
+
+/* ===== ENQUIRY modal ===== */
+.enq{position:fixed;inset:0;z-index:10001;background:rgba(14,12,9,.74);backdrop-filter:blur(8px);display:grid;place-items:center;
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease);padding:20px}
+.enq.open{opacity:1;pointer-events:auto}
+.enqcard{background:var(--paper);border-radius:14px;max-width:520px;width:100%;overflow:hidden;border:1px solid var(--line);
+  transform:translateY(18px) scale(.98);transition:transform .4s var(--ease);position:relative}
+.enq.open .enqcard{transform:none}
+.enqhead{padding:24px 28px;border-bottom:1px solid var(--line);background:radial-gradient(120% 140% at 100% 0%,var(--accent-soft),transparent 60%)}
+.enqhead .ek{font-family:var(--ff-s);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);transition:color .5s}
+.enqhead h3{font-family:var(--ff-d);font-weight:600;font-size:26px;line-height:1;margin-top:8px}
+.enqhead .esub{color:var(--dim);font-size:13px;margin-top:8px}
+.enqbody{padding:22px 28px 28px;display:flex;flex-direction:column;gap:12px}
+.enqbody label{font-family:var(--ff-s);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:-4px}
+.enqbody input,.enqbody select,.enqbody textarea{font-family:var(--ff-b);font-size:14px;padding:12px 14px;border:1px solid var(--line);
+  border-radius:9px;background:var(--paper2);color:var(--ink);outline:none;transition:border-color .3s;width:100%}
+.enqbody input:focus,.enqbody select:focus,.enqbody textarea:focus{border-color:var(--accent)}
+.enqbody textarea{resize:vertical;min-height:60px}
+.enqsubmit{font-family:var(--ff-s);font-size:12px;letter-spacing:.18em;text-transform:uppercase;background:var(--ink);color:var(--paper);
+  border:none;border-radius:44px;padding:15px;cursor:pointer;transition:.3s var(--ease);margin-top:6px}
+.enqsubmit:hover{background:var(--accent);color:#100e0b}
+.enqclose{position:absolute;top:14px;right:16px;z-index:3;background:rgba(8,7,5,.5);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px}
+.enqdone{text-align:center;padding:40px 28px}
+.enqdone .big{font-family:var(--ff-d);font-weight:600;font-size:28px;margin-bottom:10px}
+.enqdone p{color:var(--ink2);font-size:14px;line-height:1.6}
+
+/* kbd hint */
+.kbd{display:inline-flex;gap:6px;align-items:center;color:var(--dim);font-family:var(--ff-s);font-size:10px;letter-spacing:.12em}
+.kbd b{border:1px solid currentColor;border-radius:5px;padding:2px 7px;font-weight:400;opacity:.7}
+
+/* marquee */
+.marq{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;background:var(--paper2)}
+.marqin{display:flex;gap:44px;width:max-content;animation:slide 32s linear infinite}
+.marqin span{font-family:var(--ff-d);font-style:italic;font-weight:500;font-size:24px;color:var(--ink2);white-space:nowrap;display:flex;align-items:center;gap:44px}
+.marqin span::after{content:"◆";font-style:normal;font-size:10px;color:var(--accent)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+footer{padding:50px 0 36px;border-top:1px solid var(--line)}
+.foot{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap}
+.foot .fb{font-family:var(--ff-d);font-weight:800;font-size:30px;letter-spacing:.1em}
+.foot .fb span{color:var(--accent);transition:color .6s}
+.foot .fmeta{color:var(--dim);font-family:var(--ff-s);font-size:11px;letter-spacing:.14em;text-transform:uppercase;line-height:2.1;text-align:right}
+@media(max-width:520px){.foot{flex-direction:column;align-items:center;text-align:center}.foot .fmeta{text-align:center}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="brandmark" style="letter-spacing:.08em">BENJAMIN<span> MOTORS</span></div>
+  <div class="navlinks">
+    <a href="#garage">The Showroom</a>
+    <a href="#casting">Handover</a>
+    <a href="#svc">Services</a>
+    <a href="#parts">Upgrades</a>
+    <a href="#reviews">Reviews</a>
+  </div>
+  <a href="#reserve" class="navcta">Book a viewing</a>
+</nav>
+
+<!-- HERO — spliced from UPSHIFT AUTOS -->
+<section id="hero">
+  <video class="hero-vid" id="hero-vid" muted playsinline preload="auto" loop>
+    <source src="assets/upshift-vid/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-fill" id="hero-fill"></div>
+  <div class="hero-sharp" id="hero-sharp"><img id="hero-sharp-img" src="assets/upshift-img/car-shark.jpg" alt=""></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-glow"></div>
+
+  <div class="h-ig">NAAS ROAD · DUBLIN · IG <b>@BENJAMINMOTORS.IE</b></div>
+
+  <div class="h-copy">
+    <div class="h-kick" id="h-kick">Trade-ins · Finance · Nationwide delivery</div>
+    <h1 class="h-title" id="h-title">
+      <span class="ln"><span>Curated <b>Luxury</b></span></span>
+      <span class="ln"><span>&amp; <b>Performance</b> <span class="slash">///</span></span></span>
+      <span class="ln"><span class="accw" id="h-model">911 GT3 RS</span></span>
+    </h1>
+    <p class="h-sub" id="h-sub">Every car on our floor is <b>hand-picked, history-checked and valeted</b> before it ever wears the Benjamin plate. Trade-in welcome, finance arranged, delivered to any county — <span id="h-story">this one wears shark blue and a full folder of provenance.</span></p>
+  </div>
+
+  <div class="h-deck">
+    <div class="chip mag"><div class="cl">Power</div><div class="cv" id="c-hp">518<small>HP</small></div></div>
+    <div class="chip mag"><div class="cl">0–100 km/h</div><div class="cv" id="c-acc">3.0<small>S</small></div></div>
+    <div class="chip mag"><div class="cl">Owners</div><div class="cv" id="c-hrs">1<small>PREV</small></div></div>
+    <div class="chip price mag"><div class="cl">Drive-away</div><div class="cv" id="c-price">€385,000</div></div>
+    <button class="cta mag" id="cta-book">Book a viewing</button>
+  </div>
+
+  <aside class="scan mag" id="scan">
+    <div class="sh">The Benjamin check</div>
+    <div class="ss" id="scan-state">In progress…</div>
+    <div style="margin-top:12px">
+      <div class="srow"><span class="sk">History</span><span class="sv" id="s-ch">Verified · clean</span></div>
+      <div class="srow"><span class="sk">Finance</span><span class="sv" id="s-dr">Arranged</span></div>
+      <div class="srow"><span class="sk">Service</span><span class="sv" id="s-pa">Full · stamped</span></div>
+      <div class="srow"><span class="sk">Stock N°</span><span class="sv" id="s-no">01 / 07</span></div>
+    </div>
+    <div class="sbar"><i id="s-bar"></i></div>
+  </aside>
+
+  <div class="rail-lbl" id="rail-lbl">Choose your car</div>
+  <div class="rail" id="rail"></div>
+
+  <div class="h-hint">Scroll — the showroom awaits</div>
+</section>
+
+<!-- §02 — THE GARAGE (browse, search, filter) -->
+<section id="garage" data-k="garage"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 02 — The Showroom</div>
+      <h2 data-split="word">40+ cars <em>in stock.</em></h2></div>
+    <div class="r rise">Every car on the Naas Road floor, searchable and filterable. Scroll to browse or search by brand, model or price — trade-ins welcome on all of them.</div>
+  </div>
+  <div class="garage-controls">
+    <div class="garage-search"><span class="ico">⌕</span><input type="text" id="garageSearch" placeholder="Search brand, model, price…"></div>
+    <div class="filters" id="filters"></div>
+  </div>
+  <div class="garage-count" id="garageCount"></div>
+  <div class="garage-scroll" id="garageScroll">
+    <div class="garage-track" id="garageTrack"></div>
+  </div>
+  <div class="garage-grid" id="garageGrid"></div>
+</div></section>
+
+<!-- §03 — HIDDEN WORLD (spliced from UPSHIFT AUTOS) -->
+<div id="deepfix">
+  <video id="deep-vid" muted loop playsinline preload="auto">
+    <source src="assets/upshift-vid/hidden.mp4" type="video/mp4">
+  </video>
+  <div class="d-scrim"></div>
+</div>
+
+<section id="deep">
+  <div class="d-cap" id="d-cap">
+    <div class="dk">Beneath every deal</div>
+    <div class="dh">Every car is <b>history-checked, serviced and valeted</b> before the keys move.</div>
+  </div>
+</section>
+
+<!-- §04 — PARTS COUNTER (moved from §07 per user request) -->
+<section id="parts"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 04 — Upgrades</div>
+      <h2 data-split="word">Fitted before <em>handover.</em></h2></div>
+    <div class="r rise">Make it yours before it leaves the floor — wheels, suspension, exhausts and carbon, fitted and warrantied in-house.</div>
+  </div>
+  <div class="pgrid" id="pGrid"></div>
+</div></section>
+
+<!-- §05 — CASTING -->
+<section id="casting" data-k="cast"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 05 — Handover Day</div>
+      <h2 data-split="word">The keys, <em>your way.</em></h2></div>
+    <div class="r rise">Every handover is shot like an editorial — the owner, the car, the spec they chose. As seen on Instagram and TikTok.</div>
+  </div>
+  <div class="castwrap">
+    <div class="cast">
+      <div class="castframe"><span class="tag" id="castTagA">THE OWNER</span><img id="castA" alt=""></div>
+      <div class="castframe"><span class="tag" id="castTagB">THE CAR</span><img id="castB" alt=""></div>
+      <div class="castmid"><div class="mood serif" id="castMood">BLUE<br><b>HOUR</b></div></div>
+    </div>
+    <div class="castmeta">
+      <div class="look"><span id="castKick">THE LOOK — 01 / 06</span><span style="display:inline;color:inherit;font-family:var(--ff-b);letter-spacing:0" id="castLook"></span></div>
+      <div class="castnav">
+        <span class="kbd" style="color:#8b8474"><b>&#8592;</b><b>&#8594;</b></span>
+        <div class="dots" id="castDots"></div>
+        <button class="cbtn" id="castPrev" aria-label="Previous">&#8592;</button>
+        <button class="cbtn" id="castNext" aria-label="Next">&#8594;</button>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- §06 — PROCESS -->
+<section id="process"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 06 — The Process</div>
+      <h2 data-split="word">Keys in <em>four steps.</em></h2></div>
+    <div class="r rise">Buying, selling or trading in — the path is the same. No pressure, no guesswork, everything documented.</div>
+  </div>
+  <div class="psteps" id="pSteps"></div>
+</div></section>
+
+<!-- §07 — SERVICES -->
+<section id="svc"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 07 — The Services</div>
+      <h2 data-split="word">More than <em>selling cars.</em></h2></div>
+    <div class="r rise">Four ways to deal with the house — sell through us, trade in, finance it, or have us hunt down the exact spec you want.</div>
+  </div>
+  <div class="svc" id="svcList"></div>
+</div></section>
+
+<div class="marq"><div class="marqin" id="marq"></div></div>
+
+<!-- §08 — REVIEWS -->
+<section id="reviews"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 08 — The Word</div>
+      <h2 data-split="word">5-star, <em>every time.</em></h2></div>
+    <div class="r rise">The people who bought, sold and traded with us. Tap any cover to read the full story.</div>
+  </div>
+  <div class="rgrid" id="rGrid"></div>
+</div></section>
+
+<!-- RESERVE -->
+<section id="reserve"><div class="wrap">
+  <h2 data-split="word">Book a <em>viewing.</em></h2>
+  <p class="rise">Come see the floor in person or ask for a live video walk-round of any car. Leave a line and we'll call you back the same working day.</p>
+  <form class="mailbar" id="mail">
+    <input type="email" placeholder="your@email.com" required>
+    <button type="submit">Book a viewing</button>
+  </form>
+  <div class="mailnote" id="mailNote">Received — we'll call you back the same working day.</div>
+  <div class="rmeta">
+    <span><b>The Showroom</b>Wilton Works, Naas Road, Dublin D22 W2K3</span>
+    <span><b>Viewing</b>7 days · by appointment</span>
+    <span><b>Call or WhatsApp</b>085 262 6625</span>
+    <span><b>Social</b>@benjaminmotors.ie</span>
+  </div>
+</div></section>
+
+<footer><div class="wrap foot">
+  <div>
+    <div class="fb" style="letter-spacing:.06em;font-size:24px">BENJAMIN<span> MOTORS</span></div>
+    <div class="mono" style="color:var(--dim);margin-top:14px">Curated Luxury &amp; Performance</div>
+  </div>
+  <div class="fmeta">
+    Consignment · Trade-ins · Finance · Sourcing · Delivery<br>
+    Wilton Works, Naas Road, Dublin D22 W2K3 · @benjaminmotors.ie<br>
+    &copy; 2026 Benjamin Motors — All rights reserved
+  </div>
+</div></footer>
+
+<!-- enquiry modal -->
+<div class="enq" id="enq"><div class="enqcard">
+  <button class="enqclose" id="enqClose">&#10005;</button>
+  <div class="enqhead">
+    <div class="ek" id="enqKick">Reserve a viewing</div>
+    <h3 class="serif" id="enqTitle">Enquire</h3>
+    <div class="esub" id="enqSub"></div>
+  </div>
+  <form class="enqbody" id="enqForm">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:6px"><label>Full name</label><input type="text" required placeholder="Jane Doe"></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><label>Phone</label><input type="tel" required placeholder="+353 85 000 0000"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px"><label>Email</label><input type="email" required placeholder="you@email.com"></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><label>I'm interested in</label>
+      <select id="enqCar"></select></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><label>Message (optional)</label>
+      <textarea placeholder="Trade-in details, preferred viewing time, questions…"></textarea></div>
+    <button type="submit" class="enqsubmit">Send enquiry</button>
+  </form>
+  <div class="enqdone" id="enqDone" style="display:none">
+    <div class="big serif">Enquiry received.</div>
+    <p>A specialist will call you within one working day to arrange your private viewing.</p>
+  </div>
+</div></div>
+
+<!-- lightbox -->
+<div class="lb" id="lb"><div class="lbcard">
+  <button class="lbclose" id="lbClose">&#10005;</button>
+  <div class="limg"><img id="lbImg" alt=""></div>
+  <div class="lbody">
+    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <blockquote id="lbQuote"></blockquote>
+    <div class="who"><b id="lbName"></b><span id="lbCar"></span></div>
+  </div>
+</div></div>
+
+<script>
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), lerp=(a,b,t)=>a+(b-a)*t;
+const A='assets/';
+let flexEls=[];
+function rebuildFlex(){
+  flexEls=$$('.flexel').map(el=>({el,rx:0,ry:0,tx:0,ty:0,lift:0,tl:0,phase:Math.random()*6.28,amp:0.5+Math.random()*0.5}));
+  flexEls.forEach(o=>{
+    o.el.addEventListener('pointerenter',()=>o.tl=1);
+    o.el.addEventListener('pointerleave',()=>o.tl=0);
+  });
+}
+
+/* ---------- DATA ---------- */
+const CARS=[
+  {file:'pics/pics-54.jpg',brand:'PORSCHE',model:'911 Carrera S',year:'2023',hp:'473',zero:'3.2s',top:'191',price:'€142,000',status:'avail',accent:'#e6b422',type:'sports'},
+  {file:'pics/pics-35.jpg',brand:'LAMBORGHINI',model:'Urus S',year:'2024',hp:'657',zero:'3.5s',top:'190',price:'€229,000',status:'avail',accent:'#8bd44a',type:'suv'},
+  {file:'pics/pics-23.jpg',brand:'BMW M',model:'M4 Competition',year:'2024',hp:'523',zero:'3.4s',top:'180',price:'€96,000',status:'avail',accent:'#3f7dff',type:'sports'},
+  {file:'pics/pics-52.jpg',brand:'SHELBY',model:'GT500',year:'2022',hp:'760',zero:'3.3s',top:'180',price:'€115,000',status:'sold',accent:'#e5323a',type:'muscle'},
+  {file:'pics/pics-28.jpg',brand:'FORD',model:'Mustang GT',year:'2023',hp:'486',zero:'4.2s',top:'166',price:'€68,500',status:'avail',accent:'#ff6a2b',type:'muscle'},
+  {file:'pics/pics-43.jpg',brand:'SOURCED',model:'By Request',year:'2025',hp:'900',zero:'2.6s',top:'217',price:'P.O.A.',status:'avail',accent:'#9070d8',type:'hypercar'},
+  {file:'pics/pics-42.jpg',brand:'PORSCHE',model:'911 GT3',year:'2023',hp:'503',zero:'3.2s',top:'197',price:'€168,000',status:'avail',accent:'#d8a534',type:'sports'},
+  {file:'pics/pics-33.jpg',brand:'KOENIGSEGG',model:'Jesko',year:'2024',hp:'1280',zero:'2.5s',top:'300',price:'P.O.A.',status:'avail',accent:'#ff9534',type:'hypercar'},
+  {file:'pics/pics-53.jpg',brand:'DODGE',model:'Hellcat',year:'2022',hp:'717',zero:'3.6s',top:'199',price:'€92,000',status:'avail',accent:'#e5323a',type:'muscle'},
+  {file:'pics/pics-38.jpg',brand:'FORD',model:'Mustang GT',year:'2023',hp:'486',zero:'4.2s',top:'166',price:'€64,500',status:'sold',accent:'#ff6a2b',type:'muscle'},
+  {file:'pics/pics-44.jpg',brand:'PORSCHE',model:'911 GT3 R',year:'2023',hp:'557',zero:'3.0s',top:'190',price:'€398,000',status:'avail',accent:'#d8a534',type:'sports'},
+  {file:'pics/pics-36.jpg',brand:'LAMBORGHINI',model:'Urus',year:'2024',hp:'657',zero:'3.5s',top:'190',price:'€214,000',status:'avail',accent:'#8bd44a',type:'suv'},
+  {file:'pics/pics-41.jpg',brand:'PININFARINA',model:'Battista',year:'2024',hp:'1877',zero:'1.9s',top:'217',price:'P.O.A.',status:'avail',accent:'#9070d8',type:'hypercar'},
+  {file:'pics/pics-55.jpg',brand:'CONCEPT',model:'Violet',year:'2025',hp:'830',zero:'2.7s',top:'211',price:'€0.9M',status:'avail',accent:'#9070d8',type:'hypercar'},
+  {file:'pics/pics-40.jpg',brand:'MERCEDES-AMG',model:'E63',year:'2023',hp:'603',zero:'3.3s',top:'186',price:'€118,000',status:'avail',accent:'#3f7dff',type:'saloon'},
+  {file:'pics/pics-47.jpg',brand:'BENTLEY',model:'Bentayga',year:'2024',hp:'542',zero:'4.4s',top:'180',price:'€196,000',status:'avail',accent:'#d8a534',type:'suv'},
+  {file:'pics/pics-22.jpg',brand:'NISSAN',model:'GT-R',year:'2022',hp:'565',zero:'2.9s',top:'196',price:'€108,000',status:'avail',accent:'#e5323a',type:'sports'},
+  {file:'pics/pics-45.jpg',brand:'ROLLS-ROYCE',model:'Collection',year:'2024',hp:'612',zero:'3.2s',top:'201',price:'€174,000',status:'avail',accent:'#d8a534',type:'luxury'},
+  {file:'pics/pics-18.jpg',brand:'NIGHT',model:'Runner',year:'2024',hp:'670',zero:'3.0s',top:'205',price:'€188,000',status:'avail',accent:'#3f7dff',type:'sports'},
+  {file:'pics/pics-50.jpg',brand:'STUDIO',model:'Series',year:'2025',hp:'720',zero:'2.8s',top:'212',price:'€240,000',status:'avail',accent:'#9070d8',type:'hypercar'},
+  {file:'pics/pics-30.jpg',brand:'PORSCHE',model:'911 GT3 RS',year:'2023',hp:'518',zero:'3.0s',top:'184',price:'€218,000',status:'avail',accent:'#e6b422',type:'sports'},
+  {file:'pics/pics-48.jpg',brand:'ROLLS-ROYCE',model:'Phantom',year:'2023',hp:'563',zero:'5.1s',top:'155',price:'€368,000',status:'avail',accent:'#9070d8',type:'luxury'},
+  {file:'pics/pics-39.jpg',brand:'McLAREN',model:'Artura',year:'2024',hp:'671',zero:'3.0s',top:'205',price:'€225,000',status:'avail',accent:'#ff6a2b',type:'hypercar'},
+  {file:'pics/pics-24.jpg',brand:'BMW',model:'M5 // Art',year:'2024',hp:'617',zero:'3.3s',top:'190',price:'€148,000',status:'avail',accent:'#3f7dff',type:'saloon'},
+];
+const CAST=[
+  {mood:'BLUE<br><b>HOUR</b>',face:'faces/faces-21.jpg',car:'pics/pics-40.jpg',accent:'#3f7dff',look:'AMG saloon — collected on a Friday evening, traded in her old E-Class the same day.'},
+  {mood:'HIGH<br><b>VOLTAGE</b>',face:'faces/faces-15.jpg',car:'pics/pics-30.jpg',accent:'#e6b422',look:'GT3 RS — sourced to exact spec from Germany, VRT and paperwork handled by the house.'},
+  {mood:'PAPAYA<br><b>DREAM</b>',face:'faces/faces-23.jpg',car:'pics/pics-39.jpg',accent:'#ff6a2b',look:'Artura — reserved off a video walk-round, financed same-day, delivered to Limerick.'},
+  {mood:'THE<br><b>SCORCH</b>',face:'faces/faces-01.jpg',car:'pics/pics-46.jpg',accent:'#e5323a',look:'Widebody special — bought off the floor the week it landed. The reel hit 200k views.'},
+  {mood:'AFTER<br><b>HOURS</b>',face:'faces/faces-25.jpg',car:'pics/pics-48.jpg',accent:'#9070d8',look:'Phantom — a consignment sale that found its buyer in eleven days.'},
+  {mood:'GOLD<br><b>STANDARD</b>',face:'faces/faces-16.jpg',car:'pics/pics-31.jpg',accent:'#d8a534',look:'Champagne over cream nappa — the anniversary surprise we kept quiet for six weeks.'},
+];
+const SERVICES=[
+  {k:'01',t:'Consignment Sales',d:'Sell your car through the house. We prep it, shoot it, market it to 4,000+ followers and a live buyer list — you keep the keys until it sells.'},
+  {k:'02',t:'Trade-In & Part Exchange',d:'Honest valuations on the spot. Drive in with your current car, drive out with the next one — the paperwork is ours to worry about.'},
+  {k:'03',t:'Finance & Warranty',d:'Finance arranged through our lending partners with same-day decisions, and every car backed by a warranty you can actually use.'},
+  {k:'04',t:'Sourcing & Delivery',d:'Tell us the exact spec and budget. We hunt it down, history-check it, and deliver it to any county in Ireland.'},
+];
+const PARTS=[
+  {file:'parts/parts-11.jpg',name:'Forged Monobloc Wheels',spec:'20/21" staggered · gloss bronze',price:4200},
+  {file:'parts/parts-13.jpg',name:'Track Coilover Kit',spec:'2-way adjustable · 60mm',price:2650},
+  {file:'parts/parts-06.jpg',name:'VTEC Cam Package',spec:'high-lift · uprated valve springs',price:1890},
+  {file:'parts/parts-09.jpg',name:'Titanium Exhaust',spec:'valved · full ti · burnt tips',price:6900},
+  {file:'parts/parts-01.jpg',name:'Carbon Aero Kit',spec:'splitter · diffuser · swan-neck wing',price:5600},
+  {file:'parts/parts-03.jpg',name:'Big Brake Kit',spec:'6-pot · 400mm 2-piece discs',price:4750},
+  {file:'parts/parts-10.jpg',name:'Throttle Bodies',spec:'individual · velocity stacks',price:3400},
+  {file:'parts/parts-04.jpg',name:'Carbon Cold-Air Intake',spec:'sealed airbox · high-flow',price:980},
+];
+const PROCESS=[
+  {n:'01',t:'Enquire',d:'Tell us the car or the budget. We reply within one working day with availability, a walk-round video and honest numbers.'},
+  {n:'02',t:'View & Drive',d:'See it on the Naas Road floor or on a live video call. Every car comes with a verified history file and a full service record.'},
+  {n:'03',t:'Reserve',d:'Secure it with a refundable deposit. We handle finance, trade-in valuation, tax and all the paperwork.'},
+  {n:'04',t:'Drive Away',d:'Collect from the showroom or we deliver to any county — valeted, fuelled and shot for the handover reel.'},
+];
+const REVIEWS=[
+  {face:'faces/faces-19.jpg',name:'Aoife K.',car:'Audi e-tron',text:'Found the exact spec I wanted on their Instagram, viewed it Saturday, drove it home Tuesday. Finance sorted in a day.'},
+  {face:'faces/faces-20.jpg',name:'Niamh O.',car:'Range Rover Sport',text:'They gave me more for my trade-in than two main dealers offered. Zero pressure, everything on paper.'},
+  {face:'faces/faces-14.jpg',name:'Artem S.',car:'E-Class AMG',text:'Flew in from Cork on a video walk-round alone. The car was better in person than in the reel. That never happens.'},
+  {face:'faces/faces-24.jpg',name:'Rafa G.',car:'CLS AMG',text:'History file, service record, fresh NCT — all in the folder before I even asked. Proper dealership.'},
+  {face:'faces/faces-11.jpg',name:'Mara V.',car:'Audi Q7 S-Line',text:'They delivered it to Galway, valeted and fuelled. The handover video they shot is still my favourite thing on my phone.'},
+  {face:'faces/faces-07.jpg',name:'Devon L.',car:'Tiguan R-Line',text:'First car I ever financed. They walked me through every number and found a better rate than my own bank.'},
+  {face:'faces/faces-04.jpg',name:'Noor A.',car:'Audi A8 Quattro',text:'Sold my A8 on consignment through them. Professionally shot, sold in eleven days, better money than any trade-in offer.'},
+  {face:'faces/faces-13.jpg',name:'Kaz M.',car:'Bentley Bentayga',text:'They sourced the exact colour combo I wanted from the UK, handled import and VRT. Seamless from first call to keys.'},
+];
+
+/* ---------- accent ---------- */
+function hexToRgb(h){h=h.replace('#','');return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function applyAccentTo(el,hex){const[r,g,b]=hexToRgb(hex);const s=el.style;
+  s.setProperty('--accent',hex);s.setProperty('--accent-soft',`rgba(${r},${g},${b},.16)`);s.setProperty('--accent-line',`rgba(${r},${g},${b},.5)`);}
+const applyAccent=hex=>applyAccentTo(document.documentElement,hex);
+
+/* ---------- text assemble ---------- */
+function splitUnits(el){
+  const mode=el.dataset.split||'char';
+  const html=el.innerHTML; const parts=html.split(/(<br\s*\/?>)/i); el.innerHTML='';
+  parts.forEach(p=>{
+    if(/<br/i.test(p)){el.appendChild(document.createElement('br'));return;}
+    const tmp=document.createElement('span'); tmp.innerHTML=p;
+    tmp.childNodes.forEach(node=>{
+      const wrapEm=node.nodeName==='EM';
+      const txt=node.textContent;
+      const units=mode==='word'?txt.split(/(\s+)/):txt.split('');
+      units.forEach(u=>{
+        if(u.trim()===''){el.appendChild(document.createTextNode(u));return;}
+        const o=document.createElement('span'); o.className='tu';
+        const i=document.createElement('i'); i.textContent=u;
+        if(wrapEm){i.style.fontStyle='italic';i.style.color='var(--accent)';}
+        o.appendChild(i); el.appendChild(o);
+      });
+    });
+  });
+}
+$$('[data-split]').forEach(el=>{splitUnits(el);
+  [...el.querySelectorAll('.tu>i')].forEach((i,idx)=>i.style.transitionDelay=(idx*0.03)+'s');});
+
+const tio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting)e.target.classList.add('on'); else e.target.classList.remove('on');
+}),{threshold:.2});
+$$('[data-split]').forEach(el=>tio.observe(el));
+
+const rio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting)e.target.classList.add('on'); else e.target.classList.remove('on');
+}),{threshold:.15});
+$$('.rise').forEach(el=>rio.observe(el));
+
+/* ---------- count up ---------- */
+function runCount(el){
+  const target=+el.dataset.count, div=+(el.dataset.div||1), dec=+(el.dataset.dec||0), suf=el.dataset.suf||'';
+  const t0=performance.now(), dur=1400;
+  function tick(t){const p=clamp((t-t0)/dur,0,1); const e=1-Math.pow(1-p,3);
+    const v=(target*e)/div; el.textContent=(v.toFixed(dec))+suf; if(p<1)requestAnimationFrame(tick);}
+  requestAnimationFrame(tick);
+}
+const cio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){runCount(e.target);cio.unobserve(e.target);}}),{threshold:.6});
+$$('[data-count]').forEach(el=>cio.observe(el));
+
+/* ---------- nav solidify ---------- */
+addEventListener('scroll',()=>{$('#nav').classList.toggle('solid',scrollY>60);},{passive:true});
+
+/* ---------- HERO — spliced UPSHIFT engine (Lenis + GSAP + rail switcher) ---------- */
+gsap.registerPlugin(ScrollTrigger);
+const lenis = new Lenis({ duration:1.2, smoothWheel:true, lerp:.085 });
+window.__lenis = lenis;
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+
+function seg(p,a,b,c,d){
+  if(p<=a) return 0;
+  if(p>=d) return c<d ? 0 : 1;
+  if(p<b) return (p-a)/(b-a);
+  if(p<c) return 1;
+  return 1-(p-c)/(d-c);
+}
+const uLerp=(a,b,t)=>a+(b-a)*t;
+
+/* CAR DATA — hero rail stock (film + 6 featured cars) */
+const UCARS=[
+  {id:'film', name:'911 GT3 RS', story:'this one wears shark blue and a full folder of provenance.', acc:[56,182,255],  hp:'518', acc100:'3.0', hrs:'1', price:'€385,000', ch:'Verified · clean', pa:'Full · stamped', img:'assets/upshift-img/car-shark.jpg', video:true},
+  {id:'r8',   name:'R8 GT · ABT', story:'nardo grey over carbon aero — one of 333 worldwide.', acc:[154,164,173],hp:'640', acc100:'3.0', hrs:'2', price:'€265,000', ch:'Verified · clean', pa:'Audi main dealer',  img:'assets/upshift-img/car-r8gt.jpg'},
+  {id:'p1',   name:'McLaren P1', story:'pearl white hybrid hypercar — sourced on request for a client.', acc:[223,228,234],hp:'903', acc100:'2.8', hrs:'2', price:'P.O.A.',   ch:'Verified · clean', pa:'McLaren Qualified', img:'assets/upshift-img/car-p1.jpg'},
+  {id:'vio',  name:'GT3 RS · UV', story:'ultraviolet over magnesium wheels — a one-of-one spec.', acc:[168,136,240],hp:'518', acc100:'3.0', hrs:'1', price:'€410,000', ch:'Verified · clean', pa:'Full · stamped', img:'assets/upshift-img/car-violet.jpg'},
+  {id:'gr86', name:'GR86 · WB',  story:'widebody special on a street title — the fun one on the floor.', acc:[216,205,189],hp:'465', acc100:'4.1', hrs:'1', price:'€96,000',  ch:'Verified · clean', pa:'Full · stamped',  img:'assets/upshift-img/car-gr86.jpg'},
+  {id:'mar',  name:'911 · Marble',story:'hand-veined carrara wrap over a fresh major service.',acc:[205,212,220],hp:'502', acc100:'3.2', hrs:'2', price:'€340,000', ch:'Verified · clean', pa:'Wrap · 1 of 1', img:'assets/upshift-img/car-marble.jpg'},
+  {id:'dune', name:'911 · Dune', story:'desert gold on a collector title — consigned through the house.',   acc:[224,185,138],hp:'502', acc100:'3.2', hrs:'3', price:'€355,000', ch:'Verified · clean', pa:'Full · stamped', img:'assets/upshift-img/car-dune.jpg'},
+];
+
+/* build rail */
+const rail=document.getElementById('rail');
+UCARS.forEach((c,i)=>{
+  const el=document.createElement('div');
+  el.className='ritem mag'+(i===0?' on':'');
+  el.dataset.i=i;
+  el.innerHTML=`<img src="${c.img}" alt="${c.name}"><div class="rn">${i===0?'THE FILM':c.name}</div>`;
+  rail.appendChild(el);
+});
+const railItems=[...rail.children];
+
+/* CURSOR SYSTEM — magnetic + glow on .mag/.chip/.scan/.ritem */
+let mx=innerWidth/2,my=innerHeight/2;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
+const mags=[...document.querySelectorAll('.mag')].map(el=>({el,x:0,y:0,s:1}));
+const glows=[...document.querySelectorAll('.chip,.scan,.ritem')];
+const RAD=230;
+const phases=mags.map((_,i)=>i*1.37);
+gsap.ticker.add(()=>{
+  const t=performance.now()*.001;
+  for(let i=0;i<mags.length;i++){
+    const m=mags[i];
+    const r=m.el.getBoundingClientRect();
+    if(r.bottom<-80||r.top>innerHeight+80) continue;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy);
+    const f=d<RAD?(1-d/RAD):0;
+    const px=Math.sin(t*.9+phases[i])*3.2, py=Math.cos(t*.7+phases[i])*2.6;
+    m.x+=((dx*.09*f+px)-m.x)*.11;
+    m.y+=((dy*.09*f+py)-m.y)*.11;
+    m.s+=((1+.028*f)-m.s)*.11;
+    m.el.style.transform=`translate3d(${m.x.toFixed(2)}px,${m.y.toFixed(2)}px,0) scale(${m.s.toFixed(3)})`;
+  }
+  for(const g of glows){
+    const r=g.getBoundingClientRect();
+    if(r.bottom<-60||r.top>innerHeight+60) continue;
+    const gx=((mx-r.left)/r.width)*100, gy=((my-r.top)/r.height)*100;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const d=Math.hypot(mx-cx,my-cy);
+    const inten=d<RAD*1.4?(1-d/(RAD*1.4)):0;
+    g.style.setProperty('--gx',gx.toFixed(1)+'%');
+    g.style.setProperty('--gy',gy.toFixed(1)+'%');
+    g.style.setProperty('--gI',inten.toFixed(3));
+  }
+});
+
+/* HERO — film plays slow, words organise into place */
+const heroVid=document.getElementById('hero-vid');
+heroVid.playbackRate=.5;
+const introEls={
+  ig:document.querySelector('.h-ig'), kick:document.getElementById('h-kick'),
+  lines:[...document.querySelectorAll('#h-title .ln>span')],
+  sub:document.getElementById('h-sub'),
+  chips:[...document.querySelectorAll('.h-deck .chip')],
+  cta:document.getElementById('cta-book'),
+  scan:document.getElementById('scan'),
+  railLbl:document.getElementById('rail-lbl'),
+  hint:document.querySelector('.h-hint'),
+};
+function heroIntro(){
+  const tl=gsap.timeline({defaults:{ease:'power3.out'}});
+  tl.to(introEls.ig,{opacity:1,filter:'blur(0px)',duration:1.3},.4)
+    .to(introEls.kick,{opacity:1,filter:'blur(0px)',duration:1.4},.6)
+    .to(introEls.lines,{y:'0%',duration:1.6,stagger:.34,ease:'power4.out'},.8)
+    .to(introEls.sub,{opacity:1,filter:'blur(0px)',duration:1.5},2.0)
+    .to(introEls.chips,{opacity:1,filter:'blur(0px)',duration:1.2,stagger:.22},2.5)
+    .to(introEls.cta,{opacity:1,filter:'blur(0px)',duration:1.2},3.4)
+    .to(introEls.scan,{opacity:1,filter:'blur(0px)',duration:1.5},2.8)
+    .to(introEls.railLbl,{opacity:1,filter:'blur(0px)',duration:1},3.8)
+    .to([...railItems],{opacity:1,filter:'blur(0px)',duration:.9,stagger:.12},3.9)
+    .to(introEls.hint,{opacity:1,duration:1.2},4.6);
+}
+function startHero(){
+  heroVid.play().catch(()=>{});
+  heroIntro();
+}
+if(heroVid.readyState>=2) startHero();
+else heroVid.addEventListener('loadeddata',startHero,{once:true});
+setTimeout(()=>{ if(!introEls.kick.style.opacity||introEls.kick.style.opacity==='0') heroIntro(); },2500);
+
+/* scan panel progress */
+const sBar=document.getElementById('s-bar'), scanState=document.getElementById('scan-state');
+gsap.to(sBar,{width:'100%',duration:7,ease:'power1.inOut',delay:2,onComplete:()=>{scanState.textContent='Complete · 5★ rated';}});
+
+/* CAR TAKEOVER — swap film to rebuild image, retint sitewide */
+const fillEl=document.getElementById('hero-fill');
+const sharpEl=document.getElementById('hero-sharp');
+const sharpImg=document.getElementById('hero-sharp-img');
+const hModel=document.getElementById('h-model');
+const hStory=document.getElementById('h-story');
+const cHP=document.getElementById('c-hp'), cACC=document.getElementById('c-acc'),
+      cHRS=document.getElementById('c-hrs'), cPRICE=document.getElementById('c-price');
+const sCH=document.getElementById('s-ch'), sPA=document.getElementById('s-pa'), sNO=document.getElementById('s-no');
+const accVar={r:56,g:182,b:255};
+let curCar=0, swapping=false;
+const rgbToHex=(r,g,b)=>'#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+
+function applyAccentRGB(rgb){
+  gsap.to(accVar,{r:rgb[0],g:rgb[1],b:rgb[2],duration:1.1,ease:'power2.inOut',onUpdate:()=>{
+    const st=document.documentElement.style;
+    const r=Math.round(accVar.r), g=Math.round(accVar.g), b=Math.round(accVar.b);
+    st.setProperty('--ar',r); st.setProperty('--ag',g); st.setProperty('--ab',b);
+    /* bridge into SABLE's sitewide --accent so nav brandmark, casting tags etc retint */
+    applyAccent(rgbToHex(r,g,b));
+  }});
+}
+function swapCar(i){
+  if(swapping||i===curCar) return;
+  swapping=true; curCar=i;
+  const c=UCARS[i];
+  railItems.forEach((r,j)=>r.classList.toggle('on',j===i));
+  applyAccentRGB(c.acc);
+
+  const infoEls=[hModel,introEls.sub,...introEls.chips];
+  const tl=gsap.timeline({onComplete:()=>{swapping=false}});
+  tl.to(infoEls,{opacity:0,y:10,filter:'blur(6px)',duration:.45,stagger:.05,ease:'power2.in'},0);
+
+  if(c.video){
+    tl.add(()=>{ heroVid.currentTime=0; heroVid.play().catch(()=>{}); },.45);
+    tl.to([fillEl,sharpEl],{opacity:0,duration:.8,ease:'power2.inOut'},.45)
+      .to(heroVid,{opacity:1,duration:.8},.45);
+  }else{
+    tl.add(()=>{ fillEl.style.backgroundImage=`url("${c.img}")`; sharpImg.src=c.img; },.4);
+    tl.to(heroVid,{opacity:0,duration:.9,ease:'power2.inOut'},.45)
+      .to(fillEl,{opacity:1,duration:1.1,ease:'power2.out'},.55)
+      .fromTo(sharpEl,{opacity:0,scale:1.06,xPercent:3},{opacity:1,scale:1,xPercent:0,duration:1.4,ease:'power3.out'},.65);
+  }
+  tl.add(()=>{
+    hModel.textContent=c.name;
+    hStory.textContent=c.story;
+    cHP.innerHTML=c.hp+'<small>HP</small>';
+    cACC.innerHTML=c.acc100+'<small>S</small>';
+    cHRS.innerHTML=c.hrs+'<small>PREV</small>';
+    cPRICE.textContent=c.price;
+    sCH.textContent=c.ch; sPA.textContent=c.pa;
+    sNO.textContent=String(i+1).padStart(2,'0')+' / 07';
+  },.95);
+  tl.to(infoEls,{opacity:1,y:0,filter:'blur(0px)',duration:1.05,stagger:.09,ease:'power3.out'},1.05);
+}
+railItems.forEach(r=>r.addEventListener('click',()=>swapCar(+r.dataset.i)));
+document.getElementById('cta-book').addEventListener('click',()=>openEnq(null));
+
+/* ---------- §02 THE GARAGE — search, filter, browse ---------- */
+const TYPES=[...new Set(CARS.map(c=>c.type))];
+$('#filters').innerHTML='<button class="fbtn active" data-t="all">All</button>'+
+  TYPES.map(t=>`<button class="fbtn" data-t="${t}">${t}</button>`).join('');
+const filterBtns=$$('#filters .fbtn');
+let activeFilter='all', searchQ='';
+
+function renderGarage(){
+  const filtered=CARS.filter(c=>{
+    if(activeFilter!=='all'&&c.type!==activeFilter)return false;
+    if(searchQ){
+      const q=searchQ.toLowerCase();
+      return (c.brand+' '+c.model+' '+c.price+' '+c.year+' '+c.type).toLowerCase().includes(q);
+    }
+    return true;
+  });
+  const html=filtered.map((c,fi)=>{
+    const i=CARS.indexOf(c);
+    return `<div class="gcard flexel" data-i="${i}" style="--accent:${c.accent}">
+      <div class="gimg"><span class="gstatus ${c.status}">${c.status==='sold'?'Sold':'Available'}</span>
+        <span class="gprice-tag serif">${c.price}</span>
+        <img src="${A+c.file}" alt="${c.brand} ${c.model}" loading="lazy"></div>
+      <div class="gbody">
+        <div class="gbrand">${c.brand} · ${c.year}</div>
+        <div class="gmodel serif">${c.model}</div>
+        <div class="gspecs">
+          <div class="gspec"><b class="serif">${c.hp}</b><span>BHP</span></div>
+          <div class="gspec"><b class="serif">${c.zero}</b><span>0–60</span></div>
+          <div class="gspec"><b class="serif">${c.top}</b><span>MPH</span></div>
+        </div>
+        <button class="gcta" data-i="${i}">${c.status==='sold'?'Join waitlist':'Enquire · reserve'}</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // If searching, show grid; if browsing, show horizontal scroll
+  const scrollEl=$('#garageScroll'), gridEl=$('#garageGrid');
+  if(searchQ){
+    scrollEl.classList.add('hidden');
+    gridEl.classList.add('active');
+    gridEl.innerHTML=html;
+  } else {
+    scrollEl.classList.remove('hidden');
+    gridEl.classList.remove('active');
+    $('#garageTrack').innerHTML=html;
+  }
+  $('#garageCount').textContent=`${filtered.length} car${filtered.length!==1?'s':''} on the floor`;
+  // rebind CTAs
+  $$(searchQ?'#garageGrid .gcta':'#garageTrack .gcta').forEach(b=>b.onclick=e=>{e.stopPropagation();openEnq(+b.dataset.i);});
+  // rebind flex engine
+  rebuildFlex();
+}
+
+filterBtns.forEach(b=>b.onclick=()=>{
+  filterBtns.forEach(f=>f.classList.remove('active'));
+  b.classList.add('active');
+  activeFilter=b.dataset.t;
+  renderGarage();
+});
+$('#garageSearch').oninput=e=>{searchQ=e.target.value.trim();renderGarage();};
+renderGarage();
+
+// drag-to-scroll on the horizontal track
+const scrollTrack=$('#garageScroll');
+let isDragging=false, startX, scrollLeft;
+scrollTrack.addEventListener('pointerdown',e=>{isDragging=true;startX=e.pageX-scrollTrack.offsetLeft;scrollLeft=scrollTrack.scrollLeft;scrollTrack.style.cursor='grabbing';});
+scrollTrack.addEventListener('pointerleave',()=>{isDragging=false;scrollTrack.style.cursor='grab';});
+scrollTrack.addEventListener('pointerup',()=>{isDragging=false;scrollTrack.style.cursor='grab';});
+scrollTrack.addEventListener('pointermove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-scrollTrack.offsetLeft;scrollTrack.scrollLeft=scrollLeft-(x-startX)*1.2;});
+
+/* ---------- §03 HIDDEN WORLD — UPSHIFT ScrollTrigger reveal ---------- */
+const deepFix=document.getElementById('deepfix');
+const deepVid=document.getElementById('deep-vid');
+const dCap=document.getElementById('d-cap');
+ScrollTrigger.create({
+  trigger:'#deep', start:'top bottom', end:'bottom top',
+  onToggle:self=>{
+    deepFix.style.visibility=self.isActive?'visible':'hidden';
+    if(self.isActive){ deepVid.play().catch(()=>{}); } else { deepVid.pause(); }
+  },
+  onUpdate:self=>{
+    const p=self.progress;
+    const a=seg(p,.18,.34,.72,.9);
+    dCap.style.opacity=a.toFixed(3);
+    dCap.style.filter=`blur(${((1-a)*8).toFixed(1)}px)`;
+    dCap.style.transform=`translateY(${((1-a)*16).toFixed(1)}px)`;
+  }
+});
+
+/* ---------- CASTING ---------- */
+let castI=0;
+const castA=$('#castA'), castB=$('#castB');
+$('#castDots').innerHTML=CAST.map((_,i)=>`<span class="dot" data-i="${i}"></span>`).join('');
+function setCast(i){
+  castI=(i+CAST.length)%CAST.length; const c=CAST[castI];
+  applyAccentTo($('#casting'),c.accent);
+  const loadSwap=(el,src)=>{el.classList.remove('show');const im=new Image();im.onload=()=>{el.src=im.src;el.classList.add('show');};im.src=A+src;};
+  loadSwap(castA,c.face); loadSwap(castB,c.car);
+  $('#castMood').innerHTML=c.mood;
+  $('#castLook').textContent=c.look;
+  $('#castKick').textContent=`THE HANDOVER — ${String(castI+1).padStart(2,'0')} / ${String(CAST.length).padStart(2,'0')}`;
+  $$('#castDots .dot').forEach((d,idx)=>d.classList.toggle('active',idx===castI));
+}
+$('#castNext').onclick=()=>setCast(castI+1);
+$('#castPrev').onclick=()=>setCast(castI-1);
+$$('#castDots .dot').forEach(d=>d.onclick=()=>setCast(+d.dataset.i));
+let dragX=null;
+const castWrap=$('.cast');
+castWrap.addEventListener('pointerdown',e=>{dragX=e.clientX;});
+addEventListener('pointerup',e=>{if(dragX===null)return;const dx=e.clientX-dragX;if(Math.abs(dx)>60)setCast(castI+(dx<0?1:-1));dragX=null;});
+setCast(0);
+
+/* ---------- PROCESS ---------- */
+$('#pSteps').innerHTML=PROCESS.map(p=>`
+  <div class="pstep rise">
+    <div class="pn serif">${p.n}</div>
+    <h4 class="serif">${p.t}</h4>
+    <p>${p.d}</p>
+    <div class="parrow">→</div>
+  </div>`).join('');
+$$('#pSteps .rise').forEach(el=>rio.observe(el));
+
+/* ---------- SERVICES ---------- */
+$('#svcList').innerHTML=SERVICES.map(s=>`
+  <div class="srow rise"><div class="k serif">${s.k}</div>
+    <div><h3 class="serif">${s.t}</h3><p>${s.d}</p></div>
+    <div class="go">→</div></div>`).join('');
+$$('#svcList .rise').forEach(el=>rio.observe(el));
+
+/* ---------- PARTS ---------- */
+const usd=n=>'€'+n.toLocaleString('en-IE');
+$('#pGrid').innerHTML=PARTS.map((p,i)=>`
+  <div class="pcard rise flexel" data-i="${i}">
+    <div class="pimg" style="background:radial-gradient(120% 100% at 50% 0%, #efe9dd 0%, #d7cfbf 100%)"><img src="${A+p.file}" alt="${p.name}" loading="lazy"></div>
+    <div class="pmeta"><h4 class="serif">${p.name}</h4><div class="spec">${p.spec}</div>
+      <div class="prow"><div class="price serif">${usd(p.price)}</div><div class="add">Add +</div></div></div>
+  </div>`).join('');
+$$('#pGrid .rise').forEach(el=>rio.observe(el));
+$$('#pGrid .add').forEach(b=>b.onclick=e=>{e.stopPropagation();b.textContent='Added ✓';b.style.background='var(--accent)';setTimeout(()=>{b.textContent='Add +';b.style.background='';},1200);});
+
+/* ---------- MARQUEE ---------- */
+const words=['5-Star Rated','Trade-Ins Welcome','Finance Arranged','History Checked','Nationwide Delivery','As Seen on TikTok','Naas Road · Dublin','Curated Luxury & Performance'];
+$('#marq').innerHTML=(()=>{const one=words.map(w=>`<span>${w}</span>`).join('');return one+one;})();
+
+/* ---------- REVIEWS ---------- */
+$('#rGrid').innerHTML=REVIEWS.map((r,i)=>`
+  <div class="rc rise flexel" data-i="${i}">
+    <div class="rf"><div class="stars">★★★★★</div><img src="${A+r.face}" alt="${r.name}" loading="lazy"></div>
+    <div class="rb"><p class="serif">\u201C${r.text.slice(0,72)}\u2026\u201D</p>
+      <div class="who"><b>${r.name}</b><span>${r.car}</span></div></div>
+  </div>`).join('');
+$$('#rGrid .rise').forEach(el=>rio.observe(el));
+$$('#rGrid .rc').forEach(c=>c.onclick=()=>openLB(+c.dataset.i));
+function openLB(i){const r=REVIEWS[i];
+  $('#lbImg').src=A+r.face; $('#lbQuote').textContent='\u201C'+r.text+'\u201D';
+  $('#lbName').textContent=r.name; $('#lbCar').textContent=r.car; $('#lb').classList.add('open');}
+$('#lbClose').onclick=()=>$('#lb').classList.remove('open');
+$('#lb').onclick=e=>{if(e.target===$('#lb'))$('#lb').classList.remove('open');};
+
+/* ---------- RESERVE ---------- */
+$('#mail').onsubmit=e=>{e.preventDefault();$('#mailNote').classList.add('show');e.target.reset();
+  setTimeout(()=>$('#mailNote').classList.remove('show'),4000);};
+
+/* ---------- ENQUIRY modal ---------- */
+const enq=$('#enq');
+$('#enqCar').innerHTML='<option value="">General enquiry</option>'+
+  CARS.map((c,i)=>`<option value="${i}">${c.brand} ${c.model} — ${c.price}${c.status==='sold'?' (sold)':''}</option>`).join('')+
+  '<option value="build">Source a car for me</option>';
+function openEnq(i){
+  const c=(i!=null&&CARS[i])?CARS[i]:null;
+  applyAccentTo(enq,c?c.accent:'#e6b422');
+  $('#enqForm').style.display=''; $('#enqDone').style.display='none';
+  if(c){$('#enqKick').textContent='Reserve a viewing';
+    $('#enqTitle').textContent=`${c.brand} ${c.model}`;
+    $('#enqSub').textContent=`${c.year} · ${c.hp} bhp · ${c.price} · ${c.status==='sold'?'sold — join the waitlist':'available now'}`;
+    $('#enqCar').value=String(i);}
+  else{$('#enqKick').textContent='Speak to the house';$('#enqTitle').textContent='Make an enquiry';
+    $('#enqSub').textContent='Buying, selling or trading in — we\u2019ll be in touch within a day.';$('#enqCar').value='';}
+  enq.classList.add('open');
+}
+function closeEnq(){enq.classList.remove('open');}
+$('#enqClose').onclick=closeEnq;
+enq.onclick=e=>{if(e.target===enq)closeEnq();};
+$('#enqForm').onsubmit=e=>{e.preventDefault();$('#enqForm').style.display='none';$('#enqDone').style.display='';
+  setTimeout(closeEnq,3200);};
+addEventListener('keydown',e=>{if(e.key==='Escape'){if(enq.classList.contains('open'))closeEnq();else if($('#lb').classList.contains('open'))$('#lb').classList.remove('open');}});
+
+/* ---------- KEYBOARD navigation ---------- */
+const kEls=$$('[data-k]');
+function currentK(){
+  const mid=innerHeight*0.42; let k='hero';
+  for(const el of kEls){const r=el.getBoundingClientRect();
+    if(r.top<=mid&&r.bottom>=mid){k=el.dataset.k;break;}}
+  return k;
+}
+addEventListener('keydown',e=>{
+  if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;
+  const tag=(document.activeElement&&document.activeElement.tagName)||'';
+  if(/INPUT|TEXTAREA|SELECT/.test(tag))return;
+  if(enq.classList.contains('open')||$('#lb').classList.contains('open'))return;
+  const dir=e.key==='ArrowRight'?1:-1, k=currentK();
+  if(k==='cast'){setCast(castI+dir);e.preventDefault();}
+  else if(k==='hero'){swapCar((curCar+dir+UCARS.length)%UCARS.length);e.preventDefault();}
+});
+
+/* ---------- FLEX ENGINE (cursor-reactive tiles + idle motion) ---------- */
+/* NOTE: mx/my already declared + tracked by the UPSHIFT cursor system above */
+rebuildFlex();
+function flexTick(t){
+  const tv=t*0.001;
+  for(const o of flexEls){
+    const r=o.el.getBoundingClientRect();
+    if(r.bottom<-100||r.top>innerHeight+100)continue;
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=(mx-cx)/r.width, dy=(my-cy)/r.height;
+    const near=clamp(1-Math.hypot(mx-cx,my-cy)/460,0,1);
+    const trx=clamp(-dy*5,-5,5)*near, tryy=clamp(dx*5,-5,5)*near;
+    const bob=Math.sin(tv*0.9+o.phase)*2.5*o.amp;
+    const sway=Math.cos(tv*0.7+o.phase)*1.8*o.amp;
+    o.rx=lerp(o.rx,trx,0.08); o.ry=lerp(o.ry,tryy,0.08);
+    o.lift=lerp(o.lift,o.tl,0.1);
+    o.el.style.transform=`perspective(900px) translate3d(${sway.toFixed(2)}px,${(bob-o.lift*6).toFixed(2)}px,0) rotateX(${o.rx.toFixed(2)}deg) rotateY(${o.ry.toFixed(2)}deg) scale(${(1+o.lift*0.02).toFixed(3)})`;
+    o.el.style.boxShadow=o.lift>0.02?`0 ${(16+o.lift*20).toFixed(0)}px ${(28+o.lift*28).toFixed(0)}px -18px var(--accent-line)`:'';
+  }
+  requestAnimationFrame(flexTick);
+}
+requestAnimationFrame(flexTick);
+
+/* ---------- VIDEO MANAGEMENT — only play visible clips ---------- */
+const allVids=$$('video');
+const playing=new Set();
+function manageVideos(){
+  allVids.forEach(v=>{
+    const r=v.getBoundingClientRect();
+    const vis=r.bottom>0&&r.top<innerHeight;
+    if(vis&&!playing.has(v)){v.play().catch(()=>{});playing.add(v);}
+    else if(!vis&&playing.has(v)){v.pause();playing.delete(v);}
+  });
+}
+manageVideos();
+addEventListener('scroll',manageVideos,{passive:true});
+setInterval(manageVideos,2000);
+
+/* ---------- hook ---------- */
+window.__sable={
+  hero:()=>({i:curCar,name:UCARS[curCar].name,accent:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}),
+  swapCar, cast:()=>({i:castI,mood:CAST[castI].mood.replace(/<[^>]+>/g,' ').trim()}),
+  setCast, openEnq, closeEnq, enqOpen:()=>enq.classList.contains('open'),
+  garage:()=>({filter:activeFilter,search:searchQ,count:+$('#garageCount').textContent.match(/\d+/)[0]}),
+  counts:{hero:UCARS.length,cast:CAST.length,cars:CARS.length,process:PROCESS.length,parts:PARTS.length,reviews:REVIEWS.length}
+};
+</script>
+</body>
+</html>
