@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNARIO ASKEW — The Vault Collection</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230b0a09'/><text x='16' y='23' font-family='Georgia,serif' font-size='22' font-weight='bold' fill='%23c9a25e' text-anchor='middle'>O</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Archivo:wght@300..700&family=Inter:wght@300..600&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --paper:#0b0a09; --paper2:#141210; --ink:#efe9dd; --ink2:#b3ab9a;
+  --line:rgba(255,255,255,.1); --dim:#8a8272;
+  --accent:#7f8cff; --ar:127; --ag:140; --ab:255;
+  --ink-panel:#ece6d9;
+  --ff-d:'Cormorant Garamond',serif; --ff-s:'Archivo',sans-serif; --ff-b:'Inter',sans-serif;
+  --ff-g:'Space Grotesk',sans-serif; --ff-m:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --mute:rgba(244,242,238,.54); --faint:rgba(244,242,238,.3);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:clip}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--ff-b);-webkit-font-smoothing:antialiased;cursor:none}
+@media(max-width:860px){body{cursor:auto}}
+/* film grain */
+body::before{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.045;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+/* subtle vignette */
+body::after{content:"";position:fixed;inset:0;z-index:9997;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0,0,0,.5) 100%)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#100e0b}
+.wrap{max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,64px)}
+.mono{font-family:var(--ff-m);letter-spacing:.32em;text-transform:uppercase;font-size:11px}
+.serif{font-family:var(--ff-d)}
+.accw{color:var(--accent);transition:color .8s var(--ease)}
+
+/* ===== custom cursor (spice) ===== */
+#cur,#curDot{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%;mix-blend-mode:difference}
+#cur{width:34px;height:34px;border:1px solid rgba(255,255,255,.75);transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),background .3s}
+#curDot{width:5px;height:5px;background:#fff;transform:translate(-50%,-50%)}
+#cur.big{width:66px;height:66px;background:rgba(255,255,255,.08)}
+@media(max-width:860px){#cur,#curDot{display:none}}
+
+/* ===== loader / curtain (spice) ===== */
+#load{position:fixed;inset:0;z-index:9990;background:var(--paper);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:22px}
+#load.gone{opacity:0;pointer-events:none;transition:opacity .9s var(--ease)}
+#load .lm{font-family:var(--ff-d);font-weight:700;font-size:clamp(40px,7vw,92px);letter-spacing:.16em;color:var(--ink);display:flex}
+#load .lm i{display:inline-block;font-style:normal;transform:translateY(115%);opacity:0}
+#load .lm i.g{color:var(--accent)}
+#load .lb{width:min(280px,60vw);height:1px;background:rgba(255,255,255,.14);position:relative;overflow:hidden}
+#load .lb b{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:var(--accent)}
+#load .lt{font-family:var(--ff-m);font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--dim)}
+
+/* text-assemble units */
+.tu{display:inline-block;overflow:hidden;vertical-align:top;line-height:1.02}
+.tu>i{display:inline-block;font-style:inherit;transform:translateY(112%);transition:transform .8s var(--ease)}
+.on .tu>i{transform:translateY(0)}
+.rise{opacity:.001;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rise.on{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:9000;display:flex;align-items:center;justify-content:space-between;
+  padding:16px clamp(20px,4vw,64px);transition:background .4s,border-color .4s,backdrop-filter .4s;border-bottom:1px solid transparent}
+nav.solid{background:rgba(11,10,9,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brandmark{font-family:var(--ff-d);font-weight:800;font-size:clamp(14px,2.3vw,23px);letter-spacing:.18em;white-space:nowrap}
+.brandmark span{color:var(--accent);transition:color .6s}
+.navlinks{display:flex;gap:30px}
+.navlinks a{font-family:var(--ff-s);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);position:relative;padding:4px 0}
+.navlinks a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--accent);transition:width .3s var(--ease)}
+.navlinks a:hover{color:var(--ink)}.navlinks a:hover::after{width:100%}
+.navcta{font-family:var(--ff-s);font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--ink);
+  padding:9px 16px;border-radius:40px;transition:.3s var(--ease)}
+.navcta:hover{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+@media(max-width:860px){.navlinks{display:none}}
+
+/* ===== HERO — coverflow vault ===== */
+#hero{position:relative;height:100vh;min-height:720px;overflow:hidden;background:#070606}
+.hero-fill{position:absolute;inset:-8%;background-size:cover;background-position:center;
+  filter:blur(90px) saturate(1.5) brightness(.42);opacity:.9;transform:scale(1.08);transition:opacity 1s,background-image .1s}
+.hero-glow{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(60vw 46vh at 50% 60%, rgba(var(--ar),var(--ag),var(--ab),.24), transparent 66%);transition:background 1.1s}
+.hero-scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,rgba(7,6,6,.9) 0%,transparent 30%),linear-gradient(180deg,rgba(7,6,6,.7) 0%,transparent 26%)}
+.hero-amb{position:absolute;right:-4%;bottom:-6%;width:46vw;max-width:640px;opacity:.16;pointer-events:none;
+  border-radius:20px;-webkit-mask:radial-gradient(70% 70% at 50% 50%,#000 55%,transparent);mask:radial-gradient(70% 70% at 50% 50%,#000 55%,transparent);mix-blend-mode:screen}
+.hero-amb video{width:100%;display:block}
+
+.h-top{position:absolute;left:0;right:0;top:13.5vh;z-index:12;text-align:center;padding:0 6vw;pointer-events:none}
+.h-kick{font-family:var(--ff-m);font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--accent);
+  display:inline-flex;align-items:center;gap:14px;transition:color .8s}
+.h-kick::before,.h-kick::after{content:"";width:38px;height:1px;background:currentColor;opacity:.6}
+.h-title{margin-top:16px;font-family:var(--ff-d);font-weight:500;font-size:clamp(38px,6vw,86px);line-height:.98;letter-spacing:.01em;color:var(--ink)}
+.h-title em{font-style:italic;color:var(--accent);transition:color .8s}
+
+/* deck */
+.deck{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;
+  perspective:1600px;z-index:8}
+.deck-inner{position:relative;width:1px;height:min(60vh,540px);transform-style:preserve-3d;margin-top:4vh}
+.card{position:absolute;top:0;left:0;height:100%;aspect-ratio:.62;transform:translate(-50%,0);
+  will-change:transform,opacity;border-radius:14px;overflow:hidden;cursor:pointer;
+  background:#111;box-shadow:0 40px 80px -30px rgba(0,0,0,.85);border:1px solid rgba(255,255,255,.08)}
+.card img{width:100%;height:100%;object-fit:cover;object-position:center}
+.card .cardtint{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,rgba(0,0,0,.55),transparent 45%);transition:opacity .5s}
+.card .cardline{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--cc,#c9a25e);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.card.center .cardline{transform:scaleX(1)}
+.card:not(.center){filter:brightness(.5) saturate(.7)}
+.card .rim{position:absolute;inset:0;border-radius:14px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);transition:box-shadow .5s}
+.card.center .rim{box-shadow:inset 0 0 0 1px rgba(var(--ar),var(--ag),var(--ab),.5),0 0 60px -6px rgba(var(--ar),var(--ag),var(--ab),.4)}
+
+/* bottom info bar — left name/spec, right index+arrows. car stays centred, text in gutters */
+.h-bar{position:absolute;left:0;right:0;bottom:0;z-index:14;padding:0 clamp(20px,4vw,64px) 4.4vh;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;pointer-events:none}
+.h-info{pointer-events:auto;max-width:32vw}
+.h-info .in-mk{font-family:var(--ff-m);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint)}
+.h-info .in-nm{font-family:var(--ff-d);font-weight:600;font-size:clamp(26px,3vw,44px);line-height:1.02;margin:4px 0 12px}
+.h-chips{display:flex;gap:9px;flex-wrap:wrap}
+.hchip{border-radius:12px;padding:9px 13px;background:linear-gradient(140deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.hchip .cl{font-family:var(--ff-m);font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+.hchip .cv{font-family:var(--ff-g);font-weight:500;font-size:17px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.hchip .cv small{font-size:10px;opacity:.55;font-family:var(--ff-m);margin-left:2px}
+.hchip.price .cv{color:var(--accent);transition:color .8s}
+.h-nav{pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.h-idx{font-family:var(--ff-m);font-size:12px;letter-spacing:.24em;color:var(--ink2)}
+.h-idx b{color:var(--accent);font-weight:500;transition:color .8s}
+.h-arrows{display:flex;gap:10px}
+.arw{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.03);
+  color:var(--ink);font-size:16px;display:grid;place-items:center;cursor:pointer;transition:.3s var(--ease)}
+.arw:hover{border-color:var(--accent);color:var(--accent);background:rgba(var(--ar),var(--ag),var(--ab),.1)}
+.h-hint{position:absolute;left:50%;bottom:1.8vh;transform:translateX(-50%);z-index:14;font-family:var(--ff-m);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--faint);pointer-events:none}
+@media(max-width:860px){
+  .h-info{max-width:none}.h-bar{flex-direction:column;align-items:stretch}
+  .h-nav{flex-direction:row;justify-content:space-between;align-items:center}
+  .deck-inner{height:44vh}
+}
+
+/* kinetic marquee (spice) */
+.marq{position:absolute;left:0;right:0;bottom:0;z-index:6;overflow:hidden;border-top:1px solid var(--line);
+  background:linear-gradient(0deg,rgba(7,6,6,.9),transparent);display:none}
+
+/* ===== generic section ===== */
+section{position:relative}
+.eyebrow{font-family:var(--ff-m);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);transition:color .8s}
+.h2{font-family:var(--ff-d);font-weight:500;font-size:clamp(32px,4.6vw,68px);line-height:1.02;letter-spacing:.01em}
+.lead{font-size:15px;line-height:1.8;font-weight:300;color:var(--mute);max-width:52ch}
+
+/* ===== §02 MANIFEST band ===== */
+#manifest{padding:18vh 0 16vh;position:relative;overflow:hidden}
+.tattoo{position:absolute;font-family:var(--ff-d);font-style:italic;font-weight:600;
+  -webkit-text-stroke:1px rgba(var(--ar),var(--ag),var(--ab),.34);color:transparent;pointer-events:none;user-select:none;
+  font-size:clamp(80px,16vw,240px);line-height:.8;white-space:nowrap;opacity:.5;transition:-webkit-text-stroke-color .8s}
+.tt1{top:4%;left:-2%;transform:rotate(-6deg)}
+.tt2{bottom:6%;right:-3%;transform:rotate(-6deg)}
+.mf-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:min(6vw,90px);align-items:center;position:relative;z-index:2}
+.mf-statement{font-family:var(--ff-d);font-weight:500;font-size:clamp(30px,4.2vw,58px);line-height:1.12;letter-spacing:.005em}
+.mf-statement em{font-style:italic;color:var(--accent);transition:color .8s}
+.mf-side .lead{margin-top:0}
+.mf-metrics{display:flex;gap:34px;margin-top:34px;flex-wrap:wrap}
+.mf-metrics .m b{font-family:var(--ff-g);font-weight:500;font-size:38px;display:block;font-variant-numeric:tabular-nums;color:var(--ink)}
+.mf-metrics .m span{font-family:var(--ff-m);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+@media(max-width:860px){.mf-grid{grid-template-columns:1fr;gap:40px}}
+
+/* ===== §03 HIDDEN WORLD ===== */
+#deepfix{position:fixed;inset:0;z-index:0;opacity:0;pointer-events:none;transition:opacity .6s}
+#deepfix video{width:100%;height:100%;object-fit:cover;filter:saturate(1.1) contrast(1.05)}
+#deepfix::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 50%,transparent 40%,rgba(6,5,5,.7))}
+.solidsec{position:relative;z-index:2;background:var(--paper)}
+#deep{position:relative;z-index:1;height:150vh}
+.deep-cap{position:sticky;top:38vh;text-align:center;padding:0 6vw;pointer-events:none}
+.deep-cap .dk{font-family:var(--ff-m);font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--accent)}
+.deep-cap .dt{font-family:var(--ff-d);font-weight:500;font-size:clamp(30px,4.6vw,64px);line-height:1.08;margin-top:14px;
+  text-shadow:0 6px 40px rgba(0,0,0,.6)}
+.deep-cap .dt em{font-style:italic;color:var(--accent)}
+/* feathered top/bottom so the reveal blends */
+.deep-feather{position:absolute;left:0;right:0;height:26vh;z-index:2;pointer-events:none}
+.deep-feather.t{top:0;background:linear-gradient(180deg,var(--paper),transparent)}
+.deep-feather.b{bottom:0;background:linear-gradient(0deg,var(--paper),transparent)}
+
+/* ===== §04 COLLECTION — FLIP gallery ===== */
+#collection{padding:16vh 0 14vh}
+.col-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:52px;flex-wrap:wrap}
+.gwall{columns:4 220px;column-gap:16px}
+.gitem{break-inside:avoid;margin:0 0 16px;position:relative;border-radius:12px;overflow:hidden;cursor:pointer;
+  border:1px solid var(--line);background:#111;will-change:transform}
+.gitem img{width:100%;display:block;transition:transform .9s var(--ease),filter .5s;filter:brightness(.82) saturate(.9)}
+.gitem:hover img{transform:scale(1.05);filter:brightness(1) saturate(1)}
+.gitem .gcap{position:absolute;left:0;right:0;bottom:0;padding:14px 14px 12px;
+  background:linear-gradient(0deg,rgba(0,0,0,.8),transparent);opacity:0;transform:translateY(8px);transition:.4s var(--ease)}
+.gitem:hover .gcap{opacity:1;transform:none}
+.gitem .gcap b{font-family:var(--ff-d);font-weight:600;font-size:18px;display:block}
+.gitem .gcap span{font-family:var(--ff-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.gitem .gcap em{font-family:var(--ff-g);font-style:normal;font-weight:600;font-size:14px;letter-spacing:.02em;color:var(--accent);display:block;margin-top:5px;font-variant-numeric:tabular-nums}
+.gitem .gtag{position:absolute;left:10px;bottom:10px;z-index:2;font-family:var(--ff-g);font-weight:600;font-size:12px;letter-spacing:.02em;
+  color:var(--ink);background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid rgba(var(--ar),var(--ag),var(--ab),.4);padding:5px 11px;border-radius:999px;font-variant-numeric:tabular-nums;transition:opacity .35s var(--ease)}
+.gitem:hover .gtag{opacity:0}
+.gitem .gglow{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;
+  box-shadow:inset 0 0 0 1px rgba(var(--ar),var(--ag),var(--ab),.4)}
+.gitem:hover .gglow{opacity:1}
+@media(max-width:640px){.gwall{columns:2 140px}}
+
+/* FLIP focus overlay */
+#focus{position:fixed;inset:0;z-index:9500;display:none;align-items:center;justify-content:center;padding:5vh 5vw;
+  background:rgba(6,5,5,.82);backdrop-filter:blur(8px)}
+#focus.open{display:flex}
+.fx-card{display:grid;grid-template-columns:1fr 1fr;gap:min(5vw,60px);max-width:1080px;width:100%;align-items:center;
+  opacity:0;transform:translateY(24px) scale(.97);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+#focus.in .fx-card{opacity:1;transform:none}
+.fx-media{position:relative;border-radius:16px;overflow:hidden;background:#111;aspect-ratio:.72;border:1px solid var(--line)}
+.fx-media img{width:100%;height:100%;object-fit:cover;will-change:transform}
+.fx-info .fx-mk{font-family:var(--ff-m);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+.fx-info h3{font-family:var(--ff-d);font-weight:600;font-size:clamp(30px,4vw,52px);line-height:1.02;margin:8px 0 18px}
+.fx-info p{font-size:14px;line-height:1.8;color:var(--mute);max-width:44ch}
+.fx-specs{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:24px 0}
+.fx-specs .s b{font-family:var(--ff-g);font-weight:500;font-size:24px;display:block;color:var(--ink);font-variant-numeric:tabular-nums}
+.fx-specs .s span{font-family:var(--ff-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.fx-close{position:absolute;top:4vh;right:5vw;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:var(--ink);cursor:pointer;font-size:18px;display:grid;place-items:center;z-index:2}
+.fx-close:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:760px){.fx-card{grid-template-columns:1fr;gap:24px}.fx-media{aspect-ratio:1.1}}
+
+/* ===== §05 TEARDOWN / provenance ===== */
+#teardown{padding:16vh 0;position:relative;overflow:hidden}
+.td-head{max-width:640px;margin-bottom:60px}
+.td-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.td{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#111;
+  aspect-ratio:.82;will-change:transform;cursor:pointer}
+.td img{width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.85);transition:filter .5s,transform .8s var(--ease)}
+.td:hover img{filter:brightness(1) saturate(1);transform:scale(1.05)}
+.td .tdlabel{position:absolute;left:0;right:0;bottom:0;padding:16px;
+  background:linear-gradient(0deg,rgba(0,0,0,.82),transparent)}
+.td .tdlabel .n{font-family:var(--ff-m);font-size:9px;letter-spacing:.24em;color:var(--accent)}
+.td .tdlabel b{font-family:var(--ff-d);font-weight:600;font-size:19px;display:block;margin-top:3px}
+.td .tdlabel p{font-size:11px;color:var(--mute);margin-top:4px;line-height:1.5}
+.td .tdglow{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;box-shadow:inset 0 0 0 1px rgba(var(--ar),var(--ag),var(--ab),.5)}
+.td:hover .tdglow{opacity:1}
+@media(max-width:960px){.td-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== §06 CASTING — light band ===== */
+#casting{background:var(--ink-panel);color:#1a1714;padding:16vh 0;position:relative;z-index:2}
+#casting .eyebrow{color:#9c7a34}
+#casting .h2{color:#1a1714}
+.cast-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px}
+.cast{position:relative}
+.cast .duo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cast .duo>div{border-radius:12px;overflow:hidden;aspect-ratio:.7;background:#ddd6c6;will-change:transform}
+.cast .duo img{width:100%;height:100%;object-fit:cover;filter:grayscale(.15)}
+.cast .ct{margin-top:14px}
+.cast .ct .nm{font-family:var(--ff-d);font-weight:600;font-size:22px}
+.cast .ct .rl{font-family:var(--ff-m);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#8a7c58;margin-top:3px}
+@media(max-width:900px){.cast-grid{grid-template-columns:1fr}}
+
+/* ===== §07 PROCESS ===== */
+#process{padding:16vh 0}
+.proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:60px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.proc{background:var(--paper);padding:38px 28px;min-height:260px;display:flex;flex-direction:column;justify-content:space-between;transition:background .5s}
+.proc:hover{background:var(--paper2)}
+.proc .pn{font-family:var(--ff-d);font-weight:600;font-size:44px;color:var(--accent);transition:color .8s}
+.proc h4{font-family:var(--ff-d);font-weight:600;font-size:23px;margin:0 0 10px}
+.proc p{font-size:13px;line-height:1.7;color:var(--mute)}
+@media(max-width:900px){.proc-grid{grid-template-columns:1fr}}
+
+/* ===== §08 REVIEWS ===== */
+#reviews{padding:16vh 0}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
+.rev{border:1px solid var(--line);border-radius:16px;padding:30px;background:var(--paper2);cursor:pointer;
+  display:flex;flex-direction:column;gap:20px;will-change:transform;transition:border-color .4s}
+.rev:hover{border-color:rgba(var(--ar),var(--ag),var(--ab),.5)}
+.rev .q{font-family:var(--ff-d);font-size:21px;line-height:1.4;font-weight:500}
+.rev .who{display:flex;align-items:center;gap:12px;margin-top:auto}
+.rev .who img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.rev .who b{font-size:14px;display:block}
+.rev .who span{font-family:var(--ff-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.rev .stars{color:var(--accent);letter-spacing:3px;font-size:12px;transition:color .8s}
+@media(max-width:900px){.rev-grid{grid-template-columns:1fr}}
+
+/* ===== RESERVE ===== */
+#reserve{padding:18vh 0 12vh;position:relative;overflow:hidden;text-align:center}
+.res-title{font-family:var(--ff-d);font-weight:500;font-size:clamp(38px,6vw,92px);line-height:1;letter-spacing:.01em}
+.res-title em{font-style:italic;color:var(--accent)}
+.res-bar{display:flex;gap:10px;max-width:520px;margin:40px auto 0;padding:8px;border:1px solid var(--line);border-radius:50px;
+  background:rgba(255,255,255,.03);backdrop-filter:blur(10px)}
+.res-bar input{flex:1;background:transparent;border:0;color:var(--ink);font-family:var(--ff-b);font-size:14px;padding:0 20px;outline:none}
+.res-bar input::placeholder{color:var(--faint)}
+.res-bar button{background:var(--accent);color:var(--paper);border:0;border-radius:40px;padding:14px 26px;
+  font-family:var(--ff-g);font-weight:600;font-size:13px;letter-spacing:.04em;cursor:pointer;transition:.3s var(--ease)}
+.res-bar button:hover{filter:brightness(1.12);box-shadow:0 0 40px -6px rgba(var(--ar),var(--ag),var(--ab),.7)}
+.res-meta{margin-top:26px;font-family:var(--ff-m);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+footer{border-top:1px solid var(--line);padding:40px clamp(20px,4vw,64px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer .brandmark{font-size:19px}
+footer .fl{display:flex;gap:24px;font-family:var(--ff-m);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink2)}
+
+/* magnetic/idle base — transform composed from vars */
+.mag{--mx:0px;--my:0px;--iy:0px;--ir:0deg;--ik:1}
+</style>
+</head>
+<body>
+
+<!-- custom cursor -->
+<div id="cur"></div><div id="curDot"></div>
+
+<!-- loader -->
+<div id="load">
+  <div class="lm" id="lm"></div>
+  <div class="lb"><b id="lbFill"></b></div>
+  <div class="lt">The Vault Collection · Est. 2009</div>
+</div>
+
+<nav id="nav">
+  <div class="brandmark">DNARI<span>O</span> ASKEW</div>
+  <div class="navlinks">
+    <a href="#collection">Collection</a>
+    <a href="#teardown">Provenance</a>
+    <a href="#process">Process</a>
+    <a href="#reviews">Owners</a>
+  </div>
+  <a href="#reserve" class="navcta">Request Access</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-fill" id="heroFill"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-amb"><video src="../assets/vid/hero.mp4" muted loop playsinline></video></div>
+  <div class="hero-scrim"></div>
+
+  <div class="h-top">
+    <div class="h-kick rise">Private acquisitions · By appointment</div>
+    <h1 class="h-title"><span class="tuwrap" data-split="char">The </span><em class="tuwrap" data-split="char">Vault</em><span class="tuwrap" data-split="char"> Collection</span></h1>
+  </div>
+
+  <div class="deck" id="deck"><div class="deck-inner" id="deckInner"></div></div>
+
+  <div class="h-bar">
+    <div class="h-info">
+      <div class="in-mk" id="inMk">Porsche</div>
+      <div class="in-nm" id="inNm">911 GT3 RS</div>
+      <div class="h-chips" id="inChips"></div>
+    </div>
+    <div class="h-nav">
+      <div class="h-idx"><b id="idxN">01</b> / <span id="idxT">07</span></div>
+      <div class="h-arrows">
+        <div class="arw" id="arwL" aria-label="previous">‹</div>
+        <div class="arw" id="arwR" aria-label="next">›</div>
+      </div>
+    </div>
+  </div>
+  <div class="h-hint">drag · scroll · arrows — select a machine</div>
+</section>
+
+<!-- ===== §02 MANIFEST ===== -->
+<section id="manifest" class="solidsec">
+  <div class="tattoo tt1">DNARIO ASKEW</div>
+  <div class="tattoo tt2">FORGED</div>
+  <div class="wrap mf-grid">
+    <div class="mf-statement rise">
+      Some machines are <em>bought.</em> Ours are <em>inherited</em> — held in confidence, released only to those who understand what they hold.
+    </div>
+    <div class="mf-side">
+      <div class="eyebrow rise">The house</div>
+      <p class="lead rise d1" style="margin-top:16px">DNario Askew is a private collection house. Every car is vetted, documented and stored in climate-controlled confidence until the right custodian appears.</p>
+      <div class="mf-metrics">
+        <div class="m rise d2"><b data-count="240">0</b><span>Machines placed</span></div>
+        <div class="m rise d3"><b data-count="16">0</b><span>Years quietly</span></div>
+        <div class="m rise d4"><b data-count="9">0</b><span>Countries served</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== §03 HIDDEN WORLD ===== -->
+<div id="deepfix"><video src="../assets/vid/deep.mp4" muted loop playsinline></video></div>
+<div id="deep">
+  <div class="deep-feather t"></div>
+  <div class="deep-cap">
+    <div class="dk">Beneath every acquisition</div>
+    <div class="dt">A world that was <em>running</em> under the surface<br>long before you arrived.</div>
+  </div>
+  <div class="deep-feather b"></div>
+</div>
+
+<!-- ===== §04 COLLECTION ===== -->
+<section id="collection" class="solidsec">
+  <div class="wrap">
+    <div class="col-head">
+      <div>
+        <div class="eyebrow rise">The floor</div>
+        <h2 class="h2 rise d1">The Collection</h2>
+      </div>
+      <p class="lead rise d2">A rotating selection of what currently sleeps in the vault. Tap any machine to open its dossier.</p>
+    </div>
+    <div class="gwall" id="gwall"></div>
+  </div>
+</section>
+
+<!-- FLIP focus overlay -->
+<div id="focus">
+  <button class="fx-close" id="fxClose">✕</button>
+  <div class="fx-card">
+    <div class="fx-media"><img id="fxImg" alt=""></div>
+    <div class="fx-info">
+      <div class="fx-mk" id="fxMk"></div>
+      <h3 id="fxNm"></h3>
+      <p id="fxDesc"></p>
+      <div class="fx-specs" id="fxSpecs"></div>
+      <a href="#reserve" class="navcta" id="fxCta" style="display:inline-block">Enquire on this machine</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== §05 TEARDOWN ===== -->
+<section id="teardown" class="solidsec">
+  <div class="wrap">
+    <div class="td-head">
+      <div class="eyebrow rise">Provenance</div>
+      <h2 class="h2 rise d1">Every bolt, accounted for.</h2>
+      <p class="lead rise d2" style="margin-top:18px">We don't sell mystery. Drivetrains, service history, chassis provenance — laid open before a single key changes hands.</p>
+    </div>
+    <div class="td-grid" id="tdGrid"></div>
+  </div>
+</section>
+
+<!-- ===== §06 CASTING (light) ===== -->
+<section id="casting">
+  <div class="wrap">
+    <div class="eyebrow rise">The custodians</div>
+    <h2 class="h2 rise d1">A car is only as told as the person who keeps it.</h2>
+    <div class="cast-grid" id="castGrid"></div>
+  </div>
+</section>
+
+<!-- ===== §07 PROCESS ===== -->
+<section id="process" class="solidsec">
+  <div class="wrap">
+    <div class="eyebrow rise">The passage</div>
+    <h2 class="h2 rise d1">From vault to your name.</h2>
+    <div class="proc-grid">
+      <div class="proc"><div class="pn">01</div><div><h4>Introduction</h4><p>A private conversation. We learn the machine you're chasing and the life it's for.</p></div></div>
+      <div class="proc"><div class="pn">02</div><div><h4>The viewing</h4><p>By appointment only. The car, the file, the history — in person or by encrypted stream.</p></div></div>
+      <div class="proc"><div class="pn">03</div><div><h4>Confidence</h4><p>Independent inspection, transport, and discreet settlement handled end to end.</p></div></div>
+      <div class="proc"><div class="pn">04</div><div><h4>Custody</h4><p>The keys, and a standing invitation back to the vault whenever you want another.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== §08 REVIEWS ===== -->
+<section id="reviews" class="solidsec">
+  <div class="wrap">
+    <div class="eyebrow rise">Owners</div>
+    <h2 class="h2 rise d1">Kept in good company.</h2>
+    <div class="rev-grid" id="revGrid"></div>
+  </div>
+</section>
+
+<!-- ===== RESERVE ===== -->
+<section id="reserve" class="solidsec">
+  <div class="wrap">
+    <div class="eyebrow rise">Request access</div>
+    <h2 class="res-title rise d1">Join the <em>quiet</em> list.</h2>
+    <p class="lead rise d2" style="margin:20px auto 0">Access is by introduction. Leave a line and we'll reach out when a machine fits your name.</p>
+    <div class="res-bar rise d3">
+      <input type="email" placeholder="your private email" aria-label="email">
+      <button onclick="alert('Thank you — DNARIO ASKEW will be in touch discreetly.')">Request</button>
+    </div>
+    <div class="res-meta">@dnario_askew · By appointment · By appointment</div>
+  </div>
+  <footer>
+    <div class="brandmark">DNARI<span>O</span> ASKEW</div>
+    <div class="fl"><span>© 2026 DNario Askew</span><span>Confidence, since 2009</span></div>
+  </footer>
+</section>
+
+<script>
+/* =========================================================
+   OBSIDIAN — motion engine + coverflow + sections
+   ========================================================= */
+const clamp=(x,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
+const smooth=t=>{t=clamp(t);return t*t*(3-2*t);};
+const lerp=(a,b,t)=>a+(b-a)*t;
+function seg(p,a,b,c,d){if(p<a)return 0;if(p<b)return smooth((p-a)/(b-a));if(p<c)return 1;if(p<d)return 1-smooth((p-c)/(d-c));return c<d?0:1;}
+function hexToRgb(h){h=h.replace('#','');return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+
+/* ---- global accent ---- */
+const root=document.documentElement;
+function applyAccent(hex){const[r,g,b]=hexToRgb(hex);root.style.setProperty('--accent',hex);root.style.setProperty('--ar',r);root.style.setProperty('--ag',g);root.style.setProperty('--ab',b);}
+
+/* ---- data ---- */
+const CARS=[
+  {mk:'Porsche',   nm:'911 GT3 RS',      pic:'../assets/pics/pics-42.jpg', accent:'#7f8cff', power:'525', ts:'296', accl:'3.0', yr:'2024', price:'£238,000', desc:'A track weapon barely tamed for the road. Naturally aspirated, wing-fed, and utterly honest about what it is.'},
+  {mk:'Lamborghini',nm:'Revuelto',       pic:'../assets/pics/pics-34.jpg', accent:'#b6e13a', power:'1001',ts:'350', accl:'2.5', yr:'2024', price:'£450,000', desc:'V12 hybrid theatre. The last of the naturally aspirated bulls, electrified without apology.'},
+  {mk:'Koenigsegg',nm:'Jesko Absolut',   pic:'../assets/pics/pics-33.jpg', accent:'#7fd4e6', power:'1600',ts:'531', accl:'2.5', yr:'2023', price:'£2,800,000', desc:'Built to chase a number no one else dares print. Aerodynamics sculpted for the far side of 500 km/h.'},
+  {mk:'BMW',       nm:'M5 CS',           pic:'../assets/pics/pics-24.jpg', accent:'#3b74ff', power:'627', ts:'305', accl:'3.0', yr:'2022', price:'£142,000', desc:'The executive that forgets its manners the moment you ask. Lighter, sharper, and quietly rare.'},
+  {mk:'McLaren',   nm:'750S',            pic:'../assets/pics/pics-39.jpg', accent:'#ff6a1f', power:'740', ts:'332', accl:'2.7', yr:'2024', price:'£258,000', desc:'Featherweight British precision. A car that shrinks around you until only the corner remains.'},
+  {mk:'Pininfarina',nm:'Battista',       pic:'../assets/pics/pics-41.jpg', accent:'#8b6cff', power:'1900',ts:'350', accl:'1.9', yr:'2023', price:'£2,000,000', desc:'Silent violence. Four motors, one coachbuilt soul, and a launch that rearranges your understanding of fast.'},
+  {mk:'Bespoke',   nm:'Crimson Special', pic:'../assets/pics/pics-46.jpg', accent:'#ff3b30', power:'820', ts:'340', accl:'2.6', yr:'2025', price:'On request', desc:'A one-off commission finished over fire-red. Documented, singular, and released only once.'}
+];
+
+/* =========================================================
+   1. CUSTOM CURSOR (lagging ring)
+   ========================================================= */
+const cur=document.getElementById('cur'),curDot=document.getElementById('curDot');
+let mx=innerWidth/2,my=innerHeight/2,cxr=mx,cyr=my;
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;curDot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`;});
+document.querySelectorAll('a,button,.card,.arw,.gitem,.td,.rev,.navcta,.res-bar button,.fx-close').forEach(el=>{
+  el.addEventListener('pointerenter',()=>cur.classList.add('big'));
+  el.addEventListener('pointerleave',()=>cur.classList.remove('big'));
+});
+
+/* =========================================================
+   2. IDLE MOTION + MAGNETIC (one rAF)
+   ========================================================= */
+let mags=[];
+function collectMags(){mags=[...document.querySelectorAll('.mag')].map(el=>({el,ph:Math.random()*6.28,sp:.5+Math.random()*.4}));}
+const RADIUS=260;
+function engine(t){
+  const s=t*0.001;
+  // cursor ring lag
+  cxr=lerp(cxr,mx,.16);cyr=lerp(cyr,my,.16);
+  cur.style.transform=`translate(${cxr}px,${cyr}px) translate(-50%,-50%)`;
+  for(const o of mags){
+    const iy=Math.sin(s*o.sp+o.ph)*5, ir=Math.sin(s*o.sp*.7+o.ph)*.7, ik=1+Math.sin(s*o.sp*.5+o.ph)*.008;
+    let dxs=0,dys=0,glow=0;
+    const r=o.el.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=mx-cx, dy=my-cy, d=Math.hypot(dx,dy);
+    const f=Math.max(0,1-d/RADIUS);
+    dxs=dx*.10*f; dys=dy*.10*f; glow=f;
+    o.el.style.setProperty('--iy',iy.toFixed(2)+'px');
+    o.el.style.setProperty('--ir',ir.toFixed(2)+'deg');
+    o.el.style.setProperty('--ik',ik.toFixed(3));
+    o.el.style.setProperty('--mx',dxs.toFixed(1)+'px');
+    o.el.style.setProperty('--my',dys.toFixed(1)+'px');
+    o.el.style.setProperty('--glow',glow.toFixed(2));
+    o.el.style.transform=`translate(var(--mx),var(--my)) translateY(var(--iy)) rotate(var(--ir)) scale(var(--ik))`;
+  }
+  coverTick();
+  requestAnimationFrame(engine);
+}
+
+/* =========================================================
+   3. COVERFLOW HERO
+   ========================================================= */
+const deckInner=document.getElementById('deckInner');
+let cards=[];
+CARS.forEach((c,i)=>{
+  const el=document.createElement('div');el.className='card';el.style.setProperty('--cc',c.accent);
+  el.innerHTML=`<img src="${c.pic}" alt="${c.mk} ${c.nm}"><div class="cardtint"></div><div class="cardline"></div><div class="rim"></div>`;
+  el.addEventListener('click',()=>{ if(Math.round(pos)===i){openFocusCar(i);} else {target=i;} });
+  deckInner.appendChild(el);cards.push(el);
+});
+let pos=0,target=0,active=-1,dragging=false,lastX=0,vel=0;
+const idxN=document.getElementById('idxN'),inMk=document.getElementById('inMk'),inNm=document.getElementById('inNm'),inChips=document.getElementById('inChips');
+document.getElementById('idxT').textContent=String(CARS.length).padStart(2,'0');
+function setActive(i){
+  active=i;const c=CARS[i];
+  applyAccent(c.accent);
+  document.getElementById('heroFill').style.backgroundImage=`url('${c.pic}')`;
+  inMk.textContent=c.mk;inNm.textContent=c.nm;
+  idxN.textContent=String(i+1).padStart(2,'0');
+  inChips.innerHTML=`
+    <div class="hchip mag"><div class="cl">Power</div><div class="cv">${c.power}<small>bhp</small></div></div>
+    <div class="hchip mag"><div class="cl">0–100</div><div class="cv">${c.accl}<small>s</small></div></div>
+    <div class="hchip mag"><div class="cl">Vmax</div><div class="cv">${c.ts}<small>km/h</small></div></div>
+    <div class="hchip price mag"><div class="cl">Guide</div><div class="cv">${c.price}</div></div>`;
+  collectMags();
+}
+function coverTick(){
+  // ease pos toward target unless dragging
+  if(!dragging){ pos=lerp(pos,target,.12); if(Math.abs(pos-target)<.001)pos=target; }
+  const spread=Math.min(210,innerWidth*0.135);
+  cards.forEach((el,i)=>{
+    const d=i-pos, ad=Math.abs(d);
+    const x=d*spread;
+    const z=-ad*260;
+    const ry=-clamp(d,-2.2,2.2)*30;
+    const sc=1-Math.min(ad*.13,.5);
+    const op=1-Math.min(ad*.34,.8);
+    el.style.transform=`translate(-50%,0) translateX(${x}px) translateZ(${z}px) rotateY(${ry}deg) scale(${sc})`;
+    el.style.opacity=op.toFixed(3);
+    el.style.zIndex=String(200-Math.round(ad*10));
+    el.classList.toggle('center',Math.round(pos)===i);
+  });
+  const near=clamp(Math.round(pos),0,CARS.length-1);
+  if(near!==active)setActive(near);
+}
+// interactions
+const deck=document.getElementById('deck');
+deck.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;deck.setPointerCapture(e.pointerId);});
+deck.addEventListener('pointermove',e=>{ if(!dragging)return; const dx=e.clientX-lastX;lastX=e.clientX; pos=clamp(pos-dx/ (Math.min(210,innerWidth*0.135)),-.3,CARS.length-.7); });
+function endDrag(){ if(!dragging)return; dragging=false; target=clamp(Math.round(pos),0,CARS.length-1); }
+deck.addEventListener('pointerup',endDrag);deck.addEventListener('pointercancel',endDrag);
+deck.addEventListener('wheel',e=>{ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault(); target=clamp(target+(e.deltaX>0?1:-1),0,CARS.length-1);} },{passive:false});
+document.getElementById('arwL').onclick=()=>target=clamp(target-1,0,CARS.length-1);
+document.getElementById('arwR').onclick=()=>target=clamp(target+1,0,CARS.length-1);
+addEventListener('keydown',e=>{ if(e.key==='ArrowLeft')target=clamp(target-1,0,CARS.length-1); if(e.key==='ArrowRight')target=clamp(target+1,0,CARS.length-1); });
+
+/* =========================================================
+   4. TEXT ASSEMBLE
+   ========================================================= */
+function splitChars(el){
+  const txt=el.textContent;el.textContent='';el.classList.add('tu');
+  const inner=document.createElement('span');inner.style.display='inline-block';
+  for(const ch of txt){const i=document.createElement('i');i.textContent=ch===' '?'\u00A0':ch;inner.appendChild(i);}
+  // wrap each char in its own overflow mask for cleaner reveal
+  el.textContent='';
+  [...txt].forEach((ch,k)=>{
+    const w=document.createElement('span');w.className='tu';const it=document.createElement('i');
+    it.style.transitionDelay=(k*0.03)+'s';it.textContent=ch===' '?'\u00A0':ch;w.appendChild(it);el.appendChild(w);
+  });
+}
+document.querySelectorAll('[data-split="char"]').forEach(splitChars);
+// reveal on view
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');}});},{threshold:.18});
+document.querySelectorAll('.rise,.h-title .tu,[data-split]').forEach(el=>io.observe(el));
+// hero title reveal after load
+function revealHero(){document.querySelectorAll('#hero .rise,#hero [data-split]').forEach(el=>el.classList.add('on'));}
+
+/* count-up metrics */
+const cio=new IntersectionObserver(es=>{es.forEach(e=>{ if(e.isIntersecting){const b=e.target,to=+b.dataset.count;let s=0;const step=()=>{s+=Math.ceil(to/34);if(s>=to){b.textContent=to;}else{b.textContent=s;requestAnimationFrame(step);}};step();cio.unobserve(b);}});},{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(b=>cio.observe(b));
+
+/* =========================================================
+   5. BUILD COLLECTION (FLIP gallery)
+   ========================================================= */
+let MAN={pics:[],parts:[],faces:[]};
+const galleryNames=[
+  ['Porsche','911 Turbo S'],['Ferrari','SF90'],['Lamborghini','Huracán STO'],['Nissan','GT-R Nismo'],
+  ['Mercedes','AMG GT'],['Aston Martin','Valour'],['Bentley','Continental'],['Ford','Mustang GT500'],
+  ['BMW','M4 CSL'],['McLaren','Artura'],['Koenigsegg','Gemera'],['Bugatti','Chiron']
+];
+const galleryAccents=['#c9a25e','#ff3b30','#b6e13a','#3fb6ff','#e8c93a','#7fd4e6','#8b6cff','#ff6a1f','#3b74ff','#ff6a1f','#b6e13a','#7fd4e6'];
+const galleryPrices=['£198,000','£376,000','£264,000','£185,000','£142,000','£830,000','£215,000','£96,000','£128,000','£189,000','£1,700,000','£2,500,000'];
+function buildGallery(){
+  const wall=document.getElementById('gwall');
+  // pick a spread of tall portrait pics for a clean masonry
+  const picks=['pics-42','pics-30','pics-34','pics-22','pics-40','pics-33','pics-48','pics-38','pics-24','pics-39','pics-46','pics-53','pics-44','pics-31','pics-52','pics-41'];
+  picks.forEach((f,i)=>{
+    const nm=galleryNames[i%galleryNames.length];const ac=galleryAccents[i%galleryAccents.length];const pr=galleryPrices[i%galleryPrices.length];
+    const el=document.createElement('div');el.className='gitem mag';el.style.setProperty('--cc',ac);
+    el.innerHTML=`<img src="../assets/pics/${f}.jpg" alt="${nm[0]} ${nm[1]}" loading="lazy">
+      <div class="gglow"></div>
+      <div class="gtag">${pr}</div>
+      <div class="gcap"><span>${nm[0]}</span><b>${nm[1]}</b><em>${pr}</em></div>`;
+    el.addEventListener('click',()=>openFocus(f,nm,ac,pr));
+    wall.appendChild(el);
+  });
+  collectMags();
+}
+
+/* FLIP focus overlay */
+const focus=document.getElementById('focus');
+let focusTimer=null;
+function fillFocus(pic,mk,nm,ac,desc,specs){
+  applyAccentScoped(focus,ac);
+  document.getElementById('fxImg').src=pic;
+  document.getElementById('fxMk').textContent=mk;
+  document.getElementById('fxNm').textContent=nm;
+  document.getElementById('fxDesc').textContent=desc;
+  document.getElementById('fxSpecs').innerHTML=specs.map(s=>`<div class="s"><b>${s.v}</b><span>${s.k}</span></div>`).join('');
+  focus.classList.add('open');clearTimeout(focusTimer);focusTimer=setTimeout(()=>focus.classList.add('in'),20);
+}
+function openFocus(f,nm,ac,price){
+  fillFocus(`../assets/pics/${f}.jpg`,nm[0],nm[1],ac,
+    'A documented example currently resting in the vault. Full history file available on request under confidence.',
+    [{k:'Guide',v:price||'On request'},{k:'Provenance',v:'Full'},{k:'Owners',v:'2'},{k:'Status',v:'Vaulted'}]);
+}
+function openFocusCar(i){const c=CARS[i];fillFocus(c.pic,c.mk,c.nm,c.accent,c.desc,[{k:'Power',v:c.power+' bhp'},{k:'0–100',v:c.accl+' s'},{k:'Vmax',v:c.ts+' km/h'},{k:'Year',v:c.yr}]);}
+function closeFocus(){focus.classList.remove('in');setTimeout(()=>focus.classList.remove('open'),400);applyAccent(CARS[Math.max(0,active)].accent);}
+document.getElementById('fxClose').onclick=closeFocus;
+focus.addEventListener('click',e=>{if(e.target===focus)closeFocus();});
+document.getElementById('fxCta').onclick=closeFocus;
+// scoped accent (so overlay doesn't fight hero accent globally-ish; still set global for glows)
+function applyAccentScoped(el,hex){const[r,g,b]=hexToRgb(hex);el.style.setProperty('--accent',hex);el.style.setProperty('--ar',r);el.style.setProperty('--ag',g);el.style.setProperty('--ab',b);applyAccent(hex);}
+// parallax on focus image
+focus.addEventListener('pointermove',e=>{const img=document.getElementById('fxImg');const nx=(e.clientX/innerWidth-.5)*2,ny=(e.clientY/innerHeight-.5)*2;img.style.transform=`scale(1.06) translate(${nx*10}px,${ny*10}px)`;});
+
+/* =========================================================
+   6. TEARDOWN (parts)
+   ========================================================= */
+const PARTS=[
+  {f:'parts-11',n:'01',t:'Forged wheels',p:'Center-lock, load-rated, and refinished to factory spec.'},
+  {f:'parts-06',n:'02',t:'The heart',p:'Every combustion event logged. Compression, valves, timing — verified.'},
+  {f:'parts-13',n:'03',t:'Suspension',p:'Coilovers corner-weighted and mapped to the original geometry.'},
+  {f:'parts-09',n:'04',t:'Drivetrain tech',p:'Torque paths and cooling documented from first principles.'}
+];
+function buildTeardown(){
+  const g=document.getElementById('tdGrid');
+  PARTS.forEach(pt=>{
+    const el=document.createElement('div');el.className='td mag';
+    el.innerHTML=`<img src="../assets/parts/${pt.f}.jpg" alt="${pt.t}" loading="lazy"><div class="tdglow"></div>
+      <div class="tdlabel"><div class="n">${pt.n}</div><b>${pt.t}</b><p>${pt.p}</p></div>`;
+    g.appendChild(el);
+  });
+  collectMags();
+}
+
+/* =========================================================
+   7. CASTING (light band) + REVIEWS
+   ========================================================= */
+const CAST=[
+  {face:'faces-19',car:'pics-44',nm:'The Collector',rl:'London · 6 machines'},
+  {face:'faces-16',car:'pics-32',nm:'The Purist',rl:'Geneva · track only'},
+  {face:'faces-24',car:'pics-38',nm:'The Inheritor',rl:'Monaco · third generation'}
+];
+function buildCasting(){
+  const g=document.getElementById('castGrid');
+  CAST.forEach(c=>{
+    const el=document.createElement('div');el.className='cast';
+    el.innerHTML=`<div class="duo mag"><div><img src="../assets/faces/${c.face}.jpg" alt="" loading="lazy"></div><div><img src="../assets/pics/${c.car}.jpg" alt="" loading="lazy"></div></div>
+      <div class="ct"><div class="nm">${c.nm}</div><div class="rl">${c.rl}</div></div>`;
+    g.appendChild(el);
+  });
+  collectMags();
+}
+const REVIEWS=[
+  {q:'They knew the car\'s history better than the previous owner did. That\'s the whole game.',nm:'A. Renard',rl:'Battista custodian',face:'faces-16'},
+  {q:'No showroom. No pressure. Just the right machine appearing at the right moment.',nm:'M. Silva',rl:'GT3 RS owner',face:'faces-24'},
+  {q:'Discretion you can feel. The kind of house you only hear about by introduction.',nm:'J. Okafor',rl:'M5 CS owner',face:'faces-19'}
+];
+function buildReviews(){
+  const g=document.getElementById('revGrid');
+  REVIEWS.forEach(r=>{
+    const el=document.createElement('div');el.className='rev mag';
+    el.innerHTML=`<div class="stars">★★★★★</div><div class="q">“${r.q}”</div>
+      <div class="who"><img src="../assets/faces/${r.face}.jpg" alt=""><div><b>${r.nm}</b><span>${r.rl}</span></div></div>`;
+    el.addEventListener('click',()=>fillFocus(`../assets/faces/${r.face}.jpg`,'Owner',r.nm,getComputedStyle(root).getPropertyValue('--accent').trim()||'#c9a25e',`“${r.q}”`,[{k:'Verified',v:'Yes'},{k:'Since',v:'2019'}]));
+    g.appendChild(el);
+  });
+  collectMags();
+}
+
+/* =========================================================
+   8. HIDDEN WORLD reveal
+   ========================================================= */
+const deepfix=document.getElementById('deepfix'),deepvid=deepfix.querySelector('video');
+const dio=new IntersectionObserver(es=>{es.forEach(e=>{ if(e.isIntersecting){deepfix.style.opacity='1';deepvid.play().catch(()=>{});}else{deepfix.style.opacity='0';deepvid.pause();}});},{threshold:.05});
+dio.observe(document.getElementById('deep'));
+
+/* =========================================================
+   9. VIDEO MANAGEMENT (autoplay visible only, no scrub)
+   ========================================================= */
+const vio=new IntersectionObserver(es=>{es.forEach(e=>{const v=e.target;if(e.isIntersecting){v.play().catch(()=>{});}else{v.pause();}});},{threshold:.15});
+function initVideos(){document.querySelectorAll('video').forEach(v=>{v.muted=true;v.loop=true;v.playsInline=true;vio.observe(v);});}
+
+/* =========================================================
+   10. NAV solidify + parallax on scroll
+   ========================================================= */
+const nav=document.getElementById('nav');
+function onScroll(y){ nav.classList.toggle('solid',y>60); }
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+buildGallery();buildTeardown();buildCasting();buildReviews();initVideos();collectMags();
+setActive(0);
+requestAnimationFrame(engine);
+
+// Lenis smooth scroll
+let lenis=null;
+if(window.Lenis){
+  lenis=new Lenis({lerp:.09,wheelMultiplier:1});
+  window.__lenis=lenis;
+  function raf(t){lenis.raf(t);requestAnimationFrame(raf);}requestAnimationFrame(raf);
+  lenis.on('scroll',({scroll})=>{onScroll(scroll);
+    // hero parallax fade
+    const h=innerHeight;const p=clamp(scroll/h,0,1);
+    document.querySelector('.hero-fill').style.transform=`scale(${1.08+p*0.06}) translateY(${p*30}px)`;
+  });
+}else{addEventListener('scroll',()=>onScroll(scrollY));}
+
+// smooth anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const id=a.getAttribute('href');if(id.length<2)return;const t=document.querySelector(id);if(!t)return;e.preventDefault();
+  if(lenis)lenis.scrollTo(t,{offset:-10});else t.scrollIntoView({behavior:'smooth'});
+}));
+
+// loader
+(function loader(){
+  const lm=document.getElementById('lm');const word='DNARIOASKEW';
+  [...word].forEach((ch,k)=>{const i=document.createElement('i');if(k===5)i.className='g';i.textContent=ch;lm.appendChild(i);});
+  const letters=lm.querySelectorAll('i');
+  requestAnimationFrame(()=>{ if(window.gsap){
+    gsap.to(letters,{y:0,opacity:1,duration:.7,stagger:.05,ease:'power3.out',delay:.15});
+    gsap.to('#lbFill',{scaleX:1,duration:1.3,ease:'power2.inOut',delay:.2,onComplete:()=>{
+      gsap.to('#load',{opacity:0,duration:.7,delay:.15,onComplete:()=>{document.getElementById('load').style.display='none';revealHero();}});
+    }});
+  } else {letters.forEach(i=>{i.style.transform='none';i.style.opacity='1';});setTimeout(()=>{document.getElementById('load').classList.add('gone');revealHero();},1200);} });
+})();
+
+// debug hook
+window.__obsidian={
+  setCar:i=>{target=i;pos=i;},
+  state:()=>({active,pos:pos.toFixed(2),accent:getComputedStyle(root).getPropertyValue('--accent').trim()}),
+  cars:CARS.length,
+  measureUpscale:()=>{const out=[];document.querySelectorAll('img').forEach(img=>{if(!img.naturalWidth)return;const cW=img.clientWidth,cH=img.clientHeight;if(!cW)return;const iAR=img.naturalWidth/img.naturalHeight,cAR=cW/cH;const fit=getComputedStyle(img).objectFit;let pw;if(fit==='cover')pw=iAR<cAR?cW:cH*iAR;else pw=iAR>cAR?cW:cH*iAR;out.push({src:img.src.split('/').pop(),up:+(pw/img.naturalWidth).toFixed(3)});});return out.sort((a,b)=>b.up-a.up).slice(0,10);}
+};
+</script>
+</body>
+</html>
