@@ -274,11 +274,11 @@ section{padding:clamp(60px,8vw,120px) 0}
 .sc-car{position:relative;display:grid;place-items:center;overflow:hidden;
   background:radial-gradient(130% 100% at 38% 34%,#1b1c1e 0%,#0c0c0d 52%,#060607 100%)}
 .sc-car::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,transparent 58%,rgba(7,7,8,.92) 100%)}
-.sc-car img{max-width:90%;max-height:78%;object-fit:contain;
+  background:linear-gradient(90deg,transparent 74%,rgba(7,7,8,.9) 100%)}
+.sc-car img{max-width:96%;max-height:90%;object-fit:contain;
   filter:drop-shadow(0 42px 50px rgba(0,0,0,.62));
-  transform:translateX(-2%) scale(1);transition:transform 1.3s var(--ease)}
-.sc-panel.in .sc-car img{transform:translateX(0) scale(1.03)}
+  transform:translateX(-1%) scale(1);transition:transform 1.3s var(--ease)}
+.sc-panel.in .sc-car img{transform:translateX(0) scale(1.04)}
 .sc-info{position:relative;display:flex;align-items:center;padding:clamp(28px,5vw,74px);color:#f4f2ee;
   background:
     repeating-linear-gradient(104deg,rgba(255,255,255,.06) 0 2px,rgba(255,255,255,0) 2px 7px,rgba(0,0,0,.55) 7px 9px,rgba(0,0,0,0) 9px 27px),
@@ -568,7 +568,7 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
 </div></section>
 
 <!-- GALLERY — full-screen "view all" -->
-<div class="gallery" id="gallery" aria-hidden="true">
+<div class="gallery" id="gallery" aria-hidden="true" data-lenis-prevent>
   <div class="gallery-top">
     <div class="gallery-head">
       <div class="mono no">The full register</div>
@@ -582,7 +582,7 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
 <!-- §02.5 — FEATURED REPORTS (stacked pinned showcase, Fougal-style) -->
 <section id="showcase">
   <div class="sc-panel in" style="--pa:#e6b422">
-    <div class="sc-car"><img src="assets/pics/pics-54.jpg" alt="Porsche 911 Carrera S" loading="lazy"></div>
+    <div class="sc-car"><img src="assets/upshift-img/car-dune.jpg" alt="Porsche 911 Carrera S" loading="lazy"></div>
     <div class="sc-info"><div class="sc-inner">
       <div class="sc-kick">360&deg; Report &middot; N&deg; 01</div>
       <div class="sc-title">PORSCHE 911<span class="sc-big">CARRERA&nbsp;S</span></div>
@@ -592,7 +592,7 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
     </div></div>
   </div>
   <div class="sc-panel" style="--pa:#ff6a2b">
-    <div class="sc-car"><img src="assets/pics/pics-39.jpg" alt="McLaren Artura" loading="lazy"></div>
+    <div class="sc-car"><img src="assets/upshift-img/car-p1.jpg" alt="McLaren" loading="lazy"></div>
     <div class="sc-info"><div class="sc-inner">
       <div class="sc-kick">360&deg; Report &middot; N&deg; 02</div>
       <div class="sc-title">McLAREN<span class="sc-big">ARTURA</span></div>
@@ -602,7 +602,7 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
     </div></div>
   </div>
   <div class="sc-panel" style="--pa:#9070d8">
-    <div class="sc-car"><img src="assets/pics/pics-55.jpg" alt="Concept Violet" loading="lazy"></div>
+    <div class="sc-car"><img src="assets/upshift-img/car-violet.jpg" alt="Concept Violet" loading="lazy"></div>
     <div class="sc-info"><div class="sc-inner">
       <div class="sc-kick">360&deg; Report &middot; N&deg; 03</div>
       <div class="sc-title">CONCEPT<span class="sc-big">VIOLET</span></div>
@@ -612,7 +612,7 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
     </div></div>
   </div>
   <div class="sc-panel" style="--pa:#3f7dff">
-    <div class="sc-car"><img src="assets/pics/pics-18.jpg" alt="Night Runner" loading="lazy"></div>
+    <div class="sc-car"><img src="assets/upshift-img/car-gr86.jpg" alt="Night Runner" loading="lazy"></div>
     <div class="sc-info"><div class="sc-inner">
       <div class="sc-kick">360&deg; Report &middot; N&deg; 04</div>
       <div class="sc-title">NIGHT<span class="sc-big">RUNNER</span></div>
@@ -995,16 +995,16 @@ const introEls={
 };
 function heroIntro(){
   const tl=gsap.timeline({defaults:{ease:'power3.out'}});
-  tl.to(introEls.ig,{opacity:1,filter:'blur(0px)',duration:1.3},.4)
-    .to(introEls.kick,{opacity:1,filter:'blur(0px)',duration:1.4},.6)
-    .to(introEls.lines,{y:'0%',duration:1.6,stagger:.34,ease:'power4.out'},.8)
-    .to(introEls.sub,{opacity:1,filter:'blur(0px)',duration:1.5},2.0)
-    .to(introEls.chips,{opacity:1,filter:'blur(0px)',duration:1.2,stagger:.22},2.5)
-    .to(introEls.cta,{opacity:1,filter:'blur(0px)',duration:1.2},3.4)
-    .to(introEls.scan,{opacity:1,filter:'blur(0px)',duration:1.5},2.8)
-    .to(introEls.railLbl,{opacity:1,filter:'blur(0px)',duration:1},3.8)
-    .to([...railItems],{opacity:1,filter:'blur(0px)',duration:.9,stagger:.12},3.9)
-    .to(introEls.hint,{opacity:1,duration:1.2},4.6);
+  tl.to(introEls.ig,{opacity:1,filter:'blur(0px)',duration:1.0},.15)
+    .to(introEls.kick,{opacity:1,filter:'blur(0px)',duration:1.0},.3)
+    .to(introEls.lines,{y:'0%',duration:1.2,stagger:.22,ease:'power4.out'},.45)
+    .to(introEls.sub,{opacity:1,filter:'blur(0px)',duration:1.1},1.2)
+    .to(introEls.chips,{opacity:1,filter:'blur(0px)',duration:1.0,stagger:.16},1.6)
+    .to(introEls.cta,{opacity:1,filter:'blur(0px)',duration:1.0},2.2)
+    .to(introEls.scan,{opacity:1,filter:'blur(0px)',duration:1.1},1.8)
+    .to(introEls.railLbl,{opacity:1,filter:'blur(0px)',duration:.9},2.5)
+    .to([...railItems],{opacity:1,filter:'blur(0px)',duration:.8,stagger:.1},2.6)
+    .to(introEls.hint,{opacity:1,duration:1.0},3.2);
 }
 function startHero(){
   heroVid.play().catch(()=>{});
@@ -1012,7 +1012,7 @@ function startHero(){
 }
 if(heroVid.readyState>=2) startHero();
 else heroVid.addEventListener('loadeddata',startHero,{once:true});
-setTimeout(()=>{ if(!introEls.kick.style.opacity||introEls.kick.style.opacity==='0') heroIntro(); },2500);
+setTimeout(()=>{ if(!introEls.kick.style.opacity||introEls.kick.style.opacity==='0') heroIntro(); },1100);
 
 /* scan panel progress */
 const sBar=document.getElementById('s-bar'), scanState=document.getElementById('scan-state');
@@ -1160,8 +1160,8 @@ function buildGallery(){
   $$('#galleryGrid .gcta').forEach(b=>b.onclick=e=>{e.stopPropagation();openEnq(+b.dataset.i);});
   galleryBuilt=true; rebuildFlex();
 }
-function openGallery(){ if(!galleryBuilt)buildGallery(); const g=$('#gallery'); g.classList.add('open'); g.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-function closeGallery(){ const g=$('#gallery'); g.classList.remove('open'); g.setAttribute('aria-hidden','true'); document.body.style.overflow=''; g.scrollTop=0; }
+function openGallery(){ if(!galleryBuilt)buildGallery(); const g=$('#gallery'); g.classList.add('open'); g.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; if(window.__lenis)window.__lenis.stop(); }
+function closeGallery(){ const g=$('#gallery'); g.classList.remove('open'); g.setAttribute('aria-hidden','true'); document.body.style.overflow=''; g.scrollTop=0; if(window.__lenis)window.__lenis.start(); }
 $('#viewAll').onclick=openGallery;
 $('#galleryClose').onclick=closeGallery;
 window.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#gallery').classList.contains('open'))closeGallery();});
