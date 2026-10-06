@@ -193,14 +193,55 @@ section{padding:clamp(60px,8vw,120px) 0}
 .fbtn:hover,.fbtn.active{background:var(--accent);border-color:var(--accent);color:#100e0b}
 .garage-count{font-family:var(--ff-s);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
 
-/* horizontal scroll track */
-.garage-scroll{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-  scroll-behavior:smooth;padding-bottom:20px;cursor:grab}
-.garage-scroll:active{cursor:grabbing}
-.garage-scroll::-webkit-scrollbar{height:4px}
-.garage-scroll::-webkit-scrollbar-track{background:var(--paper2);border-radius:4px}
-.garage-scroll::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
-.garage-track{display:flex;gap:18px;width:max-content;padding:0 clamp(20px,4vw,64px)}
+/* ===== coverflow deck (pristine browse) ===== */
+.cf-stage{position:relative;height:min(54vh,470px);min-height:380px;margin:0 0 22px;perspective:1700px}
+.cf-stage.hidden,.cf-bar.hidden,.cf-hint.hidden{display:none}
+.cf-deck{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;cursor:grab;touch-action:pan-y}
+.cf-deck:active{cursor:grabbing}
+.cf-inner{position:relative;width:1px;height:min(50vh,430px);transform-style:preserve-3d}
+.cf-card{position:absolute;top:0;left:0;height:100%;aspect-ratio:.64;transform:translate(-50%,0);
+  will-change:transform,opacity;border-radius:14px;overflow:hidden;background:#111;
+  box-shadow:0 44px 90px -34px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.08);contain:layout paint}
+.cf-card img{width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none}
+.cf-card .cf-tint{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(0,0,0,.6),transparent 46%);transition:opacity .5s}
+.cf-card .cf-badge{position:absolute;top:11px;left:11px;z-index:2;font-family:var(--ff-s);font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  padding:5px 9px;border-radius:30px;background:rgba(243,240,232,.92);backdrop-filter:blur(4px);opacity:0;transition:opacity .4s}
+.cf-card.center .cf-badge{opacity:1}
+.cf-card .cf-badge.avail{color:#2c7a4b}.cf-card .cf-badge.avail::before{content:"● ";color:#2c9b57}
+.cf-card .cf-badge.sold{color:#b34}
+.cf-card .cf-line{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--cc,#c9a25e);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.cf-card.center .cf-line{transform:scaleX(1)}
+.cf-card:not(.center){filter:brightness(.5) saturate(.7)}
+.cf-card .cf-rim{position:absolute;inset:0;border-radius:14px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);transition:box-shadow .5s}
+.cf-card.center .cf-rim{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--cc,#c9a25e) 60%,transparent),0 0 64px -6px color-mix(in srgb,var(--cc,#c9a25e) 42%,transparent)}
+/* info bar */
+.cf-bar{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.cf-info{min-width:min(100%,340px);flex:1}
+.cf-mk{font-family:var(--ff-s);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);transition:color .6s}
+.cf-nm{font-family:var(--ff-d);font-weight:600;font-size:clamp(26px,3.2vw,46px);line-height:1.02;margin:4px 0 14px}
+.cf-chips{display:flex;gap:9px;flex-wrap:wrap}
+.cf-chip{border-radius:12px;padding:9px 13px;background:linear-gradient(140deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12)}
+.cf-chip .cl{font-family:var(--ff-s);font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.cf-chip .cv{font-family:var(--ff-d);font-weight:600;font-size:17px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.cf-chip .cv small{font-size:10px;opacity:.6;margin-left:2px}
+.cf-chip.price .cv{color:var(--cc,var(--accent))}
+.cf-nav{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.cf-count-nav{display:flex;align-items:center;gap:16px}
+.cf-idx{font-family:var(--ff-s);font-size:12px;letter-spacing:.22em;color:var(--ink2)}
+.cf-idx b{color:var(--accent);font-weight:600}
+.cf-arrows{display:flex;gap:10px}
+.cf-arw{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink);
+  font-size:17px;display:grid;place-items:center;cursor:pointer;transition:.3s var(--ease);user-select:none}
+.cf-arw:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.cf-cta{font-family:var(--ff-s);font-size:11px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--ink);
+  background:transparent;color:var(--ink);border-radius:44px;padding:12px 24px;cursor:pointer;transition:.3s var(--ease)}
+.cf-cta:hover{background:var(--ink);color:var(--paper)}
+.cf-hint{font-family:var(--ff-s);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-top:16px;text-align:center}
+@media(max-width:720px){
+  .cf-bar{flex-direction:column;align-items:stretch}
+  .cf-nav{flex-direction:row;justify-content:space-between;align-items:center}
+  .cf-stage{height:min(54vh,440px)}
+}
 .gcard{flex:0 0 min(82vw,340px);scroll-snap-align:start;position:relative;background:var(--paper);border:1px solid var(--line);
   border-radius:14px;overflow:hidden;transition:transform .5s var(--ease),box-shadow .5s var(--ease);will-change:transform}
 .gcard:hover{transform:translateY(-6px);box-shadow:0 24px 60px -20px rgba(201,162,94,.18)}
@@ -266,6 +307,34 @@ section{padding:clamp(60px,8vw,120px) 0}
   .viewall{margin-left:0;justify-content:center}
   .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 }
+
+/* ===== CAR MATH — finance / tax calculator ===== */
+#carmath{background:linear-gradient(180deg,var(--paper2) 0%,var(--paper) 100%)}
+.cm-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:min(5vw,60px);margin-top:16px;align-items:start}
+.cm-field{margin-bottom:22px}
+.cm-field>label{display:block;font-family:var(--ff-s);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:9px}
+.cm-field input[type=number],.cm-field select{width:100%;font-family:var(--ff-d);font-weight:600;font-size:21px;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:12px 15px;outline:none;transition:border-color .3s;-moz-appearance:textfield}
+.cm-field input[type=number]::-webkit-outer-spin-button,.cm-field input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.cm-field input:focus,.cm-field select:focus{border-color:var(--accent)}
+.cm-field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' stroke='%23c9a25e' stroke-width='1.4' fill='none'/></svg>");background-repeat:no-repeat;background-position:right 15px center}
+.cm-rng{display:flex;align-items:center;gap:14px}
+.cm-rng input[type=range]{flex:1;accent-color:var(--accent);height:3px;cursor:pointer}
+.cm-rng .rv{font-family:var(--ff-d);font-weight:600;font-size:19px;min-width:92px;text-align:right;font-variant-numeric:tabular-nums}
+.cm-out{background:linear-gradient(150deg,rgba(201,162,94,.1),rgba(255,255,255,.02));border:1px solid var(--accent-line);border-radius:18px;padding:clamp(24px,3vw,40px);position:relative;overflow:hidden}
+.cm-out::before{content:"";position:absolute;top:-40%;right:-20%;width:60%;height:120%;background:radial-gradient(circle,rgba(201,162,94,.14),transparent 70%);pointer-events:none}
+.cm-outlbl{font-family:var(--ff-s);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink2)}
+.cm-monthly{font-family:var(--ff-d);font-weight:700;font-size:clamp(46px,7vw,80px);line-height:1;color:var(--accent);margin-top:6px;font-variant-numeric:tabular-nums}
+.cm-monthly small{font-family:var(--ff-s);font-size:13px;letter-spacing:.1em;color:var(--ink2);font-weight:400;margin-left:8px}
+.cm-rows{margin-top:26px;border-top:1px solid var(--line)}
+.cm-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
+.cm-row span{font-family:var(--ff-b);font-size:13.5px;color:var(--ink2)}
+.cm-row b{font-family:var(--ff-d);font-weight:600;font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums}
+.cm-note{font-family:var(--ff-s);font-size:10px;letter-spacing:.06em;color:var(--dim);margin-top:20px;line-height:1.8}
+.cm-cta{margin-top:18px;width:100%;font-family:var(--ff-s);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  border:none;background:var(--accent);color:#100e0b;border-radius:44px;padding:15px;cursor:pointer;transition:filter .3s,transform .3s var(--ease)}
+.cm-cta:hover{filter:brightness(1.08);transform:translateY(-2px)}
+@media(max-width:820px){.cm-grid{grid-template-columns:1fr;gap:34px}}
 
 /* ===== FEATURED REPORTS — stacked pinned showcase (Fougal-style) ===== */
 #showcase{position:relative;z-index:2;background:#070708}
@@ -484,6 +553,59 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
 .foot .fb span{color:var(--accent);transition:color .6s}
 .foot .fmeta{color:var(--dim);font-family:var(--ff-s);font-size:11px;letter-spacing:.14em;text-transform:uppercase;line-height:2.1;text-align:right}
 @media(max-width:520px){.foot{flex-direction:column;align-items:center;text-align:center}.foot .fmeta{text-align:center}}
+
+/* ===================== MOBILE (responsive + perf) ===================== */
+@media(max-width:760px){
+  html{scroll-padding-top:70px}
+  body::before{display:none} /* drop grain overlay — cheaper repaints */
+
+  /* lighter blurs so scrolling stays smooth on phones */
+  nav.solid{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .chip{backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+  .scan{backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+  .hero-fill{filter:blur(42px) saturate(1.2) brightness(.5)}
+
+  /* NAV */
+  nav{padding:12px 20px}
+  .brandmark{font-size:20px}
+  .navcta{padding:8px 13px;font-size:10px}
+
+  /* ===== HERO → vertical flow; media stays full-bleed behind ===== */
+  #hero{height:auto;min-height:100svh;display:flex;flex-direction:column;
+    justify-content:center;gap:14px;padding:88px 20px 34px}
+  .hero-vid,.hero-still,.hero-fill,.hero-sharp,.hero-scrim,.hero-glow{position:absolute;inset:0}
+  .hero-sharp{padding:11vh 8vw 24vh;justify-content:center}
+  .hero-glow{opacity:.4}
+  .h-ig{position:static;left:auto;top:auto;filter:none;font-size:9px;letter-spacing:.17em}
+  .h-copy{position:static;left:auto;top:auto;max-width:100%}
+  .h-title{font-size:clamp(34px,9vw,50px)}
+  .h-sub{max-width:100%;font-size:13px;margin-top:16px}
+  .h-deck{position:static;left:auto;bottom:auto;max-width:100%;gap:8px}
+  .chip{flex:1 1 calc(50% - 8px);padding:10px 12px;border-radius:13px}
+  .chip .cl{font-size:8px}
+  .chip .cv{font-size:18px}
+  .cta{flex:1 1 100%;height:50px;justify-content:center}
+  .scan{position:static;right:auto;top:auto;width:100%}
+  .rail-lbl{position:static;right:auto;bottom:auto;filter:none}
+  .rail{position:static;right:auto;bottom:auto;width:100%;overflow-x:auto;overflow-y:hidden;
+    flex-wrap:nowrap;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
+  .rail::-webkit-scrollbar{height:3px}
+  .rail::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+  .ritem{flex:0 0 auto}
+  .h-hint{display:none}
+
+  /* section rhythm */
+  section{padding:clamp(48px,11vw,76px) 0}
+  .shead{margin-bottom:30px;padding-bottom:16px}
+
+  /* HIDDEN WORLD caption fits the screen */
+  #deep{height:120vh}
+  .d-cap{margin-left:20px;max-width:84vw;top:62vh}
+  .d-cap .dh{font-size:clamp(22px,6.5vw,30px)}
+}
+@media(max-width:400px){
+  .chip{flex:1 1 100%}
+}
 </style>
 </head>
 <body>
@@ -496,6 +618,7 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
     <a href="#svc">Packages</a>
     <a href="#parts">Add-ons</a>
     <a href="#reviews">Clients</a>
+    <a href="#carmath">Finance</a>
   </div>
   <a href="#reserve" class="navcta">Book inspection</a>
 </nav>
@@ -553,7 +676,7 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
   <div class="shead">
     <div class="l"><div class="mono no">§ 02 — Inspected</div>
       <h2 data-split="word">Cars we've <em>inspected.</em></h2></div>
-    <div class="r rise">Every inspection on file, searchable and filterable. Scroll to explore or search by brand, model or value.</div>
+    <div class="r rise">Browse the collection car by car, or search and filter by brand, model or value — every inspection on file.</div>
   </div>
   <div class="garage-controls">
     <div class="garage-search"><span class="ico">⌕</span><input type="text" id="garageSearch" placeholder="Search brand, model, value…"></div>
@@ -561,9 +684,24 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
     <button class="viewall" id="viewAll">View all <b></b> <span>&#8594;</span></button>
   </div>
   <div class="garage-count" id="garageCount"></div>
-  <div class="garage-scroll" id="garageScroll">
-    <div class="garage-track" id="garageTrack"></div>
+  <div class="cf-stage" id="cfStage">
+    <div class="cf-deck" id="cfDeck"><div class="cf-inner" id="cfInner"></div></div>
   </div>
+  <div class="cf-bar" id="cfBar">
+    <div class="cf-info">
+      <div class="cf-mk" id="cfMk"></div>
+      <div class="cf-nm serif" id="cfNm"></div>
+      <div class="cf-chips" id="cfChips"></div>
+    </div>
+    <div class="cf-nav">
+      <div class="cf-count-nav">
+        <div class="cf-idx"><b id="cfIdxN">01</b> / <span id="cfIdxT">24</span></div>
+        <div class="cf-arrows"><div class="cf-arw" id="cfArwL" aria-label="previous">&#8249;</div><div class="cf-arw" id="cfArwR" aria-label="next">&#8250;</div></div>
+      </div>
+      <button class="cf-cta" id="cfCta">Request report</button>
+    </div>
+  </div>
+  <div class="cf-hint" id="cfHint">Drag &middot; scroll &middot; arrows — select a car, tap it for the full report</div>
   <div class="garage-grid" id="garageGrid"></div>
 </div></section>
 
@@ -705,6 +843,56 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
   <div class="rgrid" id="rGrid"></div>
 </div></section>
 
+<!-- §08 — CAR MATH (finance / tax calculator) -->
+<section id="carmath" data-k="carmath"><div class="wrap">
+  <div class="shead">
+    <div class="l"><div class="mono no">§ 08 — Car Math</div>
+      <h2 data-split="word">Run the <em>numbers.</em></h2></div>
+    <div class="r rise">Estimate the monthly cost, the interest and the tax before you commit — pick a car from the floor or type your own figures. Indicative only.</div>
+  </div>
+  <div class="cm-grid">
+    <div class="cm-inputs">
+      <div class="cm-field">
+        <label for="cmCar">Pick a car (optional)</label>
+        <select id="cmCar"><option value="">Type my own price…</option></select>
+      </div>
+      <div class="cm-field">
+        <label for="cmPrice">Vehicle price (£)</label>
+        <input type="number" id="cmPrice" min="0" step="500" value="96000">
+      </div>
+      <div class="cm-field">
+        <label for="cmDep">Deposit (£)</label>
+        <input type="number" id="cmDep" min="0" step="500" value="9600">
+      </div>
+      <div class="cm-field">
+        <label for="cmTerm">Term</label>
+        <div class="cm-rng"><input type="range" id="cmTerm" min="12" max="84" step="6" value="48"><span class="rv" id="cmTermV">48 mo</span></div>
+      </div>
+      <div class="cm-field">
+        <label for="cmApr">Interest — APR (%)</label>
+        <div class="cm-rng"><input type="range" id="cmApr" min="0" max="20" step="0.1" value="9.9"><span class="rv" id="cmAprV">9.9%</span></div>
+      </div>
+      <div class="cm-field">
+        <label for="cmTax">Tax / VAT (%)</label>
+        <div class="cm-rng"><input type="range" id="cmTax" min="0" max="25" step="0.5" value="0"><span class="rv" id="cmTaxV">0%</span></div>
+      </div>
+    </div>
+    <div class="cm-out">
+      <div class="cm-outlbl">Estimated monthly payment</div>
+      <div class="cm-monthly"><span id="cmMonthly">£—</span><small>/ month</small></div>
+      <div class="cm-rows">
+        <div class="cm-row"><span>On-the-road price</span><b id="cmOtr">£—</b></div>
+        <div class="cm-row"><span>Tax included</span><b id="cmTaxAmt">£—</b></div>
+        <div class="cm-row"><span>Amount financed</span><b id="cmFin">£—</b></div>
+        <div class="cm-row"><span>Total interest</span><b id="cmInt">£—</b></div>
+        <div class="cm-row"><span>Total payable</span><b id="cmTotal">£—</b></div>
+      </div>
+      <div class="cm-note">Illustration only — not a finance quote or offer. Actual APR, tax and terms depend on the lender, the car and your circumstances. We can arrange an inspection before you sign anything.</div>
+      <button class="cm-cta" id="cmCta">Talk to us about this car</button>
+    </div>
+  </div>
+</div></section>
+
 <!-- RESERVE -->
 <section id="reserve"><div class="wrap">
   <h2 data-split="word">Book an <em>inspection.</em></h2>
@@ -775,6 +963,10 @@ footer{padding:50px 0 36px;border-top:1px solid var(--line)}
 const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), lerp=(a,b,t)=>a+(b-a)*t;
 const A='assets/';
+/* perf gates — kill per-frame rAF storms + cursor magnetics on phones/touch */
+const isMobile = matchMedia('(max-width:760px)').matches;
+const isTouch  = isMobile || matchMedia('(hover:none) and (pointer:coarse)').matches;
+window.__isMobile=isMobile;
 let flexEls=[];
 function rebuildFlex(){
   flexEls=$$('.flexel').map(el=>({el,rx:0,ry:0,tx:0,ty:0,lift:0,tl:0,phase:Math.random()*6.28,amp:0.5+Math.random()*0.5}));
@@ -952,7 +1144,7 @@ const mags=[...document.querySelectorAll('.mag')].map(el=>({el,x:0,y:0,s:1}));
 const glows=[...document.querySelectorAll('.chip,.scan,.ritem')];
 const RAD=230;
 const phases=mags.map((_,i)=>i*1.37);
-gsap.ticker.add(()=>{
+if(!isTouch) gsap.ticker.add(()=>{
   const t=performance.now()*.001;
   for(let i=0;i<mags.length;i++){
     const m=mags[i];
@@ -1082,7 +1274,34 @@ $('#filters').innerHTML='<button class="fbtn active" data-t="all">All</button>'+
 const filterBtns=$$('#filters .fbtn');
 let activeFilter='all', searchQ='';
 
+function gcardHTML(c,i){
+  return `<div class="gcard flexel" data-i="${i}" style="--accent:${c.accent}">
+    <div class="gimg"><span class="gstatus ${c.status}">${c.status==='sold'?'Flagged':'Passed'}</span>
+      <span class="gprice-tag serif">${c.price}</span>
+      <img src="${A+c.file}" alt="${c.brand} ${c.model}" loading="lazy"></div>
+    <div class="gbody">
+      <div class="gbrand">${c.brand} · ${c.year}</div>
+      <div class="gmodel serif">${c.model}</div>
+      <div class="gspecs">
+        <div class="gspec"><b class="serif">${c.hp}</b><span>BHP</span></div>
+        <div class="gspec"><b class="serif">${c.zero}</b><span>0–60</span></div>
+        <div class="gspec"><b class="serif">${c.top}</b><span>MPH</span></div>
+      </div>
+      <button class="gcta" data-i="${i}">${c.status==='sold'?'See findings':'Request report'}</button>
+    </div>
+  </div>`;
+}
 function renderGarage(){
+  // deck is the default pristine browse; search OR a type filter switches to a results grid
+  const deckMode = !searchQ && activeFilter==='all';
+  const gridEl=$('#garageGrid'), stage=$('#cfStage'), bar=$('#cfBar'), hint=$('#cfHint');
+  if(deckMode){
+    stage.classList.remove('hidden'); bar.classList.remove('hidden'); hint.classList.remove('hidden');
+    gridEl.classList.remove('active'); gridEl.innerHTML='';
+    $('#garageCount').textContent=`${CARS.length} cars inspected — on the floor now`;
+    return;
+  }
+  stage.classList.add('hidden'); bar.classList.add('hidden'); hint.classList.add('hidden');
   const filtered=CARS.filter(c=>{
     if(activeFilter!=='all'&&c.type!==activeFilter)return false;
     if(searchQ){
@@ -1091,40 +1310,11 @@ function renderGarage(){
     }
     return true;
   });
-  const html=filtered.map((c,fi)=>{
-    const i=CARS.indexOf(c);
-    return `<div class="gcard flexel" data-i="${i}" style="--accent:${c.accent}">
-      <div class="gimg"><span class="gstatus ${c.status}">${c.status==='sold'?'Flagged':'Passed'}</span>
-        <span class="gprice-tag serif">${c.price}</span>
-        <img src="${A+c.file}" alt="${c.brand} ${c.model}" loading="lazy"></div>
-      <div class="gbody">
-        <div class="gbrand">${c.brand} · ${c.year}</div>
-        <div class="gmodel serif">${c.model}</div>
-        <div class="gspecs">
-          <div class="gspec"><b class="serif">${c.hp}</b><span>BHP</span></div>
-          <div class="gspec"><b class="serif">${c.zero}</b><span>0–60</span></div>
-          <div class="gspec"><b class="serif">${c.top}</b><span>MPH</span></div>
-        </div>
-        <button class="gcta" data-i="${i}">${c.status==='sold'?'See findings':'Request report'}</button>
-      </div>
-    </div>`;
-  }).join('');
-
-  // If searching, show grid; if browsing, show horizontal scroll
-  const scrollEl=$('#garageScroll'), gridEl=$('#garageGrid');
-  if(searchQ){
-    scrollEl.classList.add('hidden');
-    gridEl.classList.add('active');
-    gridEl.innerHTML=html;
-  } else {
-    scrollEl.classList.remove('hidden');
-    gridEl.classList.remove('active');
-    $('#garageTrack').innerHTML=html;
-  }
-  $('#garageCount').textContent=`${filtered.length} car${filtered.length!==1?'s':''} on the floor`;
-  // rebind CTAs
-  $$(searchQ?'#garageGrid .gcta':'#garageTrack .gcta').forEach(b=>b.onclick=e=>{e.stopPropagation();openEnq(+b.dataset.i);});
-  // rebind flex engine
+  gridEl.innerHTML=filtered.map(c=>gcardHTML(c,CARS.indexOf(c))).join('')
+    || '<div style="grid-column:1/-1;padding:40px 0;color:var(--dim);font-family:var(--ff-s);letter-spacing:.1em">No cars match that search.</div>';
+  gridEl.classList.add('active');
+  $('#garageCount').textContent=`${filtered.length} car${filtered.length!==1?'s':''} found`;
+  $$('#garageGrid .gcta').forEach(b=>b.onclick=e=>{e.stopPropagation();openEnq(+b.dataset.i);});
   rebuildFlex();
 }
 
@@ -1136,6 +1326,62 @@ filterBtns.forEach(b=>b.onclick=()=>{
 });
 $('#garageSearch').oninput=e=>{searchQ=e.target.value.trim();renderGarage();};
 renderGarage();
+
+/* ---------- COVERFLOW DECK — pristine car browse (no gBCR; gated to view) ---------- */
+const cfInner=$('#cfInner'), cfDeck=$('#cfDeck');
+const cfMk=$('#cfMk'), cfNm=$('#cfNm'), cfChips=$('#cfChips'), cfCta=$('#cfCta'),
+      cfIdxN=$('#cfIdxN'), cfBar=$('#cfBar'), cfStage=$('#cfStage');
+let cfCards=[], cfPos=0, cfTarget=0, cfActive=-1, cfDragging=false, cfLastX=0, cfVisible=false;
+const cfSpread=()=>Math.min(210,innerWidth*0.135);
+$('#cfIdxT').textContent=String(CARS.length).padStart(2,'0');
+CARS.forEach((c,i)=>{
+  const el=document.createElement('div'); el.className='cf-card'; el.style.setProperty('--cc',c.accent);
+  el.innerHTML=`<img src="${A+c.file}" alt="${c.brand} ${c.model}" loading="lazy" draggable="false"><div class="cf-tint"></div><span class="cf-badge ${c.status}">${c.status==='sold'?'Flagged':'Passed'}</span><div class="cf-line"></div><div class="cf-rim"></div>`;
+  el.addEventListener('click',()=>{ if(Math.round(cfPos)===i) openEnq(i); else cfTarget=i; });
+  cfInner.appendChild(el); cfCards.push(el);
+});
+function cfSetActive(i){
+  cfActive=i; const c=CARS[i];
+  cfMk.textContent=`${c.brand} · ${c.year}`; cfMk.style.color=c.accent;
+  cfNm.textContent=c.model;
+  cfIdxN.textContent=String(i+1).padStart(2,'0');
+  cfBar.style.setProperty('--cc',c.accent);
+  cfChips.innerHTML=`
+    <div class="cf-chip"><div class="cl">Power</div><div class="cv">${c.hp}<small>bhp</small></div></div>
+    <div class="cf-chip"><div class="cl">0–60</div><div class="cv">${c.zero}</div></div>
+    <div class="cf-chip"><div class="cl">Top</div><div class="cv">${c.top}<small>mph</small></div></div>
+    <div class="cf-chip price"><div class="cl">Guide</div><div class="cv">${c.price}</div></div>`;
+  cfCta.textContent=c.status==='sold'?'See findings':'Request report';
+  cfCta.onclick=()=>openEnq(i);
+}
+function cfRender(){
+  if(!cfDragging){ cfPos+=(cfTarget-cfPos)*.14; if(Math.abs(cfPos-cfTarget)<.001)cfPos=cfTarget; }
+  const sp=cfSpread();
+  for(let i=0;i<cfCards.length;i++){
+    const el=cfCards[i], d=i-cfPos, ad=Math.abs(d);
+    if(ad>4.2){ if(el.style.display!=='none')el.style.display='none'; continue; }
+    if(el.style.display==='none')el.style.display='';
+    const x=d*sp, z=-ad*260, ry=-clamp(d,-2.2,2.2)*30, scl=1-Math.min(ad*.13,.5), op=1-Math.min(ad*.34,.82);
+    el.style.transform=`translate(-50%,0) translateX(${x}px) translateZ(${z}px) rotateY(${ry}deg) scale(${scl})`;
+    el.style.opacity=op.toFixed(3);
+    el.style.zIndex=String(200-Math.round(ad*10));
+    el.classList.toggle('center',Math.round(cfPos)===i);
+  }
+  const near=clamp(Math.round(cfPos),0,CARS.length-1);
+  if(near!==cfActive)cfSetActive(near);
+}
+cfSetActive(0); cfRender();
+new IntersectionObserver(es=>es.forEach(e=>cfVisible=e.isIntersecting),{threshold:.02}).observe(cfStage);
+(function cfLoop(){ if(cfVisible && !cfStage.classList.contains('hidden')) cfRender(); requestAnimationFrame(cfLoop); })();
+// interactions
+cfDeck.addEventListener('pointerdown',e=>{cfDragging=true;cfLastX=e.clientX;cfDeck.setPointerCapture(e.pointerId);});
+cfDeck.addEventListener('pointermove',e=>{ if(!cfDragging)return; const dx=e.clientX-cfLastX;cfLastX=e.clientX; cfPos=clamp(cfPos-dx/cfSpread(),-.3,CARS.length-.7); });
+function cfEnd(){ if(!cfDragging)return; cfDragging=false; cfTarget=clamp(Math.round(cfPos),0,CARS.length-1); }
+cfDeck.addEventListener('pointerup',cfEnd); cfDeck.addEventListener('pointercancel',cfEnd); cfDeck.addEventListener('lostpointercapture',cfEnd);
+cfDeck.addEventListener('wheel',e=>{ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){ e.preventDefault(); cfTarget=clamp(cfTarget+(e.deltaX>0?1:-1),0,CARS.length-1);} },{passive:false});
+$('#cfArwL').onclick=()=>cfTarget=clamp(cfTarget-1,0,CARS.length-1);
+$('#cfArwR').onclick=()=>cfTarget=clamp(cfTarget+1,0,CARS.length-1);
+addEventListener('keydown',e=>{ if(!cfVisible||cfStage.classList.contains('hidden'))return; if(e.target.matches('input,select,textarea'))return; if(e.key==='ArrowLeft')cfTarget=clamp(cfTarget-1,0,CARS.length-1); if(e.key==='ArrowRight')cfTarget=clamp(cfTarget+1,0,CARS.length-1); });
 
 /* ---------- VIEW ALL — full-screen gallery ---------- */
 $('#viewAll').querySelector('b').textContent=CARS.length;
@@ -1172,13 +1418,41 @@ $$('#showcase .sc-panel').forEach(pn=>{
 });
 $$('#showcase .sc-btn').forEach(b=>b.onclick=e=>{e.stopPropagation();openEnq(+b.dataset.i);});
 
-// drag-to-scroll on the horizontal track
-const scrollTrack=$('#garageScroll');
-let isDragging=false, startX, scrollLeft;
-scrollTrack.addEventListener('pointerdown',e=>{isDragging=true;startX=e.pageX-scrollTrack.offsetLeft;scrollLeft=scrollTrack.scrollLeft;scrollTrack.style.cursor='grabbing';});
-scrollTrack.addEventListener('pointerleave',()=>{isDragging=false;scrollTrack.style.cursor='grab';});
-scrollTrack.addEventListener('pointerup',()=>{isDragging=false;scrollTrack.style.cursor='grab';});
-scrollTrack.addEventListener('pointermove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-scrollTrack.offsetLeft;scrollTrack.scrollLeft=scrollLeft-(x-startX)*1.2;});
+/* ---------- CAR MATH — finance / tax calculator ---------- */
+(function(){
+  const $i=id=>document.getElementById(id);
+  const price=$i('cmPrice'),dep=$i('cmDep'),term=$i('cmTerm'),apr=$i('cmApr'),tax=$i('cmTax'),carSel=$i('cmCar');
+  if(!price) return;
+  const money=n=>'£'+Math.round(n).toLocaleString('en-GB');
+  function parsePrice(s){
+    if(!s) return null; const t=s.replace(/[£,\s]/g,'');
+    if(/^[0-9.]+M$/i.test(t)) return Math.round(parseFloat(t)*1e6);
+    if(/^[0-9.]+K$/i.test(t)) return Math.round(parseFloat(t)*1e3);
+    const n=parseFloat(t); return isFinite(n)&&n>0 ? n : null;
+  }
+  // populate car dropdown (only cars with a real number price)
+  CARS.forEach((c,i)=>{ const p=parsePrice(c.price); if(p){ const o=document.createElement('option'); o.value=i; o.textContent=`${c.brand} ${c.model} — ${c.price}`; carSel.appendChild(o);} });
+  function compute(){
+    const P=+price.value||0, D=Math.min(+dep.value||0,P*1.25), N=+term.value||1, R=+apr.value||0, T=+tax.value||0;
+    $i('cmTermV').textContent=N+' mo';
+    $i('cmAprV').textContent=R.toFixed(1)+'%';
+    $i('cmTaxV').textContent=T+'%';
+    const taxAmt=P*T/100, otr=P+taxAmt, financed=Math.max(0,otr-D), r=R/100/12;
+    let monthly = r>0 ? financed*r/(1-Math.pow(1+r,-N)) : financed/N;
+    if(!isFinite(monthly)||monthly<0) monthly=0;
+    const totalPay=monthly*N+D, interest=Math.max(0,monthly*N-financed);
+    $i('cmMonthly').textContent=money(monthly);
+    $i('cmOtr').textContent=money(otr);
+    $i('cmTaxAmt').textContent=money(taxAmt);
+    $i('cmFin').textContent=money(financed);
+    $i('cmInt').textContent=money(interest);
+    $i('cmTotal').textContent=money(totalPay);
+  }
+  carSel.addEventListener('change',()=>{ const i=carSel.value; if(i!==''){ const p=parsePrice(CARS[+i].price); if(p){ price.value=p; dep.value=Math.round(p*.1); } } compute(); });
+  [price,dep,term,apr,tax].forEach(el=>el.addEventListener('input',compute));
+  $i('cmCta').addEventListener('click',()=>{ const i=carSel.value; openEnq(i!==''?+i:0); });
+  compute();
+})();
 
 /* ---------- §03 HIDDEN WORLD — UPSHIFT ScrollTrigger reveal ---------- */
 const deepFix=document.getElementById('deepfix');
@@ -1336,7 +1610,7 @@ function flexTick(t){
   }
   requestAnimationFrame(flexTick);
 }
-requestAnimationFrame(flexTick);
+if(!isMobile) requestAnimationFrame(flexTick);
 
 /* ---------- VIDEO MANAGEMENT — only play visible clips ---------- */
 const allVids=$$('video');
