@@ -686,7 +686,7 @@ button.hero-price:active{transform:scale(.96)}
       </div></div>
     </div>
     <div class="hero-frame" id="heroFrame">
-      <video id="heroVid" muted loop playsinline preload="none" poster="../360-inspections/assets/v5/hero-m.jpg" aria-label="Porsche 911 GT3 RS in the showroom"></video>
+      <video id="heroVid" autoplay muted loop playsinline preload="auto" poster="../360-inspections/assets/v5/hero-m.jpg" aria-label="Porsche 911 GT3 RS in the showroom"></video>
       <div class="hero-tag"><b>94</b>360° report<span> · A — Pass</span></div>
       <button class="hero-price" data-hero-car aria-label="View the 911 GT3 RS"><small>911 GT3 RS · 3,210 mi</small><b>£218,000 →</b></button>
     </div>
@@ -1203,6 +1203,7 @@ $$('[data-close-menu]').forEach(b=>b.addEventListener('click',()=>{menu.classLis
 const vid=$('#heroVid');
 if(isDesk){vid.poster='../360-inspections/assets/v5/hero-wide.jpg';}
 vid.src=isDesk?'../360-inspections/assets/v5/hero-wide.mp4':'../360-inspections/assets/v5/hero-m.mp4';
+vid.muted=true;vid.play().catch(()=>{});
 const playing=new Set();
 const vio=new IntersectionObserver(es=>es.forEach(e=>{
   if(e.isIntersecting){playing.add(e.target);e.target.play().catch(()=>{});}
