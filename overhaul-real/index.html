@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OVERHAUL — Performance Rebuilds, Digbeth</title>
+<meta name="description" content="OVERHAUL — a working performance shop in Digbeth, Birmingham. Fourteen full builds a year, priced line by line." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306070b'/%3E%3Cpath d='M5 20h22M9 20a3.4 3.4 0 1 0 6.8 0M19 20a3.4 3.4 0 1 0 6.8 0M6 20l3-7h14l4 7' stroke='%23ff7a1f' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#06070b;
+  --ink:#eef2f8;
+  --muted:#808b9f;
+  --amber:#ff7a1f;
+  --blue:#3ea9ff;
+  --red:#e0273c;
+  --lime:#a9e62b;
+  --line:rgba(255,255,255,.1);
+  --disp:'Bebas Neue',sans-serif;
+  --sans:'Space Grotesk',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+::selection{background:var(--amber);color:#06070b}
+
+#scene{position:fixed;inset:0;z-index:1;display:block}
+.scroller{position:relative;z-index:2;pointer-events:none;width:100%}
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.vig{position:fixed;inset:0;z-index:55;pointer-events:none;box-shadow:inset 0 0 210px 30px rgba(0,0,0,.7)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;align-items:center;justify-content:space-between;
+  padding:15px clamp(14px,4vw,48px);mix-blend-mode:difference}
+.brand{font-family:var(--disp);font-size:30px;letter-spacing:.14em;line-height:.9}
+.brand small{display:block;font-family:var(--mono);font-size:8px;letter-spacing:.42em;opacity:.75;margin-top:2px}
+.nav-r{display:flex;align-items:center;gap:18px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.nav-r .where{opacity:.72}
+.ig{display:inline-flex;align-items:center;gap:7px}
+.ig .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.res{border:1px solid rgba(255,255,255,.55);padding:8px 16px;border-radius:40px;pointer-events:auto;transition:transform .3s,background .3s,color .3s}
+.res:hover{background:#fff;color:#000;transform:translateY(-2px)}
+@media(max-width:1040px){.nav-r .where{display:none}}
+
+/* ---------- gutter captions (word-by-word, scroll-driven, no blur) ---------- */
+.cap{position:fixed;z-index:50;max-width:min(23vw,340px);will-change:transform,opacity}
+.cap.L{left:clamp(16px,4.2vw,58px);text-align:left}
+.cap.R{right:clamp(16px,4.2vw,58px);text-align:right}
+.cap.pos-mid{top:50%;transform:translateY(-50%)}
+.kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent,var(--amber));display:inline-flex;align-items:center;gap:9px}
+.cap.R .kick{flex-direction:row-reverse}
+.kick::before{content:"";width:20px;height:1px;background:var(--accent,var(--amber))}
+.cap h2{font-family:var(--disp);font-size:clamp(34px,4.4vw,70px);line-height:.92;letter-spacing:.012em;margin:12px 0 10px}
+.cap h2 .stroke{color:transparent;-webkit-text-stroke:1.2px var(--ink)}
+.cap p{color:#c2cad8;font-size:13.5px;line-height:1.72;margin-bottom:14px}
+.cap.R p{margin-left:auto}
+.spec{display:flex;gap:18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;flex-wrap:wrap}
+.cap.R .spec{justify-content:flex-end}
+.spec b{display:block;color:var(--ink);font-size:15px;font-family:var(--sans);letter-spacing:0;margin-top:3px}
+.idx{font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;color:var(--muted)}
+.idx b{color:var(--accent,var(--amber))}
+.wd{display:inline-block;will-change:transform,opacity}
+.tapline{margin-top:13px;font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent,var(--amber));opacity:.92}
+
+/* ---------- hero overlay ---------- */
+.hero-ov{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;pointer-events:none;transition:opacity .4s}
+/* the words sit either side of the car, never on it */
+.hero-ov .mega{font-family:var(--disp);font-size:clamp(54px,9.4vw,146px);line-height:.82;letter-spacing:.03em;
+  display:flex;align-items:center;justify-content:center;width:100%}
+.hero-ov .mega span{display:inline-block;will-change:transform,opacity}
+.hero-ov .mega .gap{width:min(52vw,1040px);flex:none}  /* always wider than the 44%-frame card */
+.hero-ov .tl{position:absolute;left:0;right:0;bottom:13vh;font-family:var(--mono);font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
+.hero-ov .tl b{color:var(--amber)}
+
+/* ---------- cue + depth rail ---------- */
+.cue{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:50;font-family:var(--mono);font-size:9.5px;letter-spacing:.34em;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .4s}
+.cue i{width:1px;height:30px;background:linear-gradient(var(--amber),transparent);animation:cue 1.8s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.rail{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:8px}
+.rail .d{width:7px;height:7px;border-radius:50%;border:1px solid rgba(255,255,255,.34);transition:background .3s,transform .3s,box-shadow .3s}
+.rail .d.on{background:var(--amber);border-color:var(--amber);box-shadow:0 0 12px var(--amber);transform:scale(1.32)}
+.rail .sep{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.2);margin:2px auto}
+
+/* ---------- cursor tooltip ---------- */
+#tip{position:fixed;z-index:80;pointer-events:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  background:rgba(8,10,16,.86);border:1px solid var(--line);border-radius:30px;padding:8px 14px;color:var(--ink);
+  opacity:0;transform:translate(14px,14px) scale(.9);transition:opacity .2s,transform .2s;backdrop-filter:blur(8px);white-space:nowrap}
+#tip b{color:var(--amber)}
+#tip.on{opacity:1;transform:translate(14px,14px) scale(1)}
+
+/* ---------- paint label (beat 09) ---------- */
+#swlab{position:fixed;left:clamp(16px,4.2vw,58px);bottom:9vh;z-index:50;pointer-events:none;text-align:left;opacity:0}
+#swlab .nm{font-family:var(--disp);font-size:clamp(30px,4.2vw,60px);letter-spacing:.05em;line-height:1}
+#swlab .hx{font-family:var(--mono);font-size:11px;letter-spacing:.42em;margin-top:5px;opacity:.86}
+#swlab .pr{font-family:var(--mono);font-size:10px;letter-spacing:.2em;margin-top:7px;color:#c2cad8;text-transform:uppercase}
+
+/* ---------- running quote HUD (beats 10–13) ---------- */
+#hud{position:fixed;left:clamp(16px,4.2vw,58px);bottom:22px;z-index:54;display:flex;align-items:center;gap:14px;
+  background:rgba(9,11,17,.78);border:1px solid var(--line);border-radius:44px;padding:10px 20px;backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;transform:translateY(12px)}
+#hud.on{opacity:1;transform:translateY(0)}
+#hud .hl{font-family:var(--mono);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+#hud .hv{font-family:var(--disp);font-size:30px;letter-spacing:.04em;line-height:1;color:var(--amber)}
+#hud .hd{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--ink)}
+#hud .hn{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line);padding-left:14px}
+@media(max-width:1100px){#hud .hn{display:none}}
+
+/* ---------- dossier mini-page ---------- */
+#doss{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;
+  opacity:0;pointer-events:none;transition:opacity .35s ease}
+#doss.open{opacity:1;pointer-events:auto}
+#doss .back{position:absolute;inset:0;background:rgba(3,4,8,.8);backdrop-filter:blur(14px)}
+.dcard{position:relative;width:min(1040px,100%);max-height:88vh;display:grid;grid-template-columns:1.05fr 1fr;
+  background:linear-gradient(160deg,rgba(16,19,28,.97),rgba(8,10,16,.97));border:1px solid rgba(255,255,255,.14);border-radius:20px;overflow:hidden;
+  box-shadow:0 40px 120px -30px rgba(0,0,0,.9), 0 0 90px -40px var(--dac,var(--amber));
+  transform:translateY(26px) scale(.94);transition:transform .45s cubic-bezier(.22,1,.36,1);will-change:transform}
+#doss.open .dcard{transform:translateY(0) scale(1)}
+.dmedia{position:relative;background:#06080c;min-height:340px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.dmedia video,.dmedia img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;will-change:transform;display:block}
+.dmedia .mat{position:absolute;inset:0;background:var(--dmat,#0b0e14);z-index:0}
+.dmedia video,.dmedia img{position:relative;z-index:1}
+.dmedia .lens{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(340px circle at var(--lx,50%) var(--ly,50%),rgba(255,255,255,.1),transparent 60%)}
+.dbody{padding:clamp(18px,3vw,36px);overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.dbody::-webkit-scrollbar{width:4px}.dbody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15)}
+.dtag{font-family:var(--mono);font-size:9.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--dac,var(--amber));display:flex;align-items:center;gap:10px}
+.dtag::before{content:"";width:20px;height:1px;background:var(--dac,var(--amber))}
+.dcard h3{font-family:var(--disp);font-size:clamp(36px,4.2vw,58px);line-height:.92;letter-spacing:.02em}
+.dstory{color:#c2cad8;font-size:14px;line-height:1.75}
+.dspecs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden}
+.dspecs div{background:#0b0e15;padding:11px 14px}
+.dspecs .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.dspecs .v{font-size:16px;font-weight:700;margin-top:3px}
+.dpal{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.dpal .chip{width:32px;height:32px;border-radius:9px;border:1px solid rgba(255,255,255,.25);box-shadow:0 0 22px -4px var(--dac,var(--amber))}
+.dthumbs{display:flex;gap:9px;flex-wrap:wrap}
+.dthumbs button{width:60px;height:60px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.16);background:#0b0e14;cursor:pointer;padding:0;
+  transition:transform .25s,border-color .25s;flex:none}
+.dthumbs button img{width:100%;height:100%;object-fit:cover;display:block;opacity:.75;transition:opacity .25s}
+.dthumbs button:hover{transform:translateY(-3px)}
+.dthumbs button.on{border-color:var(--dac,var(--amber))}
+.dthumbs button.on img{opacity:1}
+.dcta{margin-top:auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.dcta .go{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+  background:var(--dac,var(--amber));color:#06070b;border:0;border-radius:40px;padding:13px 22px;cursor:pointer;transition:transform .3s,box-shadow .3s}
+.dcta .go:hover{transform:translateY(-2px);box-shadow:0 14px 34px -10px var(--dac,var(--amber))}
+.dcta .go.added{background:transparent;color:var(--dac,var(--amber));border:1px solid var(--dac,var(--amber))}
+.dcta .ig2{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.dx{position:absolute;top:13px;right:13px;z-index:5;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.25);
+  background:rgba(0,0,0,.5);color:#fff;font-size:18px;cursor:pointer;backdrop-filter:blur(6px);transition:transform .3s,background .3s;line-height:1}
+.dx:hover{background:var(--amber);border-color:var(--amber);color:#000;transform:rotate(90deg)}
+@keyframes dfloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-7px) rotate(.22deg)}}
+#doss.open .dcard{animation:dfloat 7s ease-in-out 1.2s infinite}
+@media(max-width:860px){.dcard{grid-template-columns:1fr;max-height:92vh;overflow-y:auto}.dmedia{min-height:220px;height:52vw}}
+
+/* ---------- closing CTA ---------- */
+.cta{position:fixed;inset:0;z-index:52;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:0 20px;pointer-events:none;opacity:0;transition:opacity .5s;
+  background:radial-gradient(ellipse 70% 62% at 50% 50%,rgba(6,7,11,.95) 0%,rgba(6,7,11,.9) 52%,rgba(6,7,11,.5) 100%)}
+.cta.show{pointer-events:auto}
+.cta .kick{justify-content:center}
+.cta h2{font-family:var(--disp);font-size:clamp(46px,8.6vw,128px);line-height:.86;margin:12px 0}
+.cta h2 em{color:var(--amber);font-style:normal}
+.cta p{color:var(--muted);max-width:470px;margin:0 auto 20px;line-height:1.7;font-size:14.5px}
+.sumbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 auto 22px;max-width:620px}
+.sumbar span{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#c2cad8;
+  border:1px solid var(--line);border-radius:30px;padding:7px 14px;background:rgba(255,255,255,.03)}
+.sumbar span b{color:var(--amber)}
+.mailbar{display:flex;gap:10px;max-width:520px;width:100%;margin:0 auto;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:60px;padding:8px 8px 8px 22px;backdrop-filter:blur(10px)}
+.mailbar input{flex:1;background:transparent;border:0;color:var(--ink);font-family:var(--sans);font-size:14.5px;outline:none;min-width:0}
+.mailbar input::placeholder{color:var(--muted)}
+.mailbar button{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--amber);color:#0a0a0a;border:0;padding:13px 22px;border-radius:50px;cursor:pointer;font-weight:700;transition:transform .3s,box-shadow .3s;white-space:nowrap}
+.mailbar button:hover{transform:translateY(-2px);box-shadow:0 12px 30px -8px var(--amber)}
+.cta .addr{margin-top:22px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;line-height:2}
+.cta .addr b{color:var(--ink);font-weight:400}
+
+/* ---------- loader ---------- */
+.loading{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .8s}
+.loading.done{opacity:0;pointer-events:none}
+.loading .lg{font-family:var(--disp);font-size:54px;letter-spacing:.16em}
+.loading .bar{width:200px;height:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.loading .bar i{display:block;height:100%;width:0;background:var(--amber);transition:width .3s}
+.loading .lt{font-family:var(--mono);font-size:9.5px;letter-spacing:.36em;color:var(--muted)}
+
+/* ================= mobile (<=820px): real 2D page, no WebGL ================= */
+.fallback{display:none}
+@media(max-width:820px){
+  #scene,.rail,#tip,#swlab,.vig{display:none}
+  .cap,.hero-ov,.cue,#hud{display:none!important}
+  /* a scrolling document runs UNDER a fixed bar, so the phone nav carries its own scrim */
+  .nav{padding:12px 16px 20px;gap:10px;mix-blend-mode:normal;
+    background:linear-gradient(180deg,rgba(6,7,11,.97) 0%,rgba(6,7,11,.9) 58%,rgba(6,7,11,0) 100%)}
+  .brand{font-size:23px;letter-spacing:.11em}
+  .brand small{font-size:6.5px;letter-spacing:.3em;white-space:nowrap}
+  .nav-r{gap:12px;font-size:9.5px;letter-spacing:.1em}
+  .nav-r .ig span:last-child{display:none}
+  .res{padding:7px 13px;white-space:nowrap}
+  .fallback{display:block;position:relative;z-index:2}
+  .mhero{position:relative;min-height:92vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 18px 36px;overflow:hidden}
+  .mhero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .mhero .scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,7,11,.72) 0%,rgba(6,7,11,.12) 38%,rgba(6,7,11,.95) 100%)}
+  .mhero .inner{position:relative;z-index:2}
+  .mhero h1{font-family:var(--disp);font-size:clamp(54px,17vw,96px);line-height:.86;letter-spacing:.02em}
+  .mhero .sub{color:#c2cad8;font-size:14.5px;line-height:1.7;margin-top:12px;max-width:34ch}
+  .mhero .mk{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;display:block}
+  .msec{padding:52px 18px 0}
+  .msec .mk{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent,var(--amber));display:block;margin-bottom:10px}
+  .msec h2{font-family:var(--disp);font-size:clamp(36px,10vw,58px);line-height:.92;letter-spacing:.015em}
+  .msec p{color:#c2cad8;font-size:14px;line-height:1.72;margin-top:11px}
+  .msec .spec{margin-top:14px}
+  .mclip{width:100%;border-radius:14px;overflow:hidden;margin:18px 0 0;border:1px solid var(--line);background:#0b0e14}
+  .mclip video,.mclip img{width:100%;display:block;height:auto}
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  .mtile{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0a0d13;display:flex;flex-direction:column}
+  .mtile .ph{width:100%;aspect-ratio:1/1;background:#0b0e14;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .mtile .ph img,.mtile .ph video{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+  .mtile .tx{padding:11px 12px 13px}
+  .mtile .nm{font-family:var(--disp);font-size:19px;letter-spacing:.04em;line-height:1.05}
+  .mtile .mt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);margin-top:5px;text-transform:uppercase}
+  .mtile .pr{font-family:var(--mono);font-size:12px;color:var(--amber);margin-top:7px;letter-spacing:.06em}
+  .mtile.sel{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber) inset}
+  .mtile .add{margin:0 12px 12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+    background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:30px;padding:9px 0;width:calc(100% - 24px);cursor:pointer}
+  .mtile.sel .add{background:var(--amber);color:#06070b;border-color:var(--amber)}
+  .mline{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .mstep{display:grid;grid-template-columns:62px 1fr;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:11px 13px;background:#0a0d13}
+  .mstep .dy{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--amber);line-height:1.5}
+  .mstep .nm{font-family:var(--disp);font-size:21px;letter-spacing:.04em}
+  .mstep .ds{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;line-height:1.6}
+  .mhud{position:sticky;bottom:12px;z-index:9;margin:22px 18px 0;display:flex;align-items:center;gap:12px;
+    background:rgba(9,11,17,.975);border:1px solid var(--line);border-radius:44px;padding:11px 18px;backdrop-filter:blur(12px)}
+  .mhud .hl{font-family:var(--mono);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+  .mhud .hv{font-family:var(--disp);font-size:27px;color:var(--amber);line-height:1}
+  .mhud .hd{font-family:var(--mono);font-size:9.5px;color:var(--ink)}
+  .cta{position:relative;opacity:1;pointer-events:auto;min-height:auto;padding:56px 18px 64px;display:block;text-align:left}
+  .cta .kick{justify-content:flex-start}
+  .cta h2{font-size:clamp(44px,13vw,72px)}
+  .cta p,.cta .sumbar,.cta .mailbar{margin-left:0;text-align:left;justify-content:flex-start}
+  .cta .addr{text-align:left}
+  .mfoot{padding:0 18px 48px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;line-height:2.1}
+}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="vig"></div>
+<div class="grain"></div>
+
+<div class="loading" id="loading">
+  <div class="lg">OVERHAUL</div>
+  <div class="bar"><i id="lbar"></i></div>
+  <div class="lt">OPENING THE SHUTTERS…</div>
+</div>
+
+<nav class="nav">
+  <div class="brand">OVERHAUL<small>PERFORMANCE REBUILDS · EST. 2014</small></div>
+  <div class="nav-r">
+    <span class="where">DIGBETH, BIRMINGHAM · MON–SAT 08:00–18:00</span>
+    <a class="ig" href="https://instagram.com/overhaul.works" target="_blank" rel="noopener"><span class="dot"></span><span>@overhaul.works</span></a>
+    <a class="res" href="#end">Book a bay</a>
+  </div>
+</nav>
+
+<div class="hero-ov" id="heroOv">
+  <div class="mega"><span data-h>OVER</span><span class="gap"></span><span data-h style="color:transparent;-webkit-text-stroke:1.4px #eef2f8">HAUL</span></div>
+  <div class="tl">14 BUILDS A YEAR · PRICED LINE BY LINE · <b>SCROLL THE SHOP</b></div>
+</div>
+
+<div class="cap L pos-mid" id="capL"></div>
+<div class="cap R pos-mid" id="capR"></div>
+
+<div class="rail" id="rail"></div>
+<div class="cue" id="cue">SCROLL<i></i></div>
+<div id="tip"></div>
+<div id="swlab"><div class="nm"></div><div class="hx"></div><div class="pr"></div></div>
+
+<div id="hud">
+  <span class="hl">Your build</span>
+  <span class="hv" id="hudSum">£0</span>
+  <span class="hd" id="hudDays">0 bay days</span>
+  <span class="hn" id="hudNote">Tap a station to add it</span>
+</div>
+
+<div id="doss">
+  <div class="back" id="dossBack"></div>
+  <article class="dcard" id="dossCard">
+    <button class="dx" id="dossX" aria-label="close">×</button>
+    <div class="dmedia" id="dossMedia"></div>
+    <div class="dbody" id="dossBody"></div>
+  </article>
+</div>
+
+<div class="cta" id="cta">
+  <span class="kick" style="--accent:var(--amber)">2026 Intake · 14 bays</span>
+  <h2>BOOK<br><em>A BAY.</em></h2>
+  <p>Tell us the car and the number you want on the dyno sheet. We quote in writing within three working days — parts, labour and paint, line by line.</p>
+  <div class="sumbar" id="sumbar"></div>
+  <form class="mailbar" onsubmit="return false"><input type="email" placeholder="you@email.com — and what you're driving" /><button>Send it over</button></form>
+  <div class="addr">
+    <b>Unit 7, Floodgate Works, Digbeth, Birmingham B9 4AA</b><br>
+    0121 496 0714 · build@overhaul.works · <b>@overhaul.works</b>
+  </div>
+</div>
+
+<div class="scroller" id="scroller"></div>
+<div class="fallback" id="fallback"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* ============================================================
+   OVERHAUL — real shop, real cars, 13 beats on one 3D spine.
+   Beats 01–09 rebuild the original hall / rotunda / paint desk.
+   Beats 10–13 are all-new and practical: services, timeline,
+   stock, and a bookable intake slot — all feeding one quote.
+   ============================================================ */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const gbp=n=>'£'+n.toLocaleString('en-GB');
+/* a near-black finish still needs a readable label on a near-black page */
+function readable(hex){
+  const n=parseInt(hex.slice(1),16), r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+  const lum=(0.2126*r+0.7152*g+0.0722*b)/255;
+  if(lum>=0.3) return hex;
+  const k=0.3/Math.max(lum,0.02), mix=Math.min(1,(0.3-lum)/0.3);
+  const up=v=>Math.round(Math.min(255,v*k*(1-mix)+200*mix));
+  return 'rgb('+up(r)+','+up(g)+','+up(b)+')';
+}
+
+const AC={amber:'#ff7a1f',blue:'#3ea9ff',red:'#e0273c',lime:'#a9e62b',ink:'#eef2f8'};
+
+/* ---------- BEATS 01–07 · THE HALL (seven bays, real film) ---------- */
+const STOPS=[
+  {v:'vid/gtr-dawn.mp4',  side:'R',accent:AC.amber,dim:1.00,kick:'Bay 01 — The doctrine',dk:'b0',
+   title:'EVERY BOLT,<br>ON RECORD.',
+   sub:'A full build runs 56 days and about 2,100 hours on our floor. You get photographs every Friday and a parts list you can check line by line.',
+   spec:[['Workshop','Digbeth, B9'],['Builds / year','14']]},
+  {v:'vid/gtr-night.mp4', side:'L',accent:AC.blue,dim:1.00,kick:'Bay 02 — Night shift',dk:'b1',
+   title:'THE DYNO<br>RUNS LATE.',
+   sub:'Pulls happen after six, when the ambient drops and the numbers stop flattering anybody. Every car leaves with its own printed sheet.',
+   spec:[['Dyno','Mainline 4WD'],['Sheet','Printed, signed']]},
+  {v:'vid/exhaust.mp4',   side:'R',accent:AC.amber,dim:1.00,kick:'Bay 03 — Breathing',dk:'b2',
+   title:'EXHAUST,<br>INTAKE, <span class="stroke">ECU.</span>',
+   sub:'Valved titanium, 3.5in downpipes and a map written on your fuel. A standard R35 goes 565 to 812 bhp without the block ever coming out.',
+   spec:[['From','£2,400'],['Lead time','4 days']]},
+  {v:'vid/gt3-arch.mp4',  side:'L',accent:AC.blue,dim:0.78,kick:'Bay 04 — Stance',dk:'b3',
+   title:'WHEELS AND<br>RIDE HEIGHT.',
+   sub:'Forged centre-locks, corner-weighted on the pads, geometry set to the sheet you sign off. Every shim and spacer is photographed before it goes in.',
+   spec:[['From','£4,100'],['Geo','Corner-weighted']]},
+  {v:'vid/gt3-bridge.mp4',side:'R',accent:AC.blue,dim:0.86,kick:'Bay 05 — Road proof',dk:'b4',
+   title:'SIGNED OFF<br>ON THE ROAD.',
+   sub:'Four hundred shakedown miles before you ever see it — motorway, B-road, cold starts — then the whole car comes back in for a full re-torque.',
+   spec:[['Shakedown','400 mi'],['Re-torque','Included']]},
+  {v:'vid/hura-red.mp4',  side:'L',accent:AC.red,dim:1.00,kick:'Bay 06 — Collected',dk:'b5',
+   title:'BUILD №112,<br>OUT IN OCTOBER.',
+   sub:'Huracán, Rosso Mars respray, valved Novitec system, 661 bhp at the wheels. Twelve weeks door to door, and the owner drove it home.',
+   spec:[['Build','№112'],['Power','661 bhp']]},
+  {v:'vid/keys.mp4',      side:'R',accent:AC.amber,dim:1.00,kick:'Bay 07 — Handover',dk:'b6',
+   title:'KEYS, FOLDER,<br>AND THE OLD PARTS.',
+   sub:'Every car goes home with its build folder, the dyno sheet, the torque log, and a crate holding every original component we took off it.',
+   spec:[['Handover','In person'],['Warranty','24 months']]}
+];
+
+/* ---------- BEAT 09 · THE PAINT DESK (real finishes, real prices) ---------- */
+const PAINTS=[
+  {key:'blue',   img:'img/p-blue.jpg',   hex:'#2E9BE6',name:'SHARK BLUE',  price:6900, days:18,
+   note:'Three stages over a graphite base. Reads near-black in a car park and electric the moment the sun finds it.'},
+  {key:'yellow', img:'img/p-yellow.jpg', hex:'#FFC400',name:'SIGNAL YELLOW',price:7400,days:19,
+   note:'A solid, not a metallic. The hardest colour in the shop to lay flat, which is exactly why we charge for it.'},
+  {key:'lime',   img:'img/p-lime.jpg',   hex:'#A9E62B',name:'ACID LIME',   price:7900, days:21,
+   note:'Mixed in-house against a chip the owner brought in. Four coats of clear so the edges never go chalky.'},
+  {key:'violet', img:'img/p-violet.jpg', hex:'#8B5CF6',name:'ULTRAVIOLET', price:9200, days:24,
+   note:'Violet pearl over black. Needs a controlled booth and a full week of cure before anybody touches it.'},
+  {key:'amber',  img:'img/p-amber.jpg',  hex:'#D9A23B',name:'BRUSHED GOLD',price:11500,days:26,
+   note:'Our most expensive finish. Hand-laid flake, sanded between coats, and it will show every repair you ever have done badly.'},
+  {key:'red',    img:'img/p-red.jpg',    hex:'#D81E2C',name:'BLOOD RED',   price:6900, days:18,
+   note:'Two-stage solid red with a tinted clear. Still the colour most owners come back to after a year of thinking about it.'},
+  {key:'mid',    img:'img/p-midnight.jpg',hex:'#11151C',name:'MIDNIGHT',   price:5800, days:16,
+   note:'Flat black with a 15% sheen. Cheapest on the board and the least forgiving panel work we do.'}
+];
+
+/* ---------- BEAT 10 · THE BAY (six stations, tap to price them) ---------- */
+const SVC=[
+  {key:'ecu',src:'part/engine.jpg',  name:'ECU & BOOST',     from:4800, days:12,accent:AC.amber,
+   det:'Bench-flashed ECU, uprated turbos or a hybrid pair, upgraded fuelling, and six dyno sessions to settle the map on your pump fuel.',
+   inc:[['Includes','Map + fuelling'],['Dyno','6 sessions'],['Gain, typical','+180 bhp'],['Warranty','24 months']]},
+  {key:'exh',src:'vid/exhaust.mp4',  name:'EXHAUST & INTAKE',from:2400, days:4, accent:AC.amber,
+   det:'Valved titanium cat-back, 3.5in downpipes, high-flow intakes. Fitted, pressure-tested and re-mapped the same week.',
+   inc:[['Includes','Cat-back + DPs'],['Material','Titanium'],['Fit time','4 days'],['Re-map','Included']]},
+  {key:'sus',src:'part/coilover.jpg',name:'SUSPENSION & GEO', from:3200, days:5, accent:AC.blue,
+   det:'Three-way adjustable coilovers, spherical top mounts, corner-weighted on our pads and set to a geometry sheet you keep.',
+   inc:[['Damping','3-way'],['Corner weights','Yes'],['Geo sheet','Signed'],['Fit time','5 days']]},
+  {key:'brk',src:'part/brakes.jpg',  name:'BIG BRAKE KIT',    from:5600, days:3, accent:AC.red,
+   det:'Six-pot front, four-pot rear, floating two-piece discs, braided lines and a full bed-in on the road before handover.',
+   inc:[['Front','6-pot'],['Discs','2-piece float'],['Lines','Braided'],['Bed-in','On road']]},
+  {key:'whl',src:'part/wheels.jpg',  name:'FORGED WHEELS',    from:4100, days:7, accent:AC.blue,
+   det:'Monoblock forged sets, built to your offsets, hub-centric rings machined in-house and road-force balanced before they go on.',
+   inc:[['Build','Monoblock'],['Offsets','To order'],['Balance','Road-force'],['Lead time','7 days']]},
+  {key:'str',src:'part/teardown.jpg',name:'FULL STRIP & REBUILD',from:18400,days:42,accent:AC.amber,
+   det:'The whole car to a bare shell. Every component catalogued, photographed, replaced or refinished, then built back with a new torque log.',
+   inc:[['Scope','Bare shell'],['Parts logged','1,800+'],['Bay days','42'],['Photos','Weekly']]}
+];
+
+/* ---------- BEAT 11 · THE LINE (what actually happens, by day) ---------- */
+const LINE=[
+  {src:'img/c-e63.jpg',     name:'INTAKE & SCAN',  day:'DAY 00–02',accent:AC.blue, plate:'Leak-down, OBD scan, 180 photographs',
+   det:'Compression and leak-down, full OBD scan, 180 photographs and a written list of everything already wrong with it.'},
+  {src:'part/teardown.jpg', name:'FULL STRIP',     day:'DAY 02–09',accent:AC.amber,plate:'Every part bagged, labelled, shelved',
+   det:'Panels, loom, drivetrain and interior out. Each part bagged, labelled and shelved on your own rack.'},
+  {src:'part/chassis.jpg',  name:'FABRICATION',    day:'DAY 09–24',accent:AC.blue, plate:'Welding, bracketry, arches, mounts',
+   det:'Welding, bracketry, arches and mounts. Anything we make for your car gets drawn first and kept on file.'},
+  {src:'img/p-lime.jpg',    name:'PAINT & CURE',   day:'DAY 24–38',accent:AC.lime, plate:'Bare metal, booth, a week of cure',
+   det:'Bare-metal prep, booth time and a full week of cure. Nothing is refitted to wet paint, ever.'},
+  {src:'part/engine.jpg',   name:'ASSEMBLY & MAP', day:'DAY 38–52',accent:AC.amber,plate:'Torque log, fluids, then the dyno',
+   det:'Build-up to the torque log, fluids, then the dyno until the map holds through heat-soak.'},
+  {src:'vid/keys.mp4',      name:'SIGN-OFF',       day:'DAY 52–56',accent:AC.amber,plate:'Shakedown, re-torque, handover',
+   det:'Shakedown miles, re-torque, detail, and a handover where we walk the whole folder with you.'}
+];
+
+/* ---------- BEAT 12 · THE FLOOR (what is on the floor right now) ---------- */
+const FLOOR=[
+  {key:'f0',src:'img/c-gtr.jpg',    name:'R35 GT-R',   trim:'Widebody · 812 bhp',  price:94500, status:'FOR SALE',accent:AC.blue,
+   det:'Build №104. Hybrid turbos, dry-sump conversion, full Rocket Bunny arches over forged centre-locks. 4,100 miles since completion.'},
+  {key:'f1',src:'img/c-720s.jpg',   name:'720S',       trim:'Track spec · 755 bhp',price:168000,status:'RESERVED',accent:AC.ink,
+   det:'Stripped interior, half-cage, Inconel system and a geometry setup done on our pads for Donington. Deposit taken 14 October.'},
+  {key:'f2',src:'img/c-e63.jpg',    name:'E63 S',      trim:'Daily brute · 712 bhp',price:78900,status:'FOR SALE',accent:AC.ink,
+   det:'The quiet one. Stage 2, uprated intercoolers, air suspension left alone on purpose. Two owners, full history, drives like standard until it does not.'},
+  {key:'f3',src:'img/c-zr1.jpg',    name:'CORVETTE ZR1',trim:'Showroom · 755 bhp', price:132000,status:'SOLD',    accent:AC.amber,
+   det:'Sold in September to a customer in Leeds. Listed here because people keep asking what happened to it.'},
+  {key:'f4',src:'img/c-vette.jpg',  name:'C8',         trim:'Red cage · 670 bhp',  price:119000,status:'IN BUILD',accent:AC.red,
+   det:'Currently on the lift at day 31. Supercharged, cage in, red leather retrim going in next week. Available if the current deposit falls through.'},
+  {key:'f5',src:'img/c-hellcat.jpg',name:'HELLCAT',    trim:'Drag spec · 1,020 bhp',price:86500,status:'FOR SALE',accent:AC.red,
+   det:'Built for the eighth-mile and street-legal by about a millimetre. 9.6 at 146 on the slicks, and it will still idle in traffic.'},
+  {key:'f6',src:'img/c-urus.jpg',   name:'URUS',       trim:'Blackout · 690 bhp',  price:145000,status:'SOLD',    accent:AC.ink,
+   det:'De-chromed, 24in forged, full PPF over satin. Delivered in August to its second OVERHAUL owner.'},
+  {key:'f7',src:'img/c-mustang.jpg',name:'MUSTANG GT', trim:'Stripe car · 580 bhp',price:62000, status:'FOR SALE',accent:AC.ink,
+   det:'Supercharged 5.0, Watts link, proper brakes. The cheapest way out of our door into something genuinely quick.'}
+];
+
+/* ---------- BEAT 13 · THE BOOK (intake slots) ---------- */
+const SLOTS=[
+  {key:'q1',q:'Q1',yr:'2026',left:0,src:'img/c-gt3rs.jpg', accent:AC.ink,  note:'Closed — all four bays committed'},
+  {key:'q2',q:'Q2',yr:'2026',left:1,src:'img/p-violet.jpg',accent:AC.amber,note:'One bay left, starts 6 April'},
+  {key:'q3',q:'Q3',yr:'2026',left:3,src:'img/c-gtr.jpg',   accent:AC.blue, note:'Three bays, starts 6 July'},
+  {key:'q4',q:'Q4',yr:'2026',left:4,src:'img/p-yellow.jpg',accent:AC.blue, note:'Open — starts 5 October'}
+];
+
+/* ---------- act captions (beats 08–13) ---------- */
+const ACTS={
+  rotunda:{kick:'Beat 08 — The floor',title:'ONE TURN OF<br>THE WORKSHOP.',
+    sub:'Every car we have filmed this year, orbiting at eye level. Tap any screen and the full build file opens — parts, hours and what it cost.',
+    spec:[['Films','07'],['Axis','You']],side:'R',accent:AC.blue,tap:1},
+  paint:{kick:'Beat 09 — The paint desk',title:'PICK IT OFF<br>THE DECK.',
+    sub:'Seven finishes we actually spray, fanned out like the deck we hand you in the office. Each card carries its real price and its real cure time.',
+    spec:[['Finishes','07'],['From','£5,800']],side:'R',accent:'#A9E62B',tap:1},
+  bay:{kick:'Beat 10 — The bay',title:'BUILD THE<br>QUOTE YOURSELF.',
+    sub:'Six stations, six real prices. Tap the ones you want and the running total in the corner is the number we will put in writing.',
+    spec:[['Stations','06'],['From','£2,400']],side:'L',accent:AC.amber,tap:2},
+  line:{kick:'Beat 11 — The line',title:'FIFTY-SIX DAYS,<br>IN ORDER.',
+    sub:'This is the whole programme. No stage starts before the one in front of it signs off, and you get photographs at the end of every week.',
+    spec:[['Total','56 days'],['Updates','Weekly']],side:'R',accent:AC.blue},
+  floor:{kick:'Beat 12 — On the floor',title:'WHAT IS HERE<br>TODAY.',
+    sub:'Finished cars, cars mid-build, and two we have already sold but people keep asking about. Tap any of them for the full listing.',
+    spec:[['Cars','08'],['Updated','This week']],side:'L',accent:AC.ink,tap:1},
+  book:{kick:'Beat 13 — The book',title:'FOUR BAYS<br>A QUARTER.',
+    sub:'That is the whole year. Pick the quarter you want and we will hold it for seven days while the written quote comes back to you.',
+    spec:[['Bays / quarter','04'],['Hold','7 days']],side:'R',accent:AC.amber,tap:3}
+};
+
+/* ---------- the spine ---------- */
+const SP=17, N=STOPS.length;
+// the camera stops ten units SHORT of the last bay, so every car is still ahead of
+// you — large and centred — for its whole dwell, and no beat ends on an empty aisle
+const HALL_Z0=14, HALL_Z1=-(N-1)*SP+10;   // 14 -> -92
+const BANDS=[
+  {name:'hall',   p0:0.00,p1:0.34,z0:HALL_Z0,z1:HALL_Z1},
+  {name:'rotunda',p0:0.34,p1:0.44,z0:HALL_Z1,z1:-172},
+  {name:'paint',  p0:0.44,p1:0.55,z0:-172,z1:-206},
+  {name:'bay',    p0:0.55,p1:0.67,z0:-206,z1:-246},
+  {name:'line',   p0:0.67,p1:0.79,z0:-246,z1:-300},
+  {name:'floor',  p0:0.79,p1:0.90,z0:-300,z1:-338},
+  {name:'book',   p0:0.90,p1:1.00,z0:-338,z1:-374}
+];
+const BZ=n=>BANDS.find(b=>b.name===n);
+const BEAT={hall:0,rotunda:7,paint:8,bay:9,line:10,floor:11,book:12};
+const TOTBEATS=13;
+
+/* ---------- the running quote ---------- */
+const BUILD={svc:new Set(),paint:null,slot:null};
+function quoteTotals(){
+  let money=0,days=0;
+  BUILD.svc.forEach(k=>{const s=SVC.find(x=>x.key===k); if(s){money+=s.from;days+=s.days;}});
+  if(BUILD.paint){const p=PAINTS.find(x=>x.key===BUILD.paint); if(p){money+=p.price;days+=p.days;}}
+  return {money,days};
+}
+function quoteNote(){
+  if(!BUILD.svc.size&&!BUILD.paint) return 'Tap a station to add it';
+  const bits=[];
+  if(BUILD.svc.size) bits.push(BUILD.svc.size+(BUILD.svc.size===1?' station':' stations'));
+  if(BUILD.paint) bits.push('paint');
+  if(BUILD.slot){const s=SLOTS.find(x=>x.key===BUILD.slot); if(s) bits.push(s.q+' '+s.yr);}
+  return bits.join(' · ');
+}
+function refreshQuote(){
+  const {money,days}=quoteTotals();
+  const hs=document.getElementById('hudSum'), hd=document.getElementById('hudDays'), hn=document.getElementById('hudNote');
+  if(hs) hs.textContent=gbp(money);
+  if(hd) hd.textContent=days+' bay days';
+  if(hn) hn.textContent=quoteNote();
+  const mS=document.getElementById('mHudSum'), mD=document.getElementById('mHudDays');
+  if(mS) mS.textContent=gbp(money);
+  if(mD) mD.textContent=days+' bay days';
+  const sb=document.getElementById('sumbar');
+  if(sb){
+    const rows=[];
+    BUILD.svc.forEach(k=>{const s=SVC.find(x=>x.key===k); if(s) rows.push('<span>'+s.name+' <b>'+gbp(s.from)+'</b></span>');});
+    if(BUILD.paint){const p=PAINTS.find(x=>x.key===BUILD.paint); if(p) rows.push('<span>'+p.name+' <b>'+gbp(p.price)+'</b></span>');}
+    if(BUILD.slot){const s=SLOTS.find(x=>x.key===BUILD.slot); if(s) rows.push('<span>Intake <b>'+s.q+' '+s.yr+'</b></span>');}
+    rows.push('<span>Running total <b>'+gbp(money)+' · '+days+' bay days</b></span>');
+    sb.innerHTML=rows.join('');
+  }
+  document.querySelectorAll('[data-sel]').forEach(el=>{
+    const k=el.getAttribute('data-sel'), kind=el.getAttribute('data-kind');
+    const on=(kind==='svc'&&BUILD.svc.has(k))||(kind==='paint'&&BUILD.paint===k)||(kind==='slot'&&BUILD.slot===k);
+    el.classList.toggle('sel',on);
+    const btn=el.querySelector('.add'); if(btn) btn.textContent=on?'Added ✓':'Add to build';
+  });
+}
+function toggleSvc(k){ BUILD.svc.has(k)?BUILD.svc.delete(k):BUILD.svc.add(k); refreshQuote(); }
+function pickPaint(k){ BUILD.paint=(BUILD.paint===k)?null:k; refreshQuote(); }
+function pickSlot(k){ const s=SLOTS.find(x=>x.key===k); if(s&&s.left===0) return; BUILD.slot=(BUILD.slot===k)?null:k; refreshQuote(); }
+
+/* ---------- dossiers (tap a tile → a real mini page) ---------- */
+const DOSSIER={};
+STOPS.forEach((s,i)=>{DOSSIER[s.dk]={type:'vid',src:'assets/'+s.v,accent:s.accent,mat:'#0b0e14',kick:s.kick,
+  name:s.title.replace(/<br>/g,' ').replace(/<[^>]+>/g,''),story:s.sub,
+  spec:s.spec.concat([['Bay days','56'],['Photos','Every Friday']]),hex:s.accent};});
+PAINTS.forEach(p=>{DOSSIER['p_'+p.key]={type:'img',src:'assets/'+p.img,accent:p.hex,mat:p.hex+'1a',kick:'Finish — mixed in-house',name:p.name,story:p.note,
+  spec:[['Price',gbp(p.price)],['Cure + prep',p.days+' days'],['Code',p.hex.toUpperCase()],['Warranty','5 years']],hex:p.hex,
+  act:{kind:'paint',key:p.key,label:'Put it on my build'}};});
+SVC.forEach(s=>{DOSSIER['s_'+s.key]={type:s.src.indexOf('vid/')===0?'vid':'img',src:'assets/'+s.src,accent:s.accent,mat:'#0b0e14',
+  kick:'Station — fixed price from',name:s.name,story:s.det,spec:s.inc,hex:s.accent,
+  act:{kind:'svc',key:s.key,label:'Add '+gbp(s.from)+' to my build'}};});
+FLOOR.forEach(c=>{DOSSIER[c.key]={type:'img',src:'assets/'+c.src,accent:c.accent,mat:'#0b0e14',kick:c.status+' — '+c.trim,name:c.name,story:c.det,
+  spec:[['Price',gbp(c.price)],['Status',c.status],['Spec',c.trim.split(' · ')[1]||c.trim],['Location','Digbeth floor']],hex:c.accent};});
+SLOTS.forEach(s=>{DOSSIER['q_'+s.key]={type:'img',src:'assets/'+s.src,accent:s.accent,mat:'#0b0e14',kick:'Intake slot — '+s.q+' '+s.yr,
+  name:s.q+' '+s.yr,story:s.note+'. A slot holds your bay for seven days from the moment we send the written quote — no deposit until you have read it.',
+  spec:[['Bays','04'],['Left',String(s.left)],['Starts',s.q==='Q1'?'5 January':s.q==='Q2'?'6 April':s.q==='Q3'?'6 July':'5 October'],['Hold','7 days']],hex:s.accent,
+  act:s.left>0?{kind:'slot',key:s.key,label:'Hold this quarter'}:null};});
+
+/* ================= MEDIA — true aspect, autoplay-loop, visibility-managed ================= */
+const VID={}, IMG={}, CARDS=[];
+const UNIT=new THREE.PlaneGeometry(1,1);
+let TEXLOAD=null;
+
+function media(path){
+  if(path.indexOf('vid/')===0){
+    if(VID[path]) return VID[path];
+    const v=document.createElement('video');
+    v.src='assets/'+path; v.muted=true; v.loop=true; v.playsInline=true; v.preload='auto'; v.crossOrigin='anonymous';
+    v.setAttribute('muted',''); v.setAttribute('playsinline','');
+    const tex=new THREE.VideoTexture(v); tex.minFilter=tex.magFilter=THREE.LinearFilter; tex.generateMipmaps=false;
+    const rec={kind:'vid',v,tex,ar:1.7778,ready:false,want:0};
+    v.addEventListener('loadeddata',()=>{ if(v.videoWidth) rec.ar=v.videoWidth/v.videoHeight; rec.ready=true; syncCards(); noteReady(); });
+    v.addEventListener('error',noteReady,{once:true});
+    VID[path]=rec; return rec;
+  }
+  if(IMG[path]) return IMG[path];
+  const rec={kind:'img',ar:1,ready:false,tex:null};
+  rec.tex=TEXLOAD.load('assets/'+path,t=>{ if(t.image&&t.image.width) rec.ar=t.image.width/t.image.height; rec.ready=true; syncCards(); });
+  rec.tex.minFilter=THREE.LinearFilter; rec.tex.generateMipmaps=false;
+  IMG[path]=rec; return rec;
+}
+function syncCards(){ CARDS.forEach(c=>c.sync()); }
+
+/* a media card: a group whose inner mesh always carries the media's TRUE aspect,
+   so nothing is ever stretched or cropped. Outer group owns position/rotation/scale. */
+function card(path,h,accent,frameCol){
+  const rec=media(path);
+  const grp=new THREE.Group();
+  const mat=new THREE.MeshBasicMaterial({map:rec.tex,transparent:true,opacity:0,toneMapped:false,side:THREE.DoubleSide,
+    color:new THREE.Color(1,1,1)});
+  const mesh=new THREE.Mesh(UNIT,mat);
+  let frame=null,fmat=null;
+  if(accent!==false){
+    fmat=new THREE.MeshBasicMaterial({color:new THREE.Color(frameCol||accent||'#ffffff'),transparent:true,opacity:0,side:THREE.DoubleSide});
+    frame=new THREE.Mesh(UNIT,fmat); frame.position.z=-0.02; grp.add(frame);
+  }
+  grp.add(mesh);
+  const c={grp,mesh,mat,frame,fmat,rec,h,pad:0.14,
+    sync(){ const w=c.h*c.rec.ar; c.mesh.scale.set(w,c.h,1); if(c.frame) c.frame.scale.set(w+c.pad,c.h+c.pad,1); },
+    w(){ return c.h*c.rec.ar; },
+    setH(v){ if(v!==c.h){ c.h=v; c.sync(); } },
+    op(v,fv){ c.mat.opacity=v; if(c.fmat) c.fmat.opacity=(fv===undefined?v*0.5:fv); },
+    tint(v){ c.mat.color.setScalar(v); },
+    play(w){ if(c.rec.kind==='vid') c.rec.want=Math.max(c.rec.want,w); }
+  };
+  c.sync(); CARDS.push(c);
+  return c;
+}
+function resetWants(){ for(const k in VID) VID[k].want=0; }
+function manageVideos(){
+  // play only what the camera can actually see — never more than five at once
+  const list=Object.keys(VID).map(k=>VID[k]).sort((a,b)=>b.want-a.want);
+  list.forEach((r,i)=>{
+    const on=r.want>0.02&&i<5;
+    if(on){ if(r.v.paused){ const pr=r.v.play(); if(pr&&pr.catch) pr.catch(()=>{}); } }
+    else if(!r.v.paused) r.v.pause();
+  });
+}
+
+/* ---------- canvas plates: in-world type, so labels live in the 3D space ---------- */
+const PLATES=[];
+function plate(draw,w,h){
+  const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+  const tex=new THREE.CanvasTexture(cv); tex.minFilter=THREE.LinearFilter; tex.generateMipmaps=false;
+  const rec={cv,tex,draw,w,h,render(){ const x=cv.getContext('2d'); x.clearRect(0,0,w,h); draw(x,w,h); tex.needsUpdate=true; }};
+  rec.render(); PLATES.push(rec); return rec;
+}
+function plateMesh(rec,worldW){
+  const m=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({map:rec.tex,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));
+  m.scale.set(worldW, worldW*rec.h/rec.w, 1);
+  return m;
+}
+function stationPlate(title,right,left,accent,sub){
+  return plate((x,w,h)=>{
+    x.font='700 30px JetBrains Mono, monospace'; x.fillStyle=accent; x.textAlign='left';
+    x.fillText(left.toUpperCase(),0,32);
+    if(right){ x.textAlign='right'; x.fillStyle='#eef2f8'; x.fillText(right.toUpperCase(),w,32); }
+    x.textAlign='left'; x.font='64px Bebas Neue, sans-serif'; x.fillStyle='#eef2f8';
+    x.fillText(title.toUpperCase(),0,100);
+    x.fillStyle=accent; x.fillRect(0,116,w,3);
+    if(sub){ x.font='24px JetBrains Mono, monospace'; x.fillStyle='rgba(200,208,222,.8)'; x.fillText(sub.toUpperCase(),0,152); }
+  },760,170);
+}
+
+/* ================= SCENE ================= */
+let renderer,scene,camera,dust,raycaster,pointer=new THREE.Vector2(0,0),hoverObj=null,pointerLive=false;
+let camZ=HALL_Z0,targetZ=HALL_Z0,camX=0,camY=0,curProg=0,curBand='',ACTOBJS=[],hallPanels=[],gHall,gEnv;
+const canvas=document.getElementById('scene');
+const isMobile=matchMedia('(max-width:820px)').matches;
+
+/* glow sprite so lights bloom instead of rendering as grey bricks */
+let GLOWTEX=null;
+function glowTex(){
+  if(GLOWTEX) return GLOWTEX;
+  const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d');
+  const gr=x.createRadialGradient(64,64,2,64,64,64);
+  gr.addColorStop(0,'rgba(255,255,255,1)'); gr.addColorStop(.34,'rgba(255,255,255,.44)'); gr.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle=gr; x.fillRect(0,0,128,128); GLOWTEX=new THREE.CanvasTexture(c); return GLOWTEX;
+}
+function glowMesh(w,h,col){
+  const m=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({map:glowTex(),color:new THREE.Color(col),transparent:true,opacity:0,
+    blending:THREE.AdditiveBlending,depthWrite:false}));
+  m.scale.set(w,h,1); return m;
+}
+
+/* The featured car holds a constant, large, centred share of the frame the whole way in —
+   and because it is solved from the clip's OWN aspect, a 2.34:1 cinematic cut and a 16:9
+   cut both land at the same width, leaving the same clean gutters for the caption. */
+const TW=0.44;
+function featuredH(rec,ahead,cap){
+  const d=Math.max(ahead,0.5);
+  const visW=2*d*Math.tan(camera.fov*Math.PI/360)*camera.aspect;
+  return Math.min(cap, Math.max(0.3, (visW*TW)/Math.max(rec.ar,0.25)));
+}
+
+function build3D(){
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(2,devicePixelRatio));
+  renderer.setSize(innerWidth,innerHeight);
+  scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x06070b,0.0168);
+  camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,0.1,460);
+  camera.position.set(0,0,camZ);
+  raycaster=new THREE.Raycaster();
+  TEXLOAD=new THREE.TextureLoader();
+
+  buildEnv();
+  buildHall();
+  buildActs();
+
+  const rail=document.getElementById('rail');
+  for(let i=0;i<TOTBEATS;i++){
+    const d=document.createElement('div'); d.className='d'; rail.appendChild(d);
+    if(i===6||i===8){ const s=document.createElement('div'); s.className='sep'; rail.appendChild(s); }
+  }
+
+  addEventListener('resize',onResize);
+  addEventListener('pointermove',e=>{
+    pointer.x=(e.clientX/innerWidth)*2-1; pointer.y=-(e.clientY/innerHeight)*2+1; pointerLive=true;
+    tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px';
+  },{passive:true});
+}
+
+/* ---------- the workshop itself: this is what moves, so the car never has to ---------- */
+const ENVZ0=14, ENVZ1=-392;
+/* the workshop is scenery: it never writes depth, so a pillar can't cut a car in half */
+function envAdd(o,base){ o.material.transparent=true; o.material.opacity=base; o.material.depthWrite=false;
+  o.userData.envBase=base; o.renderOrder=-5; gEnv.add(o); }
+function buildEnv(){
+  gEnv=new THREE.Group(); scene.add(gEnv);
+
+  const grid=new THREE.GridHelper(420,84,0x1b2232,0x11151e);
+  grid.position.set(0,-4.6,(ENVZ0+ENVZ1)/2); envAdd(grid,0.85);
+  const ceil=new THREE.GridHelper(420,42,0x151a26,0x0d1017);
+  ceil.position.set(0,7.6,(ENVZ0+ENVZ1)/2); envAdd(ceil,0.6);
+
+  // overhead strip lights streaming past — the parallax engine
+  for(let z=ENVZ0;z>ENVZ1;z-=11){
+    const g=glowMesh(7.2,1.5,0xffd9a8); g.position.set(0,7.0,z); envAdd(g,0.30);
+    const bar=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0xfff0d8,transparent:true,depthWrite:false}));
+    bar.scale.set(5.4,0.09,1); bar.position.set(0,7.0,z); envAdd(bar,0.5);
+  }
+  // side bays: dark pillars with a lit edge, left and right
+  for(let z=ENVZ0;z>ENVZ1;z-=SP){
+    [-1,1].forEach(s=>{
+      const p=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0x0a0d14,transparent:true,side:THREE.DoubleSide}));
+      p.scale.set(1.5,12.4,1); p.position.set(s*10.6,1.4,z); p.rotation.y=-s*Math.PI/2; envAdd(p,0.92);
+      const edge=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0x33506e,transparent:true,depthWrite:false}));
+      edge.scale.set(0.07,12.4,1); edge.position.set(s*9.86,1.4,z); edge.rotation.y=-s*Math.PI/2; envAdd(edge,0.55);
+      const fl=glowMesh(2.6,2.6,0x3ea9ff); fl.position.set(s*9.7,4.6,z); envAdd(fl,0.16);
+    });
+  }
+  // floor haze
+  const hz=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({map:glowTex(),color:0x1d3550,transparent:true,
+    blending:THREE.AdditiveBlending,depthWrite:false}));
+  hz.scale.set(48,22,1); hz.rotation.x=-Math.PI/2; hz.position.set(0,-4.4,-180); envAdd(hz,0.22);
+
+  const gp=new THREE.BufferGeometry(); const cnt=520; const arr=new Float32Array(cnt*3);
+  for(let i=0;i<cnt;i++){arr[i*3]=(Math.random()-0.5)*44;arr[i*3+1]=(Math.random()-0.5)*20;arr[i*3+2]=(Math.random()-0.5)*72;}
+  gp.setAttribute('position',new THREE.BufferAttribute(arr,3));
+  dust=new THREE.Points(gp,new THREE.PointsMaterial({color:0x8fa2c0,size:0.052,transparent:true,opacity:0.46,depthWrite:false}));
+  scene.add(dust);
+}
+
+/* ---------- BEATS 01–07 · the hall ---------- */
+function buildHall(){
+  gHall=new THREE.Group(); scene.add(gHall);
+  STOPS.forEach((s,i)=>{
+    const z=-i*SP;
+    const c=card(s.v,4.4,s.accent);
+    c.grp.position.set(0,0,z);
+    c.mesh.userData.dk=s.dk; c.mesh.userData.nm=DOSSIER[s.dk].name;
+    const halo=glowMesh(1,1,s.accent); halo.position.z=-0.3; c.grp.add(halo);
+    gHall.add(c.grp);
+    hallPanels.push({i,c,z,halo,dim:s.dim,phase:Math.random()*6.28,accent:s.accent});
+  });
+}
+
+/* ===== BEAT 08 — THE FLOOR TURNS (a turntable of every film, parked a readable
+   distance ahead; scroll spins the room, the front screen is always big and centred) ===== */
+function buildRotunda(z0,z1){
+  const g=new THREE.Group(); const items=[]; const R=8.0, LAT=0.44, DIST=21;
+  STOPS.forEach((s,k)=>{
+    const c=card(s.v,4.4,s.accent);
+    c.mesh.userData.dk=s.dk; c.mesh.userData.nm=DOSSIER[s.dk].name;
+    g.add(c.grp); items.push({c,k,phase:Math.random()*6.28,dim:s.dim});
+  });
+  g.visible=false; scene.add(g);
+  return {g,clicks:items.map(i=>i.c.mesh),update(l,t){
+    const cz=camZ-DIST;
+    const vis=smooth(clamp(l/0.1,0,1))*smooth(clamp((1-l)/0.1,0,1));
+    const spin=l*Math.PI*2+t*0.022;
+    items.forEach(it=>{
+      const ang=it.k*(Math.PI*2/items.length)+spin;
+      const ca=Math.cos(ang);
+      const front=smooth(clamp((ca-0.3)/0.7,0,1));          // only the screen facing you is "live"
+      const x=Math.sin(ang)*R*LAT, z=cz+ca*R;
+      const bob=Math.sin(t*0.5+it.phase)*0.17;
+      const y=bob-(1-front)*1.7+pointer.y*0.3*front;        // the rest sink out of the caption gutters
+      const hov=(hoverObj===it.c.mesh)?1:0;
+      it.c.setH(lerp(0.52,1,front)*featuredH(it.c.rec,camZ-z,6.0));   // same frame share whatever the cut's aspect
+      it.c.grp.position.set(x+pointer.x*0.5*front,y,z);
+      it.c.grp.lookAt(camera.position.x*0.3,y,z+R*2.4);
+      it.c.grp.scale.setScalar(1+hov*0.05);
+      it.c.tint(it.dim);
+      it.c.op((0.3+0.7*front)*vis*(0.9+0.1*hov),(0.14+0.6*front)*(0.6+0.4*hov)*vis);
+      it.c.play(front>0.55?front*vis:0);   // only the screens actually facing you decode
+    });
+  }};
+}
+
+/* ===== BEAT 09 — THE PAINT DESK (the deck we actually hand you, fanned out) ===== */
+function buildPaint(z0,z1){
+  const g=new THREE.Group();
+  const backdrop=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0x06070b,transparent:true,opacity:0}));
+  backdrop.scale.set(220,120,1); g.add(backdrop);
+  const cards=PAINTS.map((p,k)=>{
+    const c=card(p.img,4.3,p.hex);
+    c.mesh.userData.dk='p_'+p.key; c.mesh.userData.nm=p.name;
+    g.add(c.grp);
+    return {c,k,key:p.key,col:new THREE.Color(p.hex),p,phase:Math.random()*6.28};
+  });
+  g.visible=false; scene.add(g);
+  const base=new THREE.Color(0x06070b);
+  const lab=document.getElementById('swlab'), nm=lab.querySelector('.nm'), hx=lab.querySelector('.hx'), pr=lab.querySelector('.pr');
+  return {g,clicks:cards.map(c=>c.c.mesh),update(l,t){
+    const cz=camZ-12;
+    backdrop.position.set(camX,0,cz-10);
+    const vis=smooth(clamp(l/0.07,0,1))*smooth(clamp((1-l)/0.07,0,1));
+    const head=clamp((l-0.22)/0.70,0,1)*cards.length;
+    const flood=new THREE.Color(0x06070b); let maxw=0,maxk=-1;
+    cards.forEach(c=>{
+      const off=c.k-(cards.length-1)/2;
+      const e=smooth(clamp((l-0.02-c.k*0.028)/0.17,0,1));
+      // the deck, held low and to the right — only the colour edges peek out
+      const fx=5.6+off*0.92, fy=-4.6-Math.abs(off)*0.16, fz=cz-off*0.1, frz=off*-0.14;
+      let x=lerp(fx-1.6,fx,e), y=lerp(fy-6.4,fy,e), z=fz, rz=lerp(frz*3,frz,e);
+      const w=(l>0.20)?smooth(clamp(1-Math.abs(head-(c.k+0.5))/0.82,0,1)):0;   // the card in focus
+      const hov=(hoverObj===c.c.mesh)?1:0, sel=(BUILD.paint===c.key)?1:0;
+      // in focus it comes off the deck, dead centre and big — the environment moves, not the subject
+      x=lerp(x,0,w); y=lerp(y,0.1,w); z=lerp(z,cz+4.0,w); rz=lerp(rz,0,w);
+      y+=Math.sin(t*0.55+c.phase)*0.085*(1-w*0.55);
+      rz+=Math.sin(t*0.4+c.phase)*0.007;
+      x+=pointer.x*0.16*(1+w); y+=pointer.y*0.1;
+      y+=hov*0.34*(1-w);
+      c.c.setH(lerp(3.4,5.6,w));
+      c.c.grp.position.set(x,y,z); c.c.grp.rotation.set(0,0,rz);
+      c.c.grp.scale.setScalar(1+hov*0.04);
+      c.c.op((0.64+0.36*Math.max(e,w))*vis,(0.3+0.5*w+0.3*hov+0.5*sel)*vis);
+      c.c.mesh.renderOrder=10+(w>0.5?30:c.k); if(c.c.frame) c.c.frame.renderOrder=c.c.mesh.renderOrder-1;
+      if(w>maxw){maxw=w;maxk=c.k;}
+      if(w>0.01) flood.lerp(c.col.clone().multiplyScalar(0.15),w*0.9);
+    });
+    scene.fog.color.copy(base).lerp(flood,vis*Math.min(1,maxw*1.2)*0.9);
+    backdrop.material.color.copy(flood);
+    backdrop.material.opacity=vis*maxw*0.8;
+    if(maxk>=0&&maxw>0.4){
+      const p=cards[maxk].p;
+      nm.textContent=p.name; hx.textContent=p.hex.toUpperCase();
+      pr.textContent=gbp(p.price)+' · '+p.days+' days'+(BUILD.paint===p.key?' · ON YOUR BUILD':'');
+      lab.style.color=readable(p.hex); lab.style.opacity=String(((maxw-0.4)/0.6)*vis);
+    } else lab.style.opacity='0';
+    if(vis<0.02){ scene.fog.color.copy(base); lab.style.opacity='0'; }
+  }};
+}
+
+/* ===== BEAT 10 — THE BAY (six stations you can actually price) ===== */
+function buildBay(z0,z1){
+  const g=new THREE.Group(); const items=[];
+  SVC.forEach((s,k)=>{
+    const col=k%3, row=(k/3)|0;
+    const c=card(s.src,3.0,s.accent);
+    c.mesh.userData.sel={kind:'svc',key:s.key}; c.mesh.userData.nm=s.name;
+    const pl=stationPlate(s.name,'FROM '+gbp(s.from),s.days+' BAY DAYS',s.accent);
+    const pm=plateMesh(pl,5.2);
+    const ring=glowMesh(7.4,5.4,s.accent);
+    g.add(c.grp); g.add(pm); g.add(ring);
+    items.push({c,pm,ring,k,col,row,s,phase:Math.random()*6.28});
+  });
+  g.visible=false; scene.add(g);
+  return {g,clicks:items.map(i=>i.c.mesh),update(l,t){
+    const cz=camZ-13;
+    const vis=smooth(clamp(l/0.08,0,1))*smooth(clamp((1-l)/0.07,0,1));
+    items.forEach(it=>{
+      const e=smooth(clamp((l*1.5-0.04-it.k*0.085)/0.28,0,1));             // stations arrive in order, reversibly
+      // the grid sits right of centre because this beat's caption lives in the left gutter
+      const bx=(it.col-1)*6.2+2.6, by=2.25-it.row*4.9;
+      const hov=(hoverObj===it.c.mesh)?1:0, sel=BUILD.svc.has(it.s.key)?1:0;
+      // cursor magnetism — every tile pulls toward the pointer and lights as it nears
+      const px=pointer.x*7.4, py=pointer.y*4.4;
+      const d=Math.hypot(px-bx,py-by);
+      const mag=smooth(clamp(1-d/7.4,0,1));
+      const x=bx+(px-bx)*0.12*mag+Math.sin(t*0.42+it.phase)*0.07;
+      const y=lerp(by-7,by,e)+Math.sin(t*0.55+it.phase)*0.12+ (py-by)*0.07*mag + hov*0.3;
+      const z=cz+mag*0.9+hov*0.8+sel*0.4;
+      it.c.setH(lerp(2.5,3.25,Math.max(mag*0.6,hov)));
+      it.c.grp.position.set(x,y+0.95,z);
+      it.c.grp.rotation.set(pointer.y*0.05,-pointer.x*0.06,Math.sin(t*0.33+it.phase)*0.012);
+      it.c.grp.scale.setScalar(1+hov*0.05+sel*0.03);
+      it.c.op((0.4+0.6*e)*vis*(0.86+0.14*Math.max(mag,hov)),(0.18+0.3*mag+0.3*hov+0.52*sel)*vis*e);
+      it.c.play((mag*0.6+hov)*vis*e);
+      it.pm.position.set(x,y-1.42,z-0.01);
+      it.pm.material.opacity=(0.34+0.66*e)*vis;
+      it.ring.position.set(x,y+0.8,z-0.5);
+      it.ring.material.opacity=(0.05+0.14*mag+0.14*hov+0.2*sel)*vis*e;
+      it.ring.scale.set(7.4+sel*0.5,5.4+sel*0.4,1);
+    });
+  }};
+}
+
+/* ===== BEAT 11 — THE LINE (fifty-six days, laid down the corridor) ===== */
+function buildLine(z0,z1){
+  const g=new THREE.Group(); const items=[];
+  // the ultrawide rain plate runs the length of the band, well behind — a cinematic back wall
+  const banner=card('vid/rain-wheel.mp4',7.0,false);
+  banner.grp.position.set(0,1.2,0); g.add(banner.grp);
+  // one unbroken rail running the length of the programme, floor level
+  const railLine=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0x3a5f82,transparent:true,opacity:0,depthWrite:false}));
+  railLine.scale.set(Math.abs(z1-z0)+60,0.07,1); railLine.rotation.y=Math.PI/2; g.add(railLine);
+  LINE.forEach((s,k)=>{
+    const z=lerp(z0-6,z1+10,k/(LINE.length-1));
+    const c=card(s.src,3.6,s.accent);
+    c.mesh.userData.nm=s.name;
+    const pl=stationPlate(s.name,'',s.day,s.accent,s.plate);
+    const pm=plateMesh(pl,6.2);
+    const tick=glowMesh(1.5,1.5,s.accent);
+    g.add(c.grp); g.add(pm); g.add(tick);
+    items.push({c,pm,tick,k,z,s,phase:Math.random()*6.28});
+  });
+  g.visible=false; scene.add(g);
+  return {g,update(l,t){
+    const vis=smooth(clamp(l/0.07,0,1))*smooth(clamp((1-l)/0.07,0,1));
+    banner.grp.position.set(camX*0.4,1.4,camZ-34);
+    banner.setH(9.0);
+    banner.op(0.2*vis); banner.play(vis*0.9);
+    railLine.position.set(0,-2.9,(z0+z1)/2);
+    railLine.material.opacity=0.34*vis;
+    items.forEach(it=>{
+      const ahead=camZ-it.z;
+      const near=smooth(clamp(1-Math.abs(ahead-10)/12,0,1));
+      const e=smooth(clamp((l*1.4-0.02-it.k*0.12)/0.3,0,1));
+      const hov=(hoverObj===it.c.mesh)?1:0;
+      const live=ahead>0.6&&ahead<30;
+      it.c.setH(featuredH(it.c.rec,ahead,4.6));
+      const sway=Math.sin(t*0.5+it.phase);
+      it.c.grp.position.set(pointer.x*0.6+sway*0.08, 1.15+sway*0.14+pointer.y*0.35, it.z);
+      it.c.grp.rotation.set(0,0,Math.sin(t*0.34+it.phase)*0.01);
+      it.c.grp.scale.setScalar(1+hov*0.03);
+      const op=live?(0.26+0.74*near)*e*vis:0;
+      it.c.op(op,op*0.5);
+      it.c.play(near*e*vis);
+      // only the station you are actually standing at captions itself — plates never stack
+      const pOp=live?smooth(clamp((near-0.66)/0.24,0,1))*e*vis:0;
+      it.pm.position.set(0.6+pointer.x*0.5, -2.25+sway*0.08, it.z+0.4);
+      it.pm.material.opacity=pOp;
+      it.tick.position.set(0,-2.9,it.z);
+      it.tick.material.opacity=live?(0.1+0.5*near)*e*vis:0;
+      it.tick.scale.set(1.4+near*0.9,1.4+near*0.9,1);
+    });
+  }};
+}
+
+/* ===== BEAT 12 — THE FLOOR (what is standing on the floor today) ===== */
+function buildFloorAct(z0,z1){
+  const g=new THREE.Group(); const items=[]; const DIST=16;
+  const wall=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0x0a0d13,transparent:true,opacity:0}));
+  wall.scale.set(80,44,1); g.add(wall);
+  FLOOR.forEach((f,k)=>{
+    const col=k%4,row=(k/4)|0;
+    const c=card(f.src,3.3,f.accent,'#f1efe9');
+    c.pad=0.22; c.sync();
+    c.mesh.userData.dk=f.key; c.mesh.userData.nm=f.name+' · '+f.status;
+    const pl=stationPlate(f.name,gbp(f.price),f.status,f.status==='FOR SALE'?AC.lime:(f.status==='SOLD'?'#6b7488':f.accent),f.trim);
+    const pm=plateMesh(pl,4.3);
+    g.add(c.grp); g.add(pm);
+    // shifted right of centre: this beat's caption owns the left gutter
+    items.push({c,pm,k,col,row,f,phase:Math.random()*6.28,
+      fx:(col-1.5)*5.1+2.9, fy:3.5-row*6.3, frz:((k%2)?1:-1)*(0.012+(k%3)*0.008),
+      sx:(col-1.5)*17+2.9, sy:(3.5-row*6.3)*2.4-16, srz:((k%2)?1:-1)*1.1});
+  });
+  g.visible=false; scene.add(g);
+  return {g,clicks:items.map(i=>i.c.mesh),update(l,t){
+    const vis=smooth(clamp(l/0.08,0,1))*smooth(clamp((1-l)/0.06,0,1));
+    const zw=camZ-DIST;                                    // the wall keeps a readable distance
+    wall.position.set(camX*0.5,0.4,zw-1.2);
+    wall.material.opacity=0.9*vis;
+    items.forEach(it=>{
+      const e=smooth(clamp((l*1.5-0.05-it.k*0.085)/0.3,0,1));   // the whole floor assembles itself, both ways
+      const hov=(hoverObj===it.c.mesh)?1:0;
+      const px=pointer.x*9.5, py=pointer.y*5.5;
+      const mag=smooth(clamp(1-Math.hypot(px-it.fx,py-it.fy)/8.5,0,1));
+      const bob=Math.sin(t*0.5+it.phase)*0.08*(1-e*0.45);
+      const x=lerp(it.sx,it.fx,e)+(px-it.fx)*0.1*mag;
+      const y=lerp(it.sy,it.fy,e)+bob+(py-it.fy)*0.06*mag;
+      const z=lerp(zw-9,zw+it.k*0.02,e)+mag*0.7+hov*0.9;
+      const rz=lerp(it.srz,it.frz,e)+Math.sin(t*0.37+it.phase)*0.006;
+      it.c.setH(lerp(3.0,3.7,Math.max(mag*0.55,hov)));
+      it.c.grp.position.set(x,y+0.95,z); it.c.grp.rotation.set(0,0,rz);
+      it.c.grp.scale.setScalar(1+hov*0.05);
+      const op=(0.34+0.66*e)*vis;
+      it.c.op(op*(0.88+0.12*Math.max(mag,hov)),op*(0.7+0.3*mag));
+      it.pm.position.set(x,y-1.5,z+0.02); it.pm.rotation.set(0,0,rz);
+      it.pm.material.opacity=op*0.98;
+    });
+  }};
+}
+
+/* ===== BEAT 13 — THE BOOK (four bays a quarter; pick one and it is held) ===== */
+function buildBook(z0,z1){
+  const g=new THREE.Group(); const items=[];
+  SLOTS.forEach((s,k)=>{
+    const c=card(s.src,4.2,s.accent);
+    c.mesh.userData.sel={kind:'slot',key:s.key}; c.mesh.userData.nm=s.q+' '+s.yr+(s.left?' · '+s.left+' LEFT':' · FULL');
+    const pl=plate((x,w,h)=>{
+      x.textAlign='center';
+      x.font='120px Bebas Neue, sans-serif'; x.fillStyle=s.left?'#eef2f8':'#5b6478';
+      x.fillText(s.q,w/2,110);
+      x.font='700 26px JetBrains Mono, monospace'; x.fillStyle=s.left?s.accent:'#5b6478';
+      x.fillText(s.yr+'  ·  '+(s.left?s.left+' BAYS LEFT':'FULL'),w/2,152);
+      x.fillStyle=s.left?s.accent:'#39404e'; x.fillRect(w*0.2,168,w*0.6,3);
+    },460,190);
+    const pm=plateMesh(pl,3.9);
+    const lamp=glowMesh(5.6,7.4,s.accent);
+    g.add(c.grp); g.add(pm); g.add(lamp);
+    items.push({c,pm,lamp,k,s,phase:Math.random()*6.28});
+  });
+  g.visible=false; scene.add(g);
+  return {g,clicks:items.map(i=>i.c.mesh),update(l,t){
+    const cz=camZ-14;
+    // a two-by-two year board, left of centre so the right gutter stays the caption's,
+    // dimming right down as the closing card takes the frame
+    const vis=smooth(clamp(l/0.08,0,1))*(1-0.9*smooth(clamp((l-0.56)/0.34,0,1)));
+    items.forEach(it=>{
+      const e=smooth(clamp((l*1.6-0.03-it.k*0.1)/0.3,0,1));
+      const bx=((it.k%2)-0.5)*6.4-1.4, by=((it.k<2)?1:-1)*3.5;
+      const hov=(hoverObj===it.c.mesh)?1:0, sel=(BUILD.slot===it.s.key)?1:0;
+      const dead=it.s.left===0?1:0;
+      const px=pointer.x*6.4, py=pointer.y*3.6;
+      const mag=smooth(clamp(1-Math.hypot(px-bx,py-by)/7,0,1))*(1-dead*0.7);
+      const x=bx+(px-bx)*0.1*mag+Math.sin(t*0.4+it.phase)*0.05;
+      const y=lerp(by-9,by,e)+Math.sin(t*0.52+it.phase)*0.13+(py-by)*0.06*mag+hov*0.26+sel*0.3;
+      it.c.setH(lerp(3.3,3.9,Math.max(mag*0.5,hov,sel)));
+      const z=cz+mag*0.8+hov*0.7+sel*0.6;
+      it.c.grp.position.set(x,y+0.85,z);
+      it.c.grp.rotation.set(0,-pointer.x*0.05,Math.sin(t*0.3+it.phase)*0.009);
+      it.c.tint(dead?0.45:1);
+      it.c.op((0.34+0.66*e)*vis*(dead?0.6:1)*(0.88+0.12*Math.max(mag,hov)),(0.16+0.3*mag+0.3*hov+0.54*sel)*vis*e);
+      it.pm.position.set(x,y-2.05,z);
+      it.pm.material.opacity=(0.34+0.66*e)*vis;
+      it.lamp.position.set(x,y+0.6,z-0.9);
+      it.lamp.material.opacity=(0.04+0.12*mag+0.1*hov+0.26*sel)*vis*e*(1-dead*0.8);
+    });
+  }};
+}
+
+function buildActs(){
+  ACTOBJS=[
+    {band:'rotunda',obj:buildRotunda(BZ('rotunda').z0,BZ('rotunda').z1)},
+    {band:'paint',  obj:buildPaint(BZ('paint').z0,BZ('paint').z1)},
+    {band:'bay',    obj:buildBay(BZ('bay').z0,BZ('bay').z1)},
+    {band:'line',   obj:buildLine(BZ('line').z0,BZ('line').z1)},
+    {band:'floor',  obj:buildFloorAct(BZ('floor').z0,BZ('floor').z1)},
+    {band:'book',   obj:buildBook(BZ('book').z0,BZ('book').z1)}
+  ];
+}
+
+/* ---------- loader: lifts as soon as the first bays have real frames, 4.2s hard stop ---------- */
+let finished=false, readyCount=0;
+function noteReady(){ if(++readyCount>=3) finishLoad(); }
+function finishLoad(){ if(finished)return; finished=true;
+  document.getElementById('lbar').style.width='100%';
+  setTimeout(()=>document.getElementById('loading').classList.add('done'),260);
+}
+setTimeout(finishLoad,4200);
+let lp=0; const li=setInterval(()=>{lp=Math.min(96,lp+8);const b=document.getElementById('lbar');if(b)b.style.width=lp+'%';if(finished)clearInterval(li);},150);
+
+function onResize(){ renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+
+/* ---------- captions: word-by-word, pure function of scroll, never blurred ---------- */
+const capL=document.getElementById('capL'), capR=document.getElementById('capR'), tip=document.getElementById('tip');
+let activeStop=-1, capWords=[], capPlate=null;
+function wordify(html){
+  const guarded=html.replace(/<[^>]+>/g,m=>m.replace(/ /g,'\u0001'));
+  return guarded.split(/ +/).map(w=>'<span class="wd">'+w.replace(/\u0001/g,' ')+'</span>').join(' ');
+}
+function setCap(s,side,accent,beatIdx,tap){
+  const useR=(side==='R');
+  const show=useR?capR:capL, hide=useR?capL:capR;
+  show.style.setProperty('--accent',accent);
+  const taps=['','◉&nbsp;TAP&nbsp;A&nbsp;SCREEN&nbsp;—&nbsp;OPEN&nbsp;THE&nbsp;FILE','◉&nbsp;TAP&nbsp;A&nbsp;STATION&nbsp;—&nbsp;ADD&nbsp;IT&nbsp;TO&nbsp;THE&nbsp;QUOTE','◉&nbsp;TAP&nbsp;A&nbsp;QUARTER&nbsp;—&nbsp;HOLD&nbsp;THE&nbsp;BAY'];
+  show.innerHTML='<span class="idx"><span class="wd">BEAT&nbsp;<b>'+String(beatIdx+1).padStart(2,'0')+'</b>&nbsp;/&nbsp;'+TOTBEATS+'</span></span>'+
+    '<div><span class="kick"><span class="wd">'+s.kick.replace(/ /g,'&nbsp;')+'</span></span></div>'+
+    '<h2>'+s.title.split('<br>').map(ln=>wordify(ln)).join('<br>')+'</h2>'+
+    '<p>'+wordify(s.sub)+'</p>'+
+    '<div class="spec">'+s.spec.map(x=>'<span class="wd">'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div>'+
+    (tap?'<div class="tapline"><span class="wd">'+taps[tap]+'</span></div>':'');
+  hide.style.opacity='0';
+  capPlate=show; capWords=[].slice.call(show.querySelectorAll('.wd'));
+  window.__curCap=show;
+}
+function updateCapReveal(r){
+  if(!capPlate) return;
+  const endFade=smooth(clamp(1-(curProg-0.962)/0.038,0,1));
+  const heroFade=smooth(clamp(curProg/0.042,0,1));   // the title card owns the frame alone
+  capPlate.style.opacity=String(smooth(clamp(r/0.1,0,1))*endFade*heroFade);
+  const n=capWords.length||1;
+  capWords.forEach((w,i)=>{
+    const st=(i/n)*0.72;
+    const wr=smooth(clamp((r-st)/0.26,0,1));
+    w.style.opacity=String(0.34+0.66*wr);
+    w.style.transform='translateY('+((1-wr)*15)+'px)';
+  });
+}
+function setActive(i){ if(i===activeStop)return; activeStop=i; const s=STOPS[i]; if(!s)return; setCap(s,s.side,s.accent,i,1); }
+function setBeat(idx){ const ds=document.querySelectorAll('#rail .d'); for(let k=0;k<ds.length;k++) ds[k].classList.toggle('on',k===idx); }
+function onBandChange(b){
+  if(b.name!=='hall'){ const m=ACTS[b.name]; setCap(m,m.side,m.accent,BEAT[b.name],m.tap); setBeat(BEAT[b.name]); activeStop=-1; }
+}
+
+/* ---------- overlays ---------- */
+function applyProgress(p){
+  curProg=p;
+  const ho=smooth(1-p/0.042);
+  const hv=document.getElementById('heroOv'); hv.style.opacity=ho;
+  document.getElementById('cue').style.opacity=p<0.02?1:0;
+  const hs=document.querySelectorAll('#heroOv [data-h]');
+  for(let i=0;i<hs.length;i++){ hs[i].style.transform='translateY('+((1-ho)*-38)+'px)'; hs[i].style.opacity=ho; }
+  const cta=document.getElementById('cta'); const cv=smooth((p-0.962)/0.038);
+  cta.style.opacity=cv; cta.classList.toggle('show',cv>0.5);
+  document.getElementById('hud').classList.toggle('on',p>0.545&&p<0.965);
+}
+
+/* ---------- the director ---------- */
+function runScene(p,t,immediate){
+  curProg=p;
+  resetWants();
+  let b=BANDS[0]; for(let i=0;i<BANDS.length;i++){ if(p>=BANDS[i].p0) b=BANDS[i]; }
+  const l=clamp((p-b.p0)/(b.p1-b.p0),0,1);
+  targetZ=lerp(b.z0,b.z1,l);
+  const k=immediate?1:0.09, xk=immediate?1:0.07;
+  camZ=lerp(camZ,targetZ,k);
+  const inHall=(b.name==='hall');
+  gHall.visible=p<0.36;
+
+  let wantX=pointer.x*1.1, wantY=pointer.y*0.7, lookX=0, lookY=0, lookZ=camZ-10;
+  if(b.name==='rotunda'){ wantX=pointer.x*1.0; wantY=pointer.y*0.7; lookZ=camZ-13; }
+  else if(b.name==='paint'){ wantX=pointer.x*0.9; wantY=pointer.y*0.5; lookZ=camZ-12; }
+  else if(b.name==='bay'){ wantX=pointer.x*0.8; wantY=pointer.y*0.45+0.3; lookZ=camZ-13; }
+  else if(b.name==='line'){ wantX=pointer.x*0.7+0.4; wantY=pointer.y*0.5+0.5; lookX=0.3; lookZ=camZ-12; }
+  else if(b.name==='floor'){ wantX=pointer.x*0.9; wantY=pointer.y*0.5+0.5; lookZ=camZ-13; }
+  else if(b.name==='book'){ wantX=pointer.x*0.55; wantY=pointer.y*0.35+0.4; lookZ=camZ-13; }
+  camX=lerp(camX,wantX,xk); camY=lerp(camY,wantY,xk);
+  camera.position.set(camX,camY,camZ);
+  camera.lookAt(lookX,lookY,lookZ);
+
+  // ---- the hall: the car is always big and dead centre; the workshop is what streams past ----
+  let capDriver=0;
+  if(gHall.visible){
+    let best=0,bestF=-1;
+    hallPanels.forEach(pn=>{
+      const ahead=camZ-pn.z;
+      const f=smooth(clamp(ahead/4.5,0,1))*smooth(clamp((26-ahead)/13,0,1));
+      if(f>bestF){bestF=f;best=pn.i;}
+      const live=ahead>0.5&&ahead<34;
+      pn.c.setH(featuredH(pn.c.rec,ahead,5.6));
+      const bob=Math.sin(t*0.55+pn.phase)*0.13, rot=Math.sin(t*0.38+pn.phase)*0.012;
+      const hov=(hoverObj===pn.c.mesh)?1:0;
+      pn.c.grp.position.set(pointer.x*0.55, bob+pointer.y*0.3, pn.z);
+      pn.c.grp.rotation.set(0,-pointer.x*0.035,rot);
+      pn.c.grp.scale.setScalar(1+hov*0.03);
+      pn.c.tint(pn.dim);
+      const op=live?(0.34+0.66*smooth(f)):0;
+      pn.c.op(op,live?(0.2+0.55*smooth(f))*(0.65+0.35*hov):0);
+      pn.c.play(live?f:0);
+      pn.halo.scale.set(pn.c.w()+5.5,pn.c.h+4.5,1);
+      pn.halo.material.opacity=live?(0.05+0.2*smooth(f))*(0.7+0.5*hov):0;
+    });
+    if(inHall){ setActive(best); setBeat(best); capDriver=clamp((bestF-0.1)/0.5,0,1); }
+  }
+
+  // environment fades back once we leave the corridor beats, so the acts own the frame
+  const envOn=(b.name==='hall'||b.name==='rotunda'||b.name==='line')?1:0.3;
+  gEnv.traverse(o=>{ if(o.material&&o.userData.envBase!==undefined) o.material.opacity=o.userData.envBase*envOn; });
+
+  ACTOBJS.forEach(a=>{ const on=(a.band===b.name); a.obj.g.visible=on; if(on) a.obj.update(l,t); });
+  if(b.name!=='paint'){ scene.fog.color.setHex(0x06070b); document.getElementById('swlab').style.opacity='0'; }
+
+  if(b.name!==curBand){ onBandChange(b); curBand=b.name; }
+  if(!inHall) capDriver=clamp(l/0.46,0,1);
+  updateCapReveal(capDriver);
+  manageVideos();
+  return {band:b.name,l:+l.toFixed(2),camZ:+camZ.toFixed(1),beat:inHall?activeStop:BEAT[b.name]};
+}
+
+/* ---------- scroll ---------- */
+/* the tall spacer and the smooth-scroll rig are the 3D journey's — the phone build
+   is an ordinary document and must never inherit 1450vh of empty track */
+let lenis=null;
+if(!isMobile){
+  document.getElementById('scroller').style.height='1450vh';
+  lenis=new Lenis({lerp:0.08,wheelMultiplier:0.9});
+  window.__lenis=lenis;
+}
+const scroller={
+  stop(){ if(lenis) lenis.stop(); },
+  start(){ if(lenis) lenis.start(); },
+  toEnd(){ if(lenis) lenis.scrollTo(document.body.scrollHeight,{duration:2.4});
+           else { const c=document.getElementById('cta'); if(c) c.scrollIntoView({behavior:'smooth'}); } }
+};
+
+/* ---------- the dossier ---------- */
+const doss=document.getElementById('doss'), dossCard=document.getElementById('dossCard'),
+      dossMedia=document.getElementById('dossMedia'), dossBody=document.getElementById('dossBody');
+let dossOpen=false, dossVid=null;
+function openDossier(key){
+  const d=DOSSIER[key]; if(!d) return;
+  dossOpen=true;
+  dossCard.style.setProperty('--dac',d.accent);
+  dossMedia.style.setProperty('--dmat',d.mat||'#0b0e14');
+  if(d.type==='vid'){
+    dossMedia.innerHTML='<div class="mat"></div><video src="'+d.src+'" muted loop playsinline autoplay preload="auto"></video><div class="lens"></div>';
+    dossVid=dossMedia.querySelector('video');
+    const pr=dossVid.play(); if(pr&&pr.catch) pr.catch(()=>{});
+  } else {
+    dossMedia.innerHTML='<div class="mat"></div><img src="'+d.src+'" alt="'+d.name+'"><div class="lens"></div>';
+    dossVid=null;
+  }
+  const thumbs=[d.src].concat(d.gallery||[]);
+  const act=d.act;
+  const on=act?((act.kind==='svc'&&BUILD.svc.has(act.key))||(act.kind==='paint'&&BUILD.paint===act.key)||(act.kind==='slot'&&BUILD.slot===act.key)):false;
+  dossBody.innerHTML=
+    '<span class="dtag">'+d.kick+'</span>'+
+    '<h3>'+d.name+'</h3>'+
+    '<p class="dstory">'+d.story+'</p>'+
+    '<div class="dspecs">'+d.spec.map(x=>'<div><div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div></div>').join('')+'</div>'+
+    '<div class="dpal"><span class="chip" style="background:'+d.hex+'"></span><span>'+d.hex.toUpperCase()+'</span></div>'+
+    (thumbs.length>1?'<div class="dthumbs">'+thumbs.map((t2,i)=>'<button data-src="'+t2+'" class="'+(i===0?'on':'')+'"><img src="'+t2+'"></button>').join('')+'</div>':'')+
+    '<div class="dcta">'+
+      (act?'<button class="go'+(on?' added':'')+'" id="dossAct">'+(on?'On your build ✓':act.label)+'</button>':
+           '<button class="go" id="dossGo">Book a bay →</button>')+
+      '<span class="ig2">or DM @overhaul.works</span></div>';
+  const tb=dossBody.querySelectorAll('.dthumbs button');
+  for(let i=0;i<tb.length;i++) tb[i].addEventListener('click',function(){
+    for(let j=0;j<tb.length;j++) tb[j].classList.remove('on');
+    this.classList.add('on');
+    const im=dossMedia.querySelector('img'); if(im) im.src=this.dataset.src;
+  });
+  const ga=document.getElementById('dossAct');
+  if(ga) ga.addEventListener('click',()=>{
+    if(act.kind==='svc') toggleSvc(act.key);
+    if(act.kind==='paint') pickPaint(act.key);
+    if(act.kind==='slot') pickSlot(act.key);
+    const nowOn=(act.kind==='svc'&&BUILD.svc.has(act.key))||(act.kind==='paint'&&BUILD.paint===act.key)||(act.kind==='slot'&&BUILD.slot===act.key);
+    ga.textContent=nowOn?'On your build ✓':act.label;
+    ga.classList.toggle('added',nowOn);
+  });
+  const gg=document.getElementById('dossGo');
+  if(gg) gg.addEventListener('click',()=>{ closeDossier(); scroller.toEnd(); });
+  doss.classList.add('open');
+  scroller.stop();
+}
+function closeDossier(){
+  dossOpen=false; doss.classList.remove('open'); scroller.start();
+  setTimeout(()=>{ if(!dossOpen){ dossMedia.innerHTML=''; dossVid=null; } },380);
+}
+document.getElementById('dossX').addEventListener('click',closeDossier);
+document.getElementById('dossBack').addEventListener('click',closeDossier);
+addEventListener('keydown',e=>{ if(e.key==='Escape'&&dossOpen) closeDossier(); });
+dossMedia.addEventListener('pointermove',e=>{
+  const r=dossMedia.getBoundingClientRect();
+  const fx=clamp((e.clientX-r.left)/r.width,0,1), fy=clamp((e.clientY-r.top)/r.height,0,1);
+  dossMedia.style.setProperty('--lx',(fx*100)+'%'); dossMedia.style.setProperty('--ly',(fy*100)+'%');
+  const im=dossMedia.querySelector('img');
+  if(im) im.style.transform='translate('+((fx-0.5)*-2.4)+'%,'+((fy-0.5)*-2.4)+'%)';
+});
+addEventListener('pointermove',e=>{
+  if(!dossOpen) return;
+  const rx=(e.clientY/innerHeight-0.5)*-2.2, ry=(e.clientX/innerWidth-0.5)*2.8;
+  dossCard.style.transform='perspective(1400px) rotateX('+rx+'deg) rotateY('+ry+'deg)';
+},{passive:true});
+
+/* ---------- taps on the 3D tiles ---------- */
+let pdX=0,pdY=0;
+if(!isMobile){
+  canvas.addEventListener('pointerdown',e=>{pdX=e.clientX;pdY=e.clientY;});
+  canvas.addEventListener('pointerup',e=>{
+    if(dossOpen) return;
+    if(Math.hypot(e.clientX-pdX,e.clientY-pdY)>7) return;
+    const m=pickClickable(); if(!m) return;
+    if(m.userData.dk) openDossier(m.userData.dk);
+    else if(m.userData.sel){
+      const s=m.userData.sel;
+      if(s.kind==='svc') toggleSvc(s.key);
+      if(s.kind==='slot') pickSlot(s.key);
+    }
+  });
+}
+function clickTargets(){
+  let list=[];
+  if(gHall&&gHall.visible) list=list.concat(hallPanels.map(p=>p.c.mesh));
+  const act=ACTOBJS.filter(a=>a.band===curBand)[0];
+  if(act&&act.obj.clicks&&act.obj.g.visible) list=list.concat(act.obj.clicks);
+  return list;
+}
+function pickClickable(){
+  raycaster.setFromCamera(pointer,camera);
+  const hits=raycaster.intersectObjects(clickTargets());
+  return hits.length?hits[0].object:null;
+}
+
+/* ---------- render loop ---------- */
+function frame(now){
+  if(lenis) lenis.raf(now);
+  const t=now/1000;
+  runScene(curProg,t,false);
+  if(dust){ dust.rotation.y=t*0.01; dust.position.z=camZ-22; }
+  if(!dossOpen){
+    const m=pickClickable();
+    hoverObj=m||null;
+    if(m&&m.userData.nm&&pointerLive){
+      let verb='OPEN THE FILE';
+      if(m.userData.sel){ const s=m.userData.sel;
+        if(s.kind==='svc') verb=BUILD.svc.has(s.key)?'REMOVE FROM BUILD':'ADD TO BUILD';
+        if(s.kind==='slot'){ const sl=SLOTS.filter(x=>x.key===s.key)[0]; verb=sl&&sl.left===0?'FULLY BOOKED':(BUILD.slot===s.key?'RELEASE':'HOLD THIS BAY'); }
+      }
+      tip.innerHTML='<b>◉</b>&nbsp;&nbsp;'+m.userData.nm+'&nbsp;·&nbsp;'+verb;
+      tip.classList.add('on'); canvas.style.cursor='pointer';
+    } else { tip.classList.remove('on'); canvas.style.cursor=''; }
+  } else tip.classList.remove('on');
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+
+/* every visible bitmap, painted size vs its own native size — must never exceed 1.0 */
+window.__upscale=function(){
+  const vFov=camera.fov*Math.PI/180, dpr=Math.min(2,devicePixelRatio), worst=[];
+  CARDS.forEach(c=>{
+    if(c.mat.opacity<0.05||!c.grp.visible) return;
+    let o=c.grp,on=true; while(o){ if(o.visible===false){on=false;break;} o=o.parent; } if(!on) return;
+    const wp=new THREE.Vector3(); c.mesh.getWorldPosition(wp);
+    const d=Math.max(0.3,camera.position.distanceTo(wp));
+    const visW=2*d*Math.tan(vFov/2)*camera.aspect;
+    const worldW=c.h*c.rec.ar*c.grp.scale.x;
+    const paintedPx=(worldW/visW)*innerWidth*dpr;
+    const nat=c.rec.kind==='vid'?(c.rec.v.videoWidth||0):((c.rec.tex&&c.rec.tex.image&&c.rec.tex.image.width)||0);
+    if(nat>0) worst.push(+(paintedPx/nat).toFixed(2));
+  });
+  worst.sort((a,b)=>b-a);
+  return {n:worst.length,max:worst[0]||0,top:worst.slice(0,4)};
+};
+
+/* ---------- verify hook ---------- */
+window.__hall={
+  setProgress(p){ p=clamp(p,0,1); applyProgress(p);
+    const info=runScene(p,performance.now()/1000,true);
+    if(renderer) renderer.render(scene,camera);
+    return info; },
+  openDossier,closeDossier,
+  build:()=>({svc:[].slice.call(BUILD.svc),paint:BUILD.paint,slot:BUILD.slot,totals:quoteTotals()}),
+  toggleSvc,pickPaint,pickSlot,
+  state(){ return {
+    curProg:+curProg.toFixed(3),band:curBand,camZ:+camZ.toFixed(1),activeStop,dossOpen,
+    caption:window.__curCap?(window.__curCap.querySelector('.kick')||{}).textContent:null,
+    capOpacity:window.__curCap?window.__curCap.style.opacity:null,
+    capWordOps:capWords.slice(0,4).map(w=>+(parseFloat(w.style.opacity)||0).toFixed(2)),
+    acts:ACTOBJS.map(a=>({band:a.band,vis:a.obj.g.visible})),
+    playing:Object.keys(VID).filter(k=>!VID[k].v.paused),
+    ars:Object.keys(VID).map(k=>({k:k.split('/')[1],ar:+VID[k].ar.toFixed(3),ready:VID[k].ready})),
+    hall:hallPanels.map(p=>({i:p.i,op:+p.c.mat.opacity.toFixed(2),h:+p.c.h.toFixed(2),w:+p.c.w().toFixed(2),x:+p.c.grp.position.x.toFixed(2)}))
+  };}
+};
+
+/* ================= MOBILE — a real page, not a stub ================= */
+function buildMobile(){
+  const fb=document.getElementById('fallback');
+  const esc=s=>s.replace(/<br>/g,' ').replace(/<[^>]+>/g,'');
+  let h='';
+  const s0=STOPS[0];
+  h+='<section class="mhero"><video src="assets/'+s0.v+'" muted loop playsinline autoplay preload="auto"></video><div class="scrim"></div>'+
+     '<div class="inner"><span class="mk">OVERHAUL · DIGBETH, BIRMINGHAM</span>'+
+     '<h1>'+s0.title.replace(/<[^>]+>/g,m=>m)+'</h1>'+
+     '<p class="sub">'+s0.sub+'</p>'+
+     '<div class="spec" style="margin-top:16px">'+s0.spec.map(x=>'<span>'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div></div></section>';
+
+  STOPS.slice(1).forEach(s=>{
+    h+='<section class="msec" style="--accent:'+s.accent+'"><span class="mk">'+s.kick+'</span><h2>'+s.title+'</h2>'+
+       '<p>'+s.sub+'</p><div class="spec">'+s.spec.map(x=>'<span>'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div>'+
+       '<div class="mclip"><video src="assets/'+s.v+'" muted loop playsinline preload="metadata" data-lazy></video></div></section>';
+  });
+
+  const pa=ACTS.paint;
+  h+='<section class="msec" style="--accent:'+pa.accent+'"><span class="mk">'+pa.kick+'</span><h2>'+pa.title+'</h2><p>'+pa.sub+'</p>'+
+     '<div class="mgrid">'+PAINTS.map(p=>
+       '<div class="mtile" data-sel="'+p.key+'" data-kind="paint"><div class="ph" style="background:'+p.hex+'14"><img src="assets/'+p.img+'" alt="'+p.name+'" loading="lazy"></div>'+
+       '<div class="tx"><div class="nm" style="color:'+readable(p.hex)+'">'+p.name+'</div><div class="mt">'+p.hex.toUpperCase()+' · '+p.days+' days</div><div class="pr">'+gbp(p.price)+'</div></div>'+
+       '<button class="add" data-paint="'+p.key+'">Add to build</button></div>').join('')+'</div></section>';
+
+  const by=ACTS.bay;
+  h+='<section class="msec" style="--accent:'+by.accent+'"><span class="mk">'+by.kick+'</span><h2>'+by.title+'</h2><p>'+by.sub+'</p>'+
+     '<div class="mgrid">'+SVC.map(s=>
+       '<div class="mtile" data-sel="'+s.key+'" data-kind="svc"><div class="ph">'+
+       (s.src.indexOf('vid/')===0?'<video src="assets/'+s.src+'" muted loop playsinline preload="metadata" data-lazy></video>':'<img src="assets/'+s.src+'" alt="'+s.name+'" loading="lazy">')+
+       '</div><div class="tx"><div class="nm">'+s.name+'</div><div class="mt">'+s.days+' bay days</div><div class="pr">from '+gbp(s.from)+'</div></div>'+
+       '<button class="add" data-svc="'+s.key+'">Add to build</button></div>').join('')+'</div></section>';
+
+  const ln=ACTS.line;
+  h+='<section class="msec" style="--accent:'+ln.accent+'"><span class="mk">'+ln.kick+'</span><h2>'+ln.title+'</h2><p>'+ln.sub+'</p>'+
+     '<div class="mline">'+LINE.map(s=>'<div class="mstep"><div class="dy">'+s.day.replace(' ','<br>')+'</div>'+
+       '<div><div class="nm">'+s.name+'</div><div class="ds">'+s.det+'</div></div></div>').join('')+'</div></section>';
+
+  const fl=ACTS.floor;
+  h+='<section class="msec" style="--accent:'+fl.accent+'"><span class="mk">'+fl.kick+'</span><h2>'+fl.title+'</h2><p>'+fl.sub+'</p>'+
+     '<div class="mgrid">'+FLOOR.map(c=>
+       '<div class="mtile"><div class="ph"><img src="assets/'+c.src+'" alt="'+c.name+'" loading="lazy"></div>'+
+       '<div class="tx"><div class="nm">'+c.name+'</div><div class="mt">'+c.trim+' · '+c.status+'</div><div class="pr">'+gbp(c.price)+'</div></div></div>').join('')+'</div></section>';
+
+  const bk=ACTS.book;
+  h+='<section class="msec" style="--accent:'+bk.accent+'"><span class="mk">'+bk.kick+'</span><h2>'+bk.title+'</h2><p>'+bk.sub+'</p>'+
+     '<div class="mgrid">'+SLOTS.map(s=>
+       '<div class="mtile'+(s.left?'':' dead')+'" data-sel="'+s.key+'" data-kind="slot"><div class="ph"><img src="assets/'+s.src+'" alt="'+s.q+'" loading="lazy"></div>'+
+       '<div class="tx"><div class="nm">'+s.q+' '+s.yr+'</div><div class="mt">'+(s.left?s.left+' bays left':'Full')+'</div><div class="pr">'+s.note+'</div></div>'+
+       (s.left?'<button class="add" data-slot="'+s.key+'">Hold this bay</button>':'')+'</div>').join('')+'</div></section>';
+
+  h+='<div class="mhud"><span class="hl">Your build</span><span class="hv" id="mHudSum">£0</span><span class="hd" id="mHudDays">0 bay days</span></div>';
+  fb.innerHTML=h;
+  fb.appendChild(document.getElementById('cta'));
+  const foot=document.createElement('div'); foot.className='mfoot';
+  foot.innerHTML='OVERHAUL · UNIT 7, FLOODGATE WORKS, DIGBETH, BIRMINGHAM B9 4AA<br>0121 496 0714 · BUILD@OVERHAUL.WORKS · @OVERHAUL.WORKS';
+  fb.appendChild(foot);
+
+  fb.addEventListener('click',e=>{
+    const b=e.target.closest('button.add'); if(!b) return;
+    if(b.dataset.svc) toggleSvc(b.dataset.svc);
+    if(b.dataset.paint) pickPaint(b.dataset.paint);
+    if(b.dataset.slot) pickSlot(b.dataset.slot);
+  });
+
+  // autoplay-loop, but only what is actually on screen
+  const vids=[].slice.call(fb.querySelectorAll('video[data-lazy]'));
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{
+    const v=en.target;
+    if(en.isIntersecting){ if(!v.src) v.src=v.dataset.src||v.src; const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
+    else v.pause();
+  });},{rootMargin:'120px 0px',threshold:0.15});
+  vids.forEach(v=>io.observe(v));
+  document.getElementById('loading').classList.add('done');
+  refreshQuote();
+}
+
+/* ---------- go ---------- */
+if(isMobile){
+  buildMobile();
+} else {
+  build3D();
+  refreshQuote();
+  lenis.on('scroll',e=>applyProgress(clamp(e.progress||0,0,1)));
+  requestAnimationFrame(frame);
+  applyProgress(0);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>PLATES.forEach(p=>p.render()));
+}
+</script>
+</body>
+</html>
