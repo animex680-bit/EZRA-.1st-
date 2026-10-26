@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OVERHAUL — Performance Rebuilds, Digbeth</title>
+<meta name="description" content="OVERHAUL — a working performance rebuild shop in Digbeth, Birmingham. Builds, servicing and bodywork, priced line by line." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306070b'/%3E%3Cpath d='M5 20h22M9 20a3.4 3.4 0 1 0 6.8 0M19 20a3.4 3.4 0 1 0 6.8 0M6 20l3-7h14l4 7' stroke='%23ff7a1f' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#06070b; --ink:#eef2f8; --muted:#808b9f;
+  --amber:#ff7a1f; --blue:#3ea9ff; --red:#e0273c; --lime:#a9e62b;
+  --panel:#0b0e14; --line:rgba(255,255,255,.1);
+  --disp:'Bebas Neue',sans-serif; --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit}
+::selection{background:var(--amber);color:#06070b}
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.vig{position:fixed;inset:0;z-index:4;pointer-events:none;box-shadow:inset 0 0 210px 30px rgba(0,0,0,.6)}
+
+/* ================= persistent nav ================= */
+.nav{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:14px clamp(14px,3.4vw,46px);
+  background:linear-gradient(180deg,rgba(6,7,11,.92) 0%,rgba(6,7,11,.6) 62%,rgba(6,7,11,0) 100%);
+  transition:background .4s}
+.nav.solid{background:rgba(6,7,11,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{font-family:var(--disp);font-size:28px;letter-spacing:.14em;line-height:.86;cursor:pointer;flex:none}
+.brand small{display:block;font-family:var(--mono);font-size:7.5px;letter-spacing:.34em;opacity:.72;margin-top:3px}
+.nav-links{display:flex;align-items:center;gap:clamp(12px,1.6vw,26px);font-family:var(--mono);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase}
+.nav-links a{position:relative;color:#c2cad8;padding:6px 0;cursor:pointer;transition:color .25s}
+.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:-1px;height:1px;background:var(--amber);transition:right .3s ease}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{right:0}
+.nav-links a.on{color:var(--ink)}
+.nav-links a.on::after{right:0}
+.nav-r{display:flex;align-items:center;gap:14px;flex:none}
+.res{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.5);padding:9px 17px;border-radius:40px;cursor:pointer;
+  transition:transform .3s,background .3s,color .3s;white-space:nowrap}
+.res:hover{background:var(--amber);border-color:var(--amber);color:#06070b;transform:translateY(-2px)}
+.burger{display:none;width:42px;height:38px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);
+  color:var(--ink);font-size:18px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:1080px){ .nav-links{display:none} .nav-r .res{display:none} .burger{display:inline-flex} }
+
+/* mobile slide menu */
+#menu{position:fixed;inset:0;z-index:95;background:rgba(6,7,11,.97);backdrop-filter:blur(14px);
+  display:flex;flex-direction:column;justify-content:center;padding:0 28px;gap:4px;
+  opacity:0;pointer-events:none;transition:opacity .35s}
+#menu.open{opacity:1;pointer-events:auto}
+#menu a{font-family:var(--disp);font-size:clamp(34px,10vw,56px);letter-spacing:.04em;color:var(--ink);
+  padding:8px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+#menu a span{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
+#menu .mclose{position:absolute;top:18px;right:20px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--ink);font-size:20px;cursor:pointer}
+#menu .mfoot{margin-top:26px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);line-height:2}
+#menu .mfoot b{color:var(--amber)}
+
+/* ================= immersive 3D block (desktop) ================= */
+#scene{position:fixed;inset:0;z-index:1;display:block;transition:opacity .5s}
+.imm-spacer{position:relative;z-index:0;width:100%;height:720vh;pointer-events:none}
+#immersive{position:fixed;inset:0;z-index:3;pointer-events:none;transition:opacity .4s}
+
+.hero-ov{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;pointer-events:none}
+.hero-ov .mega{font-family:var(--disp);font-size:clamp(84px,21vw,310px);line-height:.82;letter-spacing:.02em}
+.hero-ov .mega span{display:inline-block;will-change:transform,opacity}
+.hero-ov .mega .stroke{color:transparent;-webkit-text-stroke:1.6px var(--ink)}
+.hero-ov .tl{font-family:var(--mono);font-size:clamp(10px,1vw,12px);letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-top:18px}
+.hero-ov .tl b{color:var(--amber)}
+.hero-ov .hbtns{display:flex;gap:12px;margin-top:30px;pointer-events:auto}
+.hbtns .hb{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
+  padding:13px 24px;border-radius:40px;transition:transform .3s,box-shadow .3s,background .3s,color .3s}
+.hbtns .fill{background:var(--amber);color:#06070b;border:0;font-weight:700}
+.hbtns .fill:hover{transform:translateY(-2px);box-shadow:0 14px 34px -10px var(--amber)}
+.hbtns .ghost{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.4)}
+.hbtns .ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+
+/* gutter captions for the hall */
+.cap{position:fixed;z-index:3;max-width:min(23vw,340px);will-change:transform,opacity}
+.cap.L{left:clamp(16px,4.2vw,58px);text-align:left}
+.cap.R{right:clamp(16px,4.2vw,58px);text-align:right}
+.cap.pos-mid{top:50%;transform:translateY(-50%)}
+.kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent,var(--amber));display:inline-flex;align-items:center;gap:9px}
+.cap.R .kick{flex-direction:row-reverse}
+.kick::before{content:"";width:20px;height:1px;background:var(--accent,var(--amber))}
+.cap h2{font-family:var(--disp);font-size:clamp(34px,4.4vw,72px);line-height:.92;letter-spacing:.012em;margin:12px 0 10px}
+.cap h2 .stroke{color:transparent;-webkit-text-stroke:1.2px var(--ink)}
+.cap p{color:#c2cad8;font-size:13.5px;line-height:1.72;margin-bottom:14px}
+.cap.R p{margin-left:auto}
+.spec{display:flex;gap:18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;flex-wrap:wrap}
+.cap.R .spec{justify-content:flex-end}
+.spec b{display:block;color:var(--ink);font-size:15px;font-family:var(--sans);letter-spacing:0;margin-top:3px}
+.idx{font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;color:var(--muted)}
+.idx b{color:var(--accent,var(--amber))}
+.wd{display:inline-block;will-change:transform,opacity}
+.tapline{margin-top:13px;font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent,var(--amber));opacity:.92}
+
+.cue{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;font-family:var(--mono);font-size:9.5px;letter-spacing:.34em;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px}
+.cue i{width:1px;height:30px;background:linear-gradient(var(--amber),transparent);animation:cue 1.8s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+#tip{position:fixed;z-index:80;pointer-events:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  background:rgba(8,10,16,.86);border:1px solid var(--line);border-radius:30px;padding:8px 14px;color:var(--ink);
+  opacity:0;transform:translate(14px,14px) scale(.9);transition:opacity .2s,transform .2s;backdrop-filter:blur(8px);white-space:nowrap}
+#tip b{color:var(--amber)}
+#tip.on{opacity:1;transform:translate(14px,14px) scale(1)}
+#hud{position:fixed;left:clamp(16px,4.2vw,58px);bottom:22px;z-index:3;display:flex;align-items:center;gap:14px;
+  background:rgba(9,11,17,.8);border:1px solid var(--line);border-radius:44px;padding:10px 20px;backdrop-filter:blur(10px);
+  opacity:0;pointer-events:auto;transition:opacity .4s,transform .4s;transform:translateY(12px)}
+#hud.on{opacity:1;transform:translateY(0)}
+#hud .hl{font-family:var(--mono);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+#hud .hv{font-family:var(--disp);font-size:30px;letter-spacing:.04em;line-height:1;color:var(--amber)}
+#hud .hd{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--ink)}
+#hud .hgo{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
+  background:var(--amber);color:#06070b;border:0;border-radius:30px;padding:9px 15px;font-weight:700;margin-left:4px}
+
+/* ================= flow (DOM sections) ================= */
+#flow{position:relative;z-index:6;background:var(--bg)}
+.sec{position:relative;padding:clamp(70px,11vh,130px) clamp(18px,6vw,100px);max-width:1340px;margin:0 auto}
+.sec.light{background:#eef1f5;color:#0b0e14;max-width:none;margin:0;padding-left:clamp(18px,6vw,100px);padding-right:clamp(18px,6vw,100px)}
+.sec.light .lead,.sec.light .shead p{color:#44506a}
+.shead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:38px}
+.shead .mk{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent,var(--amber));display:flex;align-items:center;gap:10px}
+.shead .mk::before{content:"";width:22px;height:1px;background:var(--accent,var(--amber))}
+.shead h2{font-family:var(--disp);font-size:clamp(40px,6.4vw,100px);line-height:.9;letter-spacing:.014em;margin-top:14px}
+.shead p{color:#c2cad8;font-size:14.5px;line-height:1.7;max-width:46ch}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.rv.in{opacity:1;transform:none}
+
+/* finance */
+#finance{--accent:var(--lime)}
+.fin-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(20px,3vw,46px);align-items:center}
+.fin-ctrl{display:flex;flex-direction:column;gap:22px}
+.frow label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.frow label b{color:var(--ink);font-size:16px;font-family:var(--sans);letter-spacing:0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.14);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px rgba(169,230,43,.16);cursor:grab}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px rgba(169,230,43,.16)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:9px 15px;border:1px solid var(--line);border-radius:30px;background:rgba(255,255,255,.03);color:#c2cad8;cursor:pointer;transition:border-color .25s,color .25s,background .25s}
+.chip.on{border-color:var(--lime);color:var(--lime);background:rgba(169,230,43,.08)}
+.fin-out{background:linear-gradient(160deg,rgba(16,20,28,.96),rgba(9,11,17,.96));border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.6vw,36px);
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+.fin-out .big{font-family:var(--disp);font-size:clamp(60px,8vw,112px);line-height:.86;color:var(--lime)}
+.fin-out .big small{font-family:var(--mono);font-size:14px;letter-spacing:.1em;color:var(--muted)}
+.fin-rows{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:20px 0}
+.fin-rows div{background:var(--panel);padding:13px 15px}
+.fin-rows .k{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.fin-rows .v{font-size:18px;font-weight:700;margin-top:4px}
+.fin-note{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);line-height:1.7;margin-bottom:18px}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;cursor:pointer;border:0;border-radius:40px;padding:14px 24px;transition:transform .3s,box-shadow .3s}
+.btn.amber{background:var(--amber);color:#06070b}
+.btn.amber:hover{transform:translateY(-2px);box-shadow:0 14px 34px -10px var(--amber)}
+.btn.lime{background:var(--lime);color:#06070b}
+.btn.lime:hover{transform:translateY(-2px);box-shadow:0 14px 34px -10px var(--lime)}
+.btn.block{width:100%}
+
+/* reviews */
+#reviews{--accent:var(--blue)}
+.rev-top{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(20px,3vw,44px);align-items:center;margin-bottom:34px}
+.rev-score .n{font-family:var(--disp);font-size:clamp(76px,10vw,140px);line-height:.82}
+.rev-score .st{color:var(--amber);letter-spacing:3px;font-size:20px}
+.rev-score .sub{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);margin-top:8px;text-transform:uppercase}
+.rev-bars{display:flex;flex-direction:column;gap:9px}
+.rbar{display:grid;grid-template-columns:34px 1fr 42px;gap:12px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.rbar .tr{height:6px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
+.rbar .tr i{display:block;height:100%;width:0;background:var(--amber);transition:width 1s cubic-bezier(.22,1,.36,1)}
+.rev-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rvw{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:11px}
+.rvw .rh{display:flex;align-items:center;justify-content:space-between}
+.rvw .who{font-weight:700;font-size:15px}
+.rvw .ver{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);display:flex;align-items:center;gap:5px}
+.rvw .stars{color:var(--amber);letter-spacing:2px;font-size:13px}
+.rvw p{color:#c2cad8;font-size:13.5px;line-height:1.66}
+.rvw .meta{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-top:auto}
+
+/* about */
+#about{--accent:var(--amber)}
+.ab-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,3.4vw,54px);align-items:center}
+.ab-copy p{color:#c2cad8;font-size:15px;line-height:1.78;margin-bottom:16px}
+.ab-copy p.lead{font-size:clamp(18px,2vw,23px);color:var(--ink);line-height:1.5}
+.ab-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+.ab-stats div{border:1px solid var(--line);border-radius:14px;padding:18px}
+.ab-stats .n{font-family:var(--disp);font-size:clamp(40px,5vw,64px);line-height:.9;color:var(--amber)}
+.ab-stats .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.ab-vis{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:4/5}
+.ab-vis img{width:100%;height:100%;object-fit:cover;display:block}
+.ab-vis .cap2{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#dfe5ee}
+.ab-vis::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,7,11,.85));z-index:1}
+.ab-trust{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+.ab-trust div{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:7px}
+.ab-trust .t{font-family:var(--disp);font-size:22px;letter-spacing:.03em}
+.ab-trust .d{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);line-height:1.6}
+
+/* contact */
+#contact{--accent:var(--amber)}
+.ct-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,3.4vw,56px)}
+.ct-form{display:flex;flex-direction:column;gap:14px}
+.ct-form .frm-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ct-form input,.ct-form textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;color:var(--ink);font-family:var(--sans);font-size:14.5px;outline:none;transition:border-color .25s}
+.ct-form textarea{min-height:120px;resize:vertical;line-height:1.6}
+.ct-form input:focus,.ct-form textarea:focus{border-color:var(--amber)}
+.ct-form input::placeholder,.ct-form textarea::placeholder{color:var(--muted)}
+.ct-sum{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:#c2cad8;background:rgba(255,122,31,.07);border:1px solid rgba(255,122,31,.25);border-radius:12px;padding:13px 15px;line-height:1.7}
+.ct-sum b{color:var(--amber)}
+.ct-ok{display:none;background:rgba(169,230,43,.09);border:1px solid rgba(169,230,43,.3);border-radius:12px;padding:16px;color:#dfffd0;font-size:14px;line-height:1.6}
+.ct-ok.show{display:block}
+.ct-info{display:flex;flex-direction:column;gap:14px}
+.ct-card{border:1px solid var(--line);border-radius:16px;padding:20px;background:var(--panel)}
+.ct-card .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.ct-card .v{font-size:16px;line-height:1.55}
+.ct-card a{color:var(--ink);border-bottom:1px solid var(--line);transition:color .25s,border-color .25s}
+.ct-card a:hover{color:var(--amber);border-color:var(--amber)}
+.ct-actions{display:flex;gap:10px;flex-wrap:wrap}
+.ct-actions a{flex:1;min-width:120px;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  padding:14px;border-radius:12px;border:1px solid var(--line);transition:transform .25s,border-color .25s,background .25s}
+.ct-actions a.call{background:var(--amber);color:#06070b;border-color:var(--amber);font-weight:700}
+.ct-actions a:hover{transform:translateY(-2px)}
+
+footer{position:relative;z-index:6;background:#04050a;border-top:1px solid var(--line);padding:46px clamp(18px,6vw,100px);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);line-height:2.2}
+footer .fr{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-end}
+footer b{color:var(--ink);font-weight:400}
+footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(--ink)}
+
+/* ================= overlays (gallery + sheet + dossier) ================= */
+.ov{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s}
+.ov.open{opacity:1;pointer-events:auto}
+.ov .back{position:absolute;inset:0;background:rgba(3,4,8,.82);backdrop-filter:blur(14px)}
+.ovx{position:absolute;top:14px;right:14px;z-index:6;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);
+  background:rgba(0,0,0,.5);color:#fff;font-size:20px;cursor:pointer;backdrop-filter:blur(6px);transition:transform .3s,background .3s;line-height:1}
+.ovx:hover{background:var(--amber);border-color:var(--amber);color:#000;transform:rotate(90deg)}
+
+/* gallery */
+#gallery .gwrap{position:relative;width:min(1240px,94vw);height:min(90vh,920px);display:flex;flex-direction:column}
+.gtop{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:6px 2px 16px}
+.gtop h3{font-family:var(--disp);font-size:clamp(34px,4vw,58px);letter-spacing:.03em;line-height:.9}
+.gtop .gsub{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.gfilt{display:flex;gap:7px;flex-wrap:wrap}
+.ggrid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;padding:4px;align-content:start}
+.ggrid::-webkit-scrollbar{width:5px}.ggrid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px}
+.gcard{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);cursor:pointer;display:flex;flex-direction:column;
+  transition:transform .3s,border-color .3s,box-shadow .3s;opacity:0;transform:translateY(16px)}
+.ggrid.shown .gcard{opacity:1;transform:none;transition:opacity .5s,transform .5s,border-color .3s,box-shadow .3s}
+.gcard:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.3);box-shadow:0 20px 44px -22px rgba(0,0,0,.9)}
+.gcard .gph{aspect-ratio:4/3;background:var(--gm,#0b0e14);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.gcard .gph img{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+.gcard .gst{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+  padding:5px 9px;border-radius:20px;background:rgba(6,7,11,.75);backdrop-filter:blur(4px)}
+.gcard .gtx{padding:13px 14px 15px}
+.gcard .gn{font-family:var(--disp);font-size:21px;letter-spacing:.03em;line-height:1.02}
+.gcard .gm{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-top:5px}
+.gcard .gp{font-family:var(--mono);font-size:13px;color:var(--amber);margin-top:8px;letter-spacing:.04em}
+
+/* sheet (car/build dossier) */
+#sheet .shwrap{position:relative;width:min(1040px,94vw);max-height:90vh;display:grid;grid-template-columns:1.05fr .95fr;
+  background:linear-gradient(160deg,rgba(16,19,28,.98),rgba(8,10,16,.98));border:1px solid rgba(255,255,255,.14);border-radius:20px;overflow:hidden;
+  box-shadow:0 40px 120px -30px rgba(0,0,0,.9),0 0 90px -40px var(--sc,var(--amber))}
+.shmedia{position:relative;background:var(--sm,#0b0e14);min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.shmedia img,.shmedia video{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+.shmedia .lens{position:absolute;inset:0;pointer-events:none;background:radial-gradient(340px circle at var(--lx,50%) var(--ly,50%),rgba(255,255,255,.1),transparent 60%)}
+.shbody{padding:clamp(20px,3vw,38px);overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.shbody::-webkit-scrollbar{width:4px}.shbody::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15)}
+.shtag{font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--sc,var(--amber));display:flex;align-items:center;gap:10px}
+.shtag::before{content:"";width:20px;height:1px;background:var(--sc,var(--amber))}
+.shwrap h3{font-family:var(--disp);font-size:clamp(38px,4.4vw,62px);line-height:.92;letter-spacing:.02em}
+.shstory{color:#c2cad8;font-size:14px;line-height:1.75}
+.shspecs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.shspecs div{background:var(--panel);padding:11px 14px}
+.shspecs .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.shspecs .v{font-size:16px;font-weight:700;margin-top:3px}
+.shcta{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+.shnav{display:flex;gap:8px}
+.shnav button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);font-size:16px;cursor:pointer;transition:background .25s,border-color .25s}
+.shnav button:hover{border-color:var(--sc,var(--amber));background:rgba(255,255,255,.08)}
+
+/* dossier (hall/bay 3D taps, desktop) — reuses sheet look */
+#doss .shwrap{grid-template-columns:1.05fr 1fr}
+
+/* mobile phone dock */
+#dock{position:fixed;left:0;right:0;bottom:0;z-index:72;display:none;gap:1px;background:var(--line);border-top:1px solid var(--line)}
+#dock a{flex:1;background:rgba(9,11,17,.96);backdrop-filter:blur(10px);text-align:center;padding:13px 4px 15px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#c2cad8;display:flex;flex-direction:column;align-items:center;gap:4px}
+#dock a .ic{font-size:16px}
+#dock a.book{background:var(--amber);color:#06070b;font-weight:700}
+
+/* ================= mobile top (JS-built: hero + work + build) ================= */
+#mtop{display:none}
+@media(max-width:820px){
+  #scene,.imm-spacer,#immersive,.vig{display:none!important}
+  #mtop{display:block}
+  #dock{display:flex}
+  body{padding-bottom:60px}
+  .nav{padding:11px 16px}
+  .brand{font-size:23px}
+  #flow{background:var(--bg)}
+  .sec{padding:54px 18px}
+  .fin-grid,.rev-top,.ab-grid,.ct-grid{grid-template-columns:1fr!important}
+  .ct-form .frm-row{grid-template-columns:1fr}
+  .rev-grid{grid-template-columns:1fr}
+  .ab-trust{grid-template-columns:1fr 1fr}
+  .ab-stats{grid-template-columns:1fr 1fr}
+  .shead h2{font-size:clamp(40px,12vw,64px)}
+  #sheet .shwrap{grid-template-columns:1fr;max-height:92vh;overflow-y:auto}
+  .shmedia{min-height:220px;height:52vw}
+  .mhero{position:relative;min-height:88vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 18px 40px;overflow:hidden}
+  .mhero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .mhero .sc{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,7,11,.72) 0%,rgba(6,7,11,.1) 40%,rgba(6,7,11,.96) 100%)}
+  .mhero .in{position:relative;z-index:2}
+  .mhero h1{font-family:var(--disp);font-size:clamp(66px,22vw,120px);line-height:.82;letter-spacing:.02em}
+  .mhero .mk{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:12px}
+  .mhero p{color:#c2cad8;font-size:14.5px;line-height:1.66;margin-top:12px;max-width:34ch}
+  .mhero .hbtns{margin-top:22px}
+  .msec{padding:52px 18px 0}
+  .msec .mk{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent,var(--amber));display:block;margin-bottom:10px}
+  .msec h2{font-family:var(--disp);font-size:clamp(38px,11vw,62px);line-height:.92;letter-spacing:.015em}
+  .msec>p{color:#c2cad8;font-size:14px;line-height:1.72;margin-top:11px}
+  .mclip{width:100%;border-radius:14px;overflow:hidden;margin:18px 0 0;border:1px solid var(--line);background:#0b0e14}
+  .mclip video{width:100%;display:block;height:auto}
+  .mwork{margin-top:10px}
+  .mwc{margin-top:26px}
+  .mwc .wk{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent,var(--amber))}
+  .mwc h3{font-family:var(--disp);font-size:clamp(30px,8.5vw,46px);line-height:.95;margin:7px 0 8px}
+  .mwc p{color:#c2cad8;font-size:13.5px;line-height:1.68}
+  .mwc .spec{margin-top:12px}
+  .mbuild{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mst{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0a0d13;display:flex;flex-direction:column}
+  .mst .ph{aspect-ratio:1/1;background:#0b0e14;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .mst .ph img,.mst .ph video{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+  .mst .tx{padding:11px 12px}
+  .mst .nm{font-family:var(--disp);font-size:18px;letter-spacing:.03em;line-height:1.05}
+  .mst .mt{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-top:5px}
+  .mst .pr{font-family:var(--mono);font-size:12px;color:var(--amber);margin-top:7px}
+  .mst.sel{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber) inset}
+  .mst .add{margin:0 12px 12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:30px;padding:9px 0;width:calc(100% - 24px);cursor:pointer}
+  .mst.sel .add{background:var(--amber);color:#06070b;border-color:var(--amber)}
+  .mqhud{position:sticky;bottom:72px;z-index:9;margin:22px 0 0;display:flex;align-items:center;gap:12px;
+    background:rgba(9,11,17,.96);border:1px solid var(--line);border-radius:44px;padding:11px 18px;backdrop-filter:blur(12px)}
+  .mqhud .hl{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .mqhud .hv{font-family:var(--disp);font-size:26px;color:var(--amber);line-height:1}
+  .mqhud .hgo{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:var(--amber);color:#06070b;border:0;border-radius:30px;padding:9px 14px;font-weight:700}
+  .ggrid{grid-template-columns:1fr 1fr}
+  #gallery .gwrap{width:94vw;height:88vh}
+}
+.loading{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .8s}
+.loading.done{opacity:0;pointer-events:none}
+.loading .lg{font-family:var(--disp);font-size:54px;letter-spacing:.16em}
+.loading .bar{width:200px;height:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.loading .bar i{display:block;height:100%;width:0;background:var(--amber);transition:width .3s}
+.loading .lt{font-family:var(--mono);font-size:9.5px;letter-spacing:.36em;color:var(--muted)}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="vig"></div>
+<div class="grain"></div>
+
+<div class="loading" id="loading"><div class="lg">OVERHAUL</div><div class="bar"><i id="lbar"></i></div><div class="lt">OPENING THE SHUTTERS…</div></div>
+
+<nav class="nav" id="nav">
+  <div class="brand" data-nav="top">OVERHAUL<small>DIGBETH · EST. 2014</small></div>
+  <div class="nav-links" id="navLinks">
+    <a data-nav="work">Work</a>
+    <a data-nav="build">Build</a>
+    <a data-nav="gallery">Gallery</a>
+    <a data-nav="finance">Finance</a>
+    <a data-nav="reviews">Reviews</a>
+    <a data-nav="about">About</a>
+    <a data-nav="contact">Contact</a>
+  </div>
+  <div class="nav-r">
+    <div class="res" data-nav="contact">Book a bay</div>
+    <button class="burger" id="burger" aria-label="menu">≡</button>
+  </div>
+</nav>
+
+<div id="menu">
+  <button class="mclose" id="mclose" aria-label="close">×</button>
+  <a data-nav="work">Work<span>01</span></a>
+  <a data-nav="build">Build a quote<span>02</span></a>
+  <a data-nav="gallery">Gallery<span>03</span></a>
+  <a data-nav="finance">Finance<span>04</span></a>
+  <a data-nav="reviews">Reviews<span>05</span></a>
+  <a data-nav="about">About<span>06</span></a>
+  <a data-nav="contact">Contact<span>07</span></a>
+  <div class="mfoot">DIGBETH, BIRMINGHAM · <b>@OVERHAUL.WORKS</b><br>0121 496 0714</div>
+</div>
+
+<!-- desktop immersive overlays -->
+<div id="immersive">
+  <div class="hero-ov" id="heroOv">
+    <div class="mega"><span data-h>OVER</span><span data-h class="stroke">HAUL</span></div>
+    <div class="tl">PERFORMANCE REBUILDS · DIGBETH, BIRMINGHAM · <b>14 BAYS A YEAR</b></div>
+    <div class="hbtns">
+      <button class="hb fill" data-nav="build">Build a quote</button>
+      <button class="hb ghost" data-nav="work">See the work</button>
+    </div>
+  </div>
+  <div class="cap L pos-mid" id="capL"></div>
+  <div class="cap R pos-mid" id="capR"></div>
+  <div class="cue" id="cue">SCROLL<i></i></div>
+  <div id="hud"><span class="hl">Your build</span><span class="hv" id="hudSum">£0</span><span class="hd" id="hudDays">0 bay days</span><button class="hgo" data-nav="finance">Finance it →</button></div>
+</div>
+<div id="tip"></div>
+
+<!-- scroll budget for the immersive block -->
+<div class="imm-spacer" id="immSpacer"></div>
+
+<!-- flow -->
+<div id="flow">
+  <div id="mtop"></div>
+
+  <section class="sec rv" id="finance">
+    <div class="shead"><div><span class="mk">Finance</span><h2>FINANCE<br>THE BUILD.</h2></div><p>Spread a build, a service or a full restomod over 2–5 years. Move the sliders — the monthly updates live, and your quote from the Build section drops straight in.</p></div>
+    <div class="fin-grid">
+      <div class="fin-ctrl">
+        <div class="frow"><label>Build cost <b id="fCostV">£45,000</b></label><input type="range" id="fCost" min="5000" max="150000" step="500" value="45000"></div>
+        <div class="frow"><label>Deposit <b id="fDepV">£6,750 · 15%</b></label><input type="range" id="fDep" min="0" max="50" step="1" value="15"></div>
+        <div class="frow"><label>Term</label><div class="chips" id="fTerm"><div class="chip" data-t="24">24 mo</div><div class="chip on" data-t="36">36 mo</div><div class="chip" data-t="48">48 mo</div><div class="chip" data-t="60">60 mo</div></div></div>
+        <div class="frow"><label>Representative APR <b>10.9%</b></label></div>
+      </div>
+      <div class="fin-out">
+        <div class="big"><span id="fMonthly">£0</span><small> /mo</small></div>
+        <div class="fin-rows">
+          <div><div class="k">Financed</div><div class="v" id="fFin">£0</div></div>
+          <div><div class="k">Deposit</div><div class="v" id="fDep2">£0</div></div>
+          <div><div class="k">Total payable</div><div class="v" id="fTot">£0</div></div>
+          <div><div class="k">Total interest</div><div class="v" id="fInt">£0</div></div>
+        </div>
+        <div class="fin-note">Representative example only, not a quote or an offer of credit. Subject to status and affordability. 10.9% APR representative on hire purchase over the selected term.</div>
+        <button class="btn lime block" data-nav="contact" id="fApply">Apply with these figures →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec light rv" id="reviews">
+    <div class="shead"><div><span class="mk" style="--accent:var(--blue)">Reviews</span><h2 style="color:#0b0e14">WHAT THEY<br>DROVE HOME.</h2></div><p>Every review is from an owner whose car left our floor with a build folder. No incentives, no edits.</p></div>
+    <div class="rev-top">
+      <div class="rev-score"><div class="n" style="color:#0b0e14">4.9</div><div class="st">★★★★★</div><div class="sub" style="color:#44506a">136 verified owners</div></div>
+      <div class="rev-bars" id="revBars"></div>
+    </div>
+    <div class="rev-filters" id="revFilters"></div>
+    <div class="rev-grid" id="revGrid"></div>
+  </section>
+
+  <section class="sec rv" id="about">
+    <div class="shead"><div><span class="mk">About</span><h2>ONE ROOF,<br>EVERY BOLT.</h2></div><p>A working performance shop in Digbeth — not a showroom with a kettle. Fourteen full builds a year, the rest servicing and bodywork.</p></div>
+    <div class="ab-grid">
+      <div class="ab-copy">
+        <p class="lead">We started in 2014 with one ramp and a welder. We now run eight bays, our own dyno, a paint booth and a fabrication shop — all under one roof in the Floodgate Works.</p>
+        <p>Nothing gets farmed out, so nothing goes missing between trades. The person who strips your car is in the building when it's painted, mapped and signed off. You get photographs every Friday and a parts list you can check line by line.</p>
+        <p>Every car leaves with its build folder: the dyno sheet, the torque log, the geometry print-out, and a crate holding every original part we took off it.</p>
+        <div class="ab-stats">
+          <div><div class="n">11</div><div class="l">Years on the floor</div></div>
+          <div><div class="n">480+</div><div class="l">Builds delivered</div></div>
+          <div><div class="n">8</div><div class="l">Bays · own dyno</div></div>
+          <div><div class="n">24mo</div><div class="l">Build warranty</div></div>
+        </div>
+      </div>
+      <div class="ab-vis"><img src="assets/img/c-e63.jpg" alt="OVERHAUL workshop"><div class="cap2">Floodgate Works · Digbeth, B9 — late shift on the dyno</div></div>
+    </div>
+    <div class="ab-trust">
+      <div><div class="t">BUILD FOLDER</div><div class="d">Every photo, invoice and spec, handed over in print.</div></div>
+      <div><div class="t">DYNO SHEET</div><div class="d">Printed and signed. The number you were promised.</div></div>
+      <div><div class="t">TORQUE LOG</div><div class="d">Every fastener, to spec, under watch.</div></div>
+      <div><div class="t">OLD PARTS BACK</div><div class="d">Everything we removed comes home in a crate.</div></div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="contact">
+    <div class="shead"><div><span class="mk">Contact</span><h2>BOOK<br>A BAY.</h2></div><p>Tell us the car and the number you want on the dyno sheet. We quote in writing within three working days — parts, labour and paint, line by line.</p></div>
+    <div class="ct-grid">
+      <form class="ct-form" id="ctForm" onsubmit="return false">
+        <div class="frm-row"><input type="text" id="ctName" placeholder="Your name" autocomplete="name"><input type="tel" id="ctPhone" placeholder="Phone" autocomplete="tel"></div>
+        <input type="email" id="ctEmail" placeholder="Email" autocomplete="email">
+        <input type="text" id="ctCar" placeholder="What are you driving? (e.g. R35 GT-R, 2019)">
+        <textarea id="ctMsg" placeholder="What do you want done?"></textarea>
+        <div class="ct-sum" id="ctSum">Nothing added yet — build a quote or run the finance calculator and it drops in here.</div>
+        <button class="btn amber block" id="ctSend">Send it over →</button>
+        <div class="ct-ok" id="ctOk"></div>
+      </form>
+      <div class="ct-info">
+        <div class="ct-card"><div class="k">The shop</div><div class="v">Unit 7, Floodgate Works<br>Digbeth, Birmingham <b>B9 4AA</b></div></div>
+        <div class="ct-card"><div class="k">Talk to us</div><div class="v"><a href="tel:+441214960714">0121 496 0714</a><br><a href="mailto:build@overhaul.works">build@overhaul.works</a><br><a href="https://instagram.com/overhaul.works" target="_blank" rel="noopener">@overhaul.works</a></div></div>
+        <div class="ct-card"><div class="k">Open</div><div class="v">Mon–Fri 08:00–18:00<br>Sat 09:00–16:00 · Sun closed</div></div>
+        <div class="ct-actions">
+          <a class="call" href="tel:+441214960714">Call</a>
+          <a href="https://wa.me/441214960714?text=Hi%20OVERHAUL%2C%20I'd%20like%20to%20book%20a%20bay" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fr">
+      <div class="fb">OVERHAUL</div>
+      <div>UNIT 7, FLOODGATE WORKS, DIGBETH, BIRMINGHAM <b>B9 4AA</b><br>0121 496 0714 · BUILD@OVERHAUL.WORKS · <b>@OVERHAUL.WORKS</b></div>
+      <div>PERFORMANCE REBUILDS<br>SERVICING · BODYWORK · <b>SINCE 2014</b></div>
+    </div>
+  </footer>
+</div>
+
+<!-- mobile phone dock -->
+<div id="dock">
+  <a href="tel:+441214960714"><span class="ic">✆</span>Call</a>
+  <a href="https://wa.me/441214960714?text=Hi%20OVERHAUL" target="_blank" rel="noopener"><span class="ic">◍</span>WhatsApp</a>
+  <a class="book" data-nav="contact"><span class="ic">◉</span>Book a bay</a>
+</div>
+
+<!-- overlays -->
+<div class="ov" id="gallery"><div class="back" data-close></div>
+  <div class="gwrap"><button class="ovx" data-close aria-label="close">×</button>
+    <div class="gtop"><div><h3>THE GALLERY</h3><div class="gsub" id="gCount">Delivered builds · Digbeth floor</div></div><div class="gfilt" id="gFilt"></div></div>
+    <div class="ggrid" id="gGrid"></div>
+  </div>
+</div>
+<div class="ov" id="sheet"><div class="back" data-close></div>
+  <div class="shwrap"><button class="ovx" data-close aria-label="close">×</button>
+    <div class="shmedia" id="shMedia"></div><div class="shbody" id="shBody"></div>
+  </div>
+</div>
+<div class="ov" id="doss"><div class="back" data-close></div>
+  <div class="shwrap"><button class="ovx" data-close aria-label="close">×</button>
+    <div class="shmedia" id="dsMedia"></div><div class="shbody" id="dsBody"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* ============================================================
+   OVERHAUL — immersive hall (beats 1-6) + 3D quote builder (beat 10)
+   on one page, then the 360-style conversion kit: gallery, finance,
+   reviews, about, contact — reachable from a persistent nav. One
+   running quote threads Build → Finance → Contact.
+   ============================================================ */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const gbp=n=>'£'+Math.round(n).toLocaleString('en-GB');
+const $=id=>document.getElementById(id);
+const isMobile=matchMedia('(max-width:820px)').matches;
+const AC={amber:'#ff7a1f',blue:'#3ea9ff',red:'#e0273c',lime:'#a9e62b',ink:'#eef2f8'};
+
+/* ---------- THE WORK · beats 1-6 (real clips) ---------- */
+const STOPS=[
+  {v:'gtr-dawn.mp4', side:'R',accent:AC.amber,dim:1,  kick:'Build 01 — On record',dk:'w0',
+   title:'EVERY BOLT,<br>ON RECORD.',
+   sub:'A full build runs 56 days and ~2,100 hours on our floor. Photographs every Friday, a parts list you can check line by line.',
+   spec:[['Workshop','Digbeth, B9'],['Builds / year','14']]},
+  {v:'gtr-night.mp4',side:'L',accent:AC.blue, dim:1,  kick:'Build 02 — Night shift',dk:'w1',
+   title:'THE DYNO<br>RUNS LATE.',
+   sub:'Pulls happen after six, when the ambient drops and the numbers stop flattering anyone. Every car leaves with its printed sheet.',
+   spec:[['Dyno','Mainline 4WD'],['Sheet','Printed, signed']]},
+  {v:'exhaust.mp4',  side:'R',accent:AC.amber,dim:1,  kick:'Build 03 — Breathing',dk:'w2',
+   title:'EXHAUST,<br>INTAKE, <span class="stroke">ECU.</span>',
+   sub:'Valved titanium, 3.5in downpipes and a map on your fuel. A stock R35 goes 565 to 812 bhp without the block coming out.',
+   spec:[['From','£2,400'],['Lead time','4 days']]},
+  {v:'gt3-arch.mp4', side:'L',accent:AC.blue, dim:.78,kick:'Build 04 — Stance',dk:'w3',
+   title:'WHEELS AND<br>RIDE HEIGHT.',
+   sub:'Forged centre-locks, corner-weighted on the pads, geometry set to the sheet you sign off. Every shim photographed before it goes in.',
+   spec:[['From','£4,100'],['Geo','Corner-weighted']]},
+  {v:'gt3-bridge.mp4',side:'R',accent:AC.blue,dim:.86,kick:'Build 05 — Road proof',dk:'w4',
+   title:'SIGNED OFF<br>ON THE ROAD.',
+   sub:'Four hundred shakedown miles before you see it — motorway, B-road, cold starts — then the whole car comes back for a full re-torque.',
+   spec:[['Shakedown','400 mi'],['Re-torque','Included']]},
+  {v:'hura-red.mp4', side:'L',accent:AC.red,  dim:1,  kick:'Build 06 — Collected',dk:'w5',
+   title:'BUILD №112,<br>OUT IN OCTOBER.',
+   sub:'Huracán, Rosso Mars respray, valved Novitec system, 661 bhp at the wheels. Twelve weeks door to door, and the owner drove it home.',
+   spec:[['Build','№112'],['Power','661 bhp']]}
+];
+
+/* ---------- THE BUILD · beat 10 (the keeper) ---------- */
+const SVC=[
+  {key:'ecu',src:'part/engine.jpg',  name:'ECU & BOOST',     from:4800, days:12,accent:AC.amber,
+   det:'Bench-flashed ECU, uprated or hybrid turbos, upgraded fuelling, six dyno sessions to settle the map on your pump fuel.',
+   inc:[['Includes','Map + fuelling'],['Dyno','6 sessions'],['Gain, typical','+180 bhp'],['Warranty','24 months']]},
+  {key:'exh',src:'vid/exhaust.mp4',  name:'EXHAUST & INTAKE',from:2400, days:4, accent:AC.amber,
+   det:'Valved titanium cat-back, 3.5in downpipes, high-flow intakes. Fitted, pressure-tested and re-mapped the same week.',
+   inc:[['Includes','Cat-back + DPs'],['Material','Titanium'],['Fit time','4 days'],['Re-map','Included']]},
+  {key:'sus',src:'part/coilover.jpg',name:'SUSPENSION & GEO', from:3200, days:5, accent:AC.blue,
+   det:'Three-way adjustable coilovers, spherical top mounts, corner-weighted on our pads and set to a geometry sheet you keep.',
+   inc:[['Damping','3-way'],['Corner weights','Yes'],['Geo sheet','Signed'],['Fit time','5 days']]},
+  {key:'brk',src:'part/brakes.jpg',  name:'BIG BRAKE KIT',    from:5600, days:3, accent:AC.red,
+   det:'Six-pot front, four-pot rear, floating two-piece discs, braided lines and a full bed-in on the road before handover.',
+   inc:[['Front','6-pot'],['Discs','2-piece float'],['Lines','Braided'],['Bed-in','On road']]},
+  {key:'whl',src:'part/wheels.jpg',  name:'FORGED WHEELS',    from:4100, days:7, accent:AC.blue,
+   det:'Monoblock forged sets, built to your offsets, hub-centric rings machined in-house and road-force balanced before they go on.',
+   inc:[['Build','Monoblock'],['Offsets','To order'],['Balance','Road-force'],['Lead time','7 days']]},
+  {key:'str',src:'part/teardown.jpg',name:'FULL STRIP & REBUILD',from:18400,days:42,accent:AC.amber,
+   det:'The whole car to a bare shell. Every component catalogued, photographed, replaced or refinished, then built back with a new torque log.',
+   inc:[['Scope','Bare shell'],['Parts logged','1,800+'],['Bay days','42'],['Photos','Weekly']]}
+];
+
+/* ---------- GALLERY · delivered builds ---------- */
+const GAL=[
+  {img:'c-gtr.jpg',    name:'R35 GT-R',    cat:'build',  spec:'Widebody · 812 bhp', price:'£94,500', status:'SOLD',   hex:AC.blue,
+   story:'Build №104. Hybrid turbos, dry-sump conversion, full arches over forged centre-locks. 4,100 miles since completion.'},
+  {img:'c-720s.jpg',   name:'720S',        cat:'build',  spec:'Track spec · 755 bhp',price:'£168,000',status:'RESERVED',hex:AC.ink,
+   story:'Stripped interior, half-cage, Inconel system and a geometry setup done on our pads for Donington.'},
+  {img:'c-e63.jpg',    name:'E63 S',       cat:'service',spec:'Stage 2 · 712 bhp',  price:'£78,900', status:'FOR SALE',hex:AC.ink,
+   story:'The quiet one. Stage 2, uprated intercoolers, air suspension left alone on purpose. Drives like standard until it does not.'},
+  {img:'c-zr1.jpg',    name:'CORVETTE ZR1',cat:'build',  spec:'Showroom · 755 bhp', price:'£132,000',status:'SOLD',   hex:AC.amber,
+   story:'Sold in September to a customer in Leeds. Listed here because people keep asking what happened to it.'},
+  {img:'c-vette.jpg',  name:'C8 STINGRAY', cat:'build',  spec:'Red cage · 670 bhp', price:'£119,000',status:'IN BUILD',hex:AC.red,
+   story:'On the lift at day 31. Supercharged, cage in, red leather retrim going in next week.'},
+  {img:'c-hellcat.jpg',name:'HELLCAT',     cat:'build',  spec:'Drag spec · 1,020 bhp',price:'£86,500',status:'FOR SALE',hex:AC.red,
+   story:'Built for the eighth-mile, street-legal by a millimetre. 9.6 at 146 on the slicks, and it still idles in traffic.'},
+  {img:'c-urus.jpg',   name:'URUS',        cat:'body',   spec:'Blackout · 690 bhp', price:'£145,000',status:'SOLD',   hex:AC.ink,
+   story:'De-chromed, 24in forged, full PPF over satin. Delivered in August to its second OVERHAUL owner.'},
+  {img:'c-mustang.jpg',name:'MUSTANG GT',  cat:'build',  spec:'Stripe car · 580 bhp',price:'£62,000', status:'FOR SALE',hex:AC.ink,
+   story:'Supercharged 5.0, Watts link, proper brakes. The cheapest way out of our door into something genuinely quick.'},
+  {img:'c-gt3rs.jpg',  name:'911 GT3 RS',  cat:'service',spec:'Track prep · 518 bhp',price:'£198,000',status:'RESERVED',hex:AC.blue,
+   story:'Corner-balanced, fresh fluids, full geometry and a cage inspection ahead of a season at the ring.'},
+  {img:'g-aventador.jpg',name:'AVENTADOR', cat:'body',   spec:'Repaint · 740 bhp',  price:'£268,000',status:'FOR SALE',hex:AC.ink,
+   story:'Nero Nemesis respray over a full strip, every panel wet-sanded, carbon re-lacquered. Bodywork only — the drivetrain was perfect.'},
+  {img:'g-jesko.jpg',  name:'JESKO',       cat:'build',  spec:'Commission · 1,280 hp',price:'P.O.A.',  status:'IN BUILD',hex:AC.amber,
+   story:'Our highest-value commission to date. Bare-metal prep, ember-orange tri-coat, carbon splitter. Twenty-six weeks booked.'},
+  {img:'g-mclaren.jpg',name:'765LT',       cat:'service',spec:'Major service · 755 bhp',price:'£232,000',status:'FOR SALE',hex:AC.ink,
+   story:'Full major, carbon brake refresh, bodywork correction and a 360° report before it went back on sale.'}
+];
+const GAL_FILTERS=[['all','All'],['build','Rebuilds'],['service','Servicing'],['body','Bodywork']];
+
+/* ---------- REVIEWS ---------- */
+const REV_DIST=[88,8,3,1,0];
+const REVIEWS=[
+  {who:'Marcus H.',cat:'build',  r:5,txt:'Brought them a crash-damaged R35 everyone else wrote off. Came back 812 bhp with a folder thicker than the owner’s manual. Faultless.',when:'Sep 2026 · R35 GT-R'},
+  {who:'Priya N.', cat:'service',r:5,txt:'Stage 2 on the E63, done in a week, re-mapped on my fuel and handed back with the dyno sheet. No surprises on the bill.',when:'Aug 2026 · E63 S'},
+  {who:'Dan R.',   cat:'build',  r:5,txt:'Twelve-week Huracán build, photos every Friday like clockwork. Drove it home the day they said. These people actually run a shop.',when:'Oct 2026 · Huracán'},
+  {who:'Sofia L.', cat:'body',   r:5,txt:'Full respray on the Urus after a bad wrap pull. Panel gaps better than factory and they PPF’d the lot. Can’t fault it.',when:'Jul 2026 · Urus'},
+  {who:'Tom A.',   cat:'build',  r:4,txt:'Hellcat drag build. Ran a day over on the cage but they called me before I had to ask. 9.6 and still idles in traffic.',when:'Jun 2026 · Hellcat'},
+  {who:'Keira M.', cat:'service',r:5,txt:'Took the GT3 RS in for track prep. Corner-balanced, geo printed, cage checked. I trust them with a car I actually race.',when:'May 2026 · 911 GT3 RS'},
+  {who:'Idris K.', cat:'build',  r:5,txt:'C8 supercharger build. They sent the torque log and a crate of my old parts. Nobody does that. Second car I’ve had built here.',when:'Apr 2026 · C8'},
+  {who:'Lena V.',  cat:'body',   r:5,txt:'Aventador repaint — bare metal, three weeks, flawless. The quote in writing matched the invoice to the pound.',when:'Mar 2026 · Aventador'}
+];
+const REV_FILTERS=[['all','All'],['build','Rebuilds'],['service','Servicing'],['body','Bodywork']];
+
+/* ============================================================
+   THE RUNNING QUOTE  (Build → Finance → Contact)
+   ============================================================ */
+const BUILD={svc:new Set()};
+function quoteTotals(){let m=0,d=0;BUILD.svc.forEach(k=>{const s=SVC.find(x=>x.key===k);if(s){m+=s.from;d+=s.days;}});return{money:m,days:d};}
+function quoteNote(){if(!BUILD.svc.size)return 'Tap a station to add it';const n=BUILD.svc.size;return n+(n===1?' station':' stations')+' · '+gbp(quoteTotals().money);}
+function refreshQuote(){
+  const {money,days}=quoteTotals();
+  if($('hudSum'))$('hudSum').textContent=gbp(money);
+  if($('hudDays'))$('hudDays').textContent=days+' bay days';
+  if($('mHudSum'))$('mHudSum').textContent=gbp(money);
+  if($('mHudDays'))$('mHudDays').textContent=days+' bay days';
+  document.querySelectorAll('[data-sel]').forEach(el=>{
+    const on=BUILD.svc.has(el.getAttribute('data-sel'));
+    el.classList.toggle('sel',on);
+    const b=el.querySelector('.add'); if(b)b.textContent=on?'Added ✓':'Add to build';
+  });
+  // feed finance + contact
+  if(money>0 && fin.cost!==money){ setFinanceCost(money); }
+  updateContactSummary();
+}
+function toggleSvc(k){ BUILD.svc.has(k)?BUILD.svc.delete(k):BUILD.svc.add(k); refreshQuote(); }
+
+/* ============================================================
+   NAV  (persistent, active-highlight, jump / overlay)
+   ============================================================ */
+let lenis=null, immH=1, immProg=0, scrollPx=0;
+function immHeight(){ return (isMobile?0:7.2)*innerHeight; }
+const scroller={
+  to(y){ if(lenis) lenis.scrollTo(y,{duration:1.3}); else window.scrollTo({top:y,behavior:'smooth'}); },
+};
+function sectionTop(id){ const el=$(id); return el? el.getBoundingClientRect().top+ (lenis?lenis.scroll:window.scrollY) - 8 : 0; }
+function navGo(t){
+  closeMenu(); closeAllOv();
+  if(t==='gallery'){ openGallery(); return; }
+  if(t==='top'){ scroller.to(0); return; }
+  if(isMobile){
+    if(t==='work'){ scroller.to(sectionTop('mWork')); return; }
+    if(t==='build'){ scroller.to(sectionTop('mBuild')); return; }
+    scroller.to(sectionTop(t)); return;
+  }
+  if(t==='work'){ scroller.to(immH*0.16); return; }
+  if(t==='build'){ scroller.to(immH*0.82); return; }
+  scroller.to(sectionTop(t));
+}
+document.addEventListener('click',e=>{ const n=e.target.closest('[data-nav]'); if(n){ e.preventDefault(); navGo(n.getAttribute('data-nav')); } });
+function setNavActive(key){
+  document.querySelectorAll('#navLinks a').forEach(a=>a.classList.toggle('on',a.getAttribute('data-nav')===key));
+}
+function currentZone(){
+  const y=lenis?lenis.scroll:window.scrollY;
+  const top=el=>el.getBoundingClientRect().top+y;          // absolute document position, not offsetParent-relative
+  if(!isMobile){
+    if(y<immH*0.72) return 'work';
+    if(y<immH*0.995) return 'build';
+  } else {
+    const mb=$('mBuild');
+    if(mb && y < top(mb)-innerHeight*0.4) return 'work';
+    if(mb && y < top(mb)+mb.offsetHeight-innerHeight*0.5) return 'build';
+  }
+  const ids=['finance','reviews','about','contact'];
+  let cur='build';
+  for(const id of ids){ const el=$(id); if(el && y >= top(el)-innerHeight*0.42) cur=id; }
+  return cur;
+}
+/* menu */
+const menu=$('menu');
+$('burger').addEventListener('click',()=>menu.classList.add('open'));
+$('mclose').addEventListener('click',closeMenu);
+function closeMenu(){ menu.classList.remove('open'); }
+
+/* ============================================================
+   FINANCE
+   ============================================================ */
+const fin={cost:45000,depPct:15,term:36,apr:10.9};
+function setFinanceCost(v){ fin.cost=clamp(v,5000,150000); if($('fCost'))$('fCost').value=fin.cost; calcFinance(); }
+function pmt(principal,aprPct,n){ const r=aprPct/100/12; if(r<=0) return principal/n; return principal*r/(1-Math.pow(1+r,-n)); }
+function calcFinance(){
+  const dep=Math.round(fin.cost*fin.depPct/100);
+  const financed=Math.max(0,fin.cost-dep);
+  const m=pmt(financed,fin.apr,fin.term);
+  const tot=m*fin.term+dep, interest=m*fin.term-financed;
+  if($('fCostV'))$('fCostV').textContent=gbp(fin.cost);
+  if($('fDepV'))$('fDepV').textContent=gbp(dep)+' · '+fin.depPct+'%';
+  if($('fMonthly'))$('fMonthly').textContent=gbp(m);
+  if($('fFin'))$('fFin').textContent=gbp(financed);
+  if($('fDep2'))$('fDep2').textContent=gbp(dep);
+  if($('fTot'))$('fTot').textContent=gbp(tot);
+  if($('fInt'))$('fInt').textContent=gbp(interest);
+  fin.monthly=m; fin.dep=dep;
+  updateContactSummary();
+}
+function wireFinance(){
+  const c=$('fCost'),d=$('fDep');
+  if(c)c.addEventListener('input',()=>{fin.cost=+c.value;calcFinance();});
+  if(d)d.addEventListener('input',()=>{fin.depPct=+d.value;calcFinance();});
+  document.querySelectorAll('#fTerm .chip').forEach(ch=>ch.addEventListener('click',()=>{
+    document.querySelectorAll('#fTerm .chip').forEach(x=>x.classList.remove('on'));
+    ch.classList.add('on'); fin.term=+ch.getAttribute('data-t'); calcFinance();
+  }));
+  calcFinance();
+}
+
+/* ============================================================
+   CONTACT  (summary from quote + finance, send → thank-you)
+   ============================================================ */
+function updateContactSummary(){
+  const el=$('ctSum'); if(!el) return;
+  const {money,days}=quoteTotals();
+  const bits=[];
+  if(money>0){ const names=[...BUILD.svc].map(k=>SVC.find(x=>x.key===k).name.toLowerCase()); bits.push('Build: <b>'+gbp(money)+'</b> ('+names.join(', ')+'), ~'+days+' bay days'); }
+  if(fin.monthly){ bits.push('Finance: <b>'+gbp(fin.monthly)+'/mo</b> over '+fin.term+' mo, '+gbp(fin.dep)+' deposit'); }
+  el.innerHTML = bits.length? bits.join('<br>') : 'Nothing added yet — build a quote or run the finance calculator and it drops in here.';
+}
+function wireContact(){
+  $('ctSend').addEventListener('click',()=>{
+    const name=$('ctName').value.trim(), car=$('ctCar').value.trim();
+    const ok=$('ctOk');
+    ok.innerHTML='<b>Thanks'+(name?', '+name.split(' ')[0]:'')+'.</b> Your request'+(car?' for the '+car:'')+' is in — we quote in writing within three working days. For anything urgent, call 0121 496 0714 or hit WhatsApp below.';
+    ok.classList.add('show'); ok.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+}
+
+/* ============================================================
+   MEDIA  (true-aspect cards, autoplay-loop, visibility-managed)
+   ============================================================ */
+const VID={}, IMG={}, CARDS=[]; const UNIT=new THREE.PlaneGeometry(1,1); let TEXLOAD=null;
+function media(path){
+  if(path.indexOf('vid/')===0){
+    if(VID[path]) return VID[path];
+    const v=document.createElement('video');
+    v.src='assets/'+path; v.muted=true; v.loop=true; v.playsInline=true; v.preload='auto'; v.crossOrigin='anonymous';
+    v.setAttribute('muted','');v.setAttribute('playsinline','');
+    const tex=new THREE.VideoTexture(v); tex.minFilter=tex.magFilter=THREE.LinearFilter; tex.generateMipmaps=false;
+    const rec={kind:'vid',v,tex,ar:1.7778,ready:false,want:0};
+    v.addEventListener('loadeddata',()=>{ if(v.videoWidth) rec.ar=v.videoWidth/v.videoHeight; rec.ready=true; syncCards(); noteReady(); });
+    v.addEventListener('error',noteReady,{once:true});
+    VID[path]=rec; return rec;
+  }
+  if(IMG[path]) return IMG[path];
+  const rec={kind:'img',ar:1,ready:false,tex:null};
+  rec.tex=TEXLOAD.load('assets/'+path,t=>{ if(t.image&&t.image.width) rec.ar=t.image.width/t.image.height; rec.ready=true; syncCards(); });
+  rec.tex.minFilter=THREE.LinearFilter; rec.tex.generateMipmaps=false;
+  IMG[path]=rec; return rec;
+}
+function syncCards(){ CARDS.forEach(c=>c.sync()); }
+function card(path,h,accent){
+  const rec=media(path), grp=new THREE.Group();
+  const mat=new THREE.MeshBasicMaterial({map:rec.tex,transparent:true,opacity:0,toneMapped:false,side:THREE.DoubleSide,color:new THREE.Color(1,1,1)});
+  const mesh=new THREE.Mesh(UNIT,mat); let frame=null,fmat=null;
+  if(accent!==false){ fmat=new THREE.MeshBasicMaterial({color:new THREE.Color(accent),transparent:true,opacity:0,side:THREE.DoubleSide});
+    frame=new THREE.Mesh(UNIT,fmat); frame.position.z=-0.02; grp.add(frame); }
+  grp.add(mesh);
+  const c={grp,mesh,mat,frame,fmat,rec,h,pad:0.14,
+    sync(){ const w=c.h*c.rec.ar; c.mesh.scale.set(w,c.h,1); if(c.frame)c.frame.scale.set(w+c.pad,c.h+c.pad,1); },
+    w(){return c.h*c.rec.ar;}, setH(v){ if(v!==c.h){c.h=v;c.sync();} },
+    op(v,fv){ c.mat.opacity=v; if(c.fmat)c.fmat.opacity=(fv===undefined?v*0.5:fv); },
+    tint(v){ c.mat.color.setScalar(v); },
+    play(w){ if(c.rec.kind==='vid')c.rec.want=Math.max(c.rec.want,w); }};
+  c.sync(); CARDS.push(c); return c;
+}
+function resetWants(){ for(const k in VID) VID[k].want=0; }
+function manageVideos(){
+  const list=Object.keys(VID).map(k=>VID[k]).sort((a,b)=>b.want-a.want);
+  list.forEach((r,i)=>{ const on=r.want>0.02&&i<5;
+    if(on){ if(r.v.paused){ const p=r.v.play(); if(p&&p.catch)p.catch(()=>{}); } } else if(!r.v.paused) r.v.pause(); });
+}
+let GLOWTEX=null;
+function glowTex(){ if(GLOWTEX)return GLOWTEX; const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
+  const g=x.createRadialGradient(64,64,2,64,64,64); g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.34,'rgba(255,255,255,.44)');g.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle=g;x.fillRect(0,0,128,128); GLOWTEX=new THREE.CanvasTexture(c); return GLOWTEX; }
+function glowMesh(w,h,col){ const m=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({map:glowTex(),color:new THREE.Color(col),transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false})); m.scale.set(w,h,1); return m; }
+const PLATES=[];
+function plate(draw,w,h){ const cv=document.createElement('canvas');cv.width=w;cv.height=h;const tex=new THREE.CanvasTexture(cv);tex.minFilter=THREE.LinearFilter;tex.generateMipmaps=false;
+  const rec={cv,tex,draw,w,h,render(){const x=cv.getContext('2d');x.clearRect(0,0,w,h);draw(x,w,h);tex.needsUpdate=true;}}; rec.render();PLATES.push(rec);return rec; }
+function plateMesh(rec,worldW){ const m=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({map:rec.tex,transparent:true,opacity:0,depthWrite:false,toneMapped:false})); m.scale.set(worldW,worldW*rec.h/rec.w,1); return m; }
+function stationPlate(title,right,left,accent){ return plate((x,w,h)=>{
+  x.font='700 30px JetBrains Mono, monospace';x.fillStyle=accent;x.textAlign='left';x.fillText(left.toUpperCase(),0,32);
+  if(right){x.textAlign='right';x.fillStyle='#eef2f8';x.fillText(right.toUpperCase(),w,32);}
+  x.textAlign='left';x.font='64px Bebas Neue, sans-serif';x.fillStyle='#eef2f8';x.fillText(title.toUpperCase(),0,100);
+  x.fillStyle=accent;x.fillRect(0,116,w,3); },760,140); }
+
+/* ============================================================
+   SCENE
+   ============================================================ */
+let renderer,scene,camera,dust,raycaster,pointer=new THREE.Vector2(0,0),hoverObj=null,pointerLive=false;
+let camZ=0,camX=0,camY=0,gEnv,gHall,hallPanels=[],bayObj=null;
+const canvas=$('scene');
+const SP=17, N=STOPS.length;
+const HALL_Z0=28, HALL_Z1=-83, BAY_Z1=-120;   // hero(no car) → hall → bay
+const TW=0.44;
+function featuredH(rec,ahead,cap){ const d=Math.max(ahead,0.5); const visW=2*d*Math.tan(camera.fov*Math.PI/360)*camera.aspect; return Math.min(cap,Math.max(0.3,(visW*TW)/Math.max(rec.ar,0.25))); }
+
+function build3D(){
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(2,devicePixelRatio)); renderer.setSize(innerWidth,innerHeight);
+  scene=new THREE.Scene(); scene.fog=new THREE.FogExp2(0x06070b,0.0166);
+  camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,0.1,460); camZ=HALL_Z0; camera.position.set(0,0,camZ);
+  raycaster=new THREE.Raycaster(); TEXLOAD=new THREE.TextureLoader();
+  buildEnv(); buildHall(); bayObj=buildBay(-86,BAY_Z1);
+  addEventListener('resize',onResize);
+  addEventListener('pointermove',e=>{ pointer.x=(e.clientX/innerWidth)*2-1; pointer.y=-(e.clientY/innerHeight)*2+1; pointerLive=true;
+    tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px'; },{passive:true});
+  canvas.addEventListener('pointerdown',e=>{pdX=e.clientX;pdY=e.clientY;});
+  canvas.addEventListener('pointerup',e=>{ if(immProg>0.995)return; if(Math.hypot(e.clientX-pdX,e.clientY-pdY)>7)return;
+    const m=pickClickable(); if(!m)return; if(m.userData.dk) openDoss(m.userData.dk); else if(m.userData.sel) toggleSvc(m.userData.sel); });
+}
+const ENVZ0=34, ENVZ1=-150;
+function envAdd(o,base){ o.material.transparent=true; o.material.opacity=base; o.material.depthWrite=false; o.userData.envBase=base; o.renderOrder=-5; gEnv.add(o); }
+function buildEnv(){
+  gEnv=new THREE.Group(); scene.add(gEnv);
+  const grid=new THREE.GridHelper(420,84,0x1b2232,0x11151e); grid.position.set(0,-4.6,(ENVZ0+ENVZ1)/2); envAdd(grid,0.85);
+  const ceil=new THREE.GridHelper(420,42,0x151a26,0x0d1017); ceil.position.set(0,7.6,(ENVZ0+ENVZ1)/2); envAdd(ceil,0.55);
+  for(let z=ENVZ0;z>ENVZ1;z-=11){ const g=glowMesh(7.2,1.5,0xffd9a8); g.position.set(0,7.0,z); envAdd(g,0.3);
+    const bar=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0xfff0d8,transparent:true,depthWrite:false})); bar.scale.set(5.4,0.09,1); bar.position.set(0,7.0,z); envAdd(bar,0.5); }
+  for(let z=ENVZ0;z>ENVZ1;z-=SP){ [-1,1].forEach(s=>{
+    const p=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0x0a0d14,transparent:true,side:THREE.DoubleSide})); p.scale.set(1.5,12.4,1); p.position.set(s*10.6,1.4,z); p.rotation.y=-s*Math.PI/2; envAdd(p,0.92);
+    const edge=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({color:0x33506e,transparent:true,depthWrite:false})); edge.scale.set(0.07,12.4,1); edge.position.set(s*9.86,1.4,z); edge.rotation.y=-s*Math.PI/2; envAdd(edge,0.55);
+    const fl=glowMesh(2.6,2.6,0x3ea9ff); fl.position.set(s*9.7,4.6,z); envAdd(fl,0.16); }); }
+  const hz=new THREE.Mesh(UNIT,new THREE.MeshBasicMaterial({map:glowTex(),color:0x1d3550,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false})); hz.scale.set(48,22,1); hz.rotation.x=-Math.PI/2; hz.position.set(0,-4.4,-60); envAdd(hz,0.22);
+  const gp=new THREE.BufferGeometry();const cnt=520;const arr=new Float32Array(cnt*3);
+  for(let i=0;i<cnt;i++){arr[i*3]=(Math.random()-0.5)*44;arr[i*3+1]=(Math.random()-0.5)*20;arr[i*3+2]=(Math.random()-0.5)*72;}
+  gp.setAttribute('position',new THREE.BufferAttribute(arr,3));
+  dust=new THREE.Points(gp,new THREE.PointsMaterial({color:0x8fa2c0,size:0.052,transparent:true,opacity:0.46,depthWrite:false})); scene.add(dust);
+}
+function buildHall(){
+  gHall=new THREE.Group(); scene.add(gHall);
+  STOPS.forEach((s,i)=>{ const z=-i*SP; const c=card('vid/'+s.v,4.4,s.accent); c.grp.position.set(0,0,z);
+    c.mesh.userData.dk=s.dk; c.mesh.userData.nm=DOSS[s.dk].name;
+    const halo=glowMesh(1,1,s.accent); halo.position.z=-0.3; c.grp.add(halo);
+    gHall.add(c.grp); hallPanels.push({i,c,z,halo,dim:s.dim,phase:Math.random()*6.28,accent:s.accent}); });
+}
+function buildBay(z0,z1){
+  const g=new THREE.Group(); const items=[];
+  SVC.forEach((s,k)=>{ const col=k%3,row=(k/3)|0; const c=card(s.src,3.0,s.accent);
+    c.mesh.userData.sel=s.key; c.mesh.userData.nm=s.name;
+    const pl=stationPlate(s.name,'FROM '+gbp(s.from),s.days+' BAY DAYS',s.accent); const pm=plateMesh(pl,5.2); const ring=glowMesh(7.4,5.4,s.accent);
+    g.add(c.grp);g.add(pm);g.add(ring); items.push({c,pm,ring,k,col,row,s,phase:Math.random()*6.28}); });
+  g.visible=false; scene.add(g);
+  return {g,clicks:items.map(i=>i.c.mesh),update(l,t){
+    const cz=camZ-13; const vis=smooth(clamp(l/0.12,0,1));
+    items.forEach(it=>{ const e=smooth(clamp((l*1.5-0.02-it.k*0.085)/0.3,0,1));
+      const bx=(it.col-1)*6.2+2.6, by=2.25-it.row*4.9;
+      const hov=(hoverObj===it.c.mesh)?1:0, sel=BUILD.svc.has(it.s.key)?1:0;
+      const px=pointer.x*7.4, py=pointer.y*4.4; const mag=smooth(clamp(1-Math.hypot(px-bx,py-by)/7.4,0,1));
+      const x=bx+(px-bx)*0.12*mag+Math.sin(t*0.42+it.phase)*0.07;
+      const y=lerp(by-7,by,e)+Math.sin(t*0.55+it.phase)*0.12+(py-by)*0.07*mag+hov*0.3;
+      const z=cz+mag*0.9+hov*0.8+sel*0.4;
+      it.c.setH(lerp(2.5,3.25,Math.max(mag*0.6,hov)));
+      it.c.grp.position.set(x,y+0.95,z); it.c.grp.rotation.set(pointer.y*0.05,-pointer.x*0.06,Math.sin(t*0.33+it.phase)*0.012);
+      it.c.grp.scale.setScalar(1+hov*0.05+sel*0.03);
+      it.c.op((0.4+0.6*e)*vis*(0.86+0.14*Math.max(mag,hov)),(0.18+0.3*mag+0.3*hov+0.52*sel)*vis*e);
+      it.c.play((mag*0.6+hov)*vis*e);
+      it.pm.position.set(x,y-1.42,z-0.01); it.pm.material.opacity=(0.34+0.66*e)*vis;
+      it.ring.position.set(x,y+0.8,z-0.5); it.ring.material.opacity=(0.05+0.14*mag+0.14*hov+0.2*sel)*vis*e; it.ring.scale.set(7.4+sel*0.5,5.4+sel*0.4,1);
+    });
+  }};
+}
+function onResize(){ if(!renderer)return; renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); immH=immHeight(); }
+
+/* ---------- captions ---------- */
+const capL=$('capL'),capR=$('capR'),tip=$('tip');
+let activeStop=-1,capWords=[],capPlate=null;
+function wordify(html){ const g=html.replace(/<[^>]+>/g,m=>m.replace(/ /g,'\u0001')); return g.split(/ +/).map(w=>'<span class="wd">'+w.replace(/\u0001/g,' ')+'</span>').join(' '); }
+function setCap(s,side,accent,beatIdx,tap){
+  const useR=(side==='R'); const show=useR?capR:capL, hide=useR?capL:capR;
+  show.style.setProperty('--accent',accent);
+  show.innerHTML='<span class="idx"><span class="wd">'+(s.idxLabel||('BUILD&nbsp;<b>'+String(beatIdx+1).padStart(2,'0')+'</b>&nbsp;/&nbsp;06'))+'</span></span>'+
+    '<div><span class="kick"><span class="wd">'+s.kick.replace(/ /g,'&nbsp;')+'</span></span></div>'+
+    '<h2>'+s.title.split('<br>').map(ln=>wordify(ln)).join('<br>')+'</h2>'+
+    '<p>'+wordify(s.sub)+'</p>'+
+    '<div class="spec">'+s.spec.map(x=>'<span class="wd">'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div>'+
+    (tap?'<div class="tapline"><span class="wd">◉&nbsp;TAP&nbsp;THE&nbsp;SCREEN&nbsp;—&nbsp;OPEN&nbsp;THE&nbsp;FILE</span></div>':'');
+  hide.style.opacity='0'; capPlate=show; capWords=[].slice.call(show.querySelectorAll('.wd')); window.__curCap=show;
+}
+function updateCapReveal(r){
+  if(!capPlate)return;
+  const heroFade=smooth(clamp(immProg/0.06,0,1));
+  capPlate.style.opacity=String(smooth(clamp(r/0.1,0,1))*heroFade);
+  const n=capWords.length||1;
+  capWords.forEach((w,i)=>{ const st=(i/n)*0.72; const wr=smooth(clamp((r-st)/0.26,0,1));
+    w.style.opacity=String(0.34+0.66*wr); w.style.transform='translateY('+((1-wr)*15)+'px)'; });
+}
+function setActive(i){ if(i===activeStop)return; activeStop=i; const s=STOPS[i]; if(!s)return; setCap(s,s.side,s.accent,i,1); }
+
+/* ---------- hero overlay ---------- */
+function applyHero(p){
+  const ho=smooth(1-p/0.055);
+  $('heroOv').style.opacity=ho; $('heroOv').style.pointerEvents=ho>0.4?'auto':'none';
+  $('cue').style.opacity=p<0.02?1:0;
+  document.querySelectorAll('#heroOv [data-h]').forEach(el=>{ el.style.transform='translateY('+((1-ho)*-38)+'px)'; el.style.opacity=ho; });
+  $('hud').classList.toggle('on', p>0.70 && p<0.999);
+}
+
+/* ---------- the immersive director ---------- */
+function runImmersive(p,t,immediate){
+  immProg=p; resetWants();
+  const inHall = p<0.72;
+  const hallL = clamp(p/0.72,0,1);
+  const bayL  = clamp((p-0.72)/0.28,0,1);
+  const targetZ = inHall ? lerp(HALL_Z0,HALL_Z1,hallL) : lerp(HALL_Z1,BAY_Z1,bayL);
+  const k=immediate?1:0.09;
+  camZ=lerp(camZ,targetZ,k);
+  gHall.visible = p<0.76;
+
+  let wantX=pointer.x*1.0, wantY=pointer.y*0.6, lookZ=camZ-10;
+  if(!inHall){ wantX=pointer.x*0.8; wantY=pointer.y*0.45+0.3; lookZ=camZ-13; }
+  camX=lerp(camX,wantX,immediate?1:0.07); camY=lerp(camY,wantY,immediate?1:0.07);
+  camera.position.set(camX,camY,camZ); camera.lookAt(0,0,lookZ);
+
+  let capDriver=0;
+  if(gHall.visible){
+    let best=0,bestF=-1;
+    hallPanels.forEach(pn=>{ const ahead=camZ-pn.z;
+      const f=smooth(clamp(ahead/4.5,0,1))*smooth(clamp((26-ahead)/13,0,1));
+      if(f>bestF){bestF=f;best=pn.i;}
+      const live=ahead>0.5&&ahead<34;
+      pn.c.setH(featuredH(pn.c.rec,ahead,5.6));
+      const bob=Math.sin(t*0.55+pn.phase)*0.13, rot=Math.sin(t*0.38+pn.phase)*0.012, hov=(hoverObj===pn.c.mesh)?1:0;
+      pn.c.grp.position.set(pointer.x*0.55,bob+pointer.y*0.3,pn.z);
+      pn.c.grp.rotation.set(0,-pointer.x*0.035,rot); pn.c.grp.scale.setScalar(1+hov*0.03); pn.c.tint(pn.dim);
+      // ff fades the whole card out at the far edge — no 0.34 floor bleeding into the hero / between clips
+      const sf=smooth(f), ff=smooth(clamp(f/0.06,0,1));
+      const op=live?(0.34+0.66*sf)*ff:0;
+      pn.c.op(op,live?(0.2+0.55*sf)*(0.65+0.35*hov)*ff:0); pn.c.play(live?f:0);
+      pn.halo.scale.set(pn.c.w()+5.5,pn.c.h+4.5,1); pn.halo.material.opacity=live?(0.05+0.2*sf)*(0.7+0.5*hov)*ff:0; });
+    if(inHall){ setActive(best); capDriver=clamp((bestF-0.1)/0.5,0,1); }
+  }
+  // bay
+  bayObj.g.visible = !inHall || p>0.68;
+  if(bayObj.g.visible){ bayObj.update(bayL,t); if(p>=0.72 && curBand!=='bay'){ setCap(BAYCAP,'L',AC.amber,9,2); window.__curCap&&(curBand='bay'); } }
+  if(inHall && curBand!=='hall'){ curBand='hall'; }
+
+  // env dims as we leave the corridor
+  const envOn = inHall?1:lerp(1,0.5,bayL);
+  gEnv.traverse(o=>{ if(o.material&&o.userData.envBase!==undefined) o.material.opacity=o.userData.envBase*envOn; });
+
+  applyHero(p);
+  if(!inHall) capDriver=clamp(bayL/0.4,0,1);
+  updateCapReveal(capDriver);
+  manageVideos();
+  return {immProg:+p.toFixed(3),camZ:+camZ.toFixed(1),band:inHall?'hall':'bay',stop:activeStop};
+}
+let curBand='';
+const BAYCAP={idxLabel:'QUOTE&nbsp;BUILDER',kick:'The build bay — your quote',title:'BUILD THE<br>QUOTE YOURSELF.',
+  sub:'Six stations, six real prices. Tap the ones you want and the running total in the corner is the number we put in writing.',
+  spec:[['Stations','06'],['From','£2,400']]};
+
+/* ---------- picking ---------- */
+let pdX=0,pdY=0;
+function clickTargets(){ let l=[]; if(gHall&&gHall.visible) l=l.concat(hallPanels.map(p=>p.c.mesh)); if(bayObj&&bayObj.g.visible) l=l.concat(bayObj.clicks); return l; }
+function pickClickable(){ raycaster.setFromCamera(pointer,camera); const h=raycaster.intersectObjects(clickTargets()); return h.length?h[0].object:null; }
+
+/* ============================================================
+   DOSSIERS / SHEET / GALLERY  (overlays)
+   ============================================================ */
+const DOSS={};
+STOPS.forEach(s=>{ DOSS[s.dk]={type:'vid',src:'assets/vid/'+s.v,accent:s.accent,mat:'#0b0e14',kick:s.kick,
+  name:s.title.replace(/<br>/g,' ').replace(/<[^>]+>/g,''),story:s.sub,
+  spec:s.spec.concat([['Bay days','56'],['Photos','Every Friday']]),hex:s.accent}; });
+
+function fillSheet(mediaEl,bodyEl,d,actions){
+  mediaEl.parentElement.style.setProperty('--sc',d.accent||d.hex||AC.amber);
+  mediaEl.style.setProperty('--sm',d.mat||'#0b0e14');
+  if(d.type==='vid'){ mediaEl.innerHTML='<video src="'+d.src+'" muted loop playsinline autoplay preload="auto"></video><div class="lens"></div>'; const v=mediaEl.querySelector('video'); const p=v.play(); if(p&&p.catch)p.catch(()=>{}); }
+  else { mediaEl.innerHTML='<img src="'+d.src+'" alt="'+d.name+'"><div class="lens"></div>'; }
+  bodyEl.innerHTML='<span class="shtag">'+d.kick+'</span><h3>'+d.name+'</h3><p class="shstory">'+d.story+'</p>'+
+    '<div class="shspecs">'+d.spec.map(x=>'<div><div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div></div>').join('')+'</div>'+
+    '<div class="shcta">'+actions+'</div>';
+}
+/* hall / bay dossier (desktop 3D taps) */
+function openDoss(key){ const d=DOSS[key]; if(!d)return; openOv('doss');
+  fillSheet($('dsMedia'),$('dsBody'),d,'<button class="btn amber" data-nav="contact" data-ovclose>Book a bay →</button><span style="font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--muted);align-self:center">OR DM @OVERHAUL.WORKS</span>');
+}
+/* gallery */
+let galFilter='all';
+function renderGallery(){
+  const grid=$('gGrid'); const list=GAL.map((g,i)=>({g,i})).filter(o=>galFilter==='all'||o.g.cat===galFilter);
+  $('gCount').textContent=list.length+' builds · '+GAL.filter(g=>g.status==='FOR SALE').length+' for sale now';
+  grid.classList.remove('shown');
+  grid.innerHTML=list.map(o=>{ const g=o.g; const stc=g.status==='FOR SALE'?AC.lime:(g.status==='SOLD'?'#6b7488':g.hex);
+    return '<div class="gcard" data-gi="'+o.i+'" style="--gm:'+g.hex+'14"><div class="gph"><img src="assets/img/'+g.img+'" alt="'+g.name+'" loading="lazy"><span class="gst" style="color:'+stc+'">'+g.status+'</span></div>'+
+      '<div class="gtx"><div class="gn">'+g.name+'</div><div class="gm">'+g.spec+'</div><div class="gp">'+g.price+'</div></div></div>'; }).join('');
+  setTimeout(()=>grid.classList.add('shown'),20);
+}
+function openGallery(){ openOv('gallery'); renderGallery(); }
+function wireGalleryFilters(){
+  $('gFilt').innerHTML=GAL_FILTERS.map(([k,l],i)=>'<div class="chip'+(i===0?' on':'')+'" data-gf="'+k+'">'+l+'</div>').join('');
+  $('gFilt').addEventListener('click',e=>{ const c=e.target.closest('[data-gf]'); if(!c)return;
+    $('gFilt').querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); galFilter=c.getAttribute('data-gf'); renderGallery(); });
+  $('gGrid').addEventListener('click',e=>{ const c=e.target.closest('[data-gi]'); if(c) openCarSheet(+c.getAttribute('data-gi')); });
+}
+function openCarSheet(i){ const g=GAL[i]; if(!g)return;
+  const d={type:'img',src:'assets/img/'+g.img,accent:g.hex,mat:g.hex+'14',kick:g.status+' — '+g.spec,name:g.name,story:g.story,
+    spec:[['Price',g.price],['Status',g.status],['Spec',g.spec.split(' · ')[1]||g.spec],['Where','Digbeth floor']],hex:g.hex};
+  openOv('sheet');
+  fillSheet($('shMedia'),$('shBody'),d,'<button class="btn amber" data-nav="contact" data-ovclose>Enquire →</button><button class="btn lime" data-nav="finance" data-ovclose>Finance it →</button>');
+}
+
+/* overlay plumbing — a stack, so a car sheet can open over the gallery and close back to it */
+let ovStack=[];
+function openOv(id){ if(!ovStack.includes(id)) ovStack.push(id); $(id).classList.add('open'); document.body.style.overflow='hidden'; if(lenis)lenis.stop(); }
+function closeOv(){ const id=ovStack.pop(); if(id)$(id).classList.remove('open'); if(!ovStack.length){ document.body.style.overflow=''; if(lenis)lenis.start(); } }
+function closeAllOv(){ while(ovStack.length){ const id=ovStack.pop(); $(id).classList.remove('open'); } document.body.style.overflow=''; if(lenis)lenis.start(); }
+document.addEventListener('click',e=>{ if(e.target.closest('[data-close]')||e.target.closest('[data-ovclose]'))closeOv(); });
+addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(ovStack.length)closeOv(); else closeMenu(); } });
+document.querySelectorAll('.shmedia').forEach(m=>m.addEventListener('pointermove',e=>{ const r=m.getBoundingClientRect();
+  m.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%'); m.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%'); }));
+
+/* ============================================================
+   REVIEWS render
+   ============================================================ */
+function renderReviews(){
+  const bars=$('revBars'), total=REV_DIST.reduce((a,b)=>a+b,0)||1;
+  bars.innerHTML=[5,4,3,2,1].map((st,i)=>{ const w=Math.round(REV_DIST[i]/total*100);
+    return '<div class="rbar"><span>'+st+'★</span><div class="tr"><i data-w="'+w+'"></i></div><span>'+w+'%</span></div>'; }).join('');
+  $('revFilters').innerHTML=REV_FILTERS.map(([k,l],i)=>'<div class="chip'+(i===0?' on':'')+'" data-rf="'+k+'" style="--lime:var(--blue)">'+l+'</div>').join('');
+  let f='all'; const paint=()=>{ const list=REVIEWS.filter(r=>f==='all'||r.cat===f);
+    $('revGrid').innerHTML=list.map(r=>'<div class="rvw"><div class="rh"><span class="who">'+r.who+'</span><span class="ver">✓ Verified</span></div>'+
+      '<div class="stars">'+'★'.repeat(r.r)+'<span style="color:#39404e">'+'★'.repeat(5-r.r)+'</span></div>'+
+      '<p>'+r.txt+'</p><div class="meta">'+r.when+'</div></div>').join(''); };
+  paint();
+  $('revFilters').addEventListener('click',e=>{ const c=e.target.closest('[data-rf]'); if(!c)return;
+    $('revFilters').querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); f=c.getAttribute('data-rf'); paint(); });
+  // animate bars when section intersects
+  const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ bars.querySelectorAll('i').forEach(i=>setTimeout(()=>i.style.width=i.getAttribute('data-w')+'%',60)); io.disconnect(); } }),{threshold:0.3});
+  io.observe($('reviews'));
+}
+
+/* reveal-on-scroll for sections */
+function wireReveals(){ const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }),{threshold:0.12});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el)); }
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+let finished=false,readyCount=0;
+function noteReady(){ if(++readyCount>=3) finishLoad(); }
+function finishLoad(){ if(finished)return; finished=true; $('lbar').style.width='100%'; setTimeout(()=>$('loading').classList.add('done'),260); }
+setTimeout(finishLoad,4200);
+let lp=0;const li=setInterval(()=>{lp=Math.min(96,lp+8);const b=$('lbar');if(b)b.style.width=lp+'%';if(finished)clearInterval(li);},150);
+
+/* ============================================================
+   MOBILE top (hero + work + build) — DOM only
+   ============================================================ */
+function buildMobileTop(){
+  const el=$('mtop'); const s0=STOPS[0];
+  let h='<section class="mhero" id="mHero"><video src="assets/vid/'+s0.v+'" muted loop playsinline autoplay preload="auto"></video><div class="sc"></div>'+
+    '<div class="in"><span class="mk">OVERHAUL · DIGBETH, BIRMINGHAM</span><h1>OVER<span style="color:transparent;-webkit-text-stroke:1.4px #eef2f8">HAUL</span></h1>'+
+    '<p>A working performance rebuild shop. Fourteen full builds a year, priced line by line.</p>'+
+    '<div class="hbtns"><button class="hb fill" data-nav="build">Build a quote</button><button class="hb ghost" data-nav="work">See the work</button></div></div></section>';
+
+  h+='<section class="msec" id="mWork" style="--accent:var(--amber)"><span class="mk">The work</span><h2>WHAT LEAVES<br>THE FLOOR.</h2>'+
+     '<p>Six builds, filmed this year. Real cars, real sheets.</p><div class="mwork">';
+  STOPS.forEach(s=>{ h+='<div class="mwc" style="--accent:'+s.accent+'"><div class="wk">'+s.kick+'</div><h3>'+s.title+'</h3><p>'+s.sub+'</p>'+
+    '<div class="spec">'+s.spec.map(x=>'<span>'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div>'+
+    '<div class="mclip"><video src="assets/vid/'+s.v+'" muted loop playsinline preload="metadata" data-lazy></video></div></div>'; });
+  h+='</div></section>';
+
+  h+='<section class="msec" id="mBuild" style="--accent:var(--amber)"><span class="mk">The build bay</span><h2>BUILD THE<br>QUOTE YOURSELF.</h2>'+
+     '<p>Six stations, six real prices. Tap the ones you want — the total is the number we put in writing.</p><div class="mbuild">';
+  SVC.forEach(s=>{ h+='<div class="mst" data-sel="'+s.key+'"><div class="ph">'+
+    (s.src.indexOf('vid/')===0?'<video src="assets/'+s.src+'" muted loop playsinline preload="metadata" data-lazy></video>':'<img src="assets/'+s.src+'" alt="'+s.name+'" loading="lazy">')+
+    '</div><div class="tx"><div class="nm">'+s.name+'</div><div class="mt">'+s.days+' bay days</div><div class="pr">from '+gbp(s.from)+'</div></div>'+
+    '<button class="add" data-add="'+s.key+'">Add to build</button></div>'; });
+  h+='</div><div class="mqhud"><span class="hl">Your build</span><span class="hv" id="mHudSum">£0</span><span class="hl" id="mHudDays">0 bay days</span><button class="hgo" data-nav="finance">Finance it →</button></div></section>';
+  el.innerHTML=h;
+
+  el.addEventListener('click',e=>{ const b=e.target.closest('[data-add]'); if(b) toggleSvc(b.getAttribute('data-add')); });
+  const io=new IntersectionObserver(es=>es.forEach(en=>{ const v=en.target; if(en.isIntersecting){ const p=v.play(); if(p&&p.catch)p.catch(()=>{}); } else v.pause(); }),{rootMargin:'140px 0px',threshold:0.15});
+  el.querySelectorAll('video[data-lazy]').forEach(v=>io.observe(v));
+}
+
+/* ============================================================
+   RENDER LOOP + BOOT
+   ============================================================ */
+function frame(now){
+  if(lenis) lenis.raf(now);
+  const t=now/1000; scrollPx=lenis?lenis.scroll:window.scrollY;
+  immProg=clamp(scrollPx/immH,0,1);
+  runImmersive(immProg,t,false);
+  if(dust){ dust.rotation.y=t*0.01; dust.position.z=camZ-22; }
+  // fade canvas + overlays once past the immersive block
+  const fade=smooth(clamp((immProg-0.9)/0.1,0,1));
+  canvas.style.opacity=String(lerp(1,0.1,fade)); canvas.style.pointerEvents=immProg>0.98?'none':'auto';
+  $('immersive').style.opacity=String(1-fade);
+  // nav solidify + active
+  $('nav').classList.toggle('solid', scrollPx>immH*0.98 || scrollPx>innerHeight*0.6);
+  if(!ovStack.length) setNavActive(currentZone());
+  // hover
+  if(immProg<0.995 && !ovStack.length){ const m=pickClickable(); hoverObj=m||null;
+    if(m&&m.userData.nm&&pointerLive){ let verb='OPEN THE FILE'; if(m.userData.sel){ verb=BUILD.svc.has(m.userData.sel)?'REMOVE FROM BUILD':'ADD TO BUILD'; }
+      tip.innerHTML='<b>◉</b>&nbsp;&nbsp;'+m.userData.nm+'&nbsp;·&nbsp;'+verb; tip.classList.add('on'); canvas.style.cursor='pointer'; }
+    else { tip.classList.remove('on'); canvas.style.cursor=''; } }
+  else { hoverObj=null; tip.classList.remove('on'); }
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+
+/* verify hook */
+window.__ov={
+  nav:navGo, openGallery, openCarSheet, openDoss, closeOv, closeAll:closeAllOv,
+  setImm(p){ p=clamp(p,0,1); if(lenis)lenis.scrollTo(p*immH,{immediate:true,force:true}); else window.scrollTo(0,p*immH);
+    scrollPx=p*immH; immProg=p; const info=runImmersive(p,performance.now()/1000,true); if(renderer)renderer.render(scene,camera); return info; },
+  build:()=>({svc:[...BUILD.svc],totals:quoteTotals()}), toggleSvc, setFinanceCost, fin:()=>({...fin}),
+  upscale(){ if(!camera)return null; const vFov=camera.fov*Math.PI/180,dpr=Math.min(2,devicePixelRatio),w=[];
+    CARDS.forEach(c=>{ if(c.mat.opacity<0.05)return; let o=c.grp,on=true; while(o){if(o.visible===false){on=false;break;}o=o.parent;} if(!on)return;
+      const wp=new THREE.Vector3();c.mesh.getWorldPosition(wp); const d=Math.max(0.3,camera.position.distanceTo(wp));
+      const visW=2*d*Math.tan(vFov/2)*camera.aspect; const px=(c.h*c.rec.ar*c.grp.scale.x/visW)*innerWidth*dpr;
+      const nat=c.rec.kind==='vid'?(c.rec.v.videoWidth||0):((c.rec.tex&&c.rec.tex.image&&c.rec.tex.image.width)||0); if(nat>0)w.push(+(px/nat).toFixed(2)); });
+    w.sort((a,b)=>b-a); return {n:w.length,max:w[0]||0,top:w.slice(0,4)}; },
+  state(){ return {immProg:+immProg.toFixed(3),camZ:+camZ.toFixed(1),zone:currentZone(),openOv:ovStack[ovStack.length-1]||null,
+    caption:window.__curCap?(window.__curCap.querySelector('.kick')||{}).textContent:null,
+    playing:Object.keys(VID).filter(k=>!VID[k].v.paused),
+    nav:[].slice.call(document.querySelectorAll('#navLinks a.on')).map(a=>a.getAttribute('data-nav')),
+    fin:{...fin}, quote:quoteTotals() }; }
+};
+
+/* ---------- boot ---------- */
+immH=immHeight();
+wireFinance(); wireContact(); wireGalleryFilters(); renderReviews(); wireReveals(); updateContactSummary();
+if(isMobile){
+  buildMobileTop();
+  $('loading').classList.add('done');
+  refreshQuote();
+  addEventListener('scroll',()=>{ $('nav').classList.toggle('solid',scrollY>innerHeight*0.5); if(!ovStack.length)setNavActive(currentZone()); },{passive:true});
+} else {
+  lenis=new Lenis({lerp:0.09,wheelMultiplier:0.9}); window.__lenis=lenis;
+  build3D(); refreshQuote();
+  requestAnimationFrame(frame);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>PLATES.forEach(p=>p.render()));
+}
+</script>
+</body>
+</html>
