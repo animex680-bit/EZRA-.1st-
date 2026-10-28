@@ -73,7 +73,10 @@ button{font-family:inherit}
 
 .hero-ov{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;pointer-events:none}
 .hero-ov .mega{font-family:var(--disp);font-size:clamp(84px,21vw,310px);line-height:.82;letter-spacing:.02em}
-.hero-ov .mega span{display:inline-block;will-change:transform,opacity}
+.hero-ov .mega span{display:inline-block}
+.hero-ov .mega .ch{display:inline-block;opacity:0;transform:translateY(64px) rotate(7deg) scale(.82);will-change:transform,opacity}
+.hero-ov .mega.go .ch{opacity:1;transform:none;
+  transition:opacity .5s cubic-bezier(.22,1,.36,1) var(--d,0ms),transform .82s cubic-bezier(.3,1.42,.5,1) var(--d,0ms)}
 .hero-ov .mega .stroke{color:transparent;-webkit-text-stroke:1.6px var(--ink)}
 .hero-ov .tl{font-family:var(--mono);font-size:clamp(10px,1vw,12px);letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-top:18px}
 .hero-ov .tl b{color:var(--amber)}
@@ -143,17 +146,23 @@ button{font-family:inherit}
 .frow label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
 .frow label b{color:var(--ink);font-size:16px;font-family:var(--sans);letter-spacing:0}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.14);outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px rgba(169,230,43,.16);cursor:grab}
-input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px rgba(169,230,43,.16)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--fz,var(--lime));box-shadow:0 0 0 5px rgba(255,255,255,.08),0 0 16px -2px var(--fz,var(--lime));cursor:grab;transition:background .45s}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:var(--fz,var(--lime));box-shadow:0 0 0 5px rgba(255,255,255,.08),0 0 16px -2px var(--fz,var(--lime))}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:9px 15px;border:1px solid var(--line);border-radius:30px;background:rgba(255,255,255,.03);color:#c2cad8;cursor:pointer;transition:border-color .25s,color .25s,background .25s}
 .chip.on{border-color:var(--lime);color:var(--lime);background:rgba(169,230,43,.08)}
-.fin-out{background:linear-gradient(160deg,rgba(16,20,28,.96),rgba(9,11,17,.96));border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.6vw,36px);
-  box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
-.fin-out .big{font-family:var(--disp);font-size:clamp(60px,8vw,112px);line-height:.86;color:var(--lime)}
+.fin-out{position:relative;background:linear-gradient(160deg,rgba(16,20,28,.96),rgba(9,11,17,.96));border:1px solid var(--line);border-radius:20px;padding:clamp(22px,2.6vw,36px);
+  --g1:var(--fz,var(--lime));--g2:transparent;box-shadow:0 40px 90px -40px rgba(0,0,0,.8);transition:box-shadow .5s}
+.fin-out .big{font-family:var(--disp);font-size:clamp(60px,8vw,112px);line-height:.86;color:var(--fz,var(--lime));transition:color .45s}
+.fzone{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--fz,var(--lime));border:1px solid currentColor;border-radius:30px;padding:6px 13px;margin-top:12px;transition:color .45s}
+.fzone i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+#finance .chip.on{border-color:var(--fz,var(--lime));color:var(--fz,var(--lime));background:rgba(255,255,255,.06)}
+#finance .btn.lime{background:var(--fz,var(--lime))}
+#finance .btn.lime:hover{box-shadow:0 14px 34px -10px var(--fz,var(--lime))}
 .fin-out .big small{font-family:var(--mono);font-size:14px;letter-spacing:.1em;color:var(--muted)}
 .fin-rows{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:20px 0}
-.fin-rows div{background:var(--panel);padding:13px 15px}
+.fin-rows>div{background:var(--panel);padding:13px 15px}
 .fin-rows .k{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .fin-rows .v{font-size:18px;font-weight:700;margin-top:4px}
 .fin-note{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);line-height:1.7;margin-bottom:18px}
@@ -164,25 +173,43 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radiu
 .btn.lime:hover{transform:translateY(-2px);box-shadow:0 14px 34px -10px var(--lime)}
 .btn.block{width:100%}
 
-/* reviews */
+/* ================= reviews (rebuilt: faces, live stars, live bars) ================= */
 #reviews{--accent:var(--blue)}
-.rev-top{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(20px,3vw,44px);align-items:center;margin-bottom:34px}
-.rev-score .n{font-family:var(--disp);font-size:clamp(76px,10vw,140px);line-height:.82}
-.rev-score .st{color:var(--amber);letter-spacing:3px;font-size:20px}
-.rev-score .sub{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);margin-top:8px;text-transform:uppercase}
-.rev-bars{display:flex;flex-direction:column;gap:9px}
-.rbar{display:grid;grid-template-columns:34px 1fr 42px;gap:12px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
-.rbar .tr{height:6px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
-.rbar .tr i{display:block;height:100%;width:0;background:var(--amber);transition:width 1s cubic-bezier(.22,1,.36,1)}
-.rev-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.rev-top{display:grid;grid-template-columns:minmax(190px,.52fr) 1fr;gap:clamp(24px,4vw,70px);align-items:center;margin-bottom:30px}
+.rev-score{display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.rev-score .n{font-family:var(--disp);font-size:clamp(76px,10vw,150px);line-height:.8;color:#0b0e14}
+.rev-score .sub{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:#44506a;text-transform:uppercase}
+.stars{display:inline-flex;gap:3px;line-height:1}
+.stars i{width:1em;height:1em;font-size:var(--ss,19px);display:inline-block;background:#c9d0da;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  transform:scale(0) rotate(-40deg);transition:transform .46s cubic-bezier(.34,1.7,.5,1) var(--d,0ms),background .35s ease var(--d,0ms)}
+.stars.go i{transform:none}
+.stars.go i.f{background:var(--amber)}
+.rev-bars{display:flex;flex-direction:column;gap:10px}
+.rbar{display:grid;grid-template-columns:30px 1fr 46px;gap:12px;align-items:center;font-family:var(--mono);font-size:11px;color:#44506a}
+.rbar .tr{height:7px;border-radius:5px;background:rgba(11,14,20,.09);overflow:hidden}
+.rbar .tr i{display:block;height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,var(--amber),#ffc48a);
+  transition:width 1.15s cubic-bezier(.22,1,.36,1) var(--d,0ms);box-shadow:0 0 14px -3px var(--amber)}
+.rev-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.sec.light .chip{border-color:rgba(11,14,20,.14);background:rgba(11,14,20,.03);color:#44506a}
+.sec.light .chip.on{border-color:var(--blue);color:#0a4e82;background:rgba(62,169,255,.12)}
 .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.rvw{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:11px}
-.rvw .rh{display:flex;align-items:center;justify-content:space-between}
-.rvw .who{font-weight:700;font-size:15px}
-.rvw .ver{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);display:flex;align-items:center;gap:5px}
-.rvw .stars{color:var(--amber);letter-spacing:2px;font-size:13px}
-.rvw p{color:#c2cad8;font-size:13.5px;line-height:1.66}
-.rvw .meta{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-top:auto}
+.rvw{position:relative;background:#fff;border:1px solid rgba(11,14,20,.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px;cursor:pointer;
+  box-shadow:0 12px 32px -24px rgba(11,14,20,.55);transition:transform .38s cubic-bezier(.34,1.4,.5,1),box-shadow .38s}
+.rvw:hover{transform:translateY(-6px);box-shadow:0 28px 54px -26px rgba(11,14,20,.42)}
+.rvw .rh{display:flex;align-items:center;gap:12px}
+.rvw .av{width:56px;height:56px;border-radius:50%;overflow:hidden;flex:none;background:#dfe4ea;position:relative}
+.rvw .av img{width:100%;height:100%;object-fit:cover;display:block}
+.rvw .av::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.92),0 0 0 1px rgba(11,14,20,.12)}
+.rvw .wi{min-width:0}
+.rvw .who{font-weight:700;font-size:15px;color:#0b0e14;line-height:1.2}
+.rvw .ver{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#2d7d22;display:flex;align-items:center;gap:4px;margin-top:3px}
+.rvw p{color:#39455c;font-size:13.6px;line-height:1.66;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.rvw.open p{-webkit-line-clamp:unset;overflow:visible}
+.rvw .meta{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:#7a8699;text-transform:uppercase;margin-top:auto;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.rvw .more{color:var(--blue);white-space:nowrap}
+.rev-foot{margin-top:26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#44506a}
+.rev-foot b{color:#0b0e14;font-weight:400}
 
 /* about */
 #about{--accent:var(--amber)}
@@ -190,7 +217,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radiu
 .ab-copy p{color:#c2cad8;font-size:15px;line-height:1.78;margin-bottom:16px}
 .ab-copy p.lead{font-size:clamp(18px,2vw,23px);color:var(--ink);line-height:1.5}
 .ab-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
-.ab-stats div{border:1px solid var(--line);border-radius:14px;padding:18px}
+.ab-stats>div{border:1px solid var(--line);border-radius:14px;padding:18px}
 .ab-stats .n{font-family:var(--disp);font-size:clamp(40px,5vw,64px);line-height:.9;color:var(--amber)}
 .ab-stats .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
 .ab-vis{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:4/5}
@@ -198,7 +225,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radiu
 .ab-vis .cap2{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#dfe5ee}
 .ab-vis::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,7,11,.85));z-index:1}
 .ab-trust{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
-.ab-trust div{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:7px}
+.ab-trust>div{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:7px}
 .ab-trust .t{font-family:var(--disp);font-size:22px;letter-spacing:.03em}
 .ab-trust .d{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);line-height:1.6}
 
@@ -277,7 +304,7 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
 .shwrap h3{font-family:var(--disp);font-size:clamp(38px,4.4vw,62px);line-height:.92;letter-spacing:.02em}
 .shstory{color:#c2cad8;font-size:14px;line-height:1.75}
 .shspecs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.shspecs div{background:var(--panel);padding:11px 14px}
+.shspecs>div{background:var(--panel);padding:11px 14px}
 .shspecs .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .shspecs .v{font-size:16px;font-weight:700;margin-top:3px}
 .shcta{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
@@ -353,7 +380,52 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
   .mqhud .hgo{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:var(--amber);color:#06070b;border:0;border-radius:30px;padding:9px 14px;font-weight:700}
   .ggrid{grid-template-columns:1fr 1fr}
   #gallery .gwrap{width:94vw;height:88vh}
+  #featOv{display:none!important}
+  .rev-grid{grid-template-columns:1fr}
+  .mfeat{margin-top:18px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#0b0e14;position:relative}
+  .mfeat video{width:100%;display:block;height:auto}
+  .mfstats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .mfstats div{border:1px solid var(--line);border-radius:14px;padding:13px 15px;--g1:var(--amber);--g2:transparent}
+  .mfstats .fv{font-family:var(--disp);font-size:34px;line-height:.95;color:var(--amber)}
+  .mfstats .fk{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 }
+/* ================= iOS-bubble arrange-in + LED glow ================= */
+.ar{opacity:0;transform:translateY(30px) scale(.92);will-change:transform,opacity}
+.ar.in{opacity:1;transform:none;
+  transition:opacity .5s cubic-bezier(.22,1,.36,1) var(--d,0ms),transform .74s cubic-bezier(.34,1.45,.52,1) var(--d,0ms)}
+.ar.from-l{transform:translateX(-38px) scale(.94)}
+.ar.from-r{transform:translateX(38px) scale(.94)}
+.ar.pop{transform:scale(.62)}
+.wrd{display:inline-block;opacity:0;transform:translateY(24px) scale(.9);will-change:transform,opacity}
+.wrd.in{opacity:1;transform:none;
+  transition:opacity .44s cubic-bezier(.22,1,.36,1) var(--d,0ms),transform .64s cubic-bezier(.34,1.5,.52,1) var(--d,0ms)}
+@media(prefers-reduced-motion:reduce){.ar,.wrd,.hero-ov .mega .ch{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* LED edge + bloom — lit trim in the dark bands, a soft halo in the light one */
+.led{position:relative;box-shadow:0 0 44px -16px var(--g1,var(--amber)),0 0 78px -34px var(--g2,var(--blue))}
+.led::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(135deg,var(--g1,var(--amber)),transparent 40%,transparent 60%,var(--g2,var(--blue)));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:.9}
+@keyframes ledp{0%,100%{opacity:.55}50%{opacity:1}}
+.led::before{animation:ledp 5.5s ease-in-out infinite}
+.sec.light .led{box-shadow:0 0 30px -18px var(--g1,var(--amber))}
+
+/* ================= 02 - featured build (immersive overlay) ================= */
+#featOv{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(18px,4.6vw,86px)}
+#featOv .fl{max-width:min(25vw,350px)}
+#featOv .fr{max-width:min(23vw,310px);display:flex;flex-direction:column;gap:11px;align-items:flex-end;text-align:right}
+#featOv .fkick{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);display:inline-flex;align-items:center;gap:9px}
+#featOv .fkick::before{content:"";width:20px;height:1px;background:var(--amber)}
+#featOv h2{font-family:var(--disp);font-size:clamp(38px,5vw,88px);line-height:.9;letter-spacing:.012em;margin:13px 0 11px}
+#featOv p{color:#c2cad8;font-size:13.5px;line-height:1.72}
+#featOv .ftap{margin-top:14px;font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);opacity:.92}
+.fstat{border:1px solid var(--line);border-radius:15px;padding:12px 17px;min-width:162px;background:rgba(9,11,17,.62);backdrop-filter:blur(8px);
+  --g1:var(--fa,var(--amber));--g2:transparent}
+.fstat .fv{font-family:var(--disp);font-size:clamp(28px,3.2vw,46px);line-height:.95;color:var(--fa,var(--amber))}
+.fstat .fk{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
 .loading{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .8s}
 .loading.done{opacity:0;pointer-events:none}
 .loading .lg{font-family:var(--disp);font-size:54px;letter-spacing:.16em}
@@ -401,12 +473,21 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
 <!-- desktop immersive overlays -->
 <div id="immersive">
   <div class="hero-ov" id="heroOv">
-    <div class="mega"><span data-h>OVER</span><span data-h class="stroke">HAUL</span></div>
+    <div class="mega" id="heroMega"><span class="w">OVER</span><span class="w stroke">HAUL</span></div>
     <div class="tl">PERFORMANCE REBUILDS · DIGBETH, BIRMINGHAM · <b>14 BAYS A YEAR</b></div>
     <div class="hbtns">
       <button class="hb fill" data-nav="build">Build a quote</button>
       <button class="hb ghost" data-nav="work">See the work</button>
     </div>
+  </div>
+  <div id="featOv">
+    <div class="fl">
+      <span class="fkick" id="featKick"></span>
+      <h2 id="featTitle"></h2>
+      <p id="featSub"></p>
+      <div class="ftap">◉ TAP THE CAR — OPEN ITS FILE</div>
+    </div>
+    <div class="fr" id="featStats"></div>
   </div>
   <div class="cap L pos-mid" id="capL"></div>
   <div class="cap R pos-mid" id="capR"></div>
@@ -423,16 +504,17 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
   <div id="mtop"></div>
 
   <section class="sec rv" id="finance">
-    <div class="shead"><div><span class="mk">Finance</span><h2>FINANCE<br>THE BUILD.</h2></div><p>Spread a build, a service or a full restomod over 2–5 years. Move the sliders — the monthly updates live, and your quote from the Build section drops straight in.</p></div>
-    <div class="fin-grid">
-      <div class="fin-ctrl">
+    <div class="shead"><div><span class="mk">Finance</span><h2 data-words>FINANCE<br>THE BUILD.</h2></div><p>Spread a build, a service or a full restomod over 2–5 years. Move the sliders — the monthly updates live, and your quote from the Build section drops straight in.</p></div>
+    <div class="fin-grid" data-stagger>
+      <div class="fin-ctrl" data-stagger>
         <div class="frow"><label>Build cost <b id="fCostV">£45,000</b></label><input type="range" id="fCost" min="5000" max="150000" step="500" value="45000"></div>
         <div class="frow"><label>Deposit <b id="fDepV">£6,750 · 15%</b></label><input type="range" id="fDep" min="0" max="50" step="1" value="15"></div>
         <div class="frow"><label>Term</label><div class="chips" id="fTerm"><div class="chip" data-t="24">24 mo</div><div class="chip on" data-t="36">36 mo</div><div class="chip" data-t="48">48 mo</div><div class="chip" data-t="60">60 mo</div></div></div>
         <div class="frow"><label>Representative APR <b>10.9%</b></label></div>
       </div>
-      <div class="fin-out">
+      <div class="fin-out led">
         <div class="big"><span id="fMonthly">£0</span><small> /mo</small></div>
+        <div class="fzone" id="fZone"><i></i><span id="fZoneL">Comfortable</span></div>
         <div class="fin-rows">
           <div><div class="k">Financed</div><div class="v" id="fFin">£0</div></div>
           <div><div class="k">Deposit</div><div class="v" id="fDep2">£0</div></div>
@@ -446,43 +528,48 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
   </section>
 
   <section class="sec light rv" id="reviews">
-    <div class="shead"><div><span class="mk" style="--accent:var(--blue)">Reviews</span><h2 style="color:#0b0e14">WHAT THEY<br>DROVE HOME.</h2></div><p>Every review is from an owner whose car left our floor with a build folder. No incentives, no edits.</p></div>
+    <div class="shead"><div><span class="mk" style="--accent:var(--blue)">Reviews</span><h2 style="color:#0b0e14" data-words>WHAT THEY<br>DROVE HOME.</h2></div><p>Every review is from an owner whose car left our floor with a build folder. No incentives, no edits.</p></div>
     <div class="rev-top">
-      <div class="rev-score"><div class="n" style="color:#0b0e14">4.9</div><div class="st">★★★★★</div><div class="sub" style="color:#44506a">136 verified owners</div></div>
+      <div class="rev-score">
+        <div class="n"><span data-count="4.9" data-dec="1">0.0</span></div>
+        <span class="stars" id="revBigStars" style="--ss:27px"></span>
+        <div class="sub"><span data-count="136">0</span> verified owners · <span data-count="98" data-suffix="%">0%</span> would come back</div>
+      </div>
       <div class="rev-bars" id="revBars"></div>
     </div>
     <div class="rev-filters" id="revFilters"></div>
-    <div class="rev-grid" id="revGrid"></div>
+    <div class="rev-grid" id="revGrid" data-stagger></div>
+    <div class="rev-foot">Showing <b id="revCount">0</b> of <b>136</b> &nbsp;·&nbsp; tap any card to read it in full</div>
   </section>
 
   <section class="sec rv" id="about">
-    <div class="shead"><div><span class="mk">About</span><h2>ONE ROOF,<br>EVERY BOLT.</h2></div><p>A working performance shop in Digbeth — not a showroom with a kettle. Fourteen full builds a year, the rest servicing and bodywork.</p></div>
+    <div class="shead"><div><span class="mk">About</span><h2 data-words>ONE ROOF,<br>EVERY BOLT.</h2></div><p>A working performance shop in Digbeth — not a showroom with a kettle. Fourteen full builds a year, the rest servicing and bodywork.</p></div>
     <div class="ab-grid">
       <div class="ab-copy">
         <p class="lead">We started in 2014 with one ramp and a welder. We now run eight bays, our own dyno, a paint booth and a fabrication shop — all under one roof in the Floodgate Works.</p>
         <p>Nothing gets farmed out, so nothing goes missing between trades. The person who strips your car is in the building when it's painted, mapped and signed off. You get photographs every Friday and a parts list you can check line by line.</p>
         <p>Every car leaves with its build folder: the dyno sheet, the torque log, the geometry print-out, and a crate holding every original part we took off it.</p>
-        <div class="ab-stats">
-          <div><div class="n">11</div><div class="l">Years on the floor</div></div>
-          <div><div class="n">480+</div><div class="l">Builds delivered</div></div>
-          <div><div class="n">8</div><div class="l">Bays · own dyno</div></div>
-          <div><div class="n">24mo</div><div class="l">Build warranty</div></div>
+        <div class="ab-stats" data-stagger>
+          <div class="led"><div class="n"><span data-count="11">0</span></div><div class="l">Years on the floor</div></div>
+          <div class="led" style="--g1:var(--blue)"><div class="n"><span data-count="480" data-suffix="+">0</span></div><div class="l">Builds delivered</div></div>
+          <div class="led"><div class="n"><span data-count="8">0</span></div><div class="l">Bays · own dyno</div></div>
+          <div class="led" style="--g1:var(--lime)"><div class="n"><span data-count="24" data-suffix="mo">0</span></div><div class="l">Build warranty</div></div>
         </div>
       </div>
       <div class="ab-vis"><img src="assets/img/c-e63.jpg" alt="OVERHAUL workshop"><div class="cap2">Floodgate Works · Digbeth, B9 — late shift on the dyno</div></div>
     </div>
-    <div class="ab-trust">
-      <div><div class="t">BUILD FOLDER</div><div class="d">Every photo, invoice and spec, handed over in print.</div></div>
-      <div><div class="t">DYNO SHEET</div><div class="d">Printed and signed. The number you were promised.</div></div>
-      <div><div class="t">TORQUE LOG</div><div class="d">Every fastener, to spec, under watch.</div></div>
-      <div><div class="t">OLD PARTS BACK</div><div class="d">Everything we removed comes home in a crate.</div></div>
+    <div class="ab-trust" data-stagger>
+      <div class="led"><div class="t">BUILD FOLDER</div><div class="d">Every photo, invoice and spec, handed over in print.</div></div>
+      <div class="led" style="--g1:var(--blue)"><div class="t">DYNO SHEET</div><div class="d">Printed and signed. The number you were promised.</div></div>
+      <div class="led"><div class="t">TORQUE LOG</div><div class="d">Every fastener, to spec, under watch.</div></div>
+      <div class="led" style="--g1:var(--lime)"><div class="t">OLD PARTS BACK</div><div class="d">Everything we removed comes home in a crate.</div></div>
     </div>
   </section>
 
   <section class="sec rv" id="contact">
-    <div class="shead"><div><span class="mk">Contact</span><h2>BOOK<br>A BAY.</h2></div><p>Tell us the car and the number you want on the dyno sheet. We quote in writing within three working days — parts, labour and paint, line by line.</p></div>
+    <div class="shead"><div><span class="mk">Contact</span><h2 data-words>BOOK<br>A BAY.</h2></div><p>Tell us the car and the number you want on the dyno sheet. We quote in writing within three working days — parts, labour and paint, line by line.</p></div>
     <div class="ct-grid">
-      <form class="ct-form" id="ctForm" onsubmit="return false">
+      <form class="ct-form" id="ctForm" data-stagger onsubmit="return false">
         <div class="frm-row"><input type="text" id="ctName" placeholder="Your name" autocomplete="name"><input type="tel" id="ctPhone" placeholder="Phone" autocomplete="tel"></div>
         <input type="email" id="ctEmail" placeholder="Email" autocomplete="email">
         <input type="text" id="ctCar" placeholder="What are you driving? (e.g. R35 GT-R, 2019)">
@@ -491,10 +578,10 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
         <button class="btn amber block" id="ctSend">Send it over →</button>
         <div class="ct-ok" id="ctOk"></div>
       </form>
-      <div class="ct-info">
-        <div class="ct-card"><div class="k">The shop</div><div class="v">Unit 7, Floodgate Works<br>Digbeth, Birmingham <b>B9 4AA</b></div></div>
-        <div class="ct-card"><div class="k">Talk to us</div><div class="v"><a href="tel:+441214960714">0121 496 0714</a><br><a href="mailto:build@overhaul.works">build@overhaul.works</a><br><a href="https://instagram.com/overhaul.works" target="_blank" rel="noopener">@overhaul.works</a></div></div>
-        <div class="ct-card"><div class="k">Open</div><div class="v">Mon–Fri 08:00–18:00<br>Sat 09:00–16:00 · Sun closed</div></div>
+      <div class="ct-info" data-stagger>
+        <div class="ct-card led"><div class="k">The shop</div><div class="v">Unit 7, Floodgate Works<br>Digbeth, Birmingham <b>B9 4AA</b></div></div>
+        <div class="ct-card led" style="--g1:var(--blue)"><div class="k">Talk to us</div><div class="v"><a href="tel:+441214960714">0121 496 0714</a><br><a href="mailto:build@overhaul.works">build@overhaul.works</a><br><a href="https://instagram.com/overhaul.works" target="_blank" rel="noopener">@overhaul.works</a></div></div>
+        <div class="ct-card led" style="--g1:var(--lime)"><div class="k">Open</div><div class="v">Mon–Fri 08:00–18:00<br>Sat 09:00–16:00 · Sun closed</div></div>
         <div class="ct-actions">
           <a class="call" href="tel:+441214960714">Call</a>
           <a href="https://wa.me/441214960714?text=Hi%20OVERHAUL%2C%20I'd%20like%20to%20book%20a%20bay" target="_blank" rel="noopener">WhatsApp</a>
@@ -554,29 +641,25 @@ const $=id=>document.getElementById(id);
 const isMobile=matchMedia('(max-width:820px)').matches;
 const AC={amber:'#ff7a1f',blue:'#3ea9ff',red:'#e0273c',lime:'#a9e62b',ink:'#eef2f8'};
 
-/* ---------- THE WORK · beats 1-6 (real clips) ---------- */
+/* ---------- 02 · THE FEATURED BUILD (one car, huge, numbers counting) ---------- */
+const FEAT={v:'gtr-dawn.mp4',still:'c-gtr.jpg',accent:AC.blue,dk:'feat',
+  name:'R35 GT-R — BUILD №104',
+  kick:'Build №104 — delivered',
+  title:'EIGHT-ONE-TWO<br>AT THE WHEELS.',
+  sub:'A crash-damaged R35 nobody else would touch. Hybrid turbos, dry-sump conversion and full arches over forged centre-locks — handed back with a folder thicker than the owner\u2019s manual.',
+  stats:[{v:812,k:'bhp at the wheels'},{v:56,k:'bay days'},{v:94500,k:'delivered at',pre:'\u00a3'},{v:2100,k:'hours on the floor'}]};
+
+/* ---------- 03-05 · THE WORK (three builds, real clips) ---------- */
 const STOPS=[
-  {v:'gtr-dawn.mp4', side:'R',accent:AC.amber,dim:1,  kick:'Build 01 — On record',dk:'w0',
-   title:'EVERY BOLT,<br>ON RECORD.',
-   sub:'A full build runs 56 days and ~2,100 hours on our floor. Photographs every Friday, a parts list you can check line by line.',
-   spec:[['Workshop','Digbeth, B9'],['Builds / year','14']]},
-  {v:'gtr-night.mp4',side:'L',accent:AC.blue, dim:1,  kick:'Build 02 — Night shift',dk:'w1',
-   title:'THE DYNO<br>RUNS LATE.',
-   sub:'Pulls happen after six, when the ambient drops and the numbers stop flattering anyone. Every car leaves with its printed sheet.',
-   spec:[['Dyno','Mainline 4WD'],['Sheet','Printed, signed']]},
-  {v:'exhaust.mp4',  side:'R',accent:AC.amber,dim:1,  kick:'Build 03 — Breathing',dk:'w2',
+  {v:'exhaust.mp4',  side:'R',accent:AC.amber,dim:1,  kick:'Build 01 — Breathing',dk:'w0',
    title:'EXHAUST,<br>INTAKE, <span class="stroke">ECU.</span>',
    sub:'Valved titanium, 3.5in downpipes and a map on your fuel. A stock R35 goes 565 to 812 bhp without the block coming out.',
-   spec:[['From','£2,400'],['Lead time','4 days']]},
-  {v:'gt3-arch.mp4', side:'L',accent:AC.blue, dim:.78,kick:'Build 04 — Stance',dk:'w3',
-   title:'WHEELS AND<br>RIDE HEIGHT.',
-   sub:'Forged centre-locks, corner-weighted on the pads, geometry set to the sheet you sign off. Every shim photographed before it goes in.',
-   spec:[['From','£4,100'],['Geo','Corner-weighted']]},
-  {v:'gt3-bridge.mp4',side:'R',accent:AC.blue,dim:.86,kick:'Build 05 — Road proof',dk:'w4',
+   spec:[['From','\u00a32,400'],['Lead time','4 days']]},
+  {v:'gt3-bridge.mp4',side:'L',accent:AC.blue,dim:.86,kick:'Build 02 — Road proof',dk:'w1',
    title:'SIGNED OFF<br>ON THE ROAD.',
    sub:'Four hundred shakedown miles before you see it — motorway, B-road, cold starts — then the whole car comes back for a full re-torque.',
    spec:[['Shakedown','400 mi'],['Re-torque','Included']]},
-  {v:'hura-red.mp4', side:'L',accent:AC.red,  dim:1,  kick:'Build 06 — Collected',dk:'w5',
+  {v:'hura-red.mp4', side:'R',accent:AC.red,  dim:1,  kick:'Build 03 — Collected',dk:'w2',
    title:'BUILD №112,<br>OUT IN OCTOBER.',
    sub:'Huracán, Rosso Mars respray, valved Novitec system, 661 bhp at the wheels. Twelve weeks door to door, and the owner drove it home.',
    spec:[['Build','№112'],['Power','661 bhp']]}
@@ -636,14 +719,15 @@ const GAL_FILTERS=[['all','All'],['build','Rebuilds'],['service','Servicing'],['
 /* ---------- REVIEWS ---------- */
 const REV_DIST=[88,8,3,1,0];
 const REVIEWS=[
-  {who:'Marcus H.',cat:'build',  r:5,txt:'Brought them a crash-damaged R35 everyone else wrote off. Came back 812 bhp with a folder thicker than the owner’s manual. Faultless.',when:'Sep 2026 · R35 GT-R'},
-  {who:'Priya N.', cat:'service',r:5,txt:'Stage 2 on the E63, done in a week, re-mapped on my fuel and handed back with the dyno sheet. No surprises on the bill.',when:'Aug 2026 · E63 S'},
-  {who:'Dan R.',   cat:'build',  r:5,txt:'Twelve-week Huracán build, photos every Friday like clockwork. Drove it home the day they said. These people actually run a shop.',when:'Oct 2026 · Huracán'},
-  {who:'Sofia L.', cat:'body',   r:5,txt:'Full respray on the Urus after a bad wrap pull. Panel gaps better than factory and they PPF’d the lot. Can’t fault it.',when:'Jul 2026 · Urus'},
-  {who:'Tom A.',   cat:'build',  r:4,txt:'Hellcat drag build. Ran a day over on the cage but they called me before I had to ask. 9.6 and still idles in traffic.',when:'Jun 2026 · Hellcat'},
-  {who:'Keira M.', cat:'service',r:5,txt:'Took the GT3 RS in for track prep. Corner-balanced, geo printed, cage checked. I trust them with a car I actually race.',when:'May 2026 · 911 GT3 RS'},
-  {who:'Idris K.', cat:'build',  r:5,txt:'C8 supercharger build. They sent the torque log and a crate of my old parts. Nobody does that. Second car I’ve had built here.',when:'Apr 2026 · C8'},
-  {who:'Lena V.',  cat:'body',   r:5,txt:'Aventador repaint — bare metal, three weeks, flawless. The quote in writing matched the invoice to the pound.',when:'Mar 2026 · Aventador'}
+  {who:'Marcus H.',av:'a1.jpg',cat:'build',  r:5,txt:'Brought them a crash-damaged R35 everyone else wrote off. Came back 812 bhp with a folder thicker than the owner\u2019s manual. Every invoice, every torque figure, every photo. Faultless.',when:'Sep 2026 · R35 GT-R'},
+  {who:'Priya N.', av:'a4.jpg',cat:'service',r:5,txt:'Stage 2 on the E63, done in a week, re-mapped on my fuel and handed back with the dyno sheet. No surprises on the bill — the written quote matched it to the pound.',when:'Aug 2026 · E63 S'},
+  {who:'Dan R.',   av:'a2.jpg',cat:'build',  r:5,txt:'Twelve-week Huracán build, photos every Friday like clockwork. Drove it home the day they said I would. These people actually run a shop instead of a showroom.',when:'Oct 2026 · Huracán'},
+  {who:'Sofia L.', av:'a5.jpg',cat:'body',   r:5,txt:'Full respray on the Urus after a bad wrap pull. Panel gaps came back better than factory and they PPF\u2019d the lot. I keep finding people staring at it in car parks.',when:'Jul 2026 · Urus'},
+  {who:'Tom A.',   av:'a7.jpg',cat:'build',  r:4,txt:'Hellcat drag build. Ran a day over on the cage but they rang me before I had to ask, which is more than the last place managed. 9.6 at 146 and it still idles in traffic.',when:'Jun 2026 · Hellcat'},
+  {who:'Keira M.', av:'a8.jpg',cat:'service',r:5,txt:'Took the GT3 RS in for track prep. Corner-balanced, geometry printed, cage checked and signed. I trust them with a car I actually race, which says everything.',when:'May 2026 · 911 GT3 RS'},
+  {who:'Idris K.', av:'a6.jpg',cat:'build',  r:5,txt:'C8 supercharger build. They sent the torque log and a crate holding every original part they took off. Nobody else does that. Second car I\u2019ve had built here.',when:'Apr 2026 · C8'},
+  {who:'Lena V.',  av:'a3.jpg',cat:'body',   r:5,txt:'Aventador repaint — bare metal, three weeks, flawless. They photographed every stage so I could see the prep under the colour. Worth every penny.',when:'Mar 2026 · Aventador'},
+  {who:'Ryan O.',  av:'a9.jpg',cat:'service',r:5,txt:'Just a major service and a geo, nothing glamorous. Still got the printout, still got the old parts back, still got a call before anything extra was spent.',when:'Feb 2026 · 765LT'}
 ];
 const REV_FILTERS=[['all','All'],['build','Rebuilds'],['service','Servicing'],['body','Bodywork']];
 
@@ -737,7 +821,22 @@ function calcFinance(){
   if($('fTot'))$('fTot').textContent=gbp(tot);
   if($('fInt'))$('fInt').textContent=gbp(interest);
   fin.monthly=m; fin.dep=dep;
+  paintFinanceZone(m);
   updateContactSummary();
+}
+/* the figure itself tells you whether it is a good one */
+function financeZone(m){
+  if(m<=700)  return {c:'var(--lime)', l:'Comfortable'};
+  if(m<=1400) return {c:'#ffc400',     l:'Manageable'};
+  if(m<=2400) return {c:'var(--amber)',l:'Stretching'};
+  return              {c:'var(--red)', l:'Steep — spread it further'};
+}
+function paintFinanceZone(m){
+  const z=financeZone(m), out=document.querySelector('.fin-out');
+  if(out) out.style.setProperty('--fz',z.c);
+  const ctrl=document.querySelector('.fin-ctrl'); if(ctrl) ctrl.style.setProperty('--fz',z.c);
+  const lbl=$('fZoneL'); if(lbl) lbl.textContent=z.l;
+  const pill=$('fZone'); if(pill) pill.style.setProperty('--fz',z.c);
 }
 function wireFinance(){
   const c=$('fCost'),d=$('fDep');
@@ -836,17 +935,20 @@ let renderer,scene,camera,dust,raycaster,pointer=new THREE.Vector2(0,0),hoverObj
 let camZ=0,camX=0,camY=0,gEnv,gHall,hallPanels=[],bayObj=null;
 const canvas=$('scene');
 const SP=17, N=STOPS.length;
-const HALL_Z0=28, HALL_Z1=-83, BAY_Z1=-120;   // hero(no car) → hall → bay
+/* hero (no car) → 02 featured → 03-05 hall → the build bay */
+const FEAT_Z=0, HALL_START=-28;
+const HALL_Z0=40, HALL_Z1=-56, BAY_Z1=-94;
 const TW=0.44;
-function featuredH(rec,ahead,cap){ const d=Math.max(ahead,0.5); const visW=2*d*Math.tan(camera.fov*Math.PI/360)*camera.aspect; return Math.min(cap,Math.max(0.3,(visW*TW)/Math.max(rec.ar,0.25))); }
+function featuredH(rec,ahead,cap,tw){ const d=Math.max(ahead,0.5); const visW=2*d*Math.tan(camera.fov*Math.PI/360)*camera.aspect; return Math.min(cap,Math.max(0.3,(visW*(tw||TW))/Math.max(rec.ar,0.25))); }
 
 function build3D(){
+  gHall=new THREE.Group();
   renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(2,devicePixelRatio)); renderer.setSize(innerWidth,innerHeight);
   scene=new THREE.Scene(); scene.fog=new THREE.FogExp2(0x06070b,0.0166);
   camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,0.1,460); camZ=HALL_Z0; camera.position.set(0,0,camZ);
   raycaster=new THREE.Raycaster(); TEXLOAD=new THREE.TextureLoader();
-  buildEnv(); buildHall(); bayObj=buildBay(-86,BAY_Z1);
+  scene.add(gHall); buildEnv(); buildFeatured(); buildHall(); bayObj=buildBay(-86,BAY_Z1);
   addEventListener('resize',onResize);
   addEventListener('pointermove',e=>{ pointer.x=(e.clientX/innerWidth)*2-1; pointer.y=-(e.clientY/innerHeight)*2+1; pointerLive=true;
     tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px'; },{passive:true});
@@ -872,9 +974,16 @@ function buildEnv(){
   gp.setAttribute('position',new THREE.BufferAttribute(arr,3));
   dust=new THREE.Points(gp,new THREE.PointsMaterial({color:0x8fa2c0,size:0.052,transparent:true,opacity:0.46,depthWrite:false})); scene.add(dust);
 }
+let featCard=null,featHalo=null;
+function buildFeatured(){
+  featCard=card('vid/'+FEAT.v,5,FEAT.accent);
+  featCard.grp.position.set(0,0,FEAT_Z);
+  featCard.mesh.userData.dk=FEAT.dk; featCard.mesh.userData.nm=FEAT.name;
+  featHalo=glowMesh(1,1,FEAT.accent); featHalo.position.z=-0.3; featCard.grp.add(featHalo);
+  gHall.add(featCard.grp);
+}
 function buildHall(){
-  gHall=new THREE.Group(); scene.add(gHall);
-  STOPS.forEach((s,i)=>{ const z=-i*SP; const c=card('vid/'+s.v,4.4,s.accent); c.grp.position.set(0,0,z);
+  STOPS.forEach((s,i)=>{ const z=HALL_START-i*SP; const c=card('vid/'+s.v,4.4,s.accent); c.grp.position.set(0,0,z);
     c.mesh.userData.dk=s.dk; c.mesh.userData.nm=DOSS[s.dk].name;
     const halo=glowMesh(1,1,s.accent); halo.position.z=-0.3; c.grp.add(halo);
     gHall.add(c.grp); hallPanels.push({i,c,z,halo,dim:s.dim,phase:Math.random()*6.28,accent:s.accent}); });
@@ -914,7 +1023,7 @@ function wordify(html){ const g=html.replace(/<[^>]+>/g,m=>m.replace(/ /g,'\u000
 function setCap(s,side,accent,beatIdx,tap){
   const useR=(side==='R'); const show=useR?capR:capL, hide=useR?capL:capR;
   show.style.setProperty('--accent',accent);
-  show.innerHTML='<span class="idx"><span class="wd">'+(s.idxLabel||('BUILD&nbsp;<b>'+String(beatIdx+1).padStart(2,'0')+'</b>&nbsp;/&nbsp;06'))+'</span></span>'+
+  show.innerHTML='<span class="idx"><span class="wd">'+(s.idxLabel||('BUILD&nbsp;<b>'+String(beatIdx+1).padStart(2,'0')+'</b>&nbsp;/&nbsp;'+String(STOPS.length).padStart(2,'0')))+'</span></span>'+
     '<div><span class="kick"><span class="wd">'+s.kick.replace(/ /g,'&nbsp;')+'</span></span></div>'+
     '<h2>'+s.title.split('<br>').map(ln=>wordify(ln)).join('<br>')+'</h2>'+
     '<p>'+wordify(s.sub)+'</p>'+
@@ -934,11 +1043,23 @@ function setActive(i){ if(i===activeStop)return; activeStop=i; const s=STOPS[i];
 
 /* ---------- hero overlay ---------- */
 function applyHero(p){
-  const ho=smooth(1-p/0.055);
-  $('heroOv').style.opacity=ho; $('heroOv').style.pointerEvents=ho>0.4?'auto':'none';
-  $('cue').style.opacity=p<0.02?1:0;
-  document.querySelectorAll('#heroOv [data-h]').forEach(el=>{ el.style.transform='translateY('+((1-ho)*-38)+'px)'; el.style.opacity=ho; });
+  const ho=smooth(1-p/0.085);
+  const h=$('heroOv');
+  h.style.opacity=ho; h.style.pointerEvents=ho>0.4?'auto':'none';
+  h.style.transform='translateY('+((1-ho)*-34)+'px)';
+  $('cue').style.opacity=p<0.03?1:0;
   $('hud').classList.toggle('on', p>0.70 && p<0.999);
+}
+/* the brandmark assembles letter by letter on arrival */
+function startHero(){
+  const m=$('heroMega'); if(!m||m.dataset.built)return; m.dataset.built='1';
+  let i=0;
+  [].slice.call(m.querySelectorAll('.w')).forEach(w=>{
+    const txt=w.textContent; w.textContent='';
+    txt.split('').forEach(ch=>{ const sp=document.createElement('span');
+      sp.className='ch'; sp.textContent=ch; sp.style.setProperty('--d',(i*52)+'ms'); i++; w.appendChild(sp); });
+  });
+  setTimeout(()=>m.classList.add('go'),60);
 }
 
 /* ---------- the immersive director ---------- */
@@ -957,6 +1078,24 @@ function runImmersive(p,t,immediate){
   camX=lerp(camX,wantX,immediate?1:0.07); camY=lerp(camY,wantY,immediate?1:0.07);
   camera.position.set(camX,camY,camZ); camera.lookAt(0,0,lookZ);
 
+  // ---- 02 · the featured build: one car, huge and centred, numbers counting ----
+  let featW=0;
+  if(featCard){
+    const fa=camZ-FEAT_Z;
+    featW=smooth(clamp(fa/5,0,1))*smooth(clamp((26-fa)/13,0,1));
+    const live=fa>0.5&&fa<34, ff=smooth(clamp(featW/0.06,0,1)), sf=smooth(featW);
+    featCard.setH(featuredH(featCard.rec,fa,7.6,0.46));
+    const bob=Math.sin(t*0.5)*0.12;
+    featCard.grp.position.set(pointer.x*0.5,bob+pointer.y*0.28,FEAT_Z);
+    featCard.grp.rotation.set(0,-pointer.x*0.03,Math.sin(t*0.34)*0.01);
+    const fop=live?(0.34+0.66*sf)*ff:0;
+    featCard.op(fop,live?(0.2+0.55*sf)*ff:0);
+    featHalo.scale.set(featCard.w()+5.5,featCard.h+4.5,1);
+    featHalo.material.opacity=live?(0.05+0.2*sf)*ff:0;
+    featCard.play(live?featW:0);
+    paintFeatured(featW);
+  }
+
   let capDriver=0;
   if(gHall.visible){
     let best=0,bestF=-1;
@@ -973,7 +1112,8 @@ function runImmersive(p,t,immediate){
       const op=live?(0.34+0.66*sf)*ff:0;
       pn.c.op(op,live?(0.2+0.55*sf)*(0.65+0.35*hov)*ff:0); pn.c.play(live?f:0);
       pn.halo.scale.set(pn.c.w()+5.5,pn.c.h+4.5,1); pn.halo.material.opacity=live?(0.05+0.2*sf)*(0.7+0.5*hov)*ff:0; });
-    if(inHall){ setActive(best); capDriver=clamp((bestF-0.1)/0.5,0,1); }
+    if(inHall&&bestF>0.02){ setActive(best); capDriver=clamp((bestF-0.1)/0.5,0,1); }
+    else if(inHall){ capDriver=0; }
   }
   // bay
   bayObj.g.visible = !inHall || p>0.68;
@@ -995,6 +1135,81 @@ const BAYCAP={idxLabel:'QUOTE&nbsp;BUILDER',kick:'The build bay — your quote',
   sub:'Six stations, six real prices. Tap the ones you want and the running total in the corner is the number we put in writing.',
   spec:[['Stations','06'],['From','£2,400']]};
 
+/* ---------- 02 · featured overlay paint (numbers are a pure function of scroll) ---------- */
+let featBuilt=false;
+function paintFeatured(w){
+  const ov=$('featOv'); if(!ov) return;
+  if(!featBuilt){
+    featBuilt=true;
+    $('featKick').textContent=FEAT.kick;
+    $('featTitle').innerHTML=FEAT.title;
+    $('featSub').textContent=FEAT.sub;
+    $('featStats').innerHTML=FEAT.stats.map((st,i)=>
+      '<div class="fstat led" style="--fa:'+(i%2?'var(--blue)':'var(--amber)')+';--g1:'+(i%2?'var(--blue)':'var(--amber)')+';--g2:transparent">'+
+      '<div class="fv" data-fv="'+i+'">0</div><div class="fk">'+st.k+'</div></div>').join('');
+  }
+  const vis=smooth(clamp(w/0.1,0,1));
+  ov.style.opacity=String(vis);
+  const e=smooth(clamp((w-0.06)/0.5,0,1));   // the count itself rides the scroll
+  FEAT.stats.forEach((st,i)=>{
+    const el=ov.querySelector('[data-fv="'+i+'"]'); if(!el)return;
+    const v=Math.round(st.v*e);
+    el.textContent=(st.pre||'')+v.toLocaleString('en-GB')+(st.suf||'');
+    el.parentElement.style.transform='translateY('+((1-e)*22)+'px) scale('+(0.92+0.08*e)+')';
+    el.parentElement.style.opacity=String(0.25+0.75*e);
+  });
+  const fl=ov.querySelector('.fl');
+  if(fl){ fl.style.transform='translateX('+((1-e)*-26)+'px)'; fl.style.opacity=String(0.2+0.8*e); }
+}
+
+/* ============================================================
+   MOTION — iOS-bubble arrange-in, counters, stars, bars
+   ============================================================ */
+function splitWords(el){
+  if(el.dataset.split)return; el.dataset.split='1';
+  el.innerHTML=el.innerHTML.split('<br>').map(function(line){
+    return line.split(/\s+/).filter(Boolean).map(function(w){return '<span class="wrd">'+w+'</span>';}).join(' ');
+  }).join('<br>');
+  [].slice.call(el.querySelectorAll('.wrd')).forEach(function(w,i){ w.style.setProperty('--d',(i*58)+'ms'); });
+}
+function animateCount(el){
+  if(el.dataset.done)return; el.dataset.done='1';
+  const to=parseFloat(el.dataset.count)||0, dec=+(el.dataset.dec||0);
+  const pre=el.dataset.prefix||'', suf=el.dataset.suffix||'';
+  const dur=1150, t0=performance.now();
+  const fmt=v=>pre+v.toLocaleString('en-GB',{minimumFractionDigits:dec,maximumFractionDigits:dec})+suf;
+  const step=now=>{ const k=clamp((now-t0)/dur,0,1), e=1-Math.pow(1-k,3);
+    el.textContent=fmt(dec?+(to*e).toFixed(dec):Math.round(to*e));
+    if(k<1) requestAnimationFrame(step); else el.textContent=fmt(to); };
+  requestAnimationFrame(step);
+}
+function tagStagger(root){
+  [].slice.call(root.querySelectorAll('[data-stagger]')).forEach(function(c){
+    [].slice.call(c.children).forEach(function(ch,i){ ch.classList.add('ar'); ch.style.setProperty('--d',(i*72)+'ms'); });
+  });
+}
+function playIn(root){
+  [].slice.call(root.querySelectorAll('.ar,.wrd')).forEach(function(x){ x.classList.add('in'); });
+  [].slice.call(root.querySelectorAll('[data-count]')).forEach(animateCount);
+  [].slice.call(root.querySelectorAll('.stars')).forEach(function(st){ st.classList.add('go'); });
+  [].slice.call(root.querySelectorAll('.rbar i')).forEach(function(i){ i.style.width=i.getAttribute('data-w')+'%'; });
+}
+/* re-rendered content (review filters) arrives already in view — stagger it in straight away */
+function revealNow(root){
+  tagStagger(root.parentElement||root);
+  setTimeout(function(){ playIn(root); },30);
+}
+let MIO=null;
+function wireMotion(){
+  tagStagger(document);
+  [].slice.call(document.querySelectorAll('[data-words]')).forEach(splitWords);
+  MIO=new IntersectionObserver(function(es){ es.forEach(function(en){
+    if(!en.isIntersecting)return;
+    en.target.classList.add('in'); playIn(en.target); MIO.unobserve(en.target);
+  });},{threshold:0.14});
+  [].slice.call(document.querySelectorAll('.rv')).forEach(function(el){ MIO.observe(el); });
+}
+
 /* ---------- picking ---------- */
 let pdX=0,pdY=0;
 function clickTargets(){ let l=[]; if(gHall&&gHall.visible) l=l.concat(hallPanels.map(p=>p.c.mesh)); if(bayObj&&bayObj.g.visible) l=l.concat(bayObj.clicks); return l; }
@@ -1004,6 +1219,9 @@ function pickClickable(){ raycaster.setFromCamera(pointer,camera); const h=rayca
    DOSSIERS / SHEET / GALLERY  (overlays)
    ============================================================ */
 const DOSS={};
+DOSS[FEAT.dk]={type:'vid',src:'assets/vid/'+FEAT.v,accent:FEAT.accent,mat:'#0b0e14',kick:FEAT.kick,
+  name:FEAT.title.replace(/<br>/g,' ').replace(/<[^>]+>/g,''),story:FEAT.sub,
+  spec:[['Power','812 bhp'],['Bay days','56'],['Delivered','£94,500'],['Hours','2,100']],hex:FEAT.accent};
 STOPS.forEach(s=>{ DOSS[s.dk]={type:'vid',src:'assets/vid/'+s.v,accent:s.accent,mat:'#0b0e14',kick:s.kick,
   name:s.title.replace(/<br>/g,' ').replace(/<[^>]+>/g,''),story:s.sub,
   spec:s.spec.concat([['Bay days','56'],['Photos','Every Friday']]),hex:s.accent}; });
@@ -1059,26 +1277,43 @@ document.querySelectorAll('.shmedia').forEach(m=>m.addEventListener('pointermove
 /* ============================================================
    REVIEWS render
    ============================================================ */
+function starsHTML(r,size){
+  let h='<span class="stars" style="--ss:'+(size||18)+'px">';
+  for(let i=0;i<5;i++) h+='<i class="'+(i<r?'f':'')+'" style="--d:'+(i*85)+'ms"></i>';
+  return h+'</span>';
+}
 function renderReviews(){
   const bars=$('revBars'), total=REV_DIST.reduce((a,b)=>a+b,0)||1;
-  bars.innerHTML=[5,4,3,2,1].map((st,i)=>{ const w=Math.round(REV_DIST[i]/total*100);
-    return '<div class="rbar"><span>'+st+'★</span><div class="tr"><i data-w="'+w+'"></i></div><span>'+w+'%</span></div>'; }).join('');
-  $('revFilters').innerHTML=REV_FILTERS.map(([k,l],i)=>'<div class="chip'+(i===0?' on':'')+'" data-rf="'+k+'" style="--lime:var(--blue)">'+l+'</div>').join('');
-  let f='all'; const paint=()=>{ const list=REVIEWS.filter(r=>f==='all'||r.cat===f);
-    $('revGrid').innerHTML=list.map(r=>'<div class="rvw"><div class="rh"><span class="who">'+r.who+'</span><span class="ver">✓ Verified</span></div>'+
-      '<div class="stars">'+'★'.repeat(r.r)+'<span style="color:#39404e">'+'★'.repeat(5-r.r)+'</span></div>'+
-      '<p>'+r.txt+'</p><div class="meta">'+r.when+'</div></div>').join(''); };
+  bars.innerHTML=[5,4,3,2,1].map(function(st,i){ const w=Math.round(REV_DIST[i]/total*100);
+    return '<div class="rbar"><span>'+st+'\u2605</span><div class="tr"><i data-w="'+w+'" style="--d:'+(i*110)+'ms"></i></div>'+
+           '<span><span data-count="'+w+'" data-suffix="%">0%</span></span></div>'; }).join('');
+  const big=$('revBigStars'); if(big) big.innerHTML=starsHTML(5,27).replace(/^<span[^>]*>/,'').replace(/<\/span>$/,'');
+  $('revFilters').innerHTML=REV_FILTERS.map(function(f,i){ return '<div class="chip'+(i===0?' on':'')+'" data-rf="'+f[0]+'">'+f[1]+'</div>'; }).join('');
+  let f='all', revFirst=true;
+  const paint=function(){
+    const list=REVIEWS.filter(function(r){ return f==='all'||r.cat===f; });
+    $('revGrid').innerHTML=list.map(function(r){
+      return '<div class="rvw" data-rv>'+
+        '<div class="rh"><span class="av"><img src="assets/ppl/'+r.av+'" alt="'+r.who+'" loading="lazy"></span>'+
+          '<span class="wi"><span class="who">'+r.who+'</span><span class="ver">\u2713 Verified owner</span></span></div>'+
+        starsHTML(r.r)+'<p>'+r.txt+'</p>'+
+        '<div class="meta"><span>'+r.when+'</span><span class="more">Read more</span></div></div>';
+    }).join('');
+    $('revCount').textContent=String(list.length);
+    /* first paint is below the fold -- let the observer bubble them in on arrival */
+    if(revFirst){ revFirst=false; } else { revealNow($('revGrid')); }
+  };
   paint();
-  $('revFilters').addEventListener('click',e=>{ const c=e.target.closest('[data-rf]'); if(!c)return;
-    $('revFilters').querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); f=c.getAttribute('data-rf'); paint(); });
-  // animate bars when section intersects
-  const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ bars.querySelectorAll('i').forEach(i=>setTimeout(()=>i.style.width=i.getAttribute('data-w')+'%',60)); io.disconnect(); } }),{threshold:0.3});
-  io.observe($('reviews'));
+  $('revFilters').addEventListener('click',function(e){ const c=e.target.closest('[data-rf]'); if(!c)return;
+    [].slice.call($('revFilters').querySelectorAll('.chip')).forEach(function(x){x.classList.remove('on');});
+    c.classList.add('on'); f=c.getAttribute('data-rf'); paint(); });
+  /* tap a card to read it in full */
+  $('revGrid').addEventListener('click',function(e){ const c=e.target.closest('[data-rv]'); if(!c)return;
+    const open=c.classList.toggle('open');
+    const m=c.querySelector('.more'); if(m) m.textContent=open?'Show less':'Read more'; });
 }
 
-/* reveal-on-scroll for sections */
-function wireReveals(){ const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } }),{threshold:0.12});
-  document.querySelectorAll('.rv').forEach(el=>io.observe(el)); }
+/* (reveal-on-scroll now lives in wireMotion) */
 
 /* ============================================================
    LOADER
@@ -1099,14 +1334,21 @@ function buildMobileTop(){
     '<p>A working performance rebuild shop. Fourteen full builds a year, priced line by line.</p>'+
     '<div class="hbtns"><button class="hb fill" data-nav="build">Build a quote</button><button class="hb ghost" data-nav="work">See the work</button></div></div></section>';
 
-  h+='<section class="msec" id="mWork" style="--accent:var(--amber)"><span class="mk">The work</span><h2>WHAT LEAVES<br>THE FLOOR.</h2>'+
-     '<p>Six builds, filmed this year. Real cars, real sheets.</p><div class="mwork">';
+  h+='<section class="msec rv" id="mFeat" style="--accent:var(--blue)"><span class="mk">'+FEAT.kick+'</span><h2 data-words>'+FEAT.title+'</h2>'+
+     '<p>'+FEAT.sub+'</p>'+
+     '<div class="mfeat"><video src="assets/vid/'+FEAT.v+'" muted loop playsinline preload="metadata" data-lazy></video></div>'+
+     '<div class="mfstats" data-stagger>'+FEAT.stats.map(function(st,i){
+       return '<div class="led" style="--g1:'+(i%2?'var(--blue)':'var(--amber)')+'"><div class="fv" data-count="'+st.v+'"'+
+         (st.pre?' data-prefix="'+st.pre+'"':'')+'>0</div><div class="fk">'+st.k+'</div></div>'; }).join('')+'</div></section>';
+
+  h+='<section class="msec rv" id="mWork" style="--accent:var(--amber)"><span class="mk">The work</span><h2 data-words>WHAT LEAVES<br>THE FLOOR.</h2>'+
+     '<p>Three builds, filmed this year. Real cars, real sheets.</p><div class="mwork">';
   STOPS.forEach(s=>{ h+='<div class="mwc" style="--accent:'+s.accent+'"><div class="wk">'+s.kick+'</div><h3>'+s.title+'</h3><p>'+s.sub+'</p>'+
     '<div class="spec">'+s.spec.map(x=>'<span>'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div>'+
     '<div class="mclip"><video src="assets/vid/'+s.v+'" muted loop playsinline preload="metadata" data-lazy></video></div></div>'; });
   h+='</div></section>';
 
-  h+='<section class="msec" id="mBuild" style="--accent:var(--amber)"><span class="mk">The build bay</span><h2>BUILD THE<br>QUOTE YOURSELF.</h2>'+
+  h+='<section class="msec rv" id="mBuild" style="--accent:var(--amber)"><span class="mk">The build bay</span><h2 data-words>BUILD THE<br>QUOTE YOURSELF.</h2>'+
      '<p>Six stations, six real prices. Tap the ones you want — the total is the number we put in writing.</p><div class="mbuild">';
   SVC.forEach(s=>{ h+='<div class="mst" data-sel="'+s.key+'"><div class="ph">'+
     (s.src.indexOf('vid/')===0?'<video src="assets/'+s.src+'" muted loop playsinline preload="metadata" data-lazy></video>':'<img src="assets/'+s.src+'" alt="'+s.name+'" loading="lazy">')+
@@ -1152,6 +1394,13 @@ window.__ov={
   setImm(p){ p=clamp(p,0,1); if(lenis)lenis.scrollTo(p*immH,{immediate:true,force:true}); else window.scrollTo(0,p*immH);
     scrollPx=p*immH; immProg=p; const info=runImmersive(p,performance.now()/1000,true); if(renderer)renderer.render(scene,camera); return info; },
   build:()=>({svc:[...BUILD.svc],totals:quoteTotals()}), toggleSvc, setFinanceCost, fin:()=>({...fin}),
+  zone:()=>financeZone(fin.monthly||0),
+  feat:()=>({built:featBuilt,stats:[].slice.call(document.querySelectorAll('[data-fv]')).map(e=>e.textContent),op:$('featOv').style.opacity}),
+  motion:()=>({ar:document.querySelectorAll('.ar').length,arIn:document.querySelectorAll('.ar.in').length,
+    wrd:document.querySelectorAll('.wrd').length,wrdIn:document.querySelectorAll('.wrd.in').length,
+    starsGo:document.querySelectorAll('.stars.go').length,
+    bars:[].slice.call(document.querySelectorAll('.rbar i')).map(e=>e.style.width),
+    counts:[].slice.call(document.querySelectorAll('[data-count]')).map(e=>e.textContent)}),
   upscale(){ if(!camera)return null; const vFov=camera.fov*Math.PI/180,dpr=Math.min(2,devicePixelRatio),w=[];
     CARDS.forEach(c=>{ if(c.mat.opacity<0.05)return; let o=c.grp,on=true; while(o){if(o.visible===false){on=false;break;}o=o.parent;} if(!on)return;
       const wp=new THREE.Vector3();c.mesh.getWorldPosition(wp); const d=Math.max(0.3,camera.position.distanceTo(wp));
@@ -1167,15 +1416,16 @@ window.__ov={
 
 /* ---------- boot ---------- */
 immH=immHeight();
-wireFinance(); wireContact(); wireGalleryFilters(); renderReviews(); wireReveals(); updateContactSummary();
+wireFinance(); wireContact(); wireGalleryFilters(); renderReviews(); wireMotion(); updateContactSummary();
 if(isMobile){
   buildMobileTop();
+  wireMotion();
   $('loading').classList.add('done');
   refreshQuote();
   addEventListener('scroll',()=>{ $('nav').classList.toggle('solid',scrollY>innerHeight*0.5); if(!ovStack.length)setNavActive(currentZone()); },{passive:true});
 } else {
   lenis=new Lenis({lerp:0.09,wheelMultiplier:0.9}); window.__lenis=lenis;
-  build3D(); refreshQuote();
+  build3D(); refreshQuote(); startHero();
   requestAnimationFrame(frame);
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>PLATES.forEach(p=>p.render()));
 }
