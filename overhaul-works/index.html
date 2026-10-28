@@ -193,21 +193,29 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radiu
 .rev-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
 .sec.light .chip{border-color:rgba(11,14,20,.14);background:rgba(11,14,20,.03);color:#44506a}
 .sec.light .chip.on{border-color:var(--blue);color:#0a4e82;background:rgba(62,169,255,.12)}
-.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.rvw{position:relative;background:#fff;border:1px solid rgba(11,14,20,.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px;cursor:pointer;
-  box-shadow:0 12px 32px -24px rgba(11,14,20,.55);transition:transform .38s cubic-bezier(.34,1.4,.5,1),box-shadow .38s}
-.rvw:hover{transform:translateY(-6px);box-shadow:0 28px 54px -26px rgba(11,14,20,.42)}
-.rvw .rh{display:flex;align-items:center;gap:12px}
-.rvw .av{width:56px;height:56px;border-radius:50%;overflow:hidden;flex:none;background:#dfe4ea;position:relative}
-.rvw .av img{width:100%;height:100%;object-fit:cover;display:block}
-.rvw .av::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.92),0 0 0 1px rgba(11,14,20,.12)}
-.rvw .wi{min-width:0}
-.rvw .who{font-weight:700;font-size:15px;color:#0b0e14;line-height:1.2}
-.rvw .ver{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#2d7d22;display:flex;align-items:center;gap:4px;margin-top:3px}
-.rvw p{color:#39455c;font-size:13.6px;line-height:1.66;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.rvw.open p{-webkit-line-clamp:unset;overflow:visible}
-.rvw .meta{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:#7a8699;text-transform:uppercase;margin-top:auto;display:flex;justify-content:space-between;gap:10px;align-items:center}
-.rvw .more{color:var(--blue);white-space:nowrap}
+.rev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.rc{position:relative;background:#fff;border:1px solid rgba(11,14,20,.08);border-radius:16px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;
+  box-shadow:0 12px 32px -24px rgba(11,14,20,.55)}
+.rc .rf{aspect-ratio:4/5;overflow:hidden;position:relative;background:#dfe4ea}
+.rc .rf img{width:100%;height:100%;object-fit:cover;object-position:center 22%;display:block;transition:transform .8s cubic-bezier(.22,1,.36,1)}
+.rc:hover .rf img{transform:scale(1.06)}
+.rc .rf .stars{position:absolute;top:11px;left:11px;z-index:2;background:rgba(8,9,14,.5);padding:6px 10px;border-radius:20px;backdrop-filter:blur(5px)}
+.rc .rf .vb{position:absolute;top:11px;right:11px;z-index:2;font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+  color:#d8ffcf;background:rgba(8,9,14,.5);padding:6px 9px;border-radius:20px;backdrop-filter:blur(5px)}
+.rc .rb{padding:15px 16px 17px;display:flex;flex-direction:column;gap:11px;flex:1}
+.rc .rb p{color:#1b2434;font-size:14.5px;line-height:1.5;font-weight:500}
+.rc .who{margin-top:auto;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rc .who b{font-size:13px;color:#0b0e14}
+.rc .who span{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#7a8699}
+.rc .more{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+@media(max-width:1100px){.rev-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* review lightbox */
+#rlb .shwrap{grid-template-columns:.85fr 1.15fr}
+#rlb .shmedia{background:#11151c}
+#rlb .lbq{color:#dfe5ee;font-size:clamp(17px,1.7vw,22px);line-height:1.55;font-weight:500}
+#rlb .lbm{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
 .rev-foot{margin-top:26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#44506a}
 .rev-foot b{color:#0b0e14;font-weight:400}
 
@@ -381,6 +389,10 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
   .ggrid{grid-template-columns:1fr 1fr}
   #gallery .gwrap{width:94vw;height:88vh}
   #featOv{display:none!important}
+  .intent-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .itile h3{font-size:21px}
+  #deep{height:150vh}
+  .d-cap{left:18px;right:18px;max-width:none;bottom:12vh}
   .rev-grid{grid-template-columns:1fr}
   .mfeat{margin-top:18px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#0b0e14;position:relative}
   .mfeat video{width:100%;display:block;height:auto}
@@ -403,12 +415,25 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
 
 /* LED edge + bloom — lit trim in the dark bands, a soft halo in the light one */
 .led{position:relative;box-shadow:0 0 44px -16px var(--g1,var(--amber)),0 0 78px -34px var(--g2,var(--blue))}
+/* cursor-reactive: the box leans toward the pointer and lights where it sits.
+   translate/scale (not transform) so it composes with the .ar arrange-in. */
+.mag{translate:var(--tx,0px) var(--ty,0px);scale:var(--msc,1);
+  transition:translate .5s cubic-bezier(.22,1,.36,1),scale .5s cubic-bezier(.22,1,.36,1),box-shadow .45s,border-color .45s}
+.mag.magon{transition:translate .16s ease-out,scale .28s ease-out,box-shadow .3s,border-color .3s}
+.mag::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),var(--g1,var(--amber)),transparent 62%);
+  opacity:0;mix-blend-mode:screen;transition:opacity .45s}
+.mag.magon::after{opacity:.18}
+.sec.light .mag::after{mix-blend-mode:multiply;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),var(--g1,var(--blue)),transparent 60%)}
+.sec.light .mag.magon::after{opacity:.1}
+.mag.magon{border-color:var(--g1,var(--amber))}
 .led::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
   background:linear-gradient(135deg,var(--g1,var(--amber)),transparent 40%,transparent 60%,var(--g2,var(--blue)));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:.9}
 @keyframes ledp{0%,100%{opacity:.55}50%{opacity:1}}
-.led::before{animation:ledp 5.5s ease-in-out infinite}
+.led::before{background-size:260% 260%;animation:ledslide 9s ease-in-out infinite alternate,ledp 5.5s ease-in-out infinite}
+@keyframes ledslide{0%{background-position:0% 50%}100%{background-position:100% 50%}}
 .sec.light .led{box-shadow:0 0 30px -18px var(--g1,var(--amber))}
 
 /* ================= 02 - featured build (immersive overlay) ================= */
@@ -425,6 +450,35 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
   --g1:var(--fa,var(--amber));--g2:transparent}
 .fstat .fv{font-family:var(--disp);font-size:clamp(28px,3.2vw,46px);line-height:.95;color:var(--fa,var(--amber))}
 .fstat .fk{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ================= 02 - what brings you in (router) ================= */
+#intent{--accent:var(--blue)}
+.intent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.itile{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  background:var(--panel);color:var(--ink);cursor:pointer;text-align:left;padding:0;font:inherit}
+.itile .ti{display:block;aspect-ratio:16/10;background:var(--mat,#0b0e14);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.itile .ti img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.22,1,.36,1)}
+.itile .ti video{width:100%;height:100%;object-fit:cover;display:block}
+.itile:hover .ti img{transform:scale(1.06)}
+.itile .tb{padding:16px 18px 18px}
+.itile h3{font-family:var(--disp);font-size:26px;letter-spacing:.03em;line-height:1}
+.itile .tb p{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+.itile .go{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(6,7,11,.6);backdrop-filter:blur(6px);border:1px solid var(--line);font-size:15px;transition:background .3s,transform .3s,color .3s}
+.itile:hover .go{background:var(--amber);color:#06070b;transform:translateX(3px)}
+
+/* ================= 03 - beneath the paint (sticky reveal) ================= */
+#deep{position:relative;height:190vh;background:var(--bg)}
+.d-stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#04050a}
+.d-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.d-scrim{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(4,5,10,.88),rgba(4,5,10,.45) 36%,rgba(4,5,10,0) 64%),
+  linear-gradient(180deg,rgba(4,5,10,.5),rgba(4,5,10,.08) 32%,rgba(4,5,10,.22) 66%,rgba(4,5,10,.92))}
+.d-cap{position:absolute;left:clamp(18px,6vw,100px);bottom:16vh;max-width:min(42vw,480px);z-index:2;opacity:0;will-change:transform,opacity}
+.d-cap .dk{font-family:var(--mono);font-size:10.5px;letter-spacing:.36em;text-transform:uppercase;color:var(--amber);text-shadow:0 1px 10px rgba(0,0,0,.8)}
+.d-cap .dh{margin-top:14px;font-family:var(--disp);font-size:clamp(34px,4.4vw,74px);line-height:.96;letter-spacing:.012em;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.75)}
+.d-cap .dh b{color:var(--amber);font-weight:400}
+.d-cap .ds{margin-top:14px;color:#d6dde8;font-size:14px;line-height:1.7;text-shadow:0 2px 12px rgba(0,0,0,.8)}
 
 .loading{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .8s}
 .loading.done{opacity:0;pointer-events:none}
@@ -460,8 +514,8 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
 
 <div id="menu">
   <button class="mclose" id="mclose" aria-label="close">×</button>
-  <a data-nav="work">Work<span>01</span></a>
-  <a data-nav="build">Build a quote<span>02</span></a>
+  <a data-nav="build">Build a quote<span>01</span></a>
+  <a data-nav="work">The work<span>02</span></a>
   <a data-nav="gallery">Gallery<span>03</span></a>
   <a data-nav="finance">Finance<span>04</span></a>
   <a data-nav="reviews">Reviews<span>05</span></a>
@@ -472,14 +526,7 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
 
 <!-- desktop immersive overlays -->
 <div id="immersive">
-  <div class="hero-ov" id="heroOv">
-    <div class="mega" id="heroMega"><span class="w">OVER</span><span class="w stroke">HAUL</span></div>
-    <div class="tl">PERFORMANCE REBUILDS · DIGBETH, BIRMINGHAM · <b>14 BAYS A YEAR</b></div>
-    <div class="hbtns">
-      <button class="hb fill" data-nav="build">Build a quote</button>
-      <button class="hb ghost" data-nav="work">See the work</button>
-    </div>
-  </div>
+  <div class="hero-ov" id="heroOv" hidden></div>
   <div id="featOv">
     <div class="fl">
       <span class="fkick" id="featKick"></span>
@@ -503,6 +550,28 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
 <div id="flow">
   <div id="mtop"></div>
 
+  <section class="sec rv" id="intent">
+    <div class="shead"><div><span class="mk" style="--accent:var(--blue)">Where to next</span><h2 data-words>WHAT BRINGS<br>YOU IN?</h2></div><p>Four ways in. Pick the one that sounds like you and we will take you straight there.</p></div>
+    <div class="intent-grid" data-stagger>
+      <button class="itile mag" data-nav="build" style="--mat:#121820;--g1:var(--amber)"><span class="ti"><img src="assets/part/engine.jpg" alt="" loading="lazy"></span><span class="tb"><h3>Build a quote</h3><p>Six stations · from £2,400</p></span><span class="go">→</span></button>
+      <button class="itile mag" data-nav="gallery" style="--mat:#141a24;--g1:var(--blue)"><span class="ti"><img src="assets/img/c-gtr.jpg" alt="" loading="lazy"></span><span class="tb"><h3>See the work</h3><p>12 delivered builds</p></span><span class="go">→</span></button>
+      <button class="itile mag" data-nav="finance" style="--mat:#161c14;--g1:var(--lime)"><span class="ti"><img src="assets/img/p-lime.jpg" alt="" loading="lazy"></span><span class="tb"><h3>Finance it</h3><p>2–5 years · 10.9% APR</p></span><span class="go">→</span></button>
+      <button class="itile mag" data-nav="contact" style="--mat:#1d1512;--g1:var(--red)"><span class="ti"><img src="assets/img/c-e63.jpg" alt="" loading="lazy"></span><span class="tb"><h3>Book a bay</h3><p>Quoted in 3 working days</p></span><span class="go">→</span></button>
+    </div>
+  </section>
+
+  <section id="deep">
+    <div class="d-stage">
+      <video id="deepVid" src="assets/vid/gt3-arch.mp4" muted loop playsinline preload="metadata"></video>
+      <div class="d-scrim"></div>
+      <div class="d-cap" id="dCap">
+        <div class="dk">Beneath the paint</div>
+        <div class="dh">There is a <b>modern machine</b> under every skin we finish.</div>
+        <div class="ds">Arches, mounts, loom, brake ducting — the parts nobody photographs are the ones that take the weeks. This is the half of the build you only see once.</div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec rv" id="finance">
     <div class="shead"><div><span class="mk">Finance</span><h2 data-words>FINANCE<br>THE BUILD.</h2></div><p>Spread a build, a service or a full restomod over 2–5 years. Move the sliders — the monthly updates live, and your quote from the Build section drops straight in.</p></div>
     <div class="fin-grid" data-stagger>
@@ -512,7 +581,7 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
         <div class="frow"><label>Term</label><div class="chips" id="fTerm"><div class="chip" data-t="24">24 mo</div><div class="chip on" data-t="36">36 mo</div><div class="chip" data-t="48">48 mo</div><div class="chip" data-t="60">60 mo</div></div></div>
         <div class="frow"><label>Representative APR <b>10.9%</b></label></div>
       </div>
-      <div class="fin-out led">
+      <div class="fin-out led mag">
         <div class="big"><span id="fMonthly">£0</span><small> /mo</small></div>
         <div class="fzone" id="fZone"><i></i><span id="fZoneL">Comfortable</span></div>
         <div class="fin-rows">
@@ -538,7 +607,7 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
       <div class="rev-bars" id="revBars"></div>
     </div>
     <div class="rev-filters" id="revFilters"></div>
-    <div class="rev-grid" id="revGrid" data-stagger></div>
+    <div class="rev-grid" id="revGrid" data-stagger="each"></div>
     <div class="rev-foot">Showing <b id="revCount">0</b> of <b>136</b> &nbsp;·&nbsp; tap any card to read it in full</div>
   </section>
 
@@ -550,19 +619,19 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
         <p>Nothing gets farmed out, so nothing goes missing between trades. The person who strips your car is in the building when it's painted, mapped and signed off. You get photographs every Friday and a parts list you can check line by line.</p>
         <p>Every car leaves with its build folder: the dyno sheet, the torque log, the geometry print-out, and a crate holding every original part we took off it.</p>
         <div class="ab-stats" data-stagger>
-          <div class="led"><div class="n"><span data-count="11">0</span></div><div class="l">Years on the floor</div></div>
-          <div class="led" style="--g1:var(--blue)"><div class="n"><span data-count="480" data-suffix="+">0</span></div><div class="l">Builds delivered</div></div>
-          <div class="led"><div class="n"><span data-count="8">0</span></div><div class="l">Bays · own dyno</div></div>
-          <div class="led" style="--g1:var(--lime)"><div class="n"><span data-count="24" data-suffix="mo">0</span></div><div class="l">Build warranty</div></div>
+          <div class="led mag"><div class="n"><span data-count="11">0</span></div><div class="l">Years on the floor</div></div>
+          <div class="led mag" style="--g1:var(--blue)"><div class="n"><span data-count="480" data-suffix="+">0</span></div><div class="l">Builds delivered</div></div>
+          <div class="led mag"><div class="n"><span data-count="8">0</span></div><div class="l">Bays · own dyno</div></div>
+          <div class="led mag" style="--g1:var(--lime)"><div class="n"><span data-count="24" data-suffix="mo">0</span></div><div class="l">Build warranty</div></div>
         </div>
       </div>
       <div class="ab-vis"><img src="assets/img/c-e63.jpg" alt="OVERHAUL workshop"><div class="cap2">Floodgate Works · Digbeth, B9 — late shift on the dyno</div></div>
     </div>
     <div class="ab-trust" data-stagger>
-      <div class="led"><div class="t">BUILD FOLDER</div><div class="d">Every photo, invoice and spec, handed over in print.</div></div>
-      <div class="led" style="--g1:var(--blue)"><div class="t">DYNO SHEET</div><div class="d">Printed and signed. The number you were promised.</div></div>
-      <div class="led"><div class="t">TORQUE LOG</div><div class="d">Every fastener, to spec, under watch.</div></div>
-      <div class="led" style="--g1:var(--lime)"><div class="t">OLD PARTS BACK</div><div class="d">Everything we removed comes home in a crate.</div></div>
+      <div class="led mag"><div class="t">BUILD FOLDER</div><div class="d">Every photo, invoice and spec, handed over in print.</div></div>
+      <div class="led mag" style="--g1:var(--blue)"><div class="t">DYNO SHEET</div><div class="d">Printed and signed. The number you were promised.</div></div>
+      <div class="led mag"><div class="t">TORQUE LOG</div><div class="d">Every fastener, to spec, under watch.</div></div>
+      <div class="led mag" style="--g1:var(--lime)"><div class="t">OLD PARTS BACK</div><div class="d">Everything we removed comes home in a crate.</div></div>
     </div>
   </section>
 
@@ -579,9 +648,9 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
         <div class="ct-ok" id="ctOk"></div>
       </form>
       <div class="ct-info" data-stagger>
-        <div class="ct-card led"><div class="k">The shop</div><div class="v">Unit 7, Floodgate Works<br>Digbeth, Birmingham <b>B9 4AA</b></div></div>
-        <div class="ct-card led" style="--g1:var(--blue)"><div class="k">Talk to us</div><div class="v"><a href="tel:+441214960714">0121 496 0714</a><br><a href="mailto:build@overhaul.works">build@overhaul.works</a><br><a href="https://instagram.com/overhaul.works" target="_blank" rel="noopener">@overhaul.works</a></div></div>
-        <div class="ct-card led" style="--g1:var(--lime)"><div class="k">Open</div><div class="v">Mon–Fri 08:00–18:00<br>Sat 09:00–16:00 · Sun closed</div></div>
+        <div class="ct-card led mag"><div class="k">The shop</div><div class="v">Unit 7, Floodgate Works<br>Digbeth, Birmingham <b>B9 4AA</b></div></div>
+        <div class="ct-card led mag" style="--g1:var(--blue)"><div class="k">Talk to us</div><div class="v"><a href="tel:+441214960714">0121 496 0714</a><br><a href="mailto:build@overhaul.works">build@overhaul.works</a><br><a href="https://instagram.com/overhaul.works" target="_blank" rel="noopener">@overhaul.works</a></div></div>
+        <div class="ct-card led mag" style="--g1:var(--lime)"><div class="k">Open</div><div class="v">Mon–Fri 08:00–18:00<br>Sat 09:00–16:00 · Sun closed</div></div>
         <div class="ct-actions">
           <a class="call" href="tel:+441214960714">Call</a>
           <a href="https://wa.me/441214960714?text=Hi%20OVERHAUL%2C%20I'd%20like%20to%20book%20a%20bay" target="_blank" rel="noopener">WhatsApp</a>
@@ -616,6 +685,11 @@ footer .fb{font-family:var(--disp);font-size:40px;letter-spacing:.1em;color:var(
 <div class="ov" id="sheet"><div class="back" data-close></div>
   <div class="shwrap"><button class="ovx" data-close aria-label="close">×</button>
     <div class="shmedia" id="shMedia"></div><div class="shbody" id="shBody"></div>
+  </div>
+</div>
+<div class="ov" id="rlb"><div class="back" data-close></div>
+  <div class="shwrap"><button class="ovx" data-close aria-label="close">×</button>
+    <div class="shmedia" id="rlbMedia"></div><div class="shbody" id="rlbBody"></div>
   </div>
 </div>
 <div class="ov" id="doss"><div class="back" data-close></div>
@@ -719,15 +793,33 @@ const GAL_FILTERS=[['all','All'],['build','Rebuilds'],['service','Servicing'],['
 /* ---------- REVIEWS ---------- */
 const REV_DIST=[88,8,3,1,0];
 const REVIEWS=[
-  {who:'Marcus H.',av:'a1.jpg',cat:'build',  r:5,txt:'Brought them a crash-damaged R35 everyone else wrote off. Came back 812 bhp with a folder thicker than the owner\u2019s manual. Every invoice, every torque figure, every photo. Faultless.',when:'Sep 2026 · R35 GT-R'},
-  {who:'Priya N.', av:'a4.jpg',cat:'service',r:5,txt:'Stage 2 on the E63, done in a week, re-mapped on my fuel and handed back with the dyno sheet. No surprises on the bill — the written quote matched it to the pound.',when:'Aug 2026 · E63 S'},
-  {who:'Dan R.',   av:'a2.jpg',cat:'build',  r:5,txt:'Twelve-week Huracán build, photos every Friday like clockwork. Drove it home the day they said I would. These people actually run a shop instead of a showroom.',when:'Oct 2026 · Huracán'},
-  {who:'Sofia L.', av:'a5.jpg',cat:'body',   r:5,txt:'Full respray on the Urus after a bad wrap pull. Panel gaps came back better than factory and they PPF\u2019d the lot. I keep finding people staring at it in car parks.',when:'Jul 2026 · Urus'},
-  {who:'Tom A.',   av:'a7.jpg',cat:'build',  r:4,txt:'Hellcat drag build. Ran a day over on the cage but they rang me before I had to ask, which is more than the last place managed. 9.6 at 146 and it still idles in traffic.',when:'Jun 2026 · Hellcat'},
-  {who:'Keira M.', av:'a8.jpg',cat:'service',r:5,txt:'Took the GT3 RS in for track prep. Corner-balanced, geometry printed, cage checked and signed. I trust them with a car I actually race, which says everything.',when:'May 2026 · 911 GT3 RS'},
-  {who:'Idris K.', av:'a6.jpg',cat:'build',  r:5,txt:'C8 supercharger build. They sent the torque log and a crate holding every original part they took off. Nobody else does that. Second car I\u2019ve had built here.',when:'Apr 2026 · C8'},
-  {who:'Lena V.',  av:'a3.jpg',cat:'body',   r:5,txt:'Aventador repaint — bare metal, three weeks, flawless. They photographed every stage so I could see the prep under the colour. Worth every penny.',when:'Mar 2026 · Aventador'},
-  {who:'Ryan O.',  av:'a9.jpg',cat:'service',r:5,txt:'Just a major service and a geo, nothing glamorous. Still got the printout, still got the old parts back, still got a call before anything extra was spent.',when:'Feb 2026 · 765LT'}
+  {who:'Marcus H.',face:'faces-02.jpg',cat:'build',  r:5,car:'R35 GT-R',when:'Sep 2026',
+   short:'Came back 812 bhp with a folder thicker than the owner\u2019s manual.',
+   txt:'Brought them a crash-damaged R35 everyone else wrote off. Came back 812 bhp with a folder thicker than the owner\u2019s manual. Every invoice, every torque figure, every photo. Faultless.'},
+  {who:'Priya N.', face:'faces-11.jpg',cat:'service',r:5,car:'E63 S',when:'Aug 2026',
+   short:'Stage 2 in a week, and the written quote matched the bill to the pound.',
+   txt:'Stage 2 on the E63, done in a week, re-mapped on my fuel and handed back with the dyno sheet. No surprises on the bill \u2014 the written quote matched it to the pound.'},
+  {who:'Dan R.',   face:'faces-07.jpg',cat:'build',  r:5,car:'Hurac\u00e1n',when:'Oct 2026',
+   short:'Photos every Friday like clockwork. Drove it home the day they said.',
+   txt:'Twelve-week Hurac\u00e1n build, photos every Friday like clockwork. Drove it home the day they said I would. These people actually run a shop instead of a showroom.'},
+  {who:'Sofia L.', face:'faces-17.jpg',cat:'body',   r:5,car:'Urus',when:'Jul 2026',
+   short:'Panel gaps came back better than factory, and they PPF\u2019d the lot.',
+   txt:'Full respray on the Urus after a bad wrap pull. Panel gaps came back better than factory and they PPF\u2019d the lot. I keep finding people staring at it in car parks.'},
+  {who:'Tom A.',   face:'faces-14.jpg',cat:'build',  r:4,car:'Hellcat',when:'Jun 2026',
+   short:'Ran a day over, but they rang me before I had to ask.',
+   txt:'Hellcat drag build. Ran a day over on the cage but they rang me before I had to ask, which is more than the last place managed. 9.6 at 146 and it still idles in traffic.'},
+  {who:'Keira M.', face:'faces-20.jpg',cat:'service',r:5,car:'911 GT3 RS',when:'May 2026',
+   short:'I trust them with a car I actually race. That says everything.',
+   txt:'Took the GT3 RS in for track prep. Corner-balanced, geometry printed, cage checked and signed. I trust them with a car I actually race, which says everything.'},
+  {who:'Idris K.', face:'faces-26.jpg',cat:'build',  r:5,car:'C8',when:'Apr 2026',
+   short:'They sent the torque log and a crate of every original part.',
+   txt:'C8 supercharger build. They sent the torque log and a crate holding every original part they took off. Nobody else does that. Second car I\u2019ve had built here.'},
+  {who:'Lena V.',  face:'faces-10.jpg',cat:'body',   r:5,car:'Aventador',when:'Mar 2026',
+   short:'Bare metal, three weeks, flawless \u2014 and photographed at every stage.',
+   txt:'Aventador repaint \u2014 bare metal, three weeks, flawless. They photographed every stage so I could see the prep under the colour. Worth every penny.'},
+  {who:'Ryan O.',  face:'faces-28.jpg',cat:'service',r:5,car:'765LT',when:'Feb 2026',
+   short:'Just a major service. Still got the printout and the old parts back.',
+   txt:'Just a major service and a geo, nothing glamorous. Still got the printout, still got the old parts back, still got a call before anything extra was spent.'}
 ];
 const REV_FILTERS=[['all','All'],['build','Rebuilds'],['service','Servicing'],['body','Bodywork']];
 
@@ -766,14 +858,15 @@ function sectionTop(id){ const el=$(id); return el? el.getBoundingClientRect().t
 function navGo(t){
   closeMenu(); closeAllOv();
   if(t==='gallery'){ openGallery(); return; }
+  if(t==='intent'){ scroller.to(sectionTop('intent')); return; }
   if(t==='top'){ scroller.to(0); return; }
   if(isMobile){
     if(t==='work'){ scroller.to(sectionTop('mWork')); return; }
     if(t==='build'){ scroller.to(sectionTop('mBuild')); return; }
     scroller.to(sectionTop(t)); return;
   }
-  if(t==='work'){ scroller.to(immH*0.16); return; }
-  if(t==='build'){ scroller.to(immH*0.82); return; }
+  if(t==='build'){ scroller.to(immH*0.05); return; }
+  if(t==='work'){ scroller.to(immH*0.70); return; }
   scroller.to(sectionTop(t));
 }
 document.addEventListener('click',e=>{ const n=e.target.closest('[data-nav]'); if(n){ e.preventDefault(); navGo(n.getAttribute('data-nav')); } });
@@ -784,14 +877,14 @@ function currentZone(){
   const y=lenis?lenis.scroll:window.scrollY;
   const top=el=>el.getBoundingClientRect().top+y;          // absolute document position, not offsetParent-relative
   if(!isMobile){
-    if(y<immH*0.72) return 'work';
-    if(y<immH*0.995) return 'build';
+    if(y<immH*0.34) return 'build';
+    if(y<immH*0.995) return 'work';
   } else {
     const mb=$('mBuild');
     if(mb && y < top(mb)-innerHeight*0.4) return 'work';
     if(mb && y < top(mb)+mb.offsetHeight-innerHeight*0.5) return 'build';
   }
-  const ids=['finance','reviews','about','contact'];
+  const ids=['intent','finance','reviews','about','contact'];
   let cur='build';
   for(const id of ids){ const el=$(id); if(el && y >= top(el)-innerHeight*0.42) cur=id; }
   return cur;
@@ -935,9 +1028,10 @@ let renderer,scene,camera,dust,raycaster,pointer=new THREE.Vector2(0,0),hoverObj
 let camZ=0,camX=0,camY=0,gEnv,gHall,hallPanels=[],bayObj=null;
 const canvas=$('scene');
 const SP=17, N=STOPS.length;
-/* hero (no car) → 02 featured → 03-05 hall → the build bay */
+/* 01 THE BUILD BAY (the hero) → 02 featured → 03-05 the work */
 const FEAT_Z=0, HALL_START=-28;
-const HALL_Z0=40, HALL_Z1=-56, BAY_Z1=-94;
+const P_BAY=0.30, P_FEAT=0.56;                 // band ends
+const Z_START=40, Z_BAYEND=34, Z_FEATEND=-4, Z_HALLEND=-56;
 const TW=0.44;
 function featuredH(rec,ahead,cap,tw){ const d=Math.max(ahead,0.5); const visW=2*d*Math.tan(camera.fov*Math.PI/360)*camera.aspect; return Math.min(cap,Math.max(0.3,(visW*(tw||TW))/Math.max(rec.ar,0.25))); }
 
@@ -946,9 +1040,9 @@ function build3D(){
   renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(2,devicePixelRatio)); renderer.setSize(innerWidth,innerHeight);
   scene=new THREE.Scene(); scene.fog=new THREE.FogExp2(0x06070b,0.0166);
-  camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,0.1,460); camZ=HALL_Z0; camera.position.set(0,0,camZ);
+  camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,0.1,460); camZ=Z_START; camera.position.set(0,0,camZ);
   raycaster=new THREE.Raycaster(); TEXLOAD=new THREE.TextureLoader();
-  scene.add(gHall); buildEnv(); buildFeatured(); buildHall(); bayObj=buildBay(-86,BAY_Z1);
+  scene.add(gHall); buildEnv(); buildFeatured(); buildHall(); bayObj=buildBay(-86,-94);
   addEventListener('resize',onResize);
   addEventListener('pointermove',e=>{ pointer.x=(e.clientX/innerWidth)*2-1; pointer.y=-(e.clientY/innerHeight)*2+1; pointerLive=true;
     tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px'; },{passive:true});
@@ -1000,7 +1094,8 @@ function buildBay(z0,z1){
     items.forEach(it=>{ const e=smooth(clamp((l*1.5-0.02-it.k*0.085)/0.3,0,1));
       const bx=(it.col-1)*6.2+2.6, by=2.25-it.row*4.9;
       const hov=(hoverObj===it.c.mesh)?1:0, sel=BUILD.svc.has(it.s.key)?1:0;
-      const px=pointer.x*7.4, py=pointer.y*4.4; const mag=smooth(clamp(1-Math.hypot(px-bx,py-by)/7.4,0,1));
+      const px=pointer.x*7.4, py=pointer.y*4.4;
+      const mag=pointerLive?smooth(clamp(1-Math.hypot(px-bx,py-by)/7.4,0,1)):0;
       const x=bx+(px-bx)*0.12*mag+Math.sin(t*0.42+it.phase)*0.07;
       const y=lerp(by-7,by,e)+Math.sin(t*0.55+it.phase)*0.12+(py-by)*0.07*mag+hov*0.3;
       const z=cz+mag*0.9+hov*0.8+sel*0.4;
@@ -1028,7 +1123,7 @@ function setCap(s,side,accent,beatIdx,tap){
     '<h2>'+s.title.split('<br>').map(ln=>wordify(ln)).join('<br>')+'</h2>'+
     '<p>'+wordify(s.sub)+'</p>'+
     '<div class="spec">'+s.spec.map(x=>'<span class="wd">'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div>'+
-    (tap?'<div class="tapline"><span class="wd">◉&nbsp;TAP&nbsp;THE&nbsp;SCREEN&nbsp;—&nbsp;OPEN&nbsp;THE&nbsp;FILE</span></div>':'');
+    (tap?'<div class="tapline"><span class="wd">'+(tap===2?'◉&nbsp;TAP&nbsp;A&nbsp;STATION&nbsp;—&nbsp;ADD&nbsp;IT&nbsp;TO&nbsp;THE&nbsp;QUOTE':'◉&nbsp;TAP&nbsp;THE&nbsp;SCREEN&nbsp;—&nbsp;OPEN&nbsp;THE&nbsp;FILE')+'</span></div>':'');
   hide.style.opacity='0'; capPlate=show; capWords=[].slice.call(show.querySelectorAll('.wd')); window.__curCap=show;
 }
 function updateCapReveal(r){
@@ -1043,12 +1138,8 @@ function setActive(i){ if(i===activeStop)return; activeStop=i; const s=STOPS[i];
 
 /* ---------- hero overlay ---------- */
 function applyHero(p){
-  const ho=smooth(1-p/0.085);
-  const h=$('heroOv');
-  h.style.opacity=ho; h.style.pointerEvents=ho>0.4?'auto':'none';
-  h.style.transform='translateY('+((1-ho)*-34)+'px)';
-  $('cue').style.opacity=p<0.03?1:0;
-  $('hud').classList.toggle('on', p>0.70 && p<0.999);
+  $('cue').style.opacity=p<0.04?1:0;
+  $('hud').classList.toggle('on', p<P_BAY+0.05);
 }
 /* the brandmark assembles letter by letter on arrival */
 function startHero(){
@@ -1065,22 +1156,25 @@ function startHero(){
 /* ---------- the immersive director ---------- */
 function runImmersive(p,t,immediate){
   immProg=p; resetWants();
-  const inHall = p<0.72;
-  const hallL = clamp(p/0.72,0,1);
-  const bayL  = clamp((p-0.72)/0.28,0,1);
-  const targetZ = inHall ? lerp(HALL_Z0,HALL_Z1,hallL) : lerp(HALL_Z1,BAY_Z1,bayL);
+  const inBay  = p<P_BAY;
+  const inFeat = p>=P_BAY && p<P_FEAT;
+  const inHall = p>=P_FEAT;
+  const bayL   = clamp(p/P_BAY,0,1);
+  const targetZ = inBay  ? lerp(Z_START,Z_BAYEND,bayL)
+                : inFeat ? lerp(Z_BAYEND,Z_FEATEND,(p-P_BAY)/(P_FEAT-P_BAY))
+                         : lerp(Z_FEATEND,Z_HALLEND,(p-P_FEAT)/(1-P_FEAT));
   const k=immediate?1:0.09;
   camZ=lerp(camZ,targetZ,k);
-  gHall.visible = p<0.76;
+  gHall.visible = p>P_BAY-0.06;
 
   let wantX=pointer.x*1.0, wantY=pointer.y*0.6, lookZ=camZ-10;
-  if(!inHall){ wantX=pointer.x*0.8; wantY=pointer.y*0.45+0.3; lookZ=camZ-13; }
+  if(inBay){ wantX=pointer.x*0.8; wantY=pointer.y*0.45+0.3; lookZ=camZ-13; }
   camX=lerp(camX,wantX,immediate?1:0.07); camY=lerp(camY,wantY,immediate?1:0.07);
   camera.position.set(camX,camY,camZ); camera.lookAt(0,0,lookZ);
 
   // ---- 02 · the featured build: one car, huge and centred, numbers counting ----
   let featW=0;
-  if(featCard){
+  if(featCard&&!inBay){
     const fa=camZ-FEAT_Z;
     featW=smooth(clamp(fa/5,0,1))*smooth(clamp((26-fa)/13,0,1));
     const live=fa>0.5&&fa<34, ff=smooth(clamp(featW/0.06,0,1)), sf=smooth(featW);
@@ -1115,24 +1209,30 @@ function runImmersive(p,t,immediate){
     if(inHall&&bestF>0.02){ setActive(best); capDriver=clamp((bestF-0.1)/0.5,0,1); }
     else if(inHall){ capDriver=0; }
   }
-  // bay
-  bayObj.g.visible = !inHall || p>0.68;
-  if(bayObj.g.visible){ bayObj.update(bayL,t); if(p>=0.72 && curBand!=='bay'){ setCap(BAYCAP,'L',AC.amber,9,2); window.__curCap&&(curBand='bay'); } }
-  if(inHall && curBand!=='hall'){ curBand='hall'; }
+  // 01 the build bay — now the opening section
+  bayObj.g.visible = p < P_BAY+0.06;
+  if(bayObj.g.visible){
+    if(!bayT0) bayT0=performance.now();
+    const introE=smooth(clamp((performance.now()-bayT0-200)/1250,0,1));   // one-time arrange-in on load
+    bayObj.update(Math.max(introE,clamp(bayL*3.2,0,1)),t);
+    if(curBand!=='bay'){ setCap(BAYCAP,'L',AC.amber,0,2); curBand='bay'; }
+  }
+  if(!inBay && curBand==='bay'){ curBand=''; }
 
-  // env dims as we leave the corridor
-  const envOn = inHall?1:lerp(1,0.5,bayL);
+  // env dims once we leave the opening bay
+  const envOn = inBay?lerp(0.55,1,bayL):1;
   gEnv.traverse(o=>{ if(o.material&&o.userData.envBase!==undefined) o.material.opacity=o.userData.envBase*envOn; });
 
   applyHero(p);
-  if(!inHall) capDriver=clamp(bayL/0.4,0,1);
+  if(inBay) capDriver=clamp(bayL/0.35,0,1);
   updateCapReveal(capDriver);
   manageVideos();
-  return {immProg:+p.toFixed(3),camZ:+camZ.toFixed(1),band:inHall?'hall':'bay',stop:activeStop};
+  return {immProg:+p.toFixed(3),camZ:+camZ.toFixed(1),band:inBay?'bay':(inFeat?'feat':'hall'),stop:activeStop};
 }
-let curBand='';
-const BAYCAP={idxLabel:'QUOTE&nbsp;BUILDER',kick:'The build bay — your quote',title:'BUILD THE<br>QUOTE YOURSELF.',
-  sub:'Six stations, six real prices. Tap the ones you want and the running total in the corner is the number we put in writing.',
+let curBand='',bayT0=0;
+const BAYCAP={idxLabel:'OVERHAUL&nbsp;—&nbsp;DIGBETH,&nbsp;BIRMINGHAM',kick:'Start here — the build bay',
+  title:'BUILD THE<br>QUOTE YOURSELF.',
+  sub:'Six stations, six real prices. Tap the ones you want and the running total in the corner is the number we put in writing — no forms, no call-backs.',
   spec:[['Stations','06'],['From','£2,400']]};
 
 /* ---------- 02 · featured overlay paint (numbers are a pure function of scroll) ---------- */
@@ -1185,7 +1285,8 @@ function animateCount(el){
 }
 function tagStagger(root){
   [].slice.call(root.querySelectorAll('[data-stagger]')).forEach(function(c){
-    [].slice.call(c.children).forEach(function(ch,i){ ch.classList.add('ar'); ch.style.setProperty('--d',(i*72)+'ms'); });
+    const each=c.getAttribute('data-stagger')==='each';
+    [].slice.call(c.children).forEach(function(ch,i){ ch.classList.add('ar'); ch.style.setProperty('--d',each?'0ms':(i*72)+'ms'); });
   });
 }
 function playIn(root){
@@ -1197,17 +1298,87 @@ function playIn(root){
 /* re-rendered content (review filters) arrives already in view — stagger it in straight away */
 function revealNow(root){
   tagStagger(root.parentElement||root);
-  setTimeout(function(){ playIn(root); },30);
+  setTimeout(function(){ playIn(root); wireMagnet(root); },30);
 }
 let MIO=null;
+/* Each animated thing is observed on ITS OWN. Watching the whole section fired
+   every bar, star and counter while they were still below the fold, so by the
+   time you scrolled to them they had already finished. */
+function fireUnit(el){
+  if(el.dataset.fired) return; el.dataset.fired='1';
+  el.classList.add('in');
+  if(el.classList.contains('stars')) el.classList.add('go');
+  if(el.classList.contains('rbar')){ const i=el.querySelector('i'); if(i) i.style.width=i.getAttribute('data-w')+'%'; }
+  if(el.hasAttribute('data-count')) animateCount(el);
+  if(el.hasAttribute('data-words')) [].slice.call(el.querySelectorAll('.wrd')).forEach(function(w){ w.classList.add('in'); });
+  if(el.hasAttribute('data-stagger')) [].slice.call(el.children).forEach(function(c){ c.classList.add('in'); });
+  /* anything nested that is not separately observed still rides along */
+  [].slice.call(el.querySelectorAll('.stars')).forEach(function(x){ x.classList.add('go'); });
+  [].slice.call(el.querySelectorAll('[data-count]')).forEach(animateCount);
+  [].slice.call(el.querySelectorAll('.rbar i')).forEach(function(i){ i.style.width=i.getAttribute('data-w')+'%'; });
+}
+function observeUnits(root){
+  if(!MIO) return;
+  const seen=[];
+  [].slice.call(root.querySelectorAll('.rv,[data-words],[data-count],.stars,.rbar')).forEach(function(el){ seen.push(el); });
+  [].slice.call(root.querySelectorAll('[data-stagger]')).forEach(function(g){
+    if(g.getAttribute('data-stagger')==='each'){ [].slice.call(g.children).forEach(function(c){ c.style.setProperty('--d','0ms'); seen.push(c); }); }
+    else seen.push(g);
+  });
+  [].slice.call(root.querySelectorAll('.ar')).forEach(function(el){ if(!el.closest('[data-stagger]')) seen.push(el); });
+  seen.forEach(function(el){ if(!el.dataset.obs){ el.dataset.obs='1'; MIO.observe(el); } });
+}
 function wireMotion(){
   tagStagger(document);
   [].slice.call(document.querySelectorAll('[data-words]')).forEach(splitWords);
-  MIO=new IntersectionObserver(function(es){ es.forEach(function(en){
-    if(!en.isIntersecting)return;
-    en.target.classList.add('in'); playIn(en.target); MIO.unobserve(en.target);
-  });},{threshold:0.14});
-  [].slice.call(document.querySelectorAll('.rv')).forEach(function(el){ MIO.observe(el); });
+  /* threshold 0 + a bottom inset: fires the moment a unit has properly entered,
+     and stays reliable for units TALLER than the viewport (a ratio threshold never
+     reaches 0.35 on a 2,000px section and the whole band stayed invisible). */
+  if(!MIO) MIO=new IntersectionObserver(function(es){ es.forEach(function(en){
+    if(!en.isIntersecting)return; fireUnit(en.target); MIO.unobserve(en.target);
+  });},{threshold:0,rootMargin:'0px 0px -12% 0px'});
+  observeUnits(document);
+  wireMagnet(document);
+}
+
+/* ---------- cursor reactivity: boxes lean and light toward the pointer ---------- */
+function wireMagnet(root){
+  if(!matchMedia('(hover:hover)').matches) return;
+  [].slice.call((root||document).querySelectorAll('.mag')).forEach(function(el){
+    if(el.dataset.mag) return; el.dataset.mag='1';
+    el.addEventListener('pointermove',function(e){
+      const r=el.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+      el.style.setProperty('--mx',(px*100).toFixed(1)+'%');
+      el.style.setProperty('--my',(py*100).toFixed(1)+'%');
+      el.style.setProperty('--tx',((px-0.5)*13).toFixed(1)+'px');
+      el.style.setProperty('--ty',((py-0.5)*11).toFixed(1)+'px');
+      el.style.setProperty('--msc','1.025');
+      el.classList.add('magon');
+    });
+    el.addEventListener('pointerleave',function(){
+      el.classList.remove('magon');
+      el.style.setProperty('--tx','0px'); el.style.setProperty('--ty','0px'); el.style.setProperty('--msc','1');
+    });
+  });
+}
+
+/* ---------- 03 · beneath the paint (sticky reveal, no blur) ---------- */
+let dVid=null,dCapEl=null,dStage=null;
+function updateDeep(){
+  const sec=$('deep'); if(!sec) return;
+  if(!dVid){ dVid=$('deepVid'); dCapEl=$('dCap'); dStage=sec.querySelector('.d-stage'); }
+  const r=sec.getBoundingClientRect();
+  const on = r.top < innerHeight*1.05 && r.bottom > -innerHeight*0.05;
+  if(on){ if(dVid.paused){ const q=dVid.play(); if(q&&q.catch)q.catch(()=>{}); } }
+  else if(!dVid.paused) dVid.pause();
+  if(!on){ dCapEl.style.opacity='0'; return; }
+  /* 0 as the stage arrives, 1 once it owns the screen, back to 0 as it leaves */
+  const enter=clamp((innerHeight-r.top)/(innerHeight*0.85),0,1);
+  const leave=clamp(r.bottom/(innerHeight*0.9),0,1);
+  const a=smooth(enter)*smooth(leave);
+  dCapEl.style.opacity=String(a);
+  dCapEl.style.transform='translateY('+((1-a)*26)+'px)';
 }
 
 /* ---------- picking ---------- */
@@ -1277,40 +1448,47 @@ document.querySelectorAll('.shmedia').forEach(m=>m.addEventListener('pointermove
 /* ============================================================
    REVIEWS render
    ============================================================ */
-function starsHTML(r,size){
-  let h='<span class="stars" style="--ss:'+(size||18)+'px">';
-  for(let i=0;i<5;i++) h+='<i class="'+(i<r?'f':'')+'" style="--d:'+(i*85)+'ms"></i>';
-  return h+'</span>';
-}
+function starsInner(r){ let h=''; for(let i=0;i<5;i++) h+='<i class="'+(i<r?'f':'')+'" style="--d:'+(i*85)+'ms"></i>'; return h; }
+function starsHTML(r,size){ return '<span class="stars" style="--ss:'+(size||18)+'px">'+starsInner(r)+'</span>'; }
 function renderReviews(){
   const bars=$('revBars'), total=REV_DIST.reduce((a,b)=>a+b,0)||1;
   bars.innerHTML=[5,4,3,2,1].map(function(st,i){ const w=Math.round(REV_DIST[i]/total*100);
-    return '<div class="rbar"><span>'+st+'\u2605</span><div class="tr"><i data-w="'+w+'" style="--d:'+(i*110)+'ms"></i></div>'+
+    return '<div class="rbar"><span>'+st+'\u2605</span><div class="tr"><i data-w="'+w+'"></i></div>'+
            '<span><span data-count="'+w+'" data-suffix="%">0%</span></span></div>'; }).join('');
-  const big=$('revBigStars'); if(big) big.innerHTML=starsHTML(5,27).replace(/^<span[^>]*>/,'').replace(/<\/span>$/,'');
+  const big=$('revBigStars'); if(big) big.innerHTML=starsInner(5);
   $('revFilters').innerHTML=REV_FILTERS.map(function(f,i){ return '<div class="chip'+(i===0?' on':'')+'" data-rf="'+f[0]+'">'+f[1]+'</div>'; }).join('');
   let f='all', revFirst=true;
   const paint=function(){
-    const list=REVIEWS.filter(function(r){ return f==='all'||r.cat===f; });
-    $('revGrid').innerHTML=list.map(function(r){
-      return '<div class="rvw" data-rv>'+
-        '<div class="rh"><span class="av"><img src="assets/ppl/'+r.av+'" alt="'+r.who+'" loading="lazy"></span>'+
-          '<span class="wi"><span class="who">'+r.who+'</span><span class="ver">\u2713 Verified owner</span></span></div>'+
-        starsHTML(r.r)+'<p>'+r.txt+'</p>'+
-        '<div class="meta"><span>'+r.when+'</span><span class="more">Read more</span></div></div>';
+    const list=REVIEWS.map(function(r,i){return {r:r,i:i};}).filter(function(o){ return f==='all'||o.r.cat===f; });
+    $('revGrid').innerHTML=list.map(function(o){ const r=o.r;
+      return '<article class="rc mag" data-rv="'+o.i+'" style="--g1:var(--blue)">'+
+        '<div class="rf">'+starsHTML(r.r,13)+'<span class="vb">\u2713 Verified</span>'+
+          '<img src="assets/faces/'+r.face+'" alt="'+r.who+'" loading="lazy"></div>'+
+        '<div class="rb"><p>\u201C'+r.short+'\u201D</p>'+
+          '<div class="who"><b>'+r.who+'</b><span>'+r.car+'</span></div>'+
+          '<div class="more">Read the full story \u2192</div></div></article>';
     }).join('');
     $('revCount').textContent=String(list.length);
-    /* first paint is below the fold -- let the observer bubble them in on arrival */
     if(revFirst){ revFirst=false; } else { revealNow($('revGrid')); }
+    wireMagnet($('revGrid'));
   };
   paint();
   $('revFilters').addEventListener('click',function(e){ const c=e.target.closest('[data-rf]'); if(!c)return;
     [].slice.call($('revFilters').querySelectorAll('.chip')).forEach(function(x){x.classList.remove('on');});
     c.classList.add('on'); f=c.getAttribute('data-rf'); paint(); });
-  /* tap a card to read it in full */
-  $('revGrid').addEventListener('click',function(e){ const c=e.target.closest('[data-rv]'); if(!c)return;
-    const open=c.classList.toggle('open');
-    const m=c.querySelector('.more'); if(m) m.textContent=open?'Show less':'Read more'; });
+  $('revGrid').addEventListener('click',function(e){ const c=e.target.closest('[data-rv]'); if(c) openReview(+c.getAttribute('data-rv')); });
+}
+function openReview(i){
+  const r=REVIEWS[i]; if(!r) return;
+  openOv('rlb');
+  const w=$('rlb').querySelector('.shwrap'); w.style.setProperty('--sc','var(--blue)');
+  $('rlbMedia').innerHTML='<img src="assets/faces/'+r.face+'" alt="'+r.who+'" style="object-fit:cover;width:100%;height:100%"><div class="lens"></div>';
+  $('rlbBody').innerHTML='<span class="shtag">'+r.car+' \u00b7 '+r.when+'</span>'+
+    starsHTML(r.r,20)+
+    '<p class="lbq">\u201C'+r.txt+'\u201D</p>'+
+    '<div class="lbm">'+r.who+' \u2014 verified owner</div>'+
+    '<div class="shcta"><button class="btn amber" data-nav="contact" data-ovclose>Book a bay \u2192</button></div>';
+  setTimeout(function(){ [].slice.call($('rlbBody').querySelectorAll('.stars')).forEach(function(x){x.classList.add('go');}); },40);
 }
 
 /* (reveal-on-scroll now lives in wireMotion) */
@@ -1328,34 +1506,34 @@ let lp=0;const li=setInterval(()=>{lp=Math.min(96,lp+8);const b=$('lbar');if(b)b
    MOBILE top (hero + work + build) — DOM only
    ============================================================ */
 function buildMobileTop(){
-  const el=$('mtop'); const s0=STOPS[0];
-  let h='<section class="mhero" id="mHero"><video src="assets/vid/'+s0.v+'" muted loop playsinline autoplay preload="auto"></video><div class="sc"></div>'+
+  const el=$('mtop');
+  let h='<section class="mhero" id="mHero"><video src="assets/vid/'+FEAT.v+'" muted loop playsinline autoplay preload="auto"></video><div class="sc"></div>'+
     '<div class="in"><span class="mk">OVERHAUL · DIGBETH, BIRMINGHAM</span><h1>OVER<span style="color:transparent;-webkit-text-stroke:1.4px #eef2f8">HAUL</span></h1>'+
     '<p>A working performance rebuild shop. Fourteen full builds a year, priced line by line.</p>'+
     '<div class="hbtns"><button class="hb fill" data-nav="build">Build a quote</button><button class="hb ghost" data-nav="work">See the work</button></div></div></section>';
 
-  h+='<section class="msec rv" id="mFeat" style="--accent:var(--blue)"><span class="mk">'+FEAT.kick+'</span><h2 data-words>'+FEAT.title+'</h2>'+
+  let hFeat='<section class="msec rv" id="mFeat" style="--accent:var(--blue)"><span class="mk">'+FEAT.kick+'</span><h2 data-words>'+FEAT.title+'</h2>'+
      '<p>'+FEAT.sub+'</p>'+
      '<div class="mfeat"><video src="assets/vid/'+FEAT.v+'" muted loop playsinline preload="metadata" data-lazy></video></div>'+
      '<div class="mfstats" data-stagger>'+FEAT.stats.map(function(st,i){
        return '<div class="led" style="--g1:'+(i%2?'var(--blue)':'var(--amber)')+'"><div class="fv" data-count="'+st.v+'"'+
          (st.pre?' data-prefix="'+st.pre+'"':'')+'>0</div><div class="fk">'+st.k+'</div></div>'; }).join('')+'</div></section>';
 
-  h+='<section class="msec rv" id="mWork" style="--accent:var(--amber)"><span class="mk">The work</span><h2 data-words>WHAT LEAVES<br>THE FLOOR.</h2>'+
+  let hWork='<section class="msec rv" id="mWork" style="--accent:var(--amber)"><span class="mk">The work</span><h2 data-words>WHAT LEAVES<br>THE FLOOR.</h2>'+
      '<p>Three builds, filmed this year. Real cars, real sheets.</p><div class="mwork">';
-  STOPS.forEach(s=>{ h+='<div class="mwc" style="--accent:'+s.accent+'"><div class="wk">'+s.kick+'</div><h3>'+s.title+'</h3><p>'+s.sub+'</p>'+
+  STOPS.forEach(s=>{ hWork+='<div class="mwc" style="--accent:'+s.accent+'"><div class="wk">'+s.kick+'</div><h3>'+s.title+'</h3><p>'+s.sub+'</p>'+
     '<div class="spec">'+s.spec.map(x=>'<span>'+x[0]+'<b>'+x[1]+'</b></span>').join('')+'</div>'+
     '<div class="mclip"><video src="assets/vid/'+s.v+'" muted loop playsinline preload="metadata" data-lazy></video></div></div>'; });
-  h+='</div></section>';
+  hWork+='</div></section>';
 
-  h+='<section class="msec rv" id="mBuild" style="--accent:var(--amber)"><span class="mk">The build bay</span><h2 data-words>BUILD THE<br>QUOTE YOURSELF.</h2>'+
+  let hBuild='<section class="msec rv" id="mBuild" style="--accent:var(--amber)"><span class="mk">The build bay</span><h2 data-words>BUILD THE<br>QUOTE YOURSELF.</h2>'+
      '<p>Six stations, six real prices. Tap the ones you want — the total is the number we put in writing.</p><div class="mbuild">';
-  SVC.forEach(s=>{ h+='<div class="mst" data-sel="'+s.key+'"><div class="ph">'+
+  SVC.forEach(s=>{ hBuild+='<div class="mst" data-sel="'+s.key+'"><div class="ph">'+
     (s.src.indexOf('vid/')===0?'<video src="assets/'+s.src+'" muted loop playsinline preload="metadata" data-lazy></video>':'<img src="assets/'+s.src+'" alt="'+s.name+'" loading="lazy">')+
     '</div><div class="tx"><div class="nm">'+s.name+'</div><div class="mt">'+s.days+' bay days</div><div class="pr">from '+gbp(s.from)+'</div></div>'+
     '<button class="add" data-add="'+s.key+'">Add to build</button></div>'; });
-  h+='</div><div class="mqhud"><span class="hl">Your build</span><span class="hv" id="mHudSum">£0</span><span class="hl" id="mHudDays">0 bay days</span><button class="hgo" data-nav="finance">Finance it →</button></div></section>';
-  el.innerHTML=h;
+  hBuild+='</div><div class="mqhud"><span class="hl">Your build</span><span class="hv" id="mHudSum">£0</span><span class="hl" id="mHudDays">0 bay days</span><button class="hgo" data-nav="finance">Finance it →</button></div></section>';
+  el.innerHTML=h+hBuild+hFeat+hWork;   /* the quote builder leads on phones too */
 
   el.addEventListener('click',e=>{ const b=e.target.closest('[data-add]'); if(b) toggleSvc(b.getAttribute('data-add')); });
   const io=new IntersectionObserver(es=>es.forEach(en=>{ const v=en.target; if(en.isIntersecting){ const p=v.play(); if(p&&p.catch)p.catch(()=>{}); } else v.pause(); }),{rootMargin:'140px 0px',threshold:0.15});
@@ -1384,6 +1562,7 @@ function frame(now){
       tip.innerHTML='<b>◉</b>&nbsp;&nbsp;'+m.userData.nm+'&nbsp;·&nbsp;'+verb; tip.classList.add('on'); canvas.style.cursor='pointer'; }
     else { tip.classList.remove('on'); canvas.style.cursor=''; } }
   else { hoverObj=null; tip.classList.remove('on'); }
+  updateDeep();
   renderer.render(scene,camera);
   requestAnimationFrame(frame);
 }
@@ -1396,6 +1575,8 @@ window.__ov={
   build:()=>({svc:[...BUILD.svc],totals:quoteTotals()}), toggleSvc, setFinanceCost, fin:()=>({...fin}),
   zone:()=>financeZone(fin.monthly||0),
   feat:()=>({built:featBuilt,stats:[].slice.call(document.querySelectorAll('[data-fv]')).map(e=>e.textContent),op:$('featOv').style.opacity}),
+  openReview,
+  magnets:()=>document.querySelectorAll('.mag[data-mag]').length,
   motion:()=>({ar:document.querySelectorAll('.ar').length,arIn:document.querySelectorAll('.ar.in').length,
     wrd:document.querySelectorAll('.wrd').length,wrdIn:document.querySelectorAll('.wrd.in').length,
     starsGo:document.querySelectorAll('.stars.go').length,
@@ -1420,9 +1601,11 @@ wireFinance(); wireContact(); wireGalleryFilters(); renderReviews(); wireMotion(
 if(isMobile){
   buildMobileTop();
   wireMotion();
+  observeUnits($('mtop'));
   $('loading').classList.add('done');
   refreshQuote();
-  addEventListener('scroll',()=>{ $('nav').classList.toggle('solid',scrollY>innerHeight*0.5); if(!ovStack.length)setNavActive(currentZone()); },{passive:true});
+  addEventListener('scroll',()=>{ $('nav').classList.toggle('solid',scrollY>innerHeight*0.5); if(!ovStack.length)setNavActive(currentZone()); updateDeep(); },{passive:true});
+  updateDeep();
 } else {
   lenis=new Lenis({lerp:0.09,wheelMultiplier:0.9}); window.__lenis=lenis;
   build3D(); refreshQuote(); startHero();
