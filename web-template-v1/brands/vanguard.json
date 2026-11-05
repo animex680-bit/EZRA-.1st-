@@ -1,0 +1,119 @@
+{
+  "output": "vanguard",
+  "assetBase": "../360-remix/assets/",
+  "lang": "en-US",
+  "name": "Vanguard Motor Sales",
+  "shortMark": "VMS",
+  "wordmark": "VAN<b>G</b>UARD",
+  "ig": "vanguardmotorsales",
+  "phone": "+1 (734) 555-0188",
+  "area": "US",
+  "currency": "$",
+  "paintGold": "Heritage Gold",
+  "titleTail": "Classic & collector cars, sold right.",
+  "metaDesc": "Hand-picked classics, muscle and collector cars — inspected, documented and ready to drive. Browse the collection, value your trade, dial in a monthly and book a viewing.",
+  "ogTitle": "Vanguard Motor Sales — Classics sold, restored & delivered",
+  "ogDesc": "Every car inspected and documented — matching numbers, honest history, nothing hidden.",
+
+  "hero": {
+    "kicker": "Vanguard Motor Sales",
+    "h1": "Buy the legend.<br>Drive it <em>home.</em>",
+    "sub": "Hand-picked classics, muscle and collector cars — inspected, documented and ready to drive. Every car with a story, and the paperwork to prove it.",
+    "cue": "Scroll to find yours"
+  },
+
+  "ways": [
+    {"t": "Browse the collection", "w": "Buy", "s": "in stock · every one documented"},
+    {"t": "Sell or consign", "w": "Sell", "s": "A real valuation in thirty seconds"},
+    {"t": "Finance it", "w": "Finance", "s": "Turn the dial, feel the monthly"},
+    {"t": "Restore & restomod", "w": "Build", "s": "Pick a platform, see the build live"},
+    {"t": "Parts & restoration", "w": "Parts", "s": "Sourced rare, or fitted in-house"}
+  ],
+
+  "omega": {
+    "aria": "Meet VMS, the collector-car specialist",
+    "kicker": "VMS · your collector-car specialist",
+    "h": "I’ve known these cars for decades. Now I run the floor.",
+    "sub": "Every car, restoration, part and price passes through me first. Tell me what you’re chasing and I’ll find it, value your trade, spec a restoration to the dollar, or set your appointment — a straight answer, any hour.",
+    "statCars": "classics sold",
+    "statParts": "parts sourced",
+    "facts": [
+      "71 classics sold — every one inspected and documented.",
+      "Tell me your car and I’ll value your trade in thirty seconds.",
+      "Tip: financing here is a soft pull — it won’t touch your score.",
+      "34 full restorations completed in-house, nut and bolt.",
+      "Try asking me: “muscle cars under $80k”.",
+      "Every one of our 128 reviews is tied to a real sale.",
+      "Tip: tap any car in the showroom to spec a build.",
+      "I’m here at 2am — ask me before you commit."
+    ]
+  },
+
+  "scan": {
+    "kicker": "Every car · inspected & documented",
+    "h": "No surprises. <em>Only provenance.</em>",
+    "lede": "Watch us go through it. Every panel, number and service record — on the report you get before you buy. Matching numbers, honest history, nothing hidden.",
+    "cta": "Request the report"
+  },
+
+  "transitions": {
+    "plate": "<span>What’s your car worth?</span><em>Thirty seconds.</em>",
+    "shutter": "<small>The collection</small>Three on the floor.<em>Pick one.</em>",
+    "tear": "<small>Last stop</small>See you <em>in the showroom.</em>"
+  },
+
+  "showroom": {
+    "kicker": "Restorations, built in-house",
+    "h": "Pick a car. <em>The rest clear the floor.</em>",
+    "lede": "Three icons on the showroom floor. Pick one — the others roll out — then spec the restoration, choose the finish and watch the build price move. Rather we source it? One call.",
+    "pick": "<small>Showroom · 3 cars</small><b>Tap a car to build it</b>",
+    "drag": "Drag to look round · tap a car",
+    "wa": "or send this build on WhatsApp →"
+  },
+
+  "reviews": {
+    "kicker": "What buyers say",
+    "h": "Straight dealing, <em>in their words.</em>",
+    "lede": "Twelve buyers, twelve real sales. Drag the ring, then tap a face — they’ll tell you the bit that didn’t fit in five stars.",
+    "verified": "verified sales"
+  },
+
+  "finance": {"kicker": "Finance & leasing, in-house"},
+
+  "booking": {
+    "bookCta": "Book a viewing",
+    "print": "Print your pass. <em>It’ll be on the showroom floor.</em>",
+    "walk": "<b>Doors are open.</b>Stop by the showroom — the coffee’s on and the cars are warm. Or print a pass below and we’ll have yours up front."
+  },
+
+  "nav": {"value": "Value my car", "stockHeader": "In the collection", "footerTag": "Classics, done right"},
+
+  "core": {
+    "greeting": "I’m <b>CORE</b>, wired into the showroom, the shop and the archive. Ask for a car, a finish, a monthly or a part — I’ll take you there.",
+    "termSmall": "● wired into the showroom, the shop &amp; the archive",
+    "fallback": "I didn’t catch that. I can find a car (<b>“Camaro”</b>, <b>“under $80k”</b>), spec a restoration, work out a monthly, value your trade, source a part or book you in.",
+    "chips": ["Muscle under $80k", "Numbers-matching", "Request report", "Monthly on a Mustang", "Value my car", "Restoration", "Book a viewing", "Showroom hours"]
+  },
+
+  "extra": [
+    ["txt:'INSPECTED'", "txt:'DOCUMENTED'"],
+    ["txt:'GRADE 92 · 1 OWNER'", "txt:'NUMBERS-MATCHING'"],
+    ["sm:'<b>On the floor</b>today'", "sm:'<b>In stock</b>today'"],
+    ["em:'30s',sm:'<b>Your price</b>no callback wall'", "em:'30s',sm:'<b>Your value</b>no callback wall'"],
+    ["txt:'48 MONTHS · £0 PART-EX'", "txt:'72 MONTHS · $0 DOWN'"],
+    ["em:'3D',sm:'<b>Spec it live</b>six on the floor'", "em:'3D',sm:'<b>Build it live</b>in the shop'"],
+    ["txt:'RESTOMOD'", "txt:'RESTORED'"],
+    ["txt:'≈ 18 WEEKS IN THE BAY'", "txt:'≈ 20 WEEKS IN THE SHOP'"],
+    ["sm:'<b>Parts</b>fitted in-house'", "sm:'<b>Parts</b>sourced & fitted'"],
+    ["<span>builds shipped</span>", "<span>restorations</span>"],
+    ["value your car", "value your trade"]
+  ],
+
+  "terminology": [
+    ["restomods", "restorations"], ["restomod", "restoration"], ["Restomods", "Restorations"], ["Restomod", "Restoration"],
+    ["part-exchange", "trade-in"], ["Part-exchange", "Trade-in"], ["part-ex", "trade"], ["Part-ex", "Trade"],
+    ["360° report", "inspection report"], ["360° grade", "condition grade"], ["360 scan", "inspection"],
+    ["on the floor", "in the showroom"], ["On the floor", "In the showroom"],
+    ["colour", "color"], ["Opening hours", "Showroom hours"]
+  ]
+}
