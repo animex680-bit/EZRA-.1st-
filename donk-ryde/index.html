@@ -6,8 +6,8 @@
 <title>Donk Ryde or Die LLC — Big wheels. Candy paint. Built to ride.</title>
 <meta name="description" content="Donks built in-house — 26s to 30s, candy paint, lifted and loud. Browse the lineup, build your own, dial in a monthly and book your pull-up.">
 <meta name="theme-color" content="#0d0c0b">
-<meta property="og:title" content="Donk Ryde or Die LLC — Donks sold, built &amp; rolled">
-<meta property="og:description" content="Every donk built in-house — wheels, candy paint and the whole build, documented.">
+<meta property="og:title" content="Donk Ryde or Die LLC — Donks sold, built & rolled">
+<meta property="og:description" Every donk built in-house — wheels, candy paint and the whole build, documented.>
 <meta property="og:image" content="../360-remix/assets/orbit/fq4.webp">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d0c0b'/><text x='16' y='22' font-family='Georgia,serif' font-size='9' font-weight='bold' fill='%23c9a25e' text-anchor='middle'>DRD</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1126,8 +1126,11 @@ html.ld .hhead h1 .w{animation-play-state:paused}
 .ways-hero{position:absolute;z-index:6;left:var(--g);right:var(--g);top:50%;translate:0 -50%;max-width:min(940px,92vw);pointer-events:none;opacity:var(--hh,1);will-change:opacity}
 .ways-hero::before{content:"";position:absolute;inset:-30% -14% -34% -14%;background:radial-gradient(62% 72% at 26% 50%,rgba(5,5,5,.8),rgba(5,5,5,.3) 60%,transparent 78%);z-index:-1}
 .wh-k{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin:0 0 20px}
-.wh-h{font-family:var(--ff-d);font-weight:600;font-size:clamp(46px,8.4vw,128px);line-height:.92;letter-spacing:-.035em;color:#fff;margin:0;text-shadow:0 12px 60px rgba(0,0,0,.6)}
+.wh-h{font-family:var(--ff-d);font-weight:600;font-size:clamp(22px,3.3vw,50px);line-height:1;letter-spacing:-.02em;color:#fff;margin:0;text-shadow:0 8px 40px rgba(0,0,0,.6)}
 .wh-h em{font-style:italic;font-weight:500;color:var(--gold2)}
+/* the first words land with a parallax rise on load, word by word */
+.wh-h .wo{display:inline-block;opacity:0;transform:translate3d(0,34px,0);transition:opacity .6s var(--out),transform .85s var(--out)}
+.wh-h.in .wo{opacity:1;transform:none}
 .wh-s{margin:26px 0 0;font-size:clamp(15px,1.5vw,20px);line-height:1.6;color:var(--ink2);max-width:48ch;text-shadow:0 4px 30px rgba(0,0,0,.75)}
 .wh-cue{display:inline-flex;align-items:center;gap:11px;margin-top:36px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
 .wh-cue i{width:7px;height:12px;border:1.5px solid var(--ink2);border-radius:4px;position:relative;flex:none}
@@ -1476,7 +1479,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
   <div class="wrap nav-in">
-    <a href="#top" class="logo" aria-label="Donk Ryde or Die home"><span>DO<b>N</b>K</span></a>
+    <a href="#top" class="logo" aria-label="Donk Ryde or Die LLC home"><span>DO<b>N</b>K</span></a>
     <nav class="nav-links" aria-label="Main">
       <a href="#stock">Stock</a><a href="#value">Value my whip</a><a href="#finance">Finance</a><a href="#build">Builds</a><a href="#parts">Parts</a><a href="#reviews">Reviews</a>
     </nav>
@@ -1505,7 +1508,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   <div class="menu-ctas">
     <button class="btn btn-gold" data-enq="viewing" data-close-menu>Book a pull-up</button>
     <a class="btn btn-line" data-tel href="#"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call</a>
-    <a class="btn btn-wa" data-wa="Hi Donk Ryde or Die, " href="#" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg>WhatsApp</a>
+    <a class="btn btn-wa" data-wa="Hi Donk Ryde or Die LLC, " href="#" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg>WhatsApp</a>
   </div>
 </div>
 
@@ -1644,7 +1647,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 </section>
 
 <!-- ============ DRD · the intelligence that runs the floor ============ -->
-<section class="omega" id="numbers" aria-label="Meet DRD, the brain of the shop">
+<section class="omega" id="numbers" aria-label="Meet DRD, the shop's intelligence">
   <div class="om-grid" aria-hidden="true"></div>
   <div class="om-bubs" id="omBubs" aria-live="polite"></div>
   <div class="om-wrap">
@@ -1664,7 +1667,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
     <div class="om-copy" id="omCopy">
       <p class="om-k">DRD · the brain of the shop</p>
       <h2 class="om-h" id="omH">I grew up in this shop. Now I run the block.</h2>
-      <p class="om-l">Every donk, build, wheel and price runs through me first. Tell me what you want and I'll find it, put a number on what you're driving, spec your build to the dollar, or set your pull-up — straight answer, any hour.</p>
+      <p class="om-l">Every donk, build, wheel and price runs through me first. Tell me what you want and I’ll find it, put a number on what you’re driving, spec your build to the dollar, or set your pull-up — straight answer, any hour.</p>
       <div class="om-stats">
         <div><b>71</b><span>donks sold</span></div>
         <div><b>34</b><span>builds shipped</span></div>
@@ -1685,7 +1688,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
         <p class="kick">Financing, handled in-house</p>
         <h2 class="h2">Turn the dial. <em>Feel the monthly.</em></h2>
       </div>
-      <p class="lede" style="max-width:44ch">Pick a whip, or drag the ring to any amount — it snaps to the whips we have. The color tells you how it will sit month to month. Checking is a soft pull only.</p>
+      <p class="lede" style="max-width:44ch">Pick a whip, or drag the ring to any amount — it snaps to the whips we have. The color tells you how it will sit month to month. Checking is a soft search only.</p>
     </div>
     <div class="fgrid">
       <div class="dialwrap rv">
@@ -1711,7 +1714,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
           <div><span>Total payable</span><b id="fTotal"></b></div>
           <div><span>Representative APR</span><b>9.9%</b></div>
         </div>
-        <button class="btn btn-gold btn-block" id="fGo">Check my eligibility — soft pull <span class="arr">→</span></button>
+        <button class="btn btn-gold btn-block" id="fGo">Check my eligibility — soft search <span class="arr">→</span></button>
         <p class="fine">Representative example for illustration. Finance subject to status, 18+ UK residents. We are a credit broker, not a lender.</p>
       </div>
     </div>
@@ -1744,7 +1747,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   </div>
 </section>
 <!-- ============ 01 · THE ORBIT LAB (hero) ============ -->
-<section id="orbit" aria-label="Roll around the donk" hidden style="display:none">
+<section id="orbit" aria-label="Walk around the Porsche 911 donk" hidden style="display:none">
   <div class="stage" id="stage">
     <div class="floor"></div>
     <canvas id="gl" aria-label="Drag to walk around the car"></canvas>
@@ -1763,7 +1766,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
     <p class="hsub">A real donk on our floor. Drag to walk round it, tap a <b>＋</b> to read what we found there.</p>
     <div class="hctas" id="heroCtas">
       <a class="btn btn-gold" href="#stock">See all <span data-count-avail></span> cars <span class="arr">→</span></a>
-      <a class="btn btn-line" href="#value">What’s your whip worth?</a>
+      <a class="btn btn-line" href="#value">What’s my car worth?</a>
     </div>
   </div>
   <aside class="hmeta" id="hcard" aria-label="This car">
@@ -1977,7 +1980,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
         <div class="bk-after" id="bkAfter" hidden></div>
         <div class="contact-list">
           <a class="cl" data-tel href="#"><span class="ic"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg></span><div><b data-phone></b><span>Call — Mon–Sat 9–7</span></div></a>
-          <a class="cl" data-wa="Hi Donk Ryde or Die, " href="#" target="_blank" rel="noopener"><span class="ic w"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg></span><div><b>WhatsApp us</b><span>Fastest reply, 7 days a week</span></div></a>
+          <a class="cl" data-wa="Hi Donk Ryde or Die LLC, " href="#" target="_blank" rel="noopener"><span class="ic w"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg></span><div><b>WhatsApp us</b><span>Fastest reply, 7 days a week</span></div></a>
           <a class="cl" href="https://instagram.com/donkrydeordie" target="_blank" rel="noopener"><span class="ic"><svg class="i" viewBox="0 0 24 24"><use href="#i-ig"/></svg></span><div><b>@donkrydeordie</b><span>New arrivals before they’re listed</span></div></a>
         </div>
         <p class="open-now" id="openNow"><i></i><span></span></p>
@@ -2000,10 +2003,10 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <!-- ============ STICKY ACTIONS ============ -->
 <div class="dock" id="dock" aria-label="Quick contact">
   <a class="icon-btn" data-tel href="#" aria-label="Call"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg></a>
-  <a class="icon-btn wa" data-wa="Hi Donk Ryde or Die, " href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+  <a class="icon-btn wa" data-wa="Hi Donk Ryde or Die LLC, " href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
   <button class="btn btn-gold" data-enq="viewing">Book a pull-up</button>
 </div>
-<a class="fab" id="fab" data-wa="Hi Donk Ryde or Die, " href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+<a class="fab" id="fab" data-wa="Hi Donk Ryde or Die LLC, " href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
 
 <!-- ============ CAR SHEET ============ -->
 <div class="ov" id="sheetOv"></div>
@@ -2199,7 +2202,7 @@ const PARTS=[
   {file:'parts/parts-03.jpg',name:'Forged Carbon Wheel',brand:'House',cat:'interior',spec:'Heated · paddles',price:1980,fit:260,stock:'Made to order',mat:'#e6e3e0'},
   {file:'parts/parts-02.jpg',name:'Headlight Unit — LH',brand:'OEM',cat:'exterior',spec:'Genuine · with loom',price:740,fit:150,stock:'In stock',mat:'#f1f1f1'},
 ];
-const PCATS=[['all','All'],['wheels','Wheels'],['brakes','26s or 28s'],['suspension','Suspension'],['engine','Engines'],['interior','Interior'],['exterior','Exterior']];
+const PCATS=[['all','All'],['wheels','Wheels'],['brakes','Brakes'],['suspension','Suspension'],['engine','Engines'],['interior','Interior'],['exterior','Exterior']];
 
 const REVIEWS=[
   {face:'faces/faces-19.jpg',name:'Jennie K.',car:'911 donk — bought',date:'Feb 2026',stars:5,text:'They showed me the build sheet before I asked for it, including two panels they’d had resprayed. No other dealer has ever volunteered that.'},
@@ -2222,7 +2225,7 @@ const DONORS=[
 const OPTS=[
   {label:'Engine',pick:1,opts:[['Rebuilt original',8900,6],['Exchange V8 6.2',21500,9],['Quad-turbo W16',98000,22]]},
   {label:'Suspension',pick:0,opts:[['2-way coilovers',2980,1],['Öhlins TTX',5400,3],['Full motorsport',9200,5]]},
-  {label:'26s or 28s',pick:0,opts:[['380mm 6-pot',3640,1],['410mm carbon-ceramic',7900,4]]},
+  {label:'Brakes',pick:0,opts:[['380mm 6-pot',3640,1],['410mm carbon-ceramic',7900,4]]},
   {label:'Wheels',pick:0,opts:[['Turbofan 19"',2290,1],['Forged monoblock',4850,3]]},
   {label:'Interior',pick:1,opts:[['Refreshed original',3200,3],['Full retrim',8600,7],['Stripped & caged',6400,5]]},
   {label:'Finish',pick:0,opts:[['Single-stage respray',7400,5],['Candy flake, hand-laid',14800,9]]},
@@ -2397,7 +2400,7 @@ const ENQ={
   price:{h:'Ask for the price',s:'Some cars aren’t priced publicly. We’ll send the price, report and finance options.',b:'Send me the price',m:c=>`Please send me the price and build sheet for the ${c.year} ${c.brand} ${c.model}.`},
   source:{h:'Find me a car',s:'Tell us the car, spec and budget. We source to order and inspect it before you commit.',b:'Start my search',m:c=>c?`I'm after a car like the ${c.brand} ${c.model} you sold. Budget: `:'I am looking for: \nBudget: '},
   partex:{h:'Lock in your valuation',s:'We’ll confirm the figure and book a 20-minute appraisal at a time that suits you.',b:'Lock in my price',m:()=>''},
-  finance:{h:'Check your eligibility',s:'A soft pull — no impact on your credit score. We’ll come back with what you’re approved for.',b:'Check my eligibility',m:()=>''},
+  finance:{h:'Check your eligibility',s:'A soft search — no impact on your credit score. We’ll come back with what you’re approved for.',b:'Check my eligibility',m:()=>''},
   build:{h:'Book a build consultation',s:'Free, no-obligation. We’ll go through the spec, the timeline and the staged payments.',b:'Book my consultation',m:()=>''},
   parts:{h:'Ask about a part',s:'Tell us the car and the part — we’ll confirm price, fitment and how soon.',b:'Send my request',m:()=>'My car is: \nPart I need: '},
 };
@@ -2442,7 +2445,7 @@ $$('form[data-form]').forEach(f=>f.addEventListener('submit',async e=>{
   const btn=$('[type=submit]',f);btn.disabled=true;
   if(SITE.endpoint){try{await fetch(SITE.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)});}catch(err){}}
   window.__lastLead=data;
-  const text=`Hi Donk Ryde or Die, it's ${data.name}. ${data.msg||''}${data.car&&!(data.msg||'').includes(data.car)?' (Car: '+data.car+')':''}`.trim();
+  const text=`Hi Donk Ryde or Die LLC, it's ${data.name}. ${data.msg||''}${data.car&&!(data.msg||'').includes(data.car)?' (Car: '+data.car+')':''}`.trim();
   const done=document.createElement('div');done.className='done';
   done.innerHTML=`<div class="tick"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></div><h4>Got it, ${data.name.split(' ')[0]}.</h4>
     <p>We’ll be in touch on ${data.phone} within the hour${pref?' by '+pref.toLowerCase():''}. Want an instant reply? Send it on WhatsApp too.</p>
@@ -2994,7 +2997,7 @@ REVIEWS.push(
 /* the bit that didn't fit in five stars */
 const MORE={
   'Jennie K.':'I’d been burned before by a “perfect” car. Here the paint map showed two refinished panels before I’d even asked, with the bodyshop invoice attached. I drove down expecting a sales pitch and got a ramp, a torch and straight answers.',
-  'Jenna O.':'I took the online figure to two other dealers first. Both knocked it down on the day. Donk Ryde matched their own number to the pound, settled the outstanding finance and paid me the same afternoon.',
+  'Jenna O.':'I took the online figure to two other dealers first. Both knocked it down on the day. DRD matched their own number to the pound, settled the outstanding finance and paid me the same afternoon.',
   'Artem S.':'Every Friday a photo set from the bay — even the boring weeks. When the shell needed more than quoted they rang before spending a penny. Fourteen months, and I’d do it again tomorrow.',
   'Kaz M.':'It was a known fault on that engine. Instead of hiding it they put it on the report, replaced the part and kept the old one in a box for me. That box is why I’ll buy from them again.',
   'Rafa G.':'They gave me a date and hit it. The handover took two hours because they walked me through every setting on the car — nobody rushed me out of the door.',
@@ -3149,7 +3152,7 @@ async function printPass(){
   const data={name:n.value.trim(),phone:ph.value.trim(),intent:'viewing',car:carLabel(c),day:BKS.day,slot:BKS.slot,pass:BKS.code,respray:c.i===HERO.i&&cfgPrice()>0?specLine():'',partex:FN.px||0,page:location.href,at:new Date().toISOString()};
   window.__lastLead=data;
   if(SITE.endpoint){ try{ await fetch(SITE.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)}); }catch(err){} }
-  const txt='Hi Donk Ryde or Die, it’s '+data.name+'. I’ve booked a viewing of the '+data.car+' on '+dstr+' at '+data.slot+' (pass '+data.pass+').'+(data.respray?' I’d like to talk about a respray: '+data.respray+'.':'');
+  const txt='Hi Donk Ryde or Die LLC, it’s '+data.name+'. I’ve booked a viewing of the '+data.car+' on '+dstr+' at '+data.slot+' (pass '+data.pass+').'+(data.respray?' I’d like to talk about a respray: '+data.respray+'.':'');
   const a=$id('bkAfter'); a.hidden=false; a.innerHTML='<a class="btn btn-wa" href="'+waLink(txt)+'" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg>Send it on WhatsApp too</a><a class="btn btn-line" href="tel:'+SITE.phone.replace(/\s/g,'')+'">Call instead</a>';
 }
 
@@ -3182,8 +3185,8 @@ function coreRun(raw){
   CORE.q=CORE.q.then(()=>{ const u=document.createElement('div'); u.className='u'; u.textContent=raw; $id('tlog').appendChild(u); $id('tlog').scrollTop=$id('tlog').scrollHeight; });
   const toHero=()=>{ if(scrollY>innerHeight*.5){ if(isMob) closeCore(); scrollTo({top:0,behavior:RM?'auto':'smooth'}); } };
   const cars=matchCars(q), car=cars[0]||null;
-  if(/^(hi|hey|hello|yo|sup|hiya)\b/.test(q)) return coreSay('Hello. I can <b>run this site</b> for you — find a donk, repaint your build, work out a monthly, value your whip or set your pull-up. What are you after?',[['box Chevys under $40k','porsches under 200k'],['Make it candy','make it red'],['What’s your whip worth?','value my car']]);
-  if(/human|person|whatsapp|call|phone|speak|talk to/.test(q)) return coreSay('A real person replies on WhatsApp, usually within the hour — or call <b>'+SITE.phone+'</b>, Mon–Sat 9–7.',[['Open WhatsApp','wa:'+encodeURIComponent('Hi Donk Ryde or Die, ')],['Call now','tel']]);
+  if(/^(hi|hey|hello|yo|sup|hiya)\b/.test(q)) return coreSay('Hello. I can <b>drive this site</b> for you — find a car, repaint the donk, work out a monthly, value your whip or book you in. What are you after?',[['Porsches under $200k','porsches under 200k'],['Make it red','make it red'],['What’s my car worth?','value my car']]);
+  if(/human|person|whatsapp|call|phone|speak|talk to/.test(q)) return coreSay('A real person replies on WhatsApp, usually within the hour — or call <b>'+SITE.phone+'</b>, Mon–Sat 9–7.',[['Open WhatsApp','wa:'+encodeURIComponent('Hi Donk Ryde or Die LLC, ')],['Call now','tel']]);
   /* the hero car */
   const col=COLORS.find(c=>new RegExp('\\b'+c[0]+'\\b').test(q));
   if(col&&!/caliper/.test(q)&&(!car||/paint|make it|colou?r|respray|spray|wrap/.test(q))){ CFG.paint=col[1]; changed(); renderCfg(); toHero(); return coreSay('<span class="ok">✓</span> The donk in <b>'+paintOf().n+'</b>. A full respray is '+fmt(paintOf().p)+' — the car itself is <b>'+fmt(priceNum(HERO))+'</b>.',[['Satin finish','satin'],['Show the rear','show the rear'],['Finance it with the respray','fin-resp']]); }
@@ -3202,7 +3205,7 @@ function coreRun(raw){
   if(/financ|monthly|a month|per month|\bpcm\b|deposit|\bapr\b|afford|eligib/.test(q)){
     const c=car&&priceNum(car)?car:(FN.car>=0?CARS[FN.car]:HERO); setFinCar(c.i); if(isMob) closeCore(); goTo('finance');
     return coreSay('The <b>'+esc(c.model)+'</b> is about <b>'+fmt(FN.mo)+'/mo</b> with '+FN.dep+'% down over '+FN.term+' months at 9.9% APR rep. — '+finZone(FN.mo).l.toLowerCase()+'. Drag the dial to try others.',[['Check eligibility','enq:finance:'+c.i],['Book a pull-up','book:'+c.i]]); }
-  const bud=q.match(/(?:under|below|less than|up to|max|budget(?: of)?)\s*[£$]?\s*(\d[\d,.]*)\s*(k|m)?/);
+  const bud=q.match(/(?:under|below|less than|up to|max|budget(?: of)?)\s*[$$]?\s*(\d[\d,.]*)\s*(k|m)?/);
   if(bud){ let n=parseFloat(bud[1].replace(/,/g,'')); if(bud[2]==='k'||n<1000) n*=1000; if(bud[2]==='m') n*=1000; const pool=(cars.length?cars:AVAIL).filter(c=>c.status==='avail'&&priceNum(c)&&priceNum(c)<=n).sort((a,b)=>priceNum(b)-priceNum(a));
     if(!pool.length) return coreSay('Nothing in the shop under <b>'+fmt(n)+'</b> right now — but we source to order.',[['Find me one','enq:source']]);
     $('#sortSel').value='phi'; $('#sortSel').dispatchEvent(new Event('change'));
@@ -3240,7 +3243,7 @@ function coreRun(raw){
     const k=/\bnew\b/.test(q)?'new':/\bused\b/.test(q)?'used':/house build|builds/.test(q)?'build':'all'; const b=$(`#condChips [data-k="${k}"]`); if(b) b.click(); if(isMob) closeCore(); goTo('stock');
     return coreSay('<b>'+(k==='all'?AVAIL.length:CARS.filter(c=>c.cond===k&&c.status==='avail').length)+'</b> '+(k==='all'?'cars':CONDLBL[k].toLowerCase()+(k==='build'?'s':' cars'))+' in the shop, every one with its build sheet.',[['Show me','go:stock']]); }
   if(/price|cost|how much|total/.test(q)) return coreSay('The donk is <b>'+fmt(priceNum(HERO))+'</b>, from '+fmt(fromMo(HERO))+'/mo.'+(cfgPrice()?' Your respray spec ('+esc(specLine())+') adds <b>'+fmt(cfgPrice())+'</b>.':''),[['Specs & report','car:'+HERO.i],['Finance it','fin:'+HERO.i]]);
-  return coreSay('I didn’t catch that. I can find a donk (<b>“box Chevy”</b>, <b>“under $40k”</b>), repaint your build, work out a monthly, value your whip, find wheels or set your pull-up.',[['Porsches','porsche'],['Under $100k','under 100k'],['Value my whip','value my car'],['Talk to a person','whatsapp']]);
+  return coreSay('I didn’t catch that. I can find a donk (<b>“box Chevy”</b>, <b>“under $40k”</b>), repaint your build, work out a monthly, value your whip, find wheels or set your pull-up.',[['Porsches','porsche'],['Under $100k','under 100k'],['Value my car','value my car'],['Talk to a person','whatsapp']]);
 }
 function coreAct(c){ const [t,a,b]=c.split(':');
   if(t==='go'){ if(isMob) closeCore(); goTo(a); return; }
@@ -3265,7 +3268,7 @@ $id('bot').addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.p
 $id('bot').addEventListener('pointerenter',()=>BOT.hover=true); $id('bot').addEventListener('pointerleave',()=>BOT.hover=false);
 $id('termX').addEventListener('click',e=>{ e.stopPropagation(); closeCore(); });
 $id('tin').addEventListener('submit',e=>{ e.preventDefault(); const v=$id('tinput').value; $id('tinput').value=''; coreRun(v); });
-const TCH=['box Chevys under $40k','Make it candy','build scan','Monthly on a Caprice','Value my whip','26s or 28s','Book a pull-up','Shop hours'];
+const TCH=['Box Chevys under $40k','Make it candy red','Build scan','Monthly on a Caprice','Value my whip','26s or 28s','Book a pull-up','Shop hours'];
 $id('tchips').innerHTML=TCH.map(c=>'<button type="button">'+esc(c)+'</button>').join('');
 $id('tchips').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) coreRun(b.textContent); });
 $id('tlog').addEventListener('click',e=>{ const b=e.target.closest('[data-cmd]'); if(b) coreAct(b.dataset.cmd); });
@@ -3281,7 +3284,7 @@ const GEO=(()=>{ const n=p=>{ const l=Math.hypot(p[0],p[1],p[2]); return [p[0]/l
 const RINGS=[{r:1.8,ax:1.2,az:.35,sp:.8,c:'227,192,127'},{r:2.12,ax:-.85,az:-.55,sp:-.55,c:'241,235,223'},{r:1.5,ax:.35,az:1.25,sp:1.3,c:'201,162,94'}];
 const DUSTB=Array.from({length:22},()=>({a:Math.random()*6.283,r:2.3+Math.random()*.6,s:(.2+Math.random()*.5)*(Math.random()<.5?-1:1),y:(Math.random()-.5)*1.4}));
 const BOT={x:innerWidth-110,y:innerHeight*.55,vx:0,vy:0,ex:0,talk:0,gx:0,gy:0,docked:false,hover:false,blink:0,blinkT:-1e4,blinkAt:0,loopAt:performance.now()+9000,loopT:-1e5,lastY:0,sv:0,bubAt:performance.now()+7000,bubI:0,s:140};
-const BUBS=['Ask me for a car','Try “under $40k”','Say “make it red”','“What’s your whip worth?”','Try “build scan”','“Monthly on the Urus?”'];
+const BUBS=['Ask me for a car','Try “under $100k”','Say “make it red”','“What’s my car worth?”','Try “build scan”','“Monthly on the Urus?”'];
 const BC=$id('botC'), bx=BC.getContext('2d');
 function sizeBot(){ BOT.s=isMob?66:140; const bd=Math.min(DPR,1.5); BC.width=Math.round(BOT.s*bd); BC.height=Math.round(BOT.s*bd); $id('bot').style.setProperty('--bs',BOT.s+'px'); }
 function rot3(p,ax,ay,az){ let x=p[0],y=p[1],z=p[2],c=Math.cos(ax),s=Math.sin(ax),t;
@@ -3402,6 +3405,17 @@ function buildWays(){
   wd.addEventListener('click',e=>{ const a=e.target.closest('.wc'); if(!a) return; e.preventDefault(); goWay(+a.dataset.i); });
   $id('waysDots').innerHTML=['Overview'].concat(WAYS.map(w=>w.t)).map((t,i)=>'<button type="button" aria-label="'+esc(t)+'" data-k="'+i+'"></button>').join('');
   $id('waysDots').addEventListener('click',e=>{ const b=e.target.closest('[data-k]'); if(b) snapTo(+b.dataset.k); });
+  /* split the hero's first words so they rise in, word by word, on load (parallax) */
+  const wh=document.querySelector('#waysHero .wh-h');
+  if(wh&&!wh.dataset.split){ wh.dataset.split='1'; let i=0; const frag=document.createDocumentFragment();
+    [...wh.childNodes].forEach(n=>{
+      if(n.nodeType===3){ n.textContent.split(/(\s+)/).forEach(t=>{ if(!t) return; if(/^\s+$/.test(t)){ frag.appendChild(document.createTextNode(t)); return; } const s=document.createElement('span'); s.className='wo'; s.textContent=t; s.style.transitionDelay=(i++*0.08).toFixed(2)+'s'; frag.appendChild(s); }); }
+      else if(n.nodeName==='BR') frag.appendChild(document.createElement('br'));
+      else if(n.nodeName==='EM'){ const e=document.createElement('em'); e.className='wo'; e.textContent=n.textContent; e.style.transitionDelay=(i++*0.08).toFixed(2)+'s'; frag.appendChild(e); }
+      else frag.appendChild(n.cloneNode(true)); });
+    wh.innerHTML=''; wh.appendChild(frag);
+    (RM?(()=>wh.classList.add('in')):(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>wh.classList.add('in')))))();
+  }
   layoutWays(); initSnap(); WS.introT0=performance.now();     /* the collage assembles into place over ~2.5s on load */
 }
 function goWay(i){ const w=WAYS[i]; if(w.gal==='stock') GSTOCK.open(true); if(w.gal==='parts') GPARTS.open(true); goTo(w.go); }
@@ -3858,7 +3872,7 @@ function buildUI(){
   stage.querySelector('.b3-views').addEventListener('click',e=>{ const b=e.target.closest('[data-v]'); if(!b) return; [...b.parentNode.children].forEach(x=>x.classList.toggle('on',x===b)); if(api) api.look(+b.dataset.v,+b.dataset.v===90?6:12); });
   el('b3Back').addEventListener('click',()=>{ if(api) api.back(); });
   el('b3Call').href='tel:'+SITE.phone.replace(/\s/g,'');
-  el('b3Send').addEventListener('click',()=>window.open(waLink('Hi Donk Ryde or Die, I specced a build on your site: '+specLine()+'. Could we talk it through?'),'_blank','noopener'));
+  el('b3Send').addEventListener('click',()=>window.open(waLink('Hi Donk Ryde or Die LLC, I specced a build on your site: '+specLine()+'. Could we talk it through?'),'_blank','noopener'));
   paintTotals(); credit();
 }
 function toggle(k,force){ if(S3.sel<0) return; const x=PARTS3.find(p=>p.k===k); const on=force===undefined?!S3.on[k]:force; if(on===S3.on[k]) return; S3.on[k]=on;

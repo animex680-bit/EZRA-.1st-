@@ -1,0 +1,119 @@
+{
+  "output": "donk-ryde",
+  "assetBase": "../360-remix/assets/",
+  "lang": "en-US",
+  "name": "Donk Ryde or Die LLC",
+  "shortMark": "DRD",
+  "wordmark": "DO<b>N</b>K",
+  "ig": "donkrydeordie",
+  "phone": "+1 (305) 555-0199",
+  "area": "US",
+  "currency": "$",
+  "paintGold": "Candy Gold",
+  "titleTail": "Big wheels. Candy paint. Built to ride.",
+  "metaDesc": "Donks built in-house — 26s to 30s, candy paint, lifted and loud. Browse the lineup, build your own, dial in a monthly and book your pull-up.",
+  "ogTitle": "Donk Ryde or Die LLC — Donks sold, built & rolled",
+  "ogDesc": "Every donk built in-house — wheels, candy paint and the whole build, documented.",
+
+  "hero": {
+    "kicker": "Donk Ryde or Die LLC",
+    "h1": "Roll up.<br>Ride out <em>legendary.</em>",
+    "sub": "Big-body builds on 26s to 30s — candy paint, lifted and loud. Every donk built in our shop and shot start to finish before it hits the street.",
+    "cue": "Scroll to pick your lane"
+  },
+
+  "ways": [
+    {"t": "Cop a donk", "w": "Cop", "s": "in the shop · every one built to ride"},
+    {"t": "Sell or trade", "w": "Sell", "s": "A real number in thirty seconds"},
+    {"t": "Finance it", "w": "Finance", "s": "Turn the dial, feel the monthly"},
+    {"t": "Build a donk", "w": "Build", "s": "Pick a whip, watch the build price move live"},
+    {"t": "Wheels & parts", "w": "Parts", "s": "Counter sale, or fitted on our lift"}
+  ],
+
+  "omega": {
+    "kicker": "DRD · the brain of the shop",
+    "h": "I grew up in this shop. Now I run the block.",
+    "sub": "Every donk, build, wheel and price runs through me first. Tell me what you want and I’ll find it, put a number on what you’re driving, spec your build to the dollar, or set your pull-up — straight answer, any hour.",
+    "statCars": "donks sold",
+    "statParts": "sets rolled",
+    "facts": [
+      "71 donks out the shop — built to ride, not just sit.",
+      "Tell me your whip and I put a number on it in thirty seconds.",
+      "Tip: financing here is a soft pull — it won’t touch your score.",
+      "34 full builds done in-house, floor to roof.",
+      "Try asking me: “box Chevys under $40k”.",
+      "Every one of our 128 reviews is tied to a real build.",
+      "Tip: tap any whip in the lineup to build it live.",
+      "I’m up at 2am — hit me before you pull up."
+    ]
+  },
+
+  "scan": {
+    "kicker": "Every build · panel by panel",
+    "h": "Built right. <em>Zero shortcuts.</em>",
+    "lede": "Watch the shop break it down. Every panel, every bolt — paint, fitment and finish, all on the build sheet before it rolls out.",
+    "cta": "Send me the build sheet"
+  },
+
+  "transitions": {
+    "plate": "<span>What’s your whip worth?</span><em>Thirty seconds.</em>",
+    "shutter": "<small>The lineup</small>Three in the shop.<em>Pick one.</em>",
+    "tear": "<small>Last stop</small>Pull up <em>and ride out.</em>"
+  },
+
+  "showroom": {
+    "kicker": "Donks, built in our shop",
+    "h": "Pick a whip. <em>The rest clear the floor.</em>",
+    "lede": "Three whips on the floor. Tap one — the rest roll out — then throw wheels on it, drench it in candy and watch the build price move. Rather we design it? One call.",
+    "pick": "<small>Lineup · 3 whips</small><b>Tap a whip to build it</b>",
+    "drag": "Drag to look round · tap a whip",
+    "wa": "or send this build on WhatsApp →"
+  },
+
+  "reviews": {
+    "kicker": "What the block says",
+    "h": "Real builds, <em>in their words.</em>",
+    "lede": "Twelve owners, twelve real builds. Drag the ring, then tap a face — they’ll tell you the bit that didn’t fit in five stars.",
+    "verified": "verified builds"
+  },
+
+  "finance": {"kicker": "Financing, handled in-house"},
+
+  "booking": {
+    "bookCta": "Book a pull-up",
+    "print": "Print your pass. <em>We’ll have it rolled out.</em>",
+    "walk": "<b>Green light’s on.</b>Pull up off the street — the shop’s open and the lift is free. Or print a pass below and we’ll have the whip rolled out."
+  },
+
+  "nav": {"value": "Value my whip", "stockHeader": "In the shop now", "footerTag": "Big wheels, done right"},
+
+  "core": {
+    "greeting": "I’m <b>CORE</b>, wired into the shop, the lift and the paint booth. Ask for a donk, a candy color, a monthly or a set of wheels — I’ll take you there.",
+    "termSmall": "● wired into the shop, the lift &amp; the booth",
+    "fallback": "I didn’t catch that. I can find a donk (<b>“box Chevy”</b>, <b>“under $40k”</b>), repaint your build, work out a monthly, value your whip, find wheels or set your pull-up.",
+    "chips": ["Box Chevys under $40k", "Make it candy red", "Build scan", "Monthly on a Caprice", "Value my whip", "26s or 28s", "Book a pull-up", "Shop hours"]
+  },
+
+  "extra": [
+    ["txt:'INSPECTED'", "txt:'BUILT'"],
+    ["txt:'GRADE 92 · 1 OWNER'", "txt:'28s · CANDY'"],
+    ["sm:'<b>On the floor</b>today'", "sm:'<b>In the shop</b>today'"],
+    ["em:'30s',sm:'<b>Your price</b>no callback wall'", "em:'30s',sm:'<b>Your number</b>no callback wall'"],
+    ["txt:'48 MONTHS · £0 PART-EX'", "txt:'48 MONTHS · $0 DOWN'"],
+    ["em:'3D',sm:'<b>Spec it live</b>six on the floor'", "em:'3D',sm:'<b>Build it live</b>in the shop'"],
+    ["txt:'RESTOMOD'", "txt:'DONK'"],
+    ["txt:'≈ 18 WEEKS IN THE BAY'", "txt:'≈ 10 WEEKS IN THE SHOP'"],
+    ["sm:'<b>Parts</b>fitted in-house'", "sm:'<b>Wheels</b>fitted in-house'"],
+    ["value your car", "value your whip"],
+    ["Pick a car, or drag the ring", "Pick a whip, or drag the ring"],
+    ["the cars we have", "the whips we have"]
+  ],
+
+  "terminology": [
+    ["restomods", "donk builds"], ["restomod", "donk build"], ["Restomods", "Donk builds"], ["Restomod", "Donk build"],
+    ["part-exchange", "trade-in"], ["Part-exchange", "Trade-in"], ["part-ex", "trade"], ["Part-ex", "Trade"],
+    ["360° report", "build sheet"], ["360° grade", "build grade"], ["360 scan", "build scan"],
+    ["on the floor", "in the shop"], ["On the floor", "In the shop"],
+    ["GT3 RS", "donk"], ["colour", "color"], ["Opening hours", "Shop hours"]
+  ]
+}

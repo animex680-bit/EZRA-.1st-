@@ -1126,8 +1126,11 @@ html.ld .hhead h1 .w{animation-play-state:paused}
 .ways-hero{position:absolute;z-index:6;left:var(--g);right:var(--g);top:50%;translate:0 -50%;max-width:min(940px,92vw);pointer-events:none;opacity:var(--hh,1);will-change:opacity}
 .ways-hero::before{content:"";position:absolute;inset:-30% -14% -34% -14%;background:radial-gradient(62% 72% at 26% 50%,rgba(5,5,5,.8),rgba(5,5,5,.3) 60%,transparent 78%);z-index:-1}
 .wh-k{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin:0 0 20px}
-.wh-h{font-family:var(--ff-d);font-weight:600;font-size:clamp(46px,8.4vw,128px);line-height:.92;letter-spacing:-.035em;color:#fff;margin:0;text-shadow:0 12px 60px rgba(0,0,0,.6)}
+.wh-h{font-family:var(--ff-d);font-weight:600;font-size:clamp(22px,3.3vw,50px);line-height:1;letter-spacing:-.02em;color:#fff;margin:0;text-shadow:0 8px 40px rgba(0,0,0,.6)}
 .wh-h em{font-style:italic;font-weight:500;color:var(--gold2)}
+/* the first words land with a parallax rise on load, word by word */
+.wh-h .wo{display:inline-block;opacity:0;transform:translate3d(0,34px,0);transition:opacity .6s var(--out),transform .85s var(--out)}
+.wh-h.in .wo{opacity:1;transform:none}
 .wh-s{margin:26px 0 0;font-size:clamp(15px,1.5vw,20px);line-height:1.6;color:var(--ink2);max-width:48ch;text-shadow:0 4px 30px rgba(0,0,0,.75)}
 .wh-cue{display:inline-flex;align-items:center;gap:11px;margin-top:36px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
 .wh-cue i{width:7px;height:12px;border:1.5px solid var(--ink2);border-radius:4px;position:relative;flex:none}
@@ -3202,7 +3205,7 @@ function coreRun(raw){
   if(/financ|monthly|a month|per month|\bpcm\b|deposit|\bapr\b|afford|eligib/.test(q)){
     const c=car&&priceNum(car)?car:(FN.car>=0?CARS[FN.car]:HERO); setFinCar(c.i); if(isMob) closeCore(); goTo('finance');
     return coreSay('The <b>'+esc(c.model)+'</b> is about <b>'+fmt(FN.mo)+'/mo</b> with '+FN.dep+'% down over '+FN.term+' months at 9.9% APR rep. — '+finZone(FN.mo).l.toLowerCase()+'. Drag the dial to try others.',[['Check eligibility','enq:finance:'+c.i],['Book a viewing','book:'+c.i]]); }
-  const bud=q.match(/(?:under|below|less than|up to|max|budget(?: of)?)\s*£?\s*(\d[\d,.]*)\s*(k|m)?/);
+  const bud=q.match(/(?:under|below|less than|up to|max|budget(?: of)?)\s*[£$]?\s*(\d[\d,.]*)\s*(k|m)?/);
   if(bud){ let n=parseFloat(bud[1].replace(/,/g,'')); if(bud[2]==='k'||n<1000) n*=1000; if(bud[2]==='m') n*=1000; const pool=(cars.length?cars:AVAIL).filter(c=>c.status==='avail'&&priceNum(c)&&priceNum(c)<=n).sort((a,b)=>priceNum(b)-priceNum(a));
     if(!pool.length) return coreSay('Nothing on the floor under <b>'+fmt(n)+'</b> right now — but we source to order.',[['Find me one','enq:source']]);
     $('#sortSel').value='phi'; $('#sortSel').dispatchEvent(new Event('change'));
@@ -3402,6 +3405,17 @@ function buildWays(){
   wd.addEventListener('click',e=>{ const a=e.target.closest('.wc'); if(!a) return; e.preventDefault(); goWay(+a.dataset.i); });
   $id('waysDots').innerHTML=['Overview'].concat(WAYS.map(w=>w.t)).map((t,i)=>'<button type="button" aria-label="'+esc(t)+'" data-k="'+i+'"></button>').join('');
   $id('waysDots').addEventListener('click',e=>{ const b=e.target.closest('[data-k]'); if(b) snapTo(+b.dataset.k); });
+  /* split the hero's first words so they rise in, word by word, on load (parallax) */
+  const wh=document.querySelector('#waysHero .wh-h');
+  if(wh&&!wh.dataset.split){ wh.dataset.split='1'; let i=0; const frag=document.createDocumentFragment();
+    [...wh.childNodes].forEach(n=>{
+      if(n.nodeType===3){ n.textContent.split(/(\s+)/).forEach(t=>{ if(!t) return; if(/^\s+$/.test(t)){ frag.appendChild(document.createTextNode(t)); return; } const s=document.createElement('span'); s.className='wo'; s.textContent=t; s.style.transitionDelay=(i++*0.08).toFixed(2)+'s'; frag.appendChild(s); }); }
+      else if(n.nodeName==='BR') frag.appendChild(document.createElement('br'));
+      else if(n.nodeName==='EM'){ const e=document.createElement('em'); e.className='wo'; e.textContent=n.textContent; e.style.transitionDelay=(i++*0.08).toFixed(2)+'s'; frag.appendChild(e); }
+      else frag.appendChild(n.cloneNode(true)); });
+    wh.innerHTML=''; wh.appendChild(frag);
+    (RM?(()=>wh.classList.add('in')):(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>wh.classList.add('in')))))();
+  }
   layoutWays(); initSnap(); WS.introT0=performance.now();     /* the collage assembles into place over ~2.5s on load */
 }
 function goWay(i){ const w=WAYS[i]; if(w.gal==='stock') GSTOCK.open(true); if(w.gal==='parts') GPARTS.open(true); goTo(w.go); }
