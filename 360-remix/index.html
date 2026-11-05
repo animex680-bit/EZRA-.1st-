@@ -767,9 +767,6 @@ body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;op
 /* ---------- MEDO · the intelligence (a bigger version of the floating chatbot) ---------- */
 .omega{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(120% 95% at 30% 44%,#15181e 0%,#0a0b0e 56%,#060608 100%);color:var(--ink)}
 .om-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(233,201,136,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(233,201,136,.05) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(70% 70% at 30% 46%,#000,transparent 80%);opacity:.5;pointer-events:none}
-.om-laser{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:58;opacity:0;transition:opacity .12s linear}
-.om-laser.fire{opacity:1}
-.om-laser line{stroke:#ffe6a6;stroke-width:2.4;stroke-linecap:round;filter:drop-shadow(0 0 7px #e9c988)}
 .om-wrap{position:relative;z-index:2;width:min(1180px,92vw);margin:0 auto;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:clamp(28px,5vw,74px);padding:13vh 0}
 /* the orb — a scaled-up twin of the #bot chatbot */
 .om-stage{position:relative;display:flex;align-items:center;justify-content:center}
@@ -790,13 +787,16 @@ body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;op
 .om-tag::first-letter{color:#7fd49a}
 .om-orb:hover .om-ball,.om-orb:focus-visible .om-ball{filter:brightness(1.07)}
 .om-orb:focus-visible{outline:2px solid var(--gold2,#e9c988);outline-offset:8px}
-/* the conjured speech bubble */
-.om-bub{position:absolute;left:50%;top:-4%;translate:-50% -100%;width:max-content;max-width:min(78vw,340px);padding:14px 17px;border-radius:18px 18px 18px 5px;background:#14161b;border:1px solid rgba(233,201,136,.3);box-shadow:0 24px 54px -22px rgba(0,0,0,.85);font-size:clamp(14px,1.2vw,16px);line-height:1.42;color:#eceae6;cursor:pointer;z-index:4;opacity:0;transform:translateY(10px) scale(.93);transition:opacity .4s var(--out),transform .5s var(--spring);pointer-events:none}
-.om-bub.on{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
-.om-bub::after{content:"";position:absolute;left:30px;bottom:-9px;width:16px;height:16px;background:#14161b;border-right:1px solid rgba(233,201,136,.3);border-bottom:1px solid rgba(233,201,136,.3);transform:rotate(45deg)}
-.om-bub-x{position:absolute;top:8px;right:11px;width:14px;height:14px;opacity:.45}
-.om-bub-x::before,.om-bub-x::after{content:"";position:absolute;left:6px;top:1px;width:1.4px;height:12px;background:currentColor}
-.om-bub-x::before{transform:rotate(45deg)}.om-bub-x::after{transform:rotate(-45deg)}
+/* the conjured speech bubbles — up to three on screen at once, the AI thinking out loud */
+.om-bubs{position:absolute;inset:0;z-index:4;pointer-events:none}
+.om-bub{position:absolute;width:max-content;max-width:min(40vw,300px);padding:13px 16px;border-radius:16px 16px 16px 5px;background:#14161b;border:1px solid rgba(233,201,136,.3);box-shadow:0 22px 50px -22px rgba(0,0,0,.85);font-size:clamp(13px,1.1vw,15.5px);line-height:1.42;color:#eceae6;cursor:pointer;pointer-events:auto;opacity:0;transform:translateY(14px) scale(.9);transition:opacity .55s var(--out),transform .6s var(--spring)}
+.om-bub.on{opacity:1;transform:translateY(0) scale(1)}
+.om-bub::after{content:"";position:absolute;left:26px;bottom:-9px;width:16px;height:16px;background:#14161b;border-right:1px solid rgba(233,201,136,.3);border-bottom:1px solid rgba(233,201,136,.3);transform:rotate(45deg)}
+.om-bub .bk{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2,#e9c988);margin-bottom:5px}
+.om-bub.s0{left:5%;top:10%}
+.om-bub.s1{left:31%;top:0}
+.om-bub.s2{left:1%;top:56%}
+@media(max-width:860px){.om-bub{max-width:min(74vw,300px)}.om-bub.s0{left:4%;top:3%}.om-bub.s1{right:3%;left:auto;top:21%}.om-bub.s2{left:4%;top:40%}}
 /* copy, with words that assemble on load */
 .om-copy{max-width:52ch}
 .om-k{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2,#e9c988);margin:0 0 18px;display:flex;align-items:center;gap:10px}
@@ -1122,6 +1122,17 @@ html.ld .hhead h1 .w{animation-play-state:paused}
 .ways-dots button:hover{transform:scale(1.3);border-color:var(--ink)}
 .ways-dots button.on{background:var(--gold2);border-color:var(--gold2);transform:scale(1.25)}
 .ways-dots button:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+/* the first thing a visitor sees — a bold greeting over the collage, fades as they scroll into the cards */
+.ways-hero{position:absolute;z-index:6;left:var(--g);right:var(--g);top:50%;translate:0 -50%;max-width:min(940px,92vw);pointer-events:none;opacity:var(--hh,1);will-change:opacity}
+.ways-hero::before{content:"";position:absolute;inset:-30% -14% -34% -14%;background:radial-gradient(62% 72% at 26% 50%,rgba(5,5,5,.8),rgba(5,5,5,.3) 60%,transparent 78%);z-index:-1}
+.wh-k{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin:0 0 20px}
+.wh-h{font-family:var(--ff-d);font-weight:600;font-size:clamp(46px,8.4vw,128px);line-height:.92;letter-spacing:-.035em;color:#fff;margin:0;text-shadow:0 12px 60px rgba(0,0,0,.6)}
+.wh-h em{font-style:italic;font-weight:500;color:var(--gold2)}
+.wh-s{margin:26px 0 0;font-size:clamp(15px,1.5vw,20px);line-height:1.6;color:var(--ink2);max-width:48ch;text-shadow:0 4px 30px rgba(0,0,0,.75)}
+.wh-cue{display:inline-flex;align-items:center;gap:11px;margin-top:36px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.wh-cue i{width:7px;height:12px;border:1.5px solid var(--ink2);border-radius:4px;position:relative;flex:none}
+.wh-cue i::after{content:"";position:absolute;left:50%;top:2px;width:2px;height:3px;margin-left:-1px;background:var(--ink2);border-radius:1px;animation:wheel 1.4s ease-in-out infinite}
+@media(max-width:760px){.ways-hero{top:auto;bottom:calc(120px + env(safe-area-inset-bottom));translate:0 0}.wh-s{display:none}.wh-cue{margin-top:24px}}
 
 /* ---------- 03 · THE HOLE — the page has a hole in it, and a car behind ---------- */
 .holefix{position:fixed;inset:0;z-index:0;visibility:hidden;pointer-events:none;background:#020403}
@@ -1179,9 +1190,8 @@ html.ld .hhead h1 .w{animation-play-state:paused}
 .sh-t{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font-family:var(--ff-d);font-weight:600;font-size:clamp(46px,7.6vw,124px);line-height:.92;letter-spacing:-.03em;transform:translate3d(0,var(--ty,40px),0) scale(var(--ts,.9));opacity:var(--ta,0)}
 .sh-t small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold2);font-weight:400;margin-bottom:18px}
 .sh-t em{display:block;font-style:italic;font-weight:500;color:var(--gold2)}
-.sh-door{position:absolute;inset:0;background:repeating-linear-gradient(180deg,#2b2722 0 34px,#1e1b17 34px 38px,#35302a 38px 40px,#2b2722 40px 74px);transform:translate3d(0,calc(var(--u,0)*-102%),0);box-shadow:0 30px 60px rgba(0,0,0,.6);will-change:transform}
-.sh-door::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22px;background:linear-gradient(180deg,#4a4239,#1c1915);border-top:1px solid #6a5e50}
-.sh-lbl{position:absolute;left:50%;top:50%;translate:-50% -50%;font-family:var(--mono);font-size:clamp(18px,2.4vw,34px);letter-spacing:.4em;color:rgba(227,192,127,.55);border:2px solid rgba(227,192,127,.4);padding:14px 26px;white-space:nowrap}
+.sh-door{position:absolute;inset:0;background:linear-gradient(180deg,#0b0a08 0%,#17130f 72%,#1e1812 100%);transform:translate3d(0,calc(var(--u,0)*-102%),0);box-shadow:0 40px 100px rgba(0,0,0,.65);will-change:transform}
+.sh-door::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);box-shadow:0 0 50px 12px rgba(233,201,136,.55),0 0 130px 22px rgba(233,201,136,.22)}
 /* the stamp */
 .tx-stamp{height:150vh}
 .tx-stamp .tx-st{background:var(--bg2)}
@@ -1505,8 +1515,14 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <section class="ways" id="ways" aria-label="What brings you in?">
   <div class="ways-pin" id="waysPin">
     <div class="ways-world" id="waysWorld"></div>
+    <div class="ways-hero" id="waysHero">
+      <p class="wh-k">MEDO automotive</p>
+      <h1 class="wh-h">Walk in.<br>Drive out <em>proven.</em></h1>
+      <p class="wh-s">Performance cars inspected on the ramp, restomods built in our own bay — and every fault published before you pay.</p>
+      <span class="wh-cue" aria-hidden="true"><i></i>Scroll to choose your way in</span>
+    </div>
     <div class="ways-top wrap"><p class="kick">What brings you in</p><p class="ways-ct" aria-hidden="true"><b id="waysN">00</b><u><i id="waysBar"></i></u>05</p></div>
-    <h2 class="ways-big" aria-hidden="true"><span id="waysWord">Ways in</span><sup>(05)</sup></h2>
+    <h2 class="ways-big" id="waysBig" aria-hidden="true"><span id="waysWord">Ways in</span><sup>(05)</sup></h2>
     <p class="ways-hint" id="waysHint"><i></i>One scroll, one stop</p>
     <nav class="ways-dots" id="waysDots" aria-label="Jump to"></nav>
   </div>
@@ -1538,8 +1554,8 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <div class="tx tx-shutter" id="txShutter" aria-hidden="true">
   <div class="tx-st">
     <div class="sh-glow" id="shGlow"></div>
-    <p class="sh-t" id="shT"><small>Bay 03 · showroom</small>Three on the floor.<em>Pick one.</em></p>
-    <div class="sh-door" id="shDoor"><span class="sh-lbl">MEDO · BAY 03</span></div>
+    <p class="sh-t" id="shT"><small>The showroom</small>Three on the floor.<em>Pick one.</em></p>
+    <div class="sh-door" id="shDoor"></div>
   </div>
 </div>
 
@@ -1630,7 +1646,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <!-- ============ MEDO · the intelligence that runs the floor ============ -->
 <section class="omega" id="numbers" aria-label="Meet MEDO, the shop's intelligence">
   <div class="om-grid" aria-hidden="true"></div>
-  <svg class="om-laser" id="omLaser" aria-hidden="true"><line id="omLaserL" x1="0" y1="0" x2="0" y2="0"></line></svg>
+  <div class="om-bubs" id="omBubs" aria-live="polite"></div>
   <div class="om-wrap">
     <div class="om-stage">
       <button class="om-orb" id="omOrb" type="button" aria-label="Ask MEDO anything">
@@ -1644,7 +1660,6 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
         </span>
         <span class="om-tag" aria-hidden="true">● MEDO online</span>
       </button>
-      <div class="om-bub" id="omBub" aria-hidden="true"><span id="omBubT"></span><i class="om-bub-x" aria-hidden="true"></i></div>
     </div>
     <div class="om-copy" id="omCopy">
       <p class="om-k">MEDO · the intelligence on the floor</p>
@@ -3454,6 +3469,8 @@ function updateWays(now,dt){
     if(WS.intro>0) op*=1-WS.intro*.35;
     if(Math.abs(bl-(o.bl||0))>.01){ o.bl=bl; el.style.setProperty('--bl',bl.toFixed(2)); }
     if(Math.abs(op-(o.op??-1))>.01){ o.op=op; el.style.opacity=op.toFixed(2); } });
+  const hh=1-smooth(clamp(WS.cs/.55,0,1));       /* the greeting owns the overview, then hands off to the per-card label */
+  if(Math.abs(hh-(WS.hh??-1))>.008){ WS.hh=hh; const he=$id('waysHero'); if(he) he.style.setProperty('--hh',hh.toFixed(3)); const bg=$id('waysBig'); if(bg) bg.style.opacity=(1-hh).toFixed(3); }
   const k=Math.round(WS.cs);
   if(k!==WS.k){ WS.k=k; $id('waysN').textContent=String(k).padStart(2,'0'); $id('waysBar').style.width=(k/n*100)+'%';
     [...$id('waysDots').children].forEach((b,i)=>b.classList.toggle('on',i===k));
@@ -3476,9 +3493,13 @@ function snapTo(k,dur){ const n=WS.stops.length-1; k=clamp(k,0,n); const from=sc
   const step=now=>{ if(SN.anim!==id) return; const e=D?clamp((now-t0)/D,0,1):1, q=e<.5?4*e*e*e:1-Math.pow(-2*e+2,3)/2;
     scrollTo({top:from+(to-from)*q,behavior:'instant'}); if(e<1) requestAnimationFrame(step); else { SN.anim=null; SN.lock=false; SN.quietUntil=performance.now()+90; } };
   requestAnimationFrame(step); }
-function snapStep(dir){ const k=wayK(), n=WS.stops.length-1;
+function snapStep(dir){ const n=WS.stops.length-1, k=wayK();
   if(dir>0&&k>=n-.02) return false; if(dir<0&&k<=.02) return false;
-  const tgt=k<-.02?0:k>n+.02?n:dir>0?Math.floor(k+.02)+1:Math.ceil(k-.02)-1; snapTo(tgt); return true; }
+  let tgt;
+  if(k<-.02) tgt=0;                              /* entering from above → land on the overview first */
+  else if(k>n+.02) tgt=n;                        /* entering from below → land on the last stop first */
+  else tgt=clamp(Math.round(k)+dir,0,n);         /* settled on a stop → move exactly one, never two */
+  snapTo(tgt); return true; }
 function initSnap(){
   addEventListener('wheel',e=>{ if(e.ctrlKey) return; const dir=Math.sign(e.deltaY); if(!dir||!snapZone(dir)) return;
     const k=wayK(), n=WS.stops.length-1; if((dir>0&&k>=n-.02)||(dir<0&&k<=.02&&scrollY>=WS.secTop-2)){ return; }
@@ -3537,40 +3558,38 @@ const OMFACTS=[
   'Tip: tap any car in the showroom to spec it live.',
   'I’m awake at 2am — ask me before you drive down.'
 ];
-const NM={items:[],mx:innerWidth*.3,my:innerHeight*.5,cx:0,cy:0,ex:999,ey:999,bw:300,bubI:-1,bubAt:0,bubShown:0,bubSticky:false,laserAt:0,laserFire:0,vis:false,exited:false};
+const NM={items:[],mx:innerWidth*.3,my:innerHeight*.5,cx:0,cy:0,ex:999,ey:999,bw:300,fi:-1,spawnAt:0,vis:false,exited:false,slots:[],wx:0,wy:0,twx:0,twy:0,wAt:0,wrange:60};
 function buildNums(){ const orb=$id('omOrb'); if(!orb) return;
-  NM.p1=$id('omP1'); NM.bub=$id('omBub'); NM.bubT=$id('omBubT'); NM.laser=$id('omLaser'); NM.laserL=$id('omLaserL');
+  NM.orb=orb; NM.p1=$id('omP1'); NM.bubs=$id('omBubs');
   const open=()=>{ const bot=$id('bot'); if(bot) bot.click(); };
-  orb.addEventListener('click',open); if(NM.bub) NM.bub.addEventListener('click',open);
-  const ask=$id('omAsk'); if(ask) ask.addEventListener('click',open);
+  orb.addEventListener('click',open); const ask=$id('omAsk'); if(ask) ask.addEventListener('click',open);
   addEventListener('pointermove',e=>{ NM.mx=e.clientX; NM.my=e.clientY; },{passive:true});
+  if(NM.bubs){ for(let i=0;i<3;i++){ const b=document.createElement('button'); b.type='button'; b.className='om-bub s'+i; b.setAttribute('aria-label','Ask MEDO about this'); b.addEventListener('click',open); NM.bubs.appendChild(b); NM.slots.push({el:b,until:0,busy:false,sticky:false}); } }
   const h=$id('omH'); if(h&&!h.dataset.split){ h.dataset.split='1'; const words=h.textContent.trim().split(/\s+/);
     h.innerHTML=words.map((w,i)=>'<span class="ow'+(i>=6?' g':'')+'" style="transition-delay:'+(i*0.06).toFixed(2)+'s">'+esc(w)+'</span>').join(' '); }
-  NM.bubAt=performance.now()+2600; NM.laserAt=performance.now()+3200;
+  NM.spawnAt=performance.now()+1300; NM.wAt=performance.now()+1500;
   layoutNums(); }
-function layoutNums(){ const orb=$id('omOrb'); if(!orb) return; const r=orb.getBoundingClientRect(); NM.cx=r.left+r.width/2; NM.cy=r.top+r.height/2; NM.bw=r.width||300; }
-function omBubble(txt,sticky){ if(!NM.bub) return; NM.bubT.textContent=txt; NM.bub.classList.add('on'); NM.bubShown=performance.now(); NM.bubSticky=!!sticky; }
+function layoutNums(){ const orb=$id('omOrb'); if(!orb) return; const r=orb.getBoundingClientRect(); NM.cx=r.left+r.width/2; NM.cy=r.top+r.height/2; NM.bw=r.width||300; NM.wrange=isMob?30:Math.min(72,NM.bw*.18); }
+function omSpawn(now,txt,sticky){ const s=NM.slots.find(s=>!s.busy); if(!s) return false; s.busy=true; s.sticky=!!sticky; s.until=now+(sticky?18000:8400);
+  s.el.innerHTML='<span class="bk">MEDO</span>'+esc(txt); void s.el.offsetWidth; s.el.classList.add('on'); return true; }
 function updateNums(){ const r=FR.numbers, H=innerHeight; const vis=!!r&&r.bottom>60&&r.top<H-60;
   if(vis&&!NM.vis){ NM.vis=true; const h=$id('omH'); if(h) h.classList.add('in'); }
-  if(!vis){ NM.vis=false; if(NM.laser) NM.laser.classList.remove('fire'); return; }
-  const orb=$id('omOrb'); if(orb){ const rr=orb.getBoundingClientRect(); NM.cx=rr.left+rr.width/2; NM.cy=rr.top+rr.height/2; NM.bw=rr.width||NM.bw; }
   const now=performance.now();
+  NM.slots.forEach(s=>{ if(s.busy&&now>s.until){ s.el.classList.remove('on'); s.busy=false; s.sticky=false; } });   /* retire the oldest once its time is up */
+  if(!vis){ NM.vis=false; return; }
+  const orb=NM.orb; if(orb){ const rr=orb.getBoundingClientRect(); NM.cx=rr.left+rr.width/2; NM.cy=rr.top+rr.height/2; NM.bw=rr.width||NM.bw; }
   const rad=Math.max(150,NM.bw*.7), dx=clamp((NM.mx-NM.cx)/rad,-1,1), dy=clamp((NM.my-NM.cy)/rad,-1,1);
   const er=NM.bw*.05, tx=+(dx*er).toFixed(1), ty=+(dy*er).toFixed(1);
   if(tx!==NM.ex||ty!==NM.ey){ NM.ex=tx; NM.ey=ty; if(NM.p1) NM.p1.style.transform='translate('+tx+'px,'+ty+'px)'; }
-  if(orb){ orb.style.setProperty('--ox',(dx*8).toFixed(1)+'px'); orb.style.setProperty('--oy',(dy*6).toFixed(1)+'px'); }
-  if(RM||!NM.bub) return;
-  /* one "before you go" bubble as the section scrolls out, re-armed when it comes back */
-  if(r.bottom<H*.5&&!NM.exited){ NM.exited=true; omBubble('Leaving already? Ask me one thing before you go →',true); }
-  else if(r.top>H*.25&&NM.exited){ NM.exited=false; if(NM.bubSticky){ NM.bub.classList.remove('on'); NM.bubSticky=false; NM.bubAt=now+1500; } }
-  /* a fact / tip bubble every ~5s */
-  const on=NM.bub.classList.contains('on');
-  if(!on&&now>NM.bubAt){ NM.bubI=(NM.bubI+1)%OMFACTS.length; omBubble(OMFACTS[NM.bubI],false); NM.bubAt=now+5200+Math.random()*1400; }
-  else if(on&&!NM.bubSticky&&now-NM.bubShown>4200){ NM.bub.classList.remove('on'); NM.bubAt=now+3600+Math.random()*2200; }
-  /* a laser toward the cursor every 3s */
-  if(now>NM.laserAt&&NM.laserL){ NM.laserAt=now+3000; NM.laserFire=now;
-    NM.laserL.setAttribute('x1',NM.cx.toFixed(0)); NM.laserL.setAttribute('y1',NM.cy.toFixed(0)); NM.laserL.setAttribute('x2',NM.mx.toFixed(0)); NM.laserL.setAttribute('y2',NM.my.toFixed(0)); NM.laser.classList.add('fire'); }
-  if(NM.laserFire&&now-NM.laserFire>420){ NM.laserFire=0; NM.laser.classList.remove('fire'); }
+  /* the orb drifts slowly around its area — a bigger copy of the roaming chatbot */
+  if(!RM){ if(now>NM.wAt){ NM.wAt=now+2600+Math.random()*1900; NM.twx=(Math.random()*2-1)*NM.wrange; NM.twy=(Math.random()*2-1)*NM.wrange*.8; }
+    NM.wx+=(NM.twx-NM.wx)*.012; NM.wy+=(NM.twy-NM.wy)*.012; }
+  if(orb){ orb.style.setProperty('--ox',(NM.wx+dx*7).toFixed(1)+'px'); orb.style.setProperty('--oy',(NM.wy+dy*6).toFixed(1)+'px'); }
+  if(RM||!NM.bubs) return;
+  if(r.bottom<H*.5&&!NM.exited){ NM.exited=true; omSpawn(now,'Leaving already? Ask me one thing before you go →',true); }
+  else if(r.top>H*.25&&NM.exited){ NM.exited=false; }
+  /* a fresh fact / tip every ~2.8s; up to three live on screen at once, each for ~8s */
+  if(now>NM.spawnAt){ NM.fi=(NM.fi+1)%OMFACTS.length; if(omSpawn(now,OMFACTS[NM.fi],false)) NM.spawnAt=now+2800+Math.random()*1500; else NM.spawnAt=now+1100; }
 }
 
 /* ============================================================ 07 · THE SCAN — six checks swept across the car */
@@ -3803,9 +3822,9 @@ const stage=el('b3Stage'), B3=el('b3');
 const DRACO='https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/';
 const CREDIT=(t,a,u)=>({t,a,u});
 const CARS3=[
-  {k:'bolide',n:'Bugatti Bolide',sub:'W16 track car',file:'assets/cars3d/bolide.glb',len:4.76,yaw:0,paint:/Paint_Material/,wheelNode:/^Wheel1A_3D/,base:3600000,w:30,cr:CREDIT('Bugatti Bolide 2024','vecarz','https://sketchfab.com/3d-models/bugatti-bolide-2024-wwwvecarzcom-8a0b3352bacd494d82927aad5ddd05b6')},
-  {k:'gt40',n:'Ford GT40',sub:'Mk II · 1966',file:'assets/cars3d/gt40.glb',len:4.18,yaw:0,paint:/^Paint1Mtl$/,wheel:/^Wheel1Mtl$/,base:420000,w:26,cr:CREDIT('Ford GT40 Mark II','vecarz','https://sketchfab.com/3d-models/ford-gt40-mark-ii-wwwvecarzcom-16e6376958604b3d83b541ee67f4b4c9')},
-  {k:'l037',n:'Lancia 037',sub:'Stradale · 1982',file:'assets/cars3d/lancia037.glb',len:3.92,yaw:0,paint:/^Meshpart3Mtl$/,wheel:/^SsrFormulaSpf1Mtl$/,base:480000,w:24,cr:CREDIT('Lancia 037 Stradale 1978','vecarz','https://sketchfab.com/3d-models/lancia-037-stradale-1978-36f1c5964de14e0088d828e88a3749b9')}
+  {k:'p911',n:'Porsche 911',sub:'992 Turbo S',file:'assets/cars3d/p911.glb',len:4.54,yaw:-90,paint:/^body_main$/,wheel:/^(rim_black|rim_chrome|tires|Discs)$/,rim:/^rim_/,base:152000,w:14,cr:CREDIT('Porsche 911 with interior','n.brizitskaya','https://sketchfab.com/3d-models/porsche-911-with-interior-877b1bc1739f4a2bb65d62fd7ffd9f75')},
+  {k:'f458',n:'Ferrari 458',sub:'Italia · V8',file:'assets/cars3d/f458.glb',len:4.53,yaw:180,paint:/^body$/,wheelNode:/^wheel_(fl|fr|rl|rr)$/,rimNode:/^rim_/,base:139000,w:18,ferrari:true,cr:CREDIT('Ferrari 458 Italia','vicent091036','https://sketchfab.com/vicent091036')},
+  {k:'p1',n:'McLaren P1',sub:'Hybrid hypercar',file:'assets/cars3d/p1.glb',len:4.59,yaw:0,paintMesh:/_Carpaint_0$/,wheelMesh:/^(Rim_.*_Rim_0|Tyre_|Brake_Disk)/,rimMesh:/^Rim_/,base:1150000,w:22,cr:CREDIT('Mclaren P1','vecarz','https://sketchfab.com/3d-models/mclaren-p1-wwwvecarzcom-adae2edc721e4ce7b31c1d06a581e30a')}
 ];
 const PARTS3=[
   {k:'wing',n:'Carbon swan-neck wing',p:6800,w:3,view:[152,17]},
@@ -3826,7 +3845,7 @@ function specLine(){ const c=cur(); if(!c) return 'a build'; return c.n+' '+c.su
 function paintTotals(){ const c=cur(), t=total(); if(c){ tween(el('b3Total'),t.p,money); el('b3Weeks').textContent='≈ '+t.w+' weeks in the bay'; el('b3Car').textContent=c.n+' · '+c.sub; }
   el('b3Cnt').textContent=PARTS3.filter(x=>S3.on[x.k]).length+' fitted'; el('b3PaintN').textContent=PAINT3[S3.paint][0]; el('b3Sel').textContent=c?c.n:'none picked'; }
 let popT=0; function pop(txt,off){ const p=el('b3Pop'); p.textContent=txt; p.classList.toggle('off',!!off); p.classList.add('on'); clearTimeout(popT); popT=setTimeout(()=>p.classList.remove('on'),1600); }
-function credit(){ const c=cur(); el('b3Cred').innerHTML=c?'Model: <a href="'+c.cr.u+'" target="_blank" rel="noopener">'+c.cr.t+'</a> by '+c.cr.a+' · CC BY 4.0':'Models CC BY 4.0: vecarz'; }
+function credit(){ const c=cur(); el('b3Cred').innerHTML=c?'Model: <a href="'+c.cr.u+'" target="_blank" rel="noopener">'+c.cr.t+'</a> by '+c.cr.a+' · CC BY 4.0':'Models CC BY 4.0: n.brizitskaya · vicent091036 · vecarz'; }
 function buildUI(){
   el('b3Cars').innerHTML=CARS3.map((c,i)=>'<button class="b3-car" type="button" data-i="'+i+'" aria-pressed="false" disabled><span>'+c.n+'</span><small>'+c.sub+' · from '+money(c.base)+'</small></button>').join('');
   el('b3Paint').innerHTML=PAINT3.map((c,i)=>'<button class="swb'+(i===0?' on':'')+'" type="button" data-i="'+i+'" style="--c:'+(c[1]||'conic-gradient(#888,#ddd,#888)')+(c[1]?'':';background:conic-gradient(from 40deg,#bbb,#555,#eee,#777,#bbb)')+'" aria-label="'+c[0]+(i?' · +£7,400':' · as built')+'" title="'+c[0]+'"></button>').join('');
