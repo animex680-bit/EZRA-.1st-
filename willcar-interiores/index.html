@@ -1715,7 +1715,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
           <div><span>Representative APR</span><b>9.9%</b></div>
         </div>
         <button class="btn btn-gold btn-block" id="fGo">Check my eligibility — soft search <span class="arr">→</span></button>
-        <p class="fine">Representative example for illustration. Installments subject to approval, 18+ Brazilian residents.</p>
+        <p class="fine">Representative example for illustration. Financing subject to approval, 18+ residents of Brazil.</p>
       </div>
     </div>
   </div>
@@ -2214,7 +2214,7 @@ const REVIEWS=[
   {face:'faces/faces-07.jpg',name:'Devon L.',car:'Galaxie 500 1969 — full interior',date:'Oct 2025',stars:5,text:'Brought them a cabin the mice had lived in. Got back something I would not sell for twice what it cost. Every invoice itemised.'},
   {face:'faces/faces-04.jpg',name:'Noor A.',car:'Escort XR3 1986 — steering & dash',date:'Jan 2026',stars:4,text:'The dash cap took two weeks longer than quoted, but they called every week with an honest update and took something off the bill.'},
 ];
-const DIST=[468,41,6,1,0];
+const DIST=[464,41,8,3,0];
 
 const DONORS=[
   {name:'GR86 shell',img:'../360-remix/assets/upshift-img/car-gr86.jpg',base:14500,accent:'#3f7dff',weeks:22,mat:'#a8a8aa'},
@@ -2602,15 +2602,15 @@ const HS={
 };
 /* what the 360° inspection found at each point on this exact car (r = index into REPORT) */
 const INSPECT={
-  wheel:{s:'Steering',t:'Steering wheel & pedals',r:3,g:'B+',d:'Rim has two hairline cracks at the spokes — recoloured and sealed, not hidden. Pedal rubbers swapped for year-correct ones and it is written on the survey.',m:[['Rim cracks','2, sealed'],['Horn pad','Original'],['Pedal rubbers','New'],['Shroud','Original']],part:4},
-  rearwheel:{s:'Floors',t:'Floors & carpets',r:1,g:'A',d:'Carpet out, floor pan photographed end to end. No rot, one old patch under the rear seat marked on the map, factory loop pile matched from a hidden offcut.',m:[['Floor pan','Solid'],['Old patches','1, marked'],['Pile','Matched'],['Photos','46']],part:6},
-  light:{s:'Dash',t:'Dash, gauges & trim',r:4,g:'A',d:'Dash cap off, gauges out. One crack by the vent, recoloured to factory; every clip and screw bagged and labelled for the refit.',m:[['Cracks','1, repaired'],['Gauges','All working'],['Clips','Bagged'],['Colour','Factory match']],part:11},
-  cockpit:{s:'Seats',t:'Seats, foam & frames',r:5,g:'A',d:'Both front seats stripped to the frame. Springs re-tensioned, one runner weld redone, new foam at factory density and the original stitch pattern copied line for line.',m:[['Frames','2 of 2 sound'],['Welds','1 redone'],['Foam','New, 32D'],['Pattern','Original']],part:10},
-  wing:{s:'Door cards',t:'Door cards & panels',r:0,g:'A',d:'All four door cards off. Boards traced and recut, one water-stained panel replaced, original pleat spacing copied to the millimetre.',m:[['Cards','4 off'],['Boards','Recut'],['Water damage','1 panel'],['Pleats','Factory spacing']],part:null},
-  engine:{s:'Firewall',t:'Firewall & sound deadening',r:2,g:'A−',d:'Firewall pad and tunnel inspected from inside the cabin. Old insulation was oil-soaked — replaced to factory weight so the cabin stays quiet and cool.',m:[['Firewall pad','Replaced'],['Oil damage','Removed'],['Tunnel','Sealed'],['Heat','In spec']],part:9},
-  exhaust:{s:'Tunnel',t:'Firewall & sound deadening',r:2,g:'A−',d:'Transmission tunnel heat shield checked from underneath before the new carpet goes down — no hot spots, no burnt backing.',m:[['Heat shield','OK'],['Hot spots','None'],['Backing','Clean'],['Seal','Pass']],part:null},
-  tail:{s:'Rear trim',t:'Dash, gauges & trim',r:4,g:'A',d:'Rear parcel shelf and C-pillar trims off, sun damage mapped, colour matched to the original from inside a hidden fold.',m:[['Parcel shelf','Recovered'],['Sun damage','Mapped'],['Pillars','2 of 2'],['Colour','Factory']],part:11},
-  diffuser:{s:'Underside',t:'Floors & carpets',r:1,g:'A',d:'Floor drain plugs and seams checked from below so no water ever reaches the new carpet.',m:[['Drain plugs','All present'],['Seams','Sealed'],['Leaks','None'],['Underlay','New']],part:null}
+  wheel:{s:'Steering',t:'Steering wheel & pedals',r:3,g:'B+',d:'Rim, horn pad and spokes checked for cracks; pedal rubbers and column shroud matched to the year.',m:[['Rim cracks logged','✓'],['Rubbers matched','✓'],['Shroud original','✓'],['Logged','Photos']],part:4},
+  rearwheel:{s:'Floors',t:'Floors & carpets',r:1,g:'A',d:'Carpet out, floor pan photographed. Rust and old repairs marked, sound deadening measured, factory pile and colour matched from a hidden offcut.',m:[['Floor pan photographed','✓'],['Rust marked','✓'],['Pile matched','✓'],['Logged','Photos']],part:6},
+  light:{s:'Dash',t:'Dash, gauges & trim',r:4,g:'A',d:'Dash cap, glovebox and gauge surround removed and photographed. Cracks mapped, trim colour matched, every clip and screw bagged and labelled.',m:[['Cracks mapped','✓'],['Colour matched','✓'],['Hardware bagged','✓'],['Logged','Photos']],part:11},
+  cockpit:{s:'Seats',t:'Seats, foam & frames',r:5,g:'A',d:'Seats stripped to the frame. Springs, welds and runners tested, foam density measured, original stitch pattern photographed before a thread goes in.',m:[['Frames tested','✓'],['Foam measured','✓'],['Pattern photographed','✓'],['Logged','Photos']],part:10},
+  wing:{s:'Door',t:'Door cards & panels',r:0,g:'A',d:'Every door card and side panel off. Boards checked for water damage, clips counted, original pattern traced before anything is cut.',m:[['Boards traced','✓'],['Water damage marked','✓'],['Clips counted','✓'],['Logged','Photos']],part:null},
+  engine:{s:'Firewall',t:'Firewall & sound deadening',r:2,g:'A−',d:'Firewall pad, bulkhead and transmission tunnel inspected for heat and oil damage. Insulation weighed and replaced to factory spec.',m:[['Heat damage logged','✓'],['Insulation spec','✓'],['Tunnel sealed','✓'],['Logged','Photos']],part:9},
+  exhaust:{s:'Firewall',t:'Firewall & sound deadening',r:2,g:'A−',d:'Firewall pad, bulkhead and transmission tunnel inspected for heat and oil damage. Insulation weighed and replaced to factory spec.',m:[['Heat damage logged','✓'],['Insulation spec','✓'],['Tunnel sealed','✓'],['Logged','Photos']],part:null},
+  tail:{s:'Dash',t:'Dash, gauges & trim',r:4,g:'A',d:'Dash cap, glovebox and gauge surround removed and photographed. Cracks mapped, trim colour matched, every clip and screw bagged and labelled.',m:[['Cracks mapped','✓'],['Colour matched','✓'],['Hardware bagged','✓'],['Logged','Photos']],part:11},
+  diffuser:{s:'Floors',t:'Floors & carpets',r:1,g:'A',d:'Carpet out, floor pan photographed. Rust and old repairs marked, sound deadening measured, factory pile and colour matched from a hidden offcut.',m:[['Floor pan photographed','✓'],['Rust marked','✓'],['Pile matched','✓'],['Logged','Photos']],part:null}
 };
 
 /* pick the smallest frame set that still covers the box at this screen's pixel density */
@@ -2887,7 +2887,7 @@ function openPD(key,s,h){
     '<a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="'+waLink('Hi, I\'m interested in the '+P.brand+' '+P.name+' ('+fmt(P.price)+'). My car is: ')+'">Ask</a>'; }
   else { pp.hidden=true; pp.innerHTML=''; }
   $id('pdBody').innerHTML='<p class="kick">interior survey · check 0'+(I.r+1)+' of 06</p><h3 id="pdH">'+I.t+'</h3>'+
-    '<div class="pdg"><span class="tag ok">Grade '+I.g+'</span><span>911 GT3 RS · 3,210 mi · '+REPORT[I.r].m[0]+'</span></div><p>'+I.d+'</p>'+
+    '<div class="pdg"><span class="tag ok">Grade '+I.g+'</span><span>Opala SS 1976 · '+REPORT[I.r].m[0]+'</span></div><p>'+I.d+'</p>'+
     '<div class="pdspecs">'+I.m.map(x=>'<div><small>'+x[0]+'</small><b>'+x[1]+'</b></div>').join('')+'</div>'+
     '<div class="pdacts"><button class="btn btn-gold btn-sm" data-pd="sheet">This car’s specs &amp; monthly</button><button class="btn btn-line btn-sm" data-pd="report">All six checks</button></div>';
   $id('pd').classList.add('open'); $id('pd').setAttribute('aria-hidden','false'); lockOn();
