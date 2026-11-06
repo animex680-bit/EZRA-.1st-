@@ -3836,9 +3836,9 @@ const stage=el('b3Stage'), B3=el('b3');
 const DRACO='https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/';
 const CREDIT=(t,a,u)=>({t,a,u});
 const CARS3=[
-  {k:'p911',n:'Porsche 911',sub:'992 Turbo S',file:'assets/cars3d/p911.glb',len:4.54,yaw:-90,paint:/^body_main$/,wheel:/^(rim_black|rim_chrome|tires|Discs)$/,rim:/^rim_/,base:152000,w:14,cr:CREDIT('Porsche 911 with interior','n.brizitskaya','https://sketchfab.com/3d-models/porsche-911-with-interior-877b1bc1739f4a2bb65d62fd7ffd9f75')},
-  {k:'f458',n:'Ferrari 458',sub:'Italia · V8',file:'assets/cars3d/f458.glb',len:4.53,yaw:180,paint:/^body$/,wheelNode:/^wheel_(fl|fr|rl|rr)$/,rimNode:/^rim_/,base:139000,w:18,ferrari:true,cr:CREDIT('Ferrari 458 Italia','vicent091036','https://sketchfab.com/vicent091036')},
-  {k:'p1',n:'McLaren P1',sub:'Hybrid hypercar',file:'assets/cars3d/p1.glb',len:4.59,yaw:0,paintMesh:/_Carpaint_0$/,wheelMesh:/^(Rim_.*_Rim_0|Tyre_|Brake_Disk)/,rimMesh:/^Rim_/,base:1150000,w:22,cr:CREDIT('Mclaren P1','vecarz','https://sketchfab.com/3d-models/mclaren-p1-wwwvecarzcom-adae2edc721e4ce7b31c1d06a581e30a')}
+  {k:'p911',n:'Porsche 911',sub:'992 Turbo S',file:'assets/cars3d/p911.glb',kb:2736,len:4.54,yaw:-90,paint:/^body_main$/,wheel:/^(rim_black|rim_chrome|tires|Discs)$/,rim:/^rim_/,base:152000,w:14,cr:CREDIT('Porsche 911 with interior','n.brizitskaya','https://sketchfab.com/3d-models/porsche-911-with-interior-877b1bc1739f4a2bb65d62fd7ffd9f75')},
+  {k:'f458',n:'Ferrari 458',sub:'Italia · V8',file:'assets/cars3d/f458.glb',kb:1642,len:4.53,yaw:180,paint:/^body$/,wheelNode:/^wheel_(fl|fr|rl|rr)$/,rimNode:/^rim_/,base:139000,w:18,ferrari:true,cr:CREDIT('Ferrari 458 Italia','vicent091036','https://sketchfab.com/vicent091036')},
+  {k:'p1',n:'McLaren P1',sub:'Hybrid hypercar',file:'assets/cars3d/p1.glb',kb:1900,len:4.59,yaw:0,paintMesh:/_Carpaint_0$/,wheelMesh:/^(Rim_.*_Rim_0|Tyre_|Brake_Disk)/,rimMesh:/^Rim_/,base:1150000,w:22,cr:CREDIT('Mclaren P1','vecarz','https://sketchfab.com/3d-models/mclaren-p1-wwwvecarzcom-adae2edc721e4ce7b31c1d06a581e30a')}
 ];
 const PARTS3=[
   {k:'wing',n:'Carbon swan-neck wing',p:6800,w:3,view:[152,17]},
@@ -3884,7 +3884,7 @@ buildUI();
 window.__b3={state:()=>({lost:S3.lost||0,ready:S3.ready,loaded:S3.loaded,err:S3.err,sel:S3.sel,mode:S3.mode,busy:S3.busy,paint:S3.paint,wheel:S3.wheel,on:{...S3.on},total:total().p,az:Math.round(S3.az),cars:api?api.debug():null}),toggle,pick:i=>api&&api.pick(i),back:()=>api&&api.back(),look:(a,e)=>api&&api.look(a,e),meshes:i=>api&&api.meshes(i)};
 
 let started=false;
-new IntersectionObserver(([e],o)=>{ if(e.isIntersecting&&!started){ started=true; o.disconnect(); boot().catch(fail); } },{rootMargin:'160% 0px'}).observe(stage);
+new IntersectionObserver(([e],o)=>{ if(e.isIntersecting&&!started){ started=true; o.disconnect(); boot().catch(fail); } },{rootMargin:'300% 0px'}).observe(stage);
 function fail(err){ console.warn('3D showroom:',err&&err.message||err); S3.err=String(err&&err.message||err);
   const L=el('b3Load'); L.classList.remove('gone'); L.innerHTML='<div><img src="assets/pics/pics-26.jpg" alt="" style="max-width:min(560px,80%);margin:0 auto 14px;border-radius:16px"><b style="font-size:30px">Let us design it with you</b>The 3D showroom couldn’t load here — call and we’ll walk you through it.</div>'; }
 
@@ -4141,16 +4141,16 @@ async function boot(){
   function render(){ R.render(scene,cam); }
   kick();
 
-  /* ---------- load the six, one after another; each rolls into its bay as it arrives ---------- */
-  const order=CARS3.map((_,i)=>i); let first=true;
-  for(const i of order){ const cfg=CARS3[i];
-    try{ const gltf=await new Promise((res,rej)=>loader.load(cfg.file,res,x=>{ if(x.total){ prog[i]=x.loaded/x.total; pct(); } },rej));
-      prog[i]=1; pct(); const o=prep(cfg,gltf,i); S3.loaded++;
-      const b=el('b3Cars').children[i]; b.disabled=false;
-      enter(o,first?200:0);
-      if(first){ first=false; S3.ready=true; el('b3Load').classList.add('gone'); }
-    }catch(err){ console.warn('showroom: '+cfg.k+' failed',err&&err.message||err); prog[i]=1; pct(); const b=el('b3Cars').children[i]; b.querySelector('small').textContent='unavailable'; }
-  }
+  /* ---------- load the cars: smallest file first so one appears fast, then the rest in parallel ---------- */
+  const order=CARS3.map((_,i)=>i).sort((a,b)=>(CARS3[a].kb||9999)-(CARS3[b].kb||9999));
+  const loadOne=i=>new Promise(res=>loader.load(CARS3[i].file,g=>res(g),x=>{ if(x.total){ prog[i]=x.loaded/x.total; pct(); } },e=>res(e instanceof Error?e:new Error(String(e)))));
+  const show=(i,gltf,delay)=>{ if(gltf instanceof Error){ console.warn('showroom: '+CARS3[i].k+' failed',gltf.message); prog[i]=1; pct(); const b=el('b3Cars').children[i]; if(b){ const s=b.querySelector('small'); if(s) s.textContent='unavailable'; } return; }
+    prog[i]=1; pct(); const o=prep(CARS3[i],gltf,i); S3.loaded++; const b=el('b3Cars').children[i]; if(b) b.disabled=false; enter(o,delay); };
+  const reveal=()=>{ if(!S3.ready&&S3.loaded){ S3.ready=true; el('b3Load').classList.add('gone'); } };
+  /* the lightest car, awaited alone, hides the loader the instant it lands */
+  show(order[0], await loadOne(order[0]), 200); reveal();
+  /* everything else at once — each rolls into its bay as it arrives */
+  await Promise.all(order.slice(1).map(async i=>{ show(i, await loadOne(i), 0); reveal(); }));
   if(!S3.loaded) throw new Error('no cars loaded');
 }
 </script>
