@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
-<head><meta name="build" content="6315f84655b5">
+<head><meta name="build" content="a22be0bd65ce">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Will Car Interiores — Classic car interior restoration, up to 1996.</title>
@@ -1482,6 +1482,13 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   .b3-pick{top:14px}
 }
 @media (prefers-reduced-data:reduce){ .b3-poster{opacity:.8} }
+
+/* ===== willcar content ===== */
+.car-media{aspect-ratio:4/3}
+.car-cr{font-size:10px;line-height:1.35;color:var(--dim);margin-top:3px;letter-spacing:.01em}
+.sh-cr{grid-column:1/-1;font-size:11px;color:var(--dim);margin-top:4px}
+/* scan pins ride the photo's own 4:3 frame, not the wider screen box it's letterboxed in */
+.sc-pins{inset:0 auto 0 50%;height:100%;aspect-ratio:4/3;max-width:100%;translate:-50% 0}
 </style>
 </head>
 <body>
@@ -1638,13 +1645,13 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   <div class="wrap">
     <div class="sec-head rv">
       <p class="kick">On the bench now</p>
-      <h2 class="h2">Pick a car. <em>Read its report.</em></h2>
-      <p class="lede">Tap any car for full specs, its condition grade and your monthly price. Prices include the inspection, a fresh service and 12 months’ warranty.</p>
+      <h2 class="h2">Real cabins. <em>Read every report.</em></h2>
+      <p class="lede">Classics on the bench right now, and the last ones out the door. Tap any car for the job, the materials, its survey grade and what the work costs per month. Every price includes the survey, the materials and 12 months’ warranty on the stitching.</p>
     </div>
     <div class="toolbar">
       <div class="chips" id="condChips" role="group" aria-label="Filter stock"></div>      <label class="sr" for="sortSel">Sort</label>
       <select class="sel" id="sortSel">
-        <option value="feat">Featured</option><option value="plo">Price: low to high</option><option value="phi">Price: high to low</option><option value="mi">Lowest mileage</option><option value="hp">Most powerful</option>
+        <option value="feat">Featured</option><option value="plo">Price: low to high</option><option value="phi">Price: high to low</option><option value="mi">Quickest job</option><option value="hp">Oldest first</option>
       </select>
     </div>
     <div class="rail" id="stockRail" aria-live="polite"></div>
@@ -1698,24 +1705,24 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
         <p class="kick">Pay in installments, in-house</p>
         <h2 class="h2">Turn the dial. <em>Feel the monthly.</em></h2>
       </div>
-      <p class="lede" style="max-width:44ch">Pick a car, or drag the ring to any amount — it snaps to the cars we have. The color tells you how it will sit month to month. Checking is a soft search only.</p>
+      <p class="lede" style="max-width:44ch">Pick a job from the bench, or drag the ring to your own quote — it snaps to the cabins we’re working on. The color tells you how it will sit month to month. Checking is a soft search only.</p>
     </div>
     <div class="fgrid">
       <div class="dialwrap rv">
-        <div class="fdial" id="fdial" role="slider" tabindex="0" aria-label="Amount to finance" aria-valuemin="10000" aria-valuemax="400000">
+        <div class="fdial" id="fdial" role="slider" tabindex="0" aria-label="Amount to finance" aria-valuemin="5000" aria-valuemax="100000">
           <svg viewBox="0 0 400 400" id="fdialSvg"></svg>
-          <div class="dc"><div class="k" id="fdK">BMW M4 Competition</div><div class="v" id="fdV">R$96,000</div><div class="h">↻ Drag the ring</div></div>
+          <div class="dc"><div class="k" id="fdK">Ford Galaxie 500</div><div class="v" id="fdV">R$48,000</div><div class="h">↻ Drag the ring</div></div>
         </div>
-        <div class="chips fcars" id="fCars" role="group" aria-label="Pick a car"></div>
+        <div class="chips fcars" id="fCars" role="group" aria-label="Pick a job"></div>
       </div>
       <div class="fout rv" aria-live="polite">
         <div><div class="fbig"><span id="fMo">R$0</span><small> /mo</small></div></div>
         <div class="fzone" id="fZone"><i></i><span id="fZoneL">Comfortable</span></div>
         <div class="fstack"><i class="s1" id="fs1"></i><i class="s2" id="fs2"></i><i class="s3" id="fs3"></i><i class="s4" id="fs4"></i></div>
-        <div class="flegend"><span><i style="background:#7d7464"></i>Deposit <b id="fl1">R$0</b></span><span><i style="background:var(--gold)"></i>Quote <b id="fl2">R$0</b></span><span><i style="background:var(--fz)"></i>Borrowed <b id="fl3">R$0</b></span><span><i style="background:#e0614e"></i>Interest <b id="fl4">R$0</b></span></div>
+        <div class="flegend"><span><i style="background:#7d7464"></i>Deposit <b id="fl1">R$0</b></span><span><i style="background:var(--gold)"></i>Up front <b id="fl2">R$0</b></span><span><i style="background:var(--fz)"></i>Borrowed <b id="fl3">R$0</b></span><span><i style="background:#e0614e"></i>Interest <b id="fl4">R$0</b></span></div>
         <div class="fl"><div class="fin-row"><span>Deposit</span><b id="fDepV"></b></div><input class="rng" id="fDep" type="range" min="0" max="50" step="5" value="20" aria-label="Deposit percent"></div>
         <div class="frow2">
-          <label class="fl"><span>Quote value (R$)</span><input class="inp" id="fPx" inputmode="numeric" placeholder="0" autocomplete="off"></label>
+          <label class="fl"><span>Paid up front (R$)</span><input class="inp" id="fPx" inputmode="numeric" placeholder="0" autocomplete="off"></label>
           <div class="fl"><span>Term</span><div class="seg" id="fTerm"></div></div>
         </div>
         <button class="fresp" id="fResp" type="button" aria-pressed="false" hidden><i>✓</i><span id="fRespT"></span></button>
@@ -1805,11 +1812,11 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
     </div>
     <div class="scan-car" id="scanCar">
       <div class="scan-scr">
-        <img loading="lazy" class="sc-a" src="../360-remix/assets/orbit/rq.webp" alt="Porsche 911 GT3 RS on the scan bay" decoding="async">
-        <img loading="lazy" class="sc-b" id="scB" src="../360-remix/assets/orbit/rq.webp" alt="" aria-hidden="true" decoding="async">
+        <img loading="lazy" class="sc-a" src="../360-remix/assets/willcar/galaxie-ltd.webp" alt="1969 Ford Galaxie 500 LTD interior on the survey bench" decoding="async">
+        <img loading="lazy" class="sc-b" id="scB" src="../360-remix/assets/willcar/galaxie-ltd.webp" alt="" aria-hidden="true" decoding="async">
         <i class="sc-line" id="scLine"></i>
         <div class="sc-pins" id="scPins"></div>
-        <span class="sc-hud">BAY 02 · SCAN <b id="scPct">000</b>%</span>
+        <span class="sc-hud">BENCH 02 · SURVEY <b id="scPct">000</b>%</span>
         <span class="sc-grade" id="scGrade">GRADE <b>—</b></span>
       </div>
     </div>
@@ -1828,9 +1835,9 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <section class="sec light" id="value">
   <div class="wrap">
     <div class="sec-head rv">
-      <p class="kick">Sell or quote</p>
-      <h2 class="h2">What’s your car worth? <em>Know in 30 seconds.</em></h2>
-      <p class="lede">No email, no callback wall — a real range, straight away. Bring the car in and we’ll honour it if it matches the description.</p>
+      <p class="kick">Interior quote</p>
+      <h2 class="h2">What will your interior cost? <em>Know in 30 seconds.</em></h2>
+      <p class="lede">No email, no callback wall — a real range, straight away. Send a few photos and we confirm it the same day; the number doesn’t move when the car arrives.</p>
     </div>
     <div class="td-grid">
       <div class="td-form rv">
@@ -1840,13 +1847,13 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
         </div>
         <div class="f2">
           <label class="fl"><span>Year</span><select class="inp" id="tdYear"></select></label>
-          <div class="fl"><span>Mileage</span>
-            <div class="mi-row"><b id="tdMiOut">32,000 mi</b></div>
-            <input class="rng" id="tdMi" type="range" min="0" max="160000" step="1000" value="32000" aria-label="Mileage">
+          <div class="fl"><span>How much of the cabin</span>
+            <div class="mi-row"><b id="tdMiOut">Full interior</b></div>
+            <input class="rng" id="tdMi" type="range" min="0" max="4" step="1" value="3" aria-label="How much of the cabin">
           </div>
         </div>
-        <div class="fl"><span>Condition</span><div class="seg" id="tdCond"></div><p class="cond-d" id="tdCondD"></p></div>
-        <div class="fl"><span>Service history</span><div class="seg" id="tdHist"></div></div>
+        <div class="fl"><span>Condition today</span><div class="seg" id="tdCond"></div><p class="cond-d" id="tdCondD"></p></div>
+        <div class="fl"><span>Material</span><div class="seg" id="tdHist"></div></div>
       </div>
       <div class="td-result rv" aria-live="polite">
         <p class="lbl">Your indicative range</p>
@@ -1854,12 +1861,12 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
         <p class="td-for" id="tdFor"></p>
         <div class="bars" id="tdBars"></div>
         <div class="td-acts">
-          <button class="btn btn-gold btn-block" id="tdLock">Lock in this price <span class="arr">→</span></button>
-          <button class="btn btn-line btn-block" id="tdToFin">Use it as a deposit on finance</button>
+          <button class="btn btn-gold btn-block" id="tdLock">Confirm this quote <span class="arr">→</span></button>
+          <button class="btn btn-line btn-block" id="tdToFin">Pay it in installments</button>
         </div>
         <div class="td-trust">
-          <span><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Paid same day by bank transfer</span>
-          <span><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>We settle any outstanding finance</span>
+          <span><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Quoted from photos, same day</span>
+          <span><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>The price holds when the car arrives</span>
           <span><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Non-runners and projects welcome</span>
         </div>
       </div>
@@ -2148,33 +2155,23 @@ const canHover=matchMedia('(hover:hover) and (pointer:fine)').matches;
 
 /* ---------- DATA ---------- */
 const CARS=[
-  {file:'pics/pics-54.jpg',brand:'Porsche',model:'911 Carrera S',year:'2023',hp:'473',zero:'3.2s',top:'191',price:'R$142,000',status:'avail',accent:'#e6b422',cond:'used',mi:'9,400',own:'2 owners'},
-  {file:'pics/pics-35.jpg',brand:'Lamborghini',model:'Urus S',year:'2024',hp:'657',zero:'3.5s',top:'190',price:'R$229,000',status:'avail',accent:'#8bd44a',cond:'new',mi:'120',own:'Delivery miles'},
-  {file:'pics/pics-23.jpg',brand:'BMW M',model:'M4 Competition',year:'2024',hp:'523',zero:'3.4s',top:'180',price:'R$96,000',status:'avail',accent:'#3f7dff',cond:'used',mi:'6,180',own:'1 owner'},
-  {file:'pics/pics-30.jpg',brand:'Porsche',model:'911 GT3 RS',year:'2023',hp:'518',zero:'3.0s',top:'184',price:'R$218,000',status:'avail',accent:'#e6b422',cond:'used',mi:'3,210',own:'1 owner'},
-  {file:'pics/pics-28.jpg',brand:'Ford',model:'Mustang GT',year:'2023',hp:'486',zero:'4.2s',top:'166',price:'R$68,500',status:'avail',accent:'#ff6a2b',cond:'used',mi:'11,900',own:'1 owner'},
-  {file:'pics/pics-43.jpg',brand:'House build',model:'DaVinci Ltd',year:'2025',hp:'900',zero:'2.6s',top:'217',price:'P.O.A.',status:'avail',accent:'#9070d8',cond:'build',mi:'340',own:'Built in our bay'},
-  {file:'pics/pics-42.jpg',brand:'Porsche',model:'911 GT3',year:'2023',hp:'503',zero:'3.2s',top:'197',price:'R$168,000',status:'avail',accent:'#d8a534',cond:'used',mi:'4,650',own:'1 owner'},
-  {file:'pics/pics-33.jpg',brand:'Koenigsegg',model:'Jesko',year:'2024',hp:'1280',zero:'2.5s',top:'300',price:'P.O.A.',status:'avail',accent:'#ff9534',cond:'new',mi:'60',own:'Delivery miles'},
-  {file:'pics/pics-53.jpg',brand:'Dodge',model:'Challenger Hellcat',year:'2022',hp:'717',zero:'3.6s',top:'199',price:'R$92,000',status:'avail',accent:'#e5323a',cond:'used',mi:'18,300',own:'2 owners'},
-  {file:'pics/pics-44.jpg',brand:'Porsche',model:'911 GT3 R',year:'2023',hp:'557',zero:'3.0s',top:'190',price:'R$398,000',status:'avail',accent:'#d8a534',cond:'build',mi:'—',own:'Race build'},
-  {file:'pics/pics-36.jpg',brand:'Lamborghini',model:'Urus',year:'2024',hp:'657',zero:'3.5s',top:'190',price:'R$214,000',status:'avail',accent:'#8bd44a',cond:'used',mi:'7,820',own:'1 owner'},
-  {file:'pics/pics-41.jpg',brand:'Pininfarina',model:'Battista',year:'2024',hp:'1877',zero:'1.9s',top:'217',price:'P.O.A.',status:'avail',accent:'#9070d8',cond:'new',mi:'15',own:'Delivery miles'},
-  {file:'pics/pics-55.jpg',brand:'Concept',model:'Violet',year:'2025',hp:'830',zero:'2.7s',top:'211',price:'R$900,000',status:'avail',accent:'#9070d8',cond:'build',mi:'210',own:'Built in our bay'},
-  {file:'pics/pics-40.jpg',brand:'Mercedes-AMG',model:'E63 S',year:'2023',hp:'603',zero:'3.3s',top:'186',price:'R$118,000',status:'avail',accent:'#3f7dff',cond:'used',mi:'12,400',own:'1 owner'},
-  {file:'pics/pics-47.jpg',brand:'Bentley',model:'Bentayga',year:'2024',hp:'542',zero:'4.4s',top:'180',price:'R$196,000',status:'avail',accent:'#d8a534',cond:'new',mi:'90',own:'Delivery miles'},
-  {file:'pics/pics-22.jpg',brand:'Nissan',model:'GT-R',year:'2022',hp:'565',zero:'2.9s',top:'196',price:'R$108,000',status:'avail',accent:'#e5323a',cond:'used',mi:'16,050',own:'2 owners'},
-  {file:'pics/pics-45.jpg',brand:'Rolls-Royce',model:'Ghost',year:'2024',hp:'612',zero:'4.6s',top:'155',price:'R$174,000',status:'avail',accent:'#d8a534',cond:'used',mi:'5,300',own:'1 owner'},
-  {file:'pics/pics-18.jpg',brand:'House build',model:'Night Runner',year:'2024',hp:'670',zero:'3.0s',top:'205',price:'R$188,000',status:'avail',accent:'#3f7dff',cond:'build',mi:'1,120',own:'Built in our bay'},
-  {file:'pics/pics-50.jpg',brand:'House build',model:'Studio Series',year:'2025',hp:'720',zero:'2.8s',top:'212',price:'R$240,000',status:'avail',accent:'#9070d8',cond:'build',mi:'480',own:'Built in our bay'},
-  {file:'pics/pics-48.jpg',brand:'Rolls-Royce',model:'Phantom',year:'2023',hp:'563',zero:'5.1s',top:'155',price:'R$368,000',status:'avail',accent:'#9070d8',cond:'used',mi:'8,940',own:'1 owner'},
-  {file:'pics/pics-39.jpg',brand:'McLaren',model:'Artura',year:'2024',hp:'671',zero:'3.0s',top:'205',price:'R$225,000',status:'avail',accent:'#ff6a2b',cond:'new',mi:'240',own:'Delivery miles'},
-  {file:'pics/pics-24.jpg',brand:'BMW',model:'M5 “Art”',year:'2024',hp:'617',zero:'3.3s',top:'190',price:'R$148,000',status:'avail',accent:'#3f7dff',cond:'build',mi:'2,760',own:'Built in our bay'},
-  {file:'pics/pics-52.jpg',brand:'Shelby',model:'GT500',year:'2022',hp:'760',zero:'3.3s',top:'180',price:'R$115,000',status:'sold',accent:'#e5323a',cond:'used',mi:'14,200',own:'2 owners'},
-  {file:'pics/pics-38.jpg',brand:'Ford',model:'Mustang GT',year:'2023',hp:'486',zero:'4.2s',top:'166',price:'R$64,500',status:'sold',accent:'#ff6a2b',cond:'used',mi:'22,750',own:'3 owners'},
+  {"file":"willcar/fusca-1966.webp","brand":"Volkswagen","model":"Fusca 1300","year":"1966","job":"Dash, wheel & seats","mat":"Red vinyl · basket weave","col":"Rubi red","wk":5,"price":"R$14,800","status":"avail","accent":"#c0392b","cond":"seats","own":"Owner since 1989","cr":"Niels de Wit · CC BY 2.0","hp":5,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/maverick-1975.webp","brand":"Ford","model":"Maverick GT","year":"1975","job":"Full interior","mat":"Factory-pattern vinyl","col":"Avocado green","wk":9,"price":"R$31,500","status":"avail","accent":"#7a8a3a","cond":"full","own":"Second owner","cr":"dave_7 · CC BY 2.0","hp":9,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/chevette-1980.webp","brand":"Chevrolet","model":"Chevette","year":"1980","job":"Seats & headliner","mat":"Cipatex vinyl","col":"Sand beige","wk":4,"price":"R$12,900","status":"avail","accent":"#b49a6a","cond":"seats","own":"Owner since 1994","cr":"dave_7 · CC BY 2.0","hp":4,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/galaxie-1964.webp","brand":"Ford","model":"Galaxie 500","year":"1964","job":"Full interior & dash","mat":"Two-tone vinyl · wood dash","col":"Oxblood & tan","wk":11,"price":"R$48,000","status":"avail","accent":"#8a2a2a","cond":"full","own":"Family car since new","cr":"Pandamera1 · CC BY 2.0","hp":11,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/brasilia-1979.webp","brand":"Volkswagen","model":"Brasília","year":"1979","job":"Full interior","mat":"Monochrome vinyl","col":"Chestnut brown","wk":7,"price":"R$19,800","status":"avail","accent":"#7b4a2c","cond":"full","own":"Owner since 2003","cr":"B.corrales86 · CC BY-SA 4.0","hp":7,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/dart-1974.webp","brand":"Dodge","model":"Dart Sport","year":"1974","job":"Seats & door cards","mat":"Original-pattern striped cloth","col":"Hang 10 stripe","wk":6,"price":"R$22,400","status":"avail","accent":"#d0a24a","cond":"seats","own":"Third owner","cr":"Pokemonprime · CC BY 4.0","hp":6,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/impala-1964.webp","brand":"Chevrolet","model":"Impala SS","year":"1964","job":"Dash, wheel & gauges","mat":"Restored woodrim · chrome","col":"Black & walnut","wk":6,"price":"R$26,000","status":"avail","accent":"#5a4a3a","cond":"seats","own":"Imported 2011","cr":"Stradablog · CC BY 2.0","hp":6,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/mustang-1966.webp","brand":"Ford","model":"Mustang","year":"1966","job":"Full interior","mat":"Pony-pattern vinyl","col":"Black","wk":8,"price":"R$34,500","status":"avail","accent":"#2a2a2e","cond":"full","own":"Owner since 1998","cr":"aresauburn · CC BY-SA 2.0","hp":8,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/galaxie-ltd.webp","brand":"Ford","model":"Galaxie 500 LTD","year":"1969","job":"Full interior","mat":"Pleated vinyl · new carpets","col":"Signal red","wk":10,"price":"R$44,000","status":"avail","accent":"#b3262b","cond":"full","own":"Owner since 1985","cr":"Packer1028 · CC0","hp":10,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/dart-1966.webp","brand":"Dodge","model":"Dart Wagon","year":"1966","job":"Bench seats & carpets","mat":"Quilted red vinyl","col":"Cardinal red","wk":6,"price":"R$21,600","status":"avail","accent":"#a3202a","cond":"seats","own":"Owner since 2009","cr":"string_bass_dave · CC BY-SA 2.0","hp":6,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/mustang-1971.webp","brand":"Ford","model":"Mustang Mach 1","year":"1971","job":"Restomod cabin","mat":"Leather · new gauges","col":"Charcoal","wk":12,"price":"R$52,000","status":"avail","accent":"#3a3d44","cond":"restomod","own":"Built for a client","cr":"Pandamera1 · CC BY 2.0","hp":12,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/cobra.webp","brand":"Replica","model":"Cobra 427","year":"1990","job":"Restomod cabin","mat":"Leather · carbon dash","col":"Black & carbon","wk":9,"price":"R$38,000","status":"avail","accent":"#22252a","cond":"restomod","own":"Built for a client","cr":"Pandamera1 · CC BY 2.0","hp":9,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/galaxie-red.webp","brand":"Ford","model":"Galaxie 500","year":"1963","job":"Full interior","mat":"Red & white vinyl","col":"Red & white","wk":10,"price":"R$41,000","status":"sold","accent":"#b3262b","cond":"full","own":"Delivered Jan 2026","cr":"aaca.richmond · CC BY 2.0","hp":10,"zero":"—","top":"—","mi":"—"},
+  {"file":"willcar/galaxie-1962.webp","brand":"Ford","model":"Galaxie 500","year":"1962","job":"Dash & steering","mat":"Restored chrome · new rim","col":"Black","wk":5,"price":"R$18,500","status":"sold","accent":"#2a2a2e","cond":"seats","own":"Delivered Nov 2025","cr":"Muffet · CC BY 2.0","hp":5,"zero":"—","top":"—","mi":"—"}
 ];
 CARS.forEach((c,i)=>{c.i=i;c.grade=88+((i*7+3)%10);});
-const CONDLBL={new:'New',used:'Used',build:'House build'};
+const CONDLBL={full:'Full cabin',seats:'Seats',restomod:'Restomod'};
 const priceNum=c=>{const m=c.price.replace(/[R$,]/g,'');return /^\d+$/.test(m)?+m:null;};
 const miNum=c=>+(c.mi.replace(/\D/g,'')||0);
 const letter=g=>g>=95?'A+':g>=91?'A':'A−';
@@ -2188,15 +2185,16 @@ const REPORT=[
   {t:'Seats, foam & frames',g:'A',d:'Seats stripped to the frame. Springs, welds and runners tested, foam density measured, original stitch pattern photographed before a thread goes in.',m:['Frames tested','Foam measured','Pattern photographed']},
 ];
 
-const TD_MAKES=[['Porsche',62000],['BMW',28000],['Mercedes-Benz',30000],['Audi',26000],['Land Rover',38000],['McLaren',128000],['Ferrari',165000],['Lamborghini',175000],['Bentley',98000],['Nissan',34000],['Toyota',19000],['Ford',21000],['Something else',22000]];
+const TD_MAKES=[['VW Fusca / Karmann-Ghia',16000],['VW Brasília / Variant / TL',17000],['VW Kombi',23000],['VW Gol / Voyage / Parati',15000],['Chevrolet Chevette / Marajó',16500],['Chevrolet Opala / Caravan',27000],['Ford Corcel / Belina / Del Rey',17500],['Ford Maverick',27000],['Ford Galaxie / LTD / Landau',39000],['Dodge Dart / Charger / Magnum',32000],['Puma / SP2 / Miura',20000],['Fiat 147 / Uno / Prêmio',14000],['Imported classic',42000],['Something else',22000]];
 const TD_COND=[
-  {n:'Show',f:1.08,d:'Concours or better than new. Flat, polished paint, no chips, unmarked wheels.'},
-  {n:'Clean',f:1.00,d:'Well kept and ready to retail. A few age marks but nothing that needs doing.'},
-  {n:'Fair',f:.88,d:'Honest daily car. Kerbed wheels, a few chips or a small dent.'},
-  {n:'Rough',f:.72,d:'Needs work. Panel damage, tired interior or a known fault.'},
-  {n:'Project',f:.48,d:'Non-runner, accident-damaged or stripped. We buy these for the bay — bring it anyway.'},
+  {n:'Tidy',f:.85,d:'Worn but whole — sound foam and frames, we re-cover and refit.'},
+  {n:'Tired',f:1.00,d:'Cracked vinyl, flat foam, a few broken clips. The usual forty-year-old cabin.'},
+  {n:'Rough',f:1.18,d:'Torn seats, wet carpets, a broken frame or springs. We rebuild what has to be rebuilt.'},
+  {n:'Mice lived here',f:1.35,d:'Chewed, stripped or rotten. We start from the frames and the floor pan.'},
+  {n:'Parts missing',f:1.5,d:'Seats or panels gone. We source originals or build them from the factory pattern.'},
 ];
-const TD_HIST=[{n:'Full main dealer',f:1.06},{n:'Part / specialist',f:1},{n:'Missing',f:.9}];
+const TD_HIST=[{n:'Factory vinyl',f:1},{n:'Original-pattern cloth',f:1.15},{n:'Leather',f:1.45}];
+const TD_SCOPE=[['Seats only',.42],['Seats & door cards',.6],['Seats, doors & carpets',.78],['Full interior',1],['Full + dash & headliner',1.28]];
 
 const PARTS=[
   {file:'parts/parts-01.jpg',name:'Forged Monoblock Set',brand:'Vossen',cat:'wheels',spec:'20"/21" staggered · gloss',price:4850,fit:420,stock:'4 sets',mat:'#0e1b24'},
@@ -2287,7 +2285,7 @@ nav.classList.toggle('solid',scrollY>20);
 let stockCond='all',stockSort='feat',stockList=[];
 const counts={all:CARS.length};CARS.forEach(c=>counts[c.cond]=(counts[c.cond]||0)+1);
 const chipWrap=$('#condChips');
-[['all','All stock'],['new','New'],['used','Used'],['build','House builds']].forEach(([k,l])=>{
+[['all','All cabins'],['full','Full cabins'],['seats','Seats & trim'],['restomod','Restomod']].forEach(([k,l])=>{
   const b=document.createElement('button');b.className='chip';b.setAttribute('aria-pressed',k==='all');b.dataset.k=k;
   b.innerHTML=`${l}<i>${counts[k]||0}</i>`;b.onclick=()=>{stockCond=k;$$('.chip',chipWrap).forEach(x=>x.setAttribute('aria-pressed',x===b));renderStock();};
   chipWrap.appendChild(b);
@@ -2295,7 +2293,7 @@ const chipWrap=$('#condChips');
 $('#sortSel').onchange=e=>{stockSort=e.target.value;renderStock();};
 function sortCars(list){
   const byP=dir=>(a,b)=>{const pa=priceNum(a),pb=priceNum(b);if(pa===null&&pb===null)return 0;if(pa===null)return 1;if(pb===null)return -1;return dir*(pa-pb);};
-  const s={feat:()=>0,plo:byP(1),phi:byP(-1),mi:(a,b)=>miNum(a)-miNum(b),hp:(a,b)=>b.hp-a.hp}[stockSort];
+  const s={feat:()=>0,plo:byP(1),phi:byP(-1),mi:(a,b)=>a.wk-b.wk,hp:(a,b)=>a.year-b.year}[stockSort];
   return list.slice().sort((a,b)=>(a.status==='sold')-(b.status==='sold')||s(a,b)||a.i-b.i);
 }
 function carCard(c,k){
@@ -2304,18 +2302,18 @@ function carCard(c,k){
   el.className='car mag'+(sold?' sold':'');el.style.setProperty('--c',c.accent);el.style.setProperty('--d',(-k*1.3)+'s');
   el.innerHTML=`
     <button class="car-media" aria-label="View ${c.brand} ${c.model} details">
-      <img src="../360-remix/assets/${c.file}" alt="${c.year} ${c.brand} ${c.model}" loading="${k<3?'eager':'lazy'}" decoding="async" width="736" height="1300">
-      <span class="badge">${sold?'Sold':CONDLBL[c.cond]+' · '+c.own}</span>
-      ${sold?'<span class="sold-ribbon">SOLD</span>':`<span class="grade"><b>${c.grade}</b>360°</span><span class="peek">Specs, report &amp; monthly →</span>`}
+      <img src="../360-remix/assets/${c.file.replace('willcar/','willcar/sm/')}" alt="${c.year} ${c.brand} ${c.model} interior" loading="${k<3?'eager':'lazy'}" decoding="async" width="640" height="480">
+      <span class="badge">${sold?'Delivered':CONDLBL[c.cond]}</span>
+      ${sold?'<span class="sold-ribbon">DELIVERED</span>':`<span class="grade"><b>${c.grade}</b>360°</span><span class="peek">The job, the report &amp; monthly →</span>`}
     </button>
     <div class="car-body">
       <p class="car-make">${c.brand}</p>
       <h3>${c.model}</h3>
-      <p class="car-meta">${c.year} · ${c.mi==='—'?'Track only':c.mi+' mi'} · ${c.hp} hp</p>
-      <div class="car-price"><b>${sold?'Sold':p?fmt(p):'Price on request'}</b><span>${sold?'Want one like it?':mo?'from '+fmt(mo)+'/mo':'Ask us'}</span></div>
+      <p class="car-meta">${c.year} · ${c.job} · ${c.wk} wks</p><p class="car-cr">Photo: ${c.cr}</p>
+      <div class="car-price"><b>${p?fmt(p):'Price on request'}</b><span>${sold?'Want yours like this?':mo?'from '+fmt(mo)+'/mo':'Ask us'}</span></div>
       <div class="car-ctas">
-        ${sold?`<button class="btn btn-line" data-source="${c.i}">Find me one like it</button>`:`<button class="btn btn-line" data-view="${c.i}">View car</button>`}
-        <a class="btn btn-wa" href="${waLink(`Hi, is the ${c.year} ${c.brand} ${c.model}${p?' ('+fmt(p)+')':''} still available?`)}" target="_blank" rel="noopener" aria-label="WhatsApp about this car"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+        ${sold?`<button class="btn btn-line" data-source="${c.i}">Do mine like this</button>`:`<button class="btn btn-line" data-view="${c.i}">See the job</button>`}
+        <a class="btn btn-wa" href="${waLink(`Hi Will Car, I saw the ${c.year} ${c.brand} ${c.model} cabin on your site (${c.job.toLowerCase()}). Could you do something like it on my car?`)}" target="_blank" rel="noopener" aria-label="WhatsApp about a job like this"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
       </div>
     </div>`;
   if(!sold)el.querySelector('.car-media').onclick=()=>openSheet(c.i,stockList);
@@ -2362,19 +2360,19 @@ function paintSheet(anim){
   const c=shList[shIdx],m=$('#shMedia');
   const apply=()=>{
     sheet.style.setProperty('--c',c.accent);
-    const img=$('#shImg');img.src='../360-remix/assets/'+c.file;img.alt=`${c.year} ${c.brand} ${c.model}`;
+    const img=$('#shImg');img.src='../360-remix/assets/'+c.file;img.alt=`${c.year} ${c.brand} ${c.model} interior`;
     $('#shMake').textContent=c.brand+' · '+c.year;
     $('#shName').textContent=c.model;
-    $('#shTags').innerHTML=`<span class="tag">${CONDLBL[c.cond]}</span><span class="tag">${c.own}</span><span class="tag ok">HPI clear</span><span class="tag ok">12-mo warranty</span>`;
+    $('#shTags').innerHTML=`<span class="tag">${CONDLBL[c.cond]}</span><span class="tag">${c.own}</span><span class="tag ok">Photo survey</span><span class="tag ok">12-mo stitching warranty</span>`;
     const p=priceNum(c);
     $('#shPrice').textContent=p?fmt(p):'Price on request';
-    $('#shSpecs').innerHTML=[['Year',c.year],['Mileage',c.mi==='—'?'Track':c.mi],['Power',c.hp+' hp'],['0–62',c.zero],['Top speed',c.top+' mph'],['Owners',c.own.replace('Delivery miles','New')]]
-      .map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('');
+    $('#shSpecs').innerHTML=[['Year',c.year],['The job',c.job],['Material',c.mat],['Colour',c.col],['On the bench',c.wk+' weeks'],['Owner',c.own]]
+      .map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('')+`<p class="sh-cr">Photo: ${c.cr}</p>`;
     $('#shGrade').textContent=`${c.grade} / 100 · ${letter(c.grade)} — Pass`;
     $('#shChecks').innerHTML=REPORT.map((r,k)=>`<li><span>${r.t.split(/[ ,&]/)[0]}</span><b>${k===3&&c.grade<93?'B+':r.g}</b></li>`).join('');
     $('#shFin').hidden=!p;
     paintSheetFin();
-    $('#shWa').href=waLink(`Hi, I'm interested in the ${c.year} ${c.brand} ${c.model}${p?' ('+fmt(p)+')':''}. Is it still available?`);
+    $('#shWa').href=waLink(`Hi Will Car, I saw the ${c.year} ${c.brand} ${c.model} job on your site (${c.job.toLowerCase()}, ${p?fmt(p):'price on request'}). Could you quote mine?`);
     $('#shBook').textContent=p?'Book a workshop visit':'Ask for the price';
     m.classList.remove('swap');
   };
@@ -2406,10 +2404,10 @@ $('#shReserve').onclick=()=>openEnq('reserve',shList[shIdx]);
 const enq=$('#enq'),enqOv=$('#enqOv');
 const ENQ={
   viewing:{h:'Book a workshop visit',s:'Pick up the details below and we’ll confirm a time by message within the hour.',b:'Request my viewing',m:c=>c?`I'd like to view the ${c.year} ${c.brand} ${c.model}. Best day for me is: `:'I would like to book a visit. Best day for me is: '},
-  reserve:{h:'Reserve this car',s:'A R$500 deposit holds it for 7 days — fully refundable. We’ll send a secure payment link.',b:'Reserve it for me',m:c=>`Please reserve the ${c.year} ${c.brand} ${c.model} for me.`},
+  reserve:{h:'Reserve a bench slot',s:'A R$500 deposit holds your slot and orders the materials — fully refundable until we cut. We’ll send a secure payment link.',b:'Hold my slot',m:c=>`Please hold a bench slot for a job like the ${c.year} ${c.brand} ${c.model} (${c.job.toLowerCase()}).`},
   price:{h:'Ask for the price',s:'Some cars aren’t priced publicly. We’ll send the price, report and finance options.',b:'Send me the price',m:c=>`Please send me the price and interior survey for the ${c.year} ${c.brand} ${c.model}.`},
-  source:{h:'Find me a car',s:'Tell us the car, spec and budget. We source to order and inspect it before you commit.',b:'Start my search',m:c=>c?`I'm after a car like the ${c.brand} ${c.model} you sold. Budget: `:'I am looking for: \nBudget: '},
-  partex:{h:'Lock in your valuation',s:'We’ll confirm the figure and book a 20-minute appraisal at a time that suits you.',b:'Lock in my price',m:()=>''},
+  source:{h:'Do mine like this',s:'Tell us your car, the year and what you want done. We reply with photos of similar jobs and a first estimate.',b:'Send my request',m:c=>c?`I'd like my interior done like the ${c.year} ${c.brand} ${c.model} (${c.job.toLowerCase()}). My car is: `:'My car is: \nWhat I want done: '},
+  partex:{h:'Confirm your interior quote',s:'Send a few photos and we’ll confirm the figure the same day — it doesn’t move when the car arrives.',b:'Confirm my quote',m:()=>''},
   finance:{h:'Check your eligibility',s:'A soft search — no impact on your credit score. We’ll come back with what you’re approved for.',b:'Check my eligibility',m:()=>''},
   build:{h:'Book a build consultation',s:'Free, no-obligation. We’ll go through the spec, the timeline and the staged payments.',b:'Book my consultation',m:()=>''},
   parts:{h:'Ask about a part',s:'Tell us the car and the part — we’ll confirm price, fitment and how soon.',b:'Send my request',m:()=>'My car is: \nPart I need: '},
@@ -2475,10 +2473,10 @@ new IntersectionObserver(([e],o)=>{if(!e.isIntersecting)return;o.disconnect();
 },{threshold:.35}).observe($('#dial'));
 
 /* ---------- VALUE MY CAR ---------- */
-const td={make:0,year:2019,mi:32000,cond:1,hist:0};
+const td={make:5,year:1976,mi:3,cond:1,hist:0};
 const NOW_Y=new Date().getFullYear();
-$('#tdMake').innerHTML=TD_MAKES.map((m,k)=>`<option value="${k}">${m[0]}</option>`).join('');
-$('#tdYear').innerHTML=Array.from({length:22},(_,k)=>NOW_Y-k).map(y=>`<option${y===td.year?' selected':''}>${y}</option>`).join('');
+$('#tdMake').innerHTML=TD_MAKES.map((m,k)=>`<option value="${k}"${k===td.make?' selected':''}>${m[0]}</option>`).join('');
+$('#tdYear').innerHTML=Array.from({length:47},(_,k)=>1996-k).map(y=>`<option${y===td.year?' selected':''}>${y}</option>`).join('');
 const segBuild=(wrap,list,key)=>list.forEach((x,k)=>{const b=document.createElement('button');b.type='button';b.textContent=x.n;b.setAttribute('aria-pressed',k===td[key]);
   b.onclick=()=>{td[key]=k;$$('button',wrap).forEach(y=>y.setAttribute('aria-pressed',y===b));calcTd();};wrap.appendChild(b);});
 segBuild($('#tdCond'),TD_COND,'cond');segBuild($('#tdHist'),TD_HIST,'hist');
@@ -2488,23 +2486,20 @@ $('#tdMi').oninput=e=>{td.mi=+e.target.value;calcTd();};
 $('#tdReg').addEventListener('input',e=>{const el=e.target,pos=el.selectionStart;el.value=el.value.toUpperCase().replace(/[^A-Z0-9 ]/g,'');el.setSelectionRange(pos,pos);});
 let tdMid=0;
 function calcTd(){
-  const base=TD_MAKES[td.make][1],age=Math.max(.5,NOW_Y-td.year);
-  const fAge=Math.max(.16,Math.pow(.86,age));
-  const exp=Math.max(6000,age*7500);
-  const fMi=Math.min(1.16,Math.max(.55,1-((td.mi-exp)/exp)*.17));
-  const c=TD_COND[td.cond],h=TD_HIST[td.hist];
-  tdMid=base*fAge*fMi*c.f*h.f;
+  const base=TD_MAKES[td.make][1], s=TD_SCOPE[td.mi], c=TD_COND[td.cond], h=TD_HIST[td.hist];
+  const fAge=1+Math.max(0,1980-td.year)/30*.22;                       /* older cabins: rarer patterns, more hand work */
+  tdMid=base*s[1]*fAge*c.f*h.f;
   const r50=n=>Math.round(n/50)*50;
-  $('#tdRange').innerHTML=`${fmt(r50(tdMid*.93))}<small> – ${fmt(r50(tdMid*1.07))}</small>`;
-  $('#tdMiOut').textContent=td.mi.toLocaleString('en-GB')+' mi';
+  $('#tdRange').innerHTML=`${fmt(r50(tdMid*.92))}<small> – ${fmt(r50(tdMid*1.1))}</small>`;
+  $('#tdMiOut').textContent=s[0];
   $('#tdCondD').textContent=c.d;
-  $('#tdFor').textContent=`${td.year} ${TD_MAKES[td.make][0]} · ${td.mi.toLocaleString('en-GB')} mi · ${c.n.toLowerCase()} · ${h.n.toLowerCase()} history`;
-  const bars=[['Age',fAge/Math.pow(.86,3)],['Mileage',fMi],['Condition',c.f*h.f]];
+  $('#tdFor').textContent=`${td.year} ${TD_MAKES[td.make][0]} · ${s[0].toLowerCase()} · ${c.n.toLowerCase()} · ${h.n.toLowerCase()}`;
+  const bars=[['Age',fAge],['Condition',c.f],['Material',h.f]];
   $('#tdBars').innerHTML=bars.map(([n,f])=>{const d=Math.round((f-1)*100);const w=Math.min(100,Math.abs(d)*2.2+4);
     return `<div class="bar"><span>${n}</span><u><i class="${d<0?'dn':''}" style="width:${w}%"></i></u><b>${d>0?'+':''}${d}%</b></div>`;}).join('');
 }
 calcTd();
-$('#tdLock').onclick=()=>{const reg=$('#tdReg').value.trim();openEnq('partex',null,`Please lock in my valuation: ${reg?reg+' — ':''}${$('#tdFor').textContent}. Your range: ${$('#tdRange').textContent}.`);};
+$('#tdLock').onclick=()=>{const reg=$('#tdReg').value.trim();openEnq('partex',null,`Please confirm my interior quote: ${reg?reg+' — ':''}${$('#tdFor').textContent}. Your range: ${$('#tdRange').textContent}. I can send photos.`);};
 
 /* ---------- PARTS ---------- */
 let ptCat='all';
@@ -2909,7 +2904,7 @@ $id('pd').addEventListener('click',e=>{ if(e.target.closest('[data-pdx]')) retur
 
 /* ============================================================ PATTERN INTERRUPTS */
 /* the stock tape — every car in the workshop, tap one to open it */
-(function(){ const h=AVAIL.map(c=>{ const p=priceNum(c); return '<button class="tp" data-i="'+c.i+'"><b>'+esc(c.brand==='House build'?'House build '+c.model:c.brand+' '+c.model)+'</b><span>'+(c.mi==='—'?'track':c.mi+' mi')+'</span><em>'+(p?fmt(p):'POA')+'</em><i>▲ '+c.grade+'</i></button>'; }).join('');
+(function(){ const h=AVAIL.map(c=>{ const p=priceNum(c); return '<button class="tp" data-i="'+c.i+'"><b>'+esc(c.year+' '+c.model)+'</b><span>'+esc(c.job.toLowerCase())+'</span><em>'+(p?fmt(p):'POA')+'</em><i>▲ '+c.grade+'</i></button>'; }).join('');
   $id('tape').innerHTML=h+h.replace(/<button /g,'<button tabindex="-1" aria-hidden="true" ');
   $id('tape').addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(b) openSheet(+b.dataset.i,AVAIL); }); })();
 function updateBands(){
@@ -2921,8 +2916,8 @@ function updateBands(){
 }
 
 /* ============================================================ FINANCE · the dial */
-const FN={car:2,price:96000,dep:20,px:0,term:48,resp:false,a:0,ta:0,mo:0};
-const FMIN=10000,FMAX=400000,A0=135,A1=405;
+const FN={car:3,price:48000,dep:20,px:0,term:48,resp:false,a:0,ta:0,mo:0};
+const FMIN=5000,FMAX=100000,A0=135,A1=405;
 const FCARS=AVAIL.filter(c=>{ const p=priceNum(c); return p&&p<=FMAX; }).sort((a,b)=>priceNum(a)-priceNum(b));
 const v2a=v=>A0+Math.sqrt(clamp((v-FMIN)/(FMAX-FMIN),0,1))*(A1-A0);
 const a2v=a=>FMIN+Math.pow(clamp((a-A0)/(A1-A0),0,1),2)*(FMAX-FMIN);
@@ -2937,7 +2932,7 @@ function finZone(m){
 function buildDial(){
   let g='<path class="dtr" d="'+arcPath(A0,A1,160)+'"/>';
   for(let i=0;i<=36;i++){ const a=A0+(A1-A0)*i/36, p0=polar(a,184), p1=polar(a,i%6?190:197); g+='<line class="dtk" x1="'+p0[0].toFixed(1)+'" y1="'+p0[1].toFixed(1)+'" x2="'+p1[0].toFixed(1)+'" y2="'+p1[1].toFixed(1)+'"/>'; }
-  [10000,25000,50000,100000,200000,400000].forEach(v=>{ const p=polar(v2a(v),214); g+='<text class="dlb" x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'">'+fmtK(v)+'</text>'; });
+  [5000,15000,30000,50000,75000,100000].forEach(v=>{ const p=polar(v2a(v),214); g+='<text class="dlb" x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'">'+fmtK(v)+'</text>'; });
   FCARS.forEach(c=>{ const p=polar(v2a(priceNum(c)),134); g+='<circle class="pip" data-i="'+c.i+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4.5"><title>'+esc(c.brand+' '+c.model+' · '+fmt(priceNum(c)))+'</title></circle>'; });
   g+='<path class="dva" id="dva"/><circle class="knob" id="knob" r="13"/>';
   $id('fdialSvg').innerHTML=g;
@@ -2966,7 +2961,7 @@ function buildDial(){
   $id('fPx').addEventListener('input',e=>{ e.target.value=e.target.value.replace(/[^\d]/g,''); FN.px=+e.target.value||0; calcFin(); });
   $id('fResp').addEventListener('click',()=>{ FN.resp=!FN.resp; FN.ta=v2a(FN.price+respAmt()); calcFin(); });
   $id('fGo').addEventListener('click',()=>{ const c=FN.car>=0?CARS[FN.car]:null;
-    openEnq('finance',c,'Finance enquiry: '+(c?c.brand+' '+c.model:'a car around '+fmt(FN.price))+(respAmt()?' + respray ('+specLine()+', '+fmt(respAmt())+')':'')+', '+FN.dep+'% deposit'+(FN.px?', quote '+fmt(FN.px):'')+', '+FN.term+' months ≈ '+fmt(FN.mo)+'/mo.'); });
+    openEnq('finance',c,'Installments enquiry: '+(c?'an interior like the '+c.year+' '+c.model:'an interior around '+fmt(FN.price))+(respAmt()?' + respray ('+specLine()+', '+fmt(respAmt())+')':'')+', '+FN.dep+'% deposit'+(FN.px?', quote '+fmt(FN.px):'')+', '+FN.term+' months ≈ '+fmt(FN.mo)+'/mo.'); });
 }
 const respAmt=()=>FN.resp&&FN.car===HERO.i?cfgPrice():0;
 function setFinCar(i){ const c=CARS[i]; if(!c||!priceNum(c)) return; FN.car=i; FN.price=priceNum(c); FN.ta=v2a(FN.price+respAmt()); calcFin(); }
@@ -2994,7 +2989,7 @@ function updateDial(now){
     const t=(now/2600)%1, tk=FTK||(FTK=$$('#fdialSvg .dtk')); tk.forEach((l,i)=>{ const d=Math.abs(i/tk.length-t); l.style.stroke='rgba(255,255,255,'+(.12+Math.max(0,.4-d*4)).toFixed(3)+')'; }); } }
 let FTK=null;
 /* the valuation drops straight into the quote box */
-$('#tdToFin').onclick=()=>{ FN.px=Math.round(tdMid/50)*50; $id('fPx').value=FN.px; calcFin(); goTo('finance'); };
+$('#tdToFin').onclick=()=>{ FN.car=-1; FN.price=Math.round(tdMid/50)*50; FN.ta=v2a(FN.price); calcFin(); goTo('finance'); };
 
 /* ============================================================ REVIEWS · the owners ring */
 /* four more buyers */
@@ -3099,7 +3094,7 @@ function msFill(i){ const r=REVIEWS[i]; OW.lg=i; const c=reviewCar(r);
   const q=$id('msQ'), m=$id('msMore'), tq='“'+r.text+'”', tm=MORE[r.name]||'', t0=performance.now();
   const tick=now=>{ if(OW.lg!==i) return; const a=clamp((now-t0-260)/(tq.length*11),0,1), b=clamp((now-t0-260-tq.length*11-120)/(tm.length*13),0,1);
     typeSet(q,tq.length*a,tq); typeSet(m,tm.length*b,tm); if(b<1) requestAnimationFrame(tick); }; requestAnimationFrame(tick); }
-function reviewCar(r){ const key=r.car.split(' — ')[0]; return CARS.find(c=>c.status==='avail'&&c.model.startsWith(key))||null; }
+function reviewCar(r){ const key=r.car.split(' — ')[0]; return CARS.find(c=>c.status==='avail'&&key.startsWith(c.model.split(' ')[0]))||null; }
 function typeSet(el,n,txt){ n=Math.round(clamp(n,0,txt.length)); if(el._n===n&&el._t===txt) return; el._n=n; el._t=txt; el.innerHTML=esc(txt.slice(0,n))+(n<txt.length&&n>0?'<i class="caret"></i>':''); }
 function openMS(i,from){ MS.from=from||null; msFill(i); const el=MS.el; el.classList.add('open'); el.setAttribute('aria-hidden','false'); lockOn();
   msPlace(from?from.getBoundingClientRect():null,false); void MS.win.offsetWidth; requestAnimationFrame(()=>msPlace(null,true)); setTimeout(()=>$id('msWin').querySelector('.ms-x').focus({preventScroll:true}),120); }
@@ -3195,11 +3190,11 @@ function coreRun(raw){
   CORE.q=CORE.q.then(()=>{ const u=document.createElement('div'); u.className='u'; u.textContent=raw; $id('tlog').appendChild(u); $id('tlog').scrollTop=$id('tlog').scrollHeight; });
   const toHero=()=>{ if(scrollY>innerHeight*.5){ if(isMob) closeCore(); scrollTo({top:0,behavior:RM?'auto':'smooth'}); } };
   const cars=matchCars(q), car=cars[0]||null;
-  if(/^(hi|hey|hello|yo|sup|hiya)\b/.test(q)) return coreSay('Hello. I can <b>drive this site</b> for you — find a car, repaint the GT3 RS, work out a monthly, quote your interior or book you in. What are you after?',[['Porsches under R$200k','porsches under 200k'],['Make it red','make it red'],['What’s my car worth?','value my car']]);
+  if(/^(hi|hey|hello|yo|sup|hiya)\b/.test(q)) return coreSay('Hello. I can <b>drive this site</b> for you — show you similar jobs, quote your interior, work out a monthly or book you in. What are you after?',[['Full interiors','full interiors'],['Galaxie jobs','galaxie'],['What will mine cost?','value my car']]);
   if(/human|person|whatsapp|call|phone|speak|talk to/.test(q)) return coreSay('A real person replies on WhatsApp, usually within the hour — or call <b>'+SITE.phone+'</b>, Mon–Sat 9–7.',[['Open WhatsApp','wa:'+encodeURIComponent('Hi Will Car Interiores, ')],['Call now','tel']]);
   /* the hero car */
   const col=COLORS.find(c=>new RegExp('\\b'+c[0]+'\\b').test(q));
-  if(col&&!/caliper/.test(q)&&(!car||/paint|make it|colou?r|respray|spray|wrap/.test(q))){ CFG.paint=col[1]; changed(); renderCfg(); toHero(); return coreSay('<span class="ok">✓</span> The GT3 RS in <b>'+paintOf().n+'</b>. A full respray is '+fmt(paintOf().p)+' — the car itself is <b>'+fmt(priceNum(HERO))+'</b>.',[['Satin finish','satin'],['Show the rear','show the rear'],['Finance it with the respray','fin-resp']]); }
+  if(col&&!/caliper/.test(q)&&(!car||/paint|make it|colou?r|respray|spray|wrap/.test(q))){ CFG.paint=col[1]; changed(); renderCfg(); toHero(); return coreSay('<span class="ok">✓</span> The '+esc(HERO.model)+' in <b>'+paintOf().n+'</b>. A full respray is '+fmt(paintOf().p)+' — the car itself is <b>'+fmt(priceNum(HERO))+'</b>.',[['Satin finish','satin'],['Show the rear','show the rear'],['Finance it with the respray','fin-resp']]); }
   if(/caliper/.test(q)){ const c=CALS.find(x=>q.includes(x.k)||q.includes(x.n.split(' ').pop().toLowerCase()))||CALS[1]; CFG.cal=c.k; changed(); renderCfg(); toHero(); return coreSay('<span class="ok">✓</span> Calipers in <b>'+c.n.toLowerCase()+'</b>'+(c.p?' (+'+fmt(c.p)+')':'')+'.'); }
   if(/\b(satin|matte|matt|gloss|flake)\b/.test(q)){ const f=FINISHES.find(x=>q.includes(x.n.split(' ').pop().toLowerCase()))||(/matt\b/.test(q)?FINISHES[2]:FINISHES[0]); CFG.finish=f.k; changed(); renderCfg(); toHero(); return coreSay('<span class="ok">✓</span> Finish: <b>'+f.n+'</b>'+(f.p?' (+'+fmt(f.p)+')':'')+'.'); }
   if(/x.?ray|scan|360 view|wireframe/.test(q)){ CFG.xray=!CFG.xray; GLS.scan=-.05; changed(); renderCfg(); toHero(); return coreSay('<span class="ok">✓</span> interior survey '+(CFG.xray?'<b>running</b> — gold lines are every edge the camera found.':'off.')); }
@@ -3245,14 +3240,14 @@ function coreRun(raw){
   if(cars.length){
     if(cars.length===1){ const c=cars[0];
       if(c.status==='sold') return coreSay('The '+esc(c.brand+' '+c.model)+' has <b>sold</b>, sorry — we can find you another.',[['Find me one like it','enq:source:'+c.i]]);
-      const p=priceNum(c); return coreSay('<b>'+esc(c.year+' '+c.brand+' '+c.model)+'</b> — '+(c.mi==='—'?'track car':c.mi+' mi')+', '+c.hp+' hp, condition grade <b>'+c.grade+'</b>. '+(p?fmt(p)+', from '+fmt(fromMo(c))+'/mo.':'Price on request.'),
+      const p=priceNum(c); return coreSay('<b>'+esc(c.year+' '+c.brand+' '+c.model)+'</b> — '+esc(c.job.toLowerCase())+' in '+esc(c.mat.toLowerCase())+', '+c.wk+' weeks on the bench, survey grade <b>'+c.grade+'</b>. '+(p?fmt(p)+', from '+fmt(fromMo(c))+'/mo.':'Price on request.'),
         [['Open it','car:'+c.i],['Finance it','fin:'+c.i],['Book a workshop visit','book:'+c.i]]); }
     const av=cars.filter(c=>c.status==='avail');
     return coreSay('<b>'+av.length+'</b> match'+(av.length===1?'':'es')+' in the workshop:',av.slice(0,6).map(carBtn)); }
   if(/\bnew\b|\bused\b|house build|in stock|stock|cars|inventory|what.*have/.test(q)){
     const k=/\bnew\b/.test(q)?'new':/\bused\b/.test(q)?'used':/house build|builds/.test(q)?'build':'all'; const b=$(`#condChips [data-k="${k}"]`); if(b) b.click(); if(isMob) closeCore(); goTo('stock');
     return coreSay('<b>'+(k==='all'?AVAIL.length:CARS.filter(c=>c.cond===k&&c.status==='avail').length)+'</b> '+(k==='all'?'cars':CONDLBL[k].toLowerCase()+(k==='build'?'s':' cars'))+' in the workshop, every one with its interior survey.',[['Show me','go:stock']]); }
-  if(/price|cost|how much|total/.test(q)) return coreSay('The GT3 RS is <b>'+fmt(priceNum(HERO))+'</b>, from '+fmt(fromMo(HERO))+'/mo.'+(cfgPrice()?' Your respray spec ('+esc(specLine())+') adds <b>'+fmt(cfgPrice())+'</b>.':''),[['Specs & report','car:'+HERO.i],['Finance it','fin:'+HERO.i]]);
+  if(/price|cost|how much|total/.test(q)) return coreSay('The '+esc(HERO.year+' '+HERO.model)+' job is <b>'+fmt(priceNum(HERO))+'</b>, from '+fmt(fromMo(HERO))+'/mo.'+(cfgPrice()?' Your respray spec ('+esc(specLine())+') adds <b>'+fmt(cfgPrice())+'</b>.':''),[['Specs & report','car:'+HERO.i],['Finance it','fin:'+HERO.i]]);
   return coreSay('I didn’t catch that. I can find a job (<b>Opala</b>, <b>Fusca</b>), spec a cabin, work out installments, quote your interior, find a material or book you in.',[['Porsches','porsche'],['Under R$100k','under 100k'],['Quote my interior','value my car'],['Talk to a person','whatsapp']]);
 }
 function coreAct(c){ const [t,a,b]=c.split(':');
@@ -3619,7 +3614,7 @@ function updateNums(){ const r=FR.numbers, H=innerHeight; const vis=!!r&&r.botto
 }
 
 /* ============================================================ 07 · THE SCAN — six checks swept across the car */
-const SCANPTS=[[5,26,66],[2,38,45],[1,47,82],[0,56,53],[4,64,40],[3,79,72]];   /* [report index, x%, y%] in sweep order */
+const SCANPTS=[[1,24,80],[3,38,58],[4,47,42],[2,58,74],[0,74,26],[5,83,50]];   /* [report index, x%, y%] in sweep order */
 const SC={rows:[],pins:[],on:[],sx:-1,done:false};
 function buildScan(){
   $id('scanList').innerHTML=SCANPTS.map(([ri],k)=>{ const r=REPORT[ri]; return '<li class="sl"><span class="n">0'+(k+1)+'</span><span class="t">'+esc(r.t)+'</span><span class="r"></span><span class="g">'+esc(r.g)+'</span></li>'; }).join('');
