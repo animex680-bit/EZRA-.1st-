@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
-<head><meta name="build" content="39fdd3031798">
+<head><meta name="build" content="6315f84655b5">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Will Car Interiores — Classic car interior restoration, up to 1996.</title>
@@ -3812,12 +3812,15 @@ function frame(now){
 }
 onChange(()=>{ paintHUD(); calcFin(); });
 addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(OW.lg>=0) closeMS(); else if(pdOpen) closePD(); else if(CORE.open) closeCore(); } });
+const __boot=()=>{
 renderCfg(); buildDial(); buildWays(); buildHole(); buildNums(); buildPark(); buildScan(); buildTx(); buildRing(); buildBook(); splitH1(); buildWords(); buildPar(); watchRoll(); sizeBot();
 FN.a=FN.ta=v2a(FN.price); drawDial(FN.a); calcFin(true); paintHUD();
 glok=$id('orbit').offsetHeight?initGL():false; layoutBox(); if(document.fonts) document.fonts.ready.then(layoutBox);
 let lastW=innerWidth; addEventListener('resize',()=>{ if(isMob&&Math.abs(innerWidth-lastW)<2) return; lastW=innerWidth; layoutBox(); layoutWays(); layoutPark(); layoutNums(); measurePar(); });
 ($id('orbit').offsetHeight?loadFrames():Promise.resolve()).then(()=>{ LD.ready=true; if(glok) ['fq4','fq3','fq5','fq2','fq6'].forEach(n=>texFor(n)); $id('hintT').textContent='Drag to walk round · tap ＋ to read the report'; ORB.idleT=performance.now(); });
 requestAnimationFrame(frame);
+};
+requestAnimationFrame(()=>setTimeout(__boot,0));
 
 /* verify hook */
 window.__rx={
