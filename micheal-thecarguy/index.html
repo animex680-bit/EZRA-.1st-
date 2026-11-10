@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Micheal — The Car Guy · Your plug for the right car</title>
+<meta name="description" content="Micheal is your car guy — sourcing, selling, trading and delivering the right cars, from clean daily drivers to dream builds. DM the plug, skip the dealership games.">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:title" content="Micheal — The Car Guy">
+<meta property="og:description" content="Your plug for the right car. Sourced, verified, delivered. DM to buy.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="../360-remix/assets/cars3d/p911-poster.webp">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0a0b'/><text x='16' y='23' font-family='Arial' font-size='18' font-weight='900' fill='%23f5a623' text-anchor='middle'>M</text></svg>">
+
+<!--
+  ============================================================================
+  MICHEAL — THE CAR GUY  ·  built in the context of @micheal_thecarguy
+  ============================================================================
+  HONESTY / ASSUMPTION LOG  (Claude could NOT access the Instagram account —
+  it is login-walled and the host is network-blocked in this build session).
+  Everything below marked [...] is a PLACEHOLDER / ASSUMPTION, not verified fact.
+  Replace before this goes live:
+
+    [NAME]      name spelling — handle is "micheal" (likely a stylised spelling)
+    [CITY]      home base / where he's located
+    [PHONE]     real phone / WhatsApp number       -> search "REPLACE:PHONE"
+    [EMAIL]     contact email                        -> search "REPLACE:EMAIL"
+    [STATS]     years / cars moved / followers       -> search "REPLACE:STAT"
+    [REVIEWS]   the 3 reviews are EXAMPLES, not real -> search "REPLACE:REVIEW"
+    [SERVICES]  assumed he does sourcing/sales/trade/delivery; adjust if wrong
+
+  ASSUMED BUSINESS TYPE: independent car dealer / broker / flipper personal brand
+  ("your car guy"). If he's actually a pure content creator or a service shop
+  (detailing/wraps/mods), keep the shell and swap the copy in #do and #how.
+
+  The 3D hero car (Porsche 911) and the 360 demo are PLACEHOLDER vehicles drawn
+  from this repo's own asset library — they represent the vibe, not his stock.
+  ============================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"></noscript>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"AutoDealer","name":"Micheal — The Car Guy","description":"Independent car dealer and broker — sourcing, selling, trading and delivering cars.","priceRange":"$$","areaServed":"US","sameAs":["https://www.instagram.com/micheal_thecarguy"]}
+</script>
+
+<style>
+:root{
+  --bg:#0a0a0b; --bg2:#111113; --bg3:#17171a; --card:#141417;
+  --ink:#f4f2ee; --ink2:#b7b4ad; --dim:#8b887f;
+  --line:rgba(244,242,238,.10); --line2:rgba(244,242,238,.2);
+  --amber:#f5a623; --amber2:#ffcf7a; --amber-soft:rgba(245,166,35,.13);
+  --steel:#8aa0b4; --wa:#25d366; --ok:#7fd49a;
+  --ff-d:'Archivo',system-ui,sans-serif; --ff:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; --ff-m:'JetBrains Mono',monospace;
+  --r:16px; --r-sm:11px; --ease:cubic-bezier(.22,.8,.26,1); --spring:cubic-bezier(.34,1.4,.64,1);
+  --g:16px; --sec:clamp(66px,10vw,118px);
+  --sh1:0 1px 0 rgba(255,255,255,.04) inset,0 12px 30px -14px rgba(0,0,0,.7);
+  --sh2:0 1px 0 rgba(255,255,255,.06) inset,0 30px 70px -26px rgba(0,0,0,.8),0 10px 20px -12px rgba(245,166,35,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:78px;scroll-behavior:smooth}
+html.lock{overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--ff);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+main{overflow-x:clip}
+img,video,canvas{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+::selection{background:var(--amber);color:#160f03}
+:focus-visible{outline:2px solid var(--amber2);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 var(--g)}
+@media(min-width:760px){:root{--g:clamp(24px,4vw,56px)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+svg.i{width:18px;height:18px;flex:none;fill:currentColor}
+
+.kick{font-family:var(--ff-m);font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);display:inline-flex;align-items:center;gap:10px}
+.kick::before{content:"";width:22px;height:1px;background:currentColor}
+.h2{font-family:var(--ff-d);font-weight:800;font-size:clamp(32px,6vw,58px);line-height:1.02;letter-spacing:-.02em;margin:14px 0}
+.h2 em{font-style:normal;color:var(--amber2)}
+.lede{color:var(--ink2);max-width:56ch;font-size:clamp(15.5px,1.6vw,17.5px);line-height:1.65}
+.sec{padding:var(--sec) 0;position:relative}
+.sec-head{margin-bottom:clamp(26px,4vw,46px)}
+.sec-head.row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px}
+
+/* buttons */
+.btn{--bh:52px;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:var(--bh);padding:0 22px;border-radius:999px;
+  font-weight:700;font-size:15px;letter-spacing:.01em;white-space:nowrap;border:1px solid transparent;
+  transition:transform .35s var(--spring),background-color .25s,border-color .25s,color .25s,box-shadow .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn-amber{background:linear-gradient(180deg,var(--amber2),var(--amber));color:#160f03;box-shadow:0 10px 26px -10px rgba(245,166,35,.7),0 1px 0 rgba(255,255,255,.4) inset}
+.btn-amber:hover{box-shadow:0 16px 34px -12px rgba(245,166,35,.85),0 1px 0 rgba(255,255,255,.4) inset}
+.btn-line{border-color:var(--line2);color:var(--ink);background:rgba(255,255,255,.02)}
+.btn-line:hover{border-color:var(--ink);background:rgba(255,255,255,.06)}
+.btn-wa{background:var(--wa);color:#06260f}
+.btn-wa:hover{background:#3be07a}
+.btn-sm{--bh:42px;padding:0 16px;font-size:14px}
+.btn .arr{transition:transform .35s var(--spring)}
+.btn:hover .arr{transform:translateX(4px)}
+
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline: view()){
+    .rv{animation:rv linear both;animation-timeline:view();animation-range:entry 0% entry 62%}
+  }
+}
+@keyframes rv{from{opacity:.25;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NAV */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background-color .35s,border-color .35s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(10,10,11,.82);-webkit-backdrop-filter:blur(13px);backdrop-filter:blur(13px);border-bottom-color:var(--line)}
+.nav-in{display:flex;align-items:center;gap:14px;height:66px}
+.logo{display:flex;align-items:center;gap:11px;font-family:var(--ff-d);font-weight:900;font-size:17px;letter-spacing:.02em;line-height:1}
+.logo .mk{width:34px;height:34px;border-radius:9px;background:linear-gradient(145deg,var(--amber2),var(--amber));color:#160f03;display:grid;place-items:center;font-size:19px;font-weight:900;box-shadow:0 6px 16px -6px rgba(245,166,35,.6)}
+.logo span{display:flex;flex-direction:column;gap:2px}
+.logo small{font-family:var(--ff-m);font-size:9px;font-weight:500;letter-spacing:.28em;color:var(--dim);text-transform:uppercase}
+.nav-links{display:none;gap:26px;margin-left:auto}
+.nav-links a{font-size:14px;color:var(--ink2);position:relative;padding:6px 0;transition:color .2s}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.nav-links a:hover{color:var(--ink)}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-act{display:flex;align-items:center;gap:8px;margin-left:auto}
+.icon-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line2);background:rgba(255,255,255,.03);transition:background-color .2s,border-color .2s,transform .3s var(--spring)}
+.icon-btn:hover{border-color:var(--ink);background:rgba(255,255,255,.08)}
+.icon-btn:active{transform:scale(.92)}
+.nav .btn{--bh:42px;padding:0 16px;font-size:14px}
+@media(min-width:1040px){.nav-links{display:flex}.nav-act{margin-left:22px}.menu-btn{display:none}}
+@media(max-width:420px){.nav .btn-amber{display:none}}
+
+.menu{position:fixed;inset:0;z-index:60;background:rgba(8,8,9,.97);display:flex;flex-direction:column;padding:16px var(--g) calc(24px + env(safe-area-inset-bottom));opacity:0;pointer-events:none;transition:opacity .3s}
+.menu.open{opacity:1;pointer-events:auto}
+.menu-top{display:flex;justify-content:space-between;align-items:center;height:50px}
+.menu nav{display:flex;flex-direction:column;margin:26px 0 auto}
+.menu nav a{font-family:var(--ff-d);font-size:34px;font-weight:800;padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;transform:translateY(14px);opacity:0;transition:transform .5s var(--ease),opacity .5s}
+.menu nav a span{font-family:var(--ff-m);font-size:11px;color:var(--dim);letter-spacing:.14em}
+.menu.open nav a{transform:none;opacity:1}
+.menu.open nav a:nth-child(2){transition-delay:.04s}.menu.open nav a:nth-child(3){transition-delay:.08s}.menu.open nav a:nth-child(4){transition-delay:.12s}.menu.open nav a:nth-child(5){transition-delay:.16s}.menu.open nav a:nth-child(6){transition-delay:.2s}
+.menu-ctas{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.menu-ctas .btn-amber{grid-column:1/-1}
+
+/* HERO */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:92px;padding-bottom:clamp(28px,5vh,56px);overflow:hidden}
+#stage{position:absolute;inset:0;z-index:0}
+#stage canvas{width:100%;height:100%}
+.hero-poster{position:absolute;inset:0;z-index:1;background:#0a0a0b center 60%/cover no-repeat;transition:opacity .9s ease;pointer-events:none}
+.hero-poster.gone{opacity:0}
+.hero::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:
+  radial-gradient(120% 80% at 50% 8%,transparent 40%,rgba(10,10,11,.5) 100%),
+  linear-gradient(180deg,rgba(10,10,11,.55) 0%,transparent 26%,transparent 46%,rgba(10,10,11,.92) 92%)}
+.hero-grain{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.hero-in{position:relative;z-index:3}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;padding:7px 13px 7px 9px;border:1px solid var(--line2);border-radius:999px;background:rgba(255,255,255,.03);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:12.5px;color:var(--ink2);margin-bottom:20px}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(127,212,154,.2);animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:var(--ff-d);font-weight:900;font-size:clamp(46px,13vw,140px);line-height:.9;letter-spacing:-.03em;text-transform:uppercase}
+.hero h1 .l2{display:block;color:var(--amber2)}
+.hero-sub{margin-top:18px;max-width:46ch;color:var(--ink2);font-size:clamp(15.5px,1.7vw,19px)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.hero-strip{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:34px;padding-top:22px;border-top:1px solid var(--line)}
+.hero-strip .st{display:flex;flex-direction:column;gap:2px}
+.hero-strip .st b{font-family:var(--ff-d);font-size:clamp(22px,3.3vw,30px);font-weight:800;line-height:1;letter-spacing:-.02em}
+.hero-strip .st span{font-family:var(--ff-m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.scrollcue{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:7px;font-family:var(--ff-m);font-size:10px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+.scrollcue i{width:1px;height:30px;background:linear-gradient(var(--amber),transparent);animation:cue 1.8s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media(max-width:620px){.scrollcue{display:none}}
+
+/* MARQUEE */
+.marq{border-block:1px solid var(--line);background:var(--bg2);overflow:hidden;padding:16px 0}
+.marq-t{display:flex;gap:46px;white-space:nowrap;width:max-content;animation:marq 32s linear infinite;font-family:var(--ff-d);font-weight:800;font-size:clamp(15px,2vw,20px);letter-spacing:.02em;color:var(--dim);text-transform:uppercase}
+.marq-t b{color:var(--ink2)}.marq-t em{color:var(--amber);font-style:normal}
+@keyframes marq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marq-t{animation:none}}
+
+/* generic grids */
+.grid{display:grid;gap:16px}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh1)}
+
+/* DO / services */
+#do .grid{grid-template-columns:1fr}
+@media(min-width:720px){#do .grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){#do .grid{grid-template-columns:repeat(3,1fr)}}
+.svc{padding:26px 22px;position:relative;overflow:hidden;transition:transform .4s var(--ease),border-color .3s}
+.svc:hover{transform:translateY(-4px);border-color:var(--line2)}
+.svc .ic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:var(--amber-soft);color:var(--amber2);margin-bottom:16px}
+.svc .ic svg{width:24px;height:24px}
+.svc h3{font-family:var(--ff-d);font-weight:800;font-size:20px;letter-spacing:-.01em;margin-bottom:8px}
+.svc p{color:var(--ink2);font-size:15px}
+.svc .no{position:absolute;top:18px;right:20px;font-family:var(--ff-m);font-size:12px;color:var(--dim)}
+
+/* ORBIT 360 */
+#orbit{background:var(--bg2);border-block:1px solid var(--line)}
+.orbit-grid{display:grid;gap:clamp(24px,5vw,56px);align-items:center;grid-template-columns:1fr}
+@media(min-width:900px){.orbit-grid{grid-template-columns:1.1fr .9fr}}
+.orbit-view{position:relative;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;background:radial-gradient(120% 90% at 50% 20%,#1b1b1f,#0c0c0e);border:1px solid var(--line);cursor:ew-resize;touch-action:pan-y;user-select:none;box-shadow:var(--sh2)}
+.orbit-view img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;pointer-events:none}
+.orbit-view img.on{opacity:1}
+.orbit-hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font-family:var(--ff-m);font-size:11px;letter-spacing:.1em;color:var(--ink2);background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:7px 13px;border-radius:999px;border:1px solid var(--line);transition:opacity .4s}
+.orbit-hint.hide{opacity:0}
+.orbit-tag{position:absolute;top:14px;left:14px;font-family:var(--ff-m);font-size:10.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;background:rgba(0,0,0,.4);padding:5px 10px;border-radius:7px;border:1px solid var(--line)}
+.spec{list-style:none;margin-top:22px;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.spec li{display:flex;justify-content:space-between;gap:16px;padding:13px 16px;background:var(--bg3);font-size:14.5px}
+.spec li span{color:var(--dim)}.spec li b{font-weight:600}
+
+/* HOW */
+#how{position:relative}
+.steps{display:grid;gap:16px;grid-template-columns:1fr;counter-reset:s}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{padding:28px 24px 26px;position:relative}
+.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-family:var(--ff-d);font-weight:900;font-size:40px;color:var(--amber);opacity:.9;display:block;margin-bottom:14px;letter-spacing:-.03em}
+.step h3{font-family:var(--ff-d);font-weight:800;font-size:21px;margin-bottom:9px}
+.step p{color:var(--ink2);font-size:15px}
+
+/* ABOUT */
+#about .about-grid{display:grid;gap:clamp(26px,5vw,56px);grid-template-columns:1fr}
+@media(min-width:900px){#about .about-grid{grid-template-columns:.9fr 1.1fr;align-items:center}}
+.about-face{aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;position:relative;background:linear-gradient(160deg,#1c1c20,#0c0c0e);border:1px solid var(--line);box-shadow:var(--sh2);display:grid;place-items:center;text-align:center;padding:24px}
+.about-face .ph{font-family:var(--ff-m);font-size:12px;color:var(--dim);letter-spacing:.08em;line-height:1.7}
+.about-face .big{font-family:var(--ff-d);font-weight:900;font-size:clamp(40px,7vw,64px);color:var(--amber);line-height:.9;margin-bottom:10px;letter-spacing:-.02em}
+.about-quote{font-family:var(--ff-d);font-weight:700;font-size:clamp(21px,3vw,30px);line-height:1.25;letter-spacing:-.01em;margin:16px 0}
+.about-quote em{color:var(--amber2);font-style:normal}
+.trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.trust .t{padding:16px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--bg3)}
+.trust .t b{display:block;font-family:var(--ff-d);font-weight:800;font-size:22px;color:var(--ink)}
+.trust .t span{font-size:13px;color:var(--dim)}
+
+/* REVIEWS */
+#reviews{background:var(--bg2);border-block:1px solid var(--line)}
+.revs{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:760px){.revs{grid-template-columns:repeat(3,1fr)}}
+.rev{padding:24px 22px}
+.rev .stars{color:var(--amber);letter-spacing:3px;font-size:15px;margin-bottom:12px}
+.rev p{font-size:15px;color:var(--ink);margin-bottom:16px}
+.rev .who{display:flex;align-items:center;gap:11px}
+.rev .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(145deg,var(--amber2),var(--amber));color:#160f03;display:grid;place-items:center;font-weight:800;font-family:var(--ff-d)}
+.rev .who b{font-size:14px;display:block}.rev .who span{font-size:12px;color:var(--dim)}
+
+/* FAQ */
+.faq{max-width:820px;margin:0 auto;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 44px 22px 2px;position:relative;font-family:var(--ff-d);font-weight:700;font-size:clamp(17px,2.2vw,20px)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:26px;color:var(--amber);transition:transform .3s}
+.faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+.faq p{padding:0 44px 24px 2px;color:var(--ink2);font-size:15.5px}
+
+/* CONTACT */
+#contact{position:relative;overflow:hidden}
+.contact-card{background:linear-gradient(150deg,#17130b,#0d0d0f 60%);border:1px solid var(--line2);border-radius:clamp(18px,3vw,28px);padding:clamp(28px,5vw,56px);box-shadow:var(--sh2);position:relative;overflow:hidden}
+.contact-card::before{content:"";position:absolute;width:420px;height:420px;right:-120px;top:-160px;background:radial-gradient(circle,var(--amber-soft),transparent 70%);pointer-events:none}
+.contact-grid{display:grid;gap:clamp(24px,4vw,44px);grid-template-columns:1fr;position:relative}
+@media(min-width:880px){.contact-grid{grid-template-columns:1.1fr .9fr}}
+.contact-grid h2{font-family:var(--ff-d);font-weight:900;font-size:clamp(30px,5vw,50px);line-height:1;letter-spacing:-.02em;text-transform:uppercase}
+.contact-grid h2 em{color:var(--amber2);font-style:normal}
+.contact-list{display:grid;gap:11px;margin-top:24px}
+.cline{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1px solid var(--line);border-radius:var(--r-sm);background:rgba(255,255,255,.02);transition:border-color .25s,background-color .25s,transform .3s var(--ease)}
+.cline:hover{border-color:var(--line2);background:rgba(255,255,255,.05);transform:translateX(3px)}
+.cline .ci{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:var(--amber-soft);color:var(--amber2);flex:none}
+.cline .ci svg{width:21px;height:21px}
+.cline b{display:block;font-size:15px}.cline span{font-size:13px;color:var(--dim)}
+.cform{display:grid;gap:12px}
+.cform .fld{display:grid;gap:6px}
+.cform label{font-family:var(--ff-m);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.cform input,.cform textarea{background:var(--bg);border:1px solid var(--line2);border-radius:var(--r-sm);padding:13px 15px;font-size:15px;transition:border-color .2s}
+.cform input:focus,.cform textarea:focus{border-color:var(--amber);outline:none}
+.cform textarea{resize:vertical;min-height:92px}
+.cform .note{font-size:12px;color:var(--dim)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:46px 0 36px;background:var(--bg2)}
+.foot{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
+.foot-links{display:flex;flex-wrap:wrap;gap:20px}
+.foot-links a{font-size:14px;color:var(--ink2);transition:color .2s}.foot-links a:hover{color:var(--amber)}
+.foot .fine{width:100%;margin-top:26px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--dim);display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between}
+
+/* floating DM */
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:45;display:inline-flex;align-items:center;gap:9px;padding:0 18px;height:52px;border-radius:999px;background:linear-gradient(180deg,var(--amber2),var(--amber));color:#160f03;font-weight:800;font-size:14px;box-shadow:0 14px 34px -10px rgba(245,166,35,.6);transform:translateY(0);transition:transform .4s var(--spring),box-shadow .3s}
+.fab:hover{transform:translateY(-3px)}
+.fab svg{width:19px;height:19px}
+@media(min-width:1040px){.fab{display:none}}
+
+.ph-note{display:inline-block;font-family:var(--ff-m);font-size:10px;letter-spacing:.06em;color:#160f03;background:var(--amber2);padding:1px 6px;border-radius:5px;vertical-align:middle;transform:translateY(-1px)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="Micheal — The Car Guy">
+      <span class="mk">M</span>
+      <span>MICHEAL<small>The Car Guy</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#do">What I do</a>
+      <a href="#orbit">The hunt</a>
+      <a href="#how">How it works</a>
+      <a href="#about">About</a>
+      <a href="#reviews">Word</a>
+    </nav>
+    <div class="nav-act">
+      <a class="icon-btn" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg class="i" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.86s0 3.6-.07 4.86c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.86.07s-3.6 0-4.86-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.86c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.21 8.8 2.2 12 2.2Zm0 1.98c-3.15 0-3.52.01-4.76.07-.9.04-1.39.2-1.72.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.12.33-.28.82-.32 1.72-.06 1.24-.07 1.61-.07 4.76s.01 3.52.07 4.76c.04.9.2 1.39.32 1.72.17.43.37.74.69 1.06.32.32.63.52 1.06.69.33.12.82.28 1.72.32 1.24.06 1.61.07 4.76.07s3.52-.01 4.76-.07c.9-.04 1.39-.2 1.72-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.12-.33.28-.82.32-1.72.06-1.24.07-1.61.07-4.76s-.01-3.52-.07-4.76c-.04-.9-.2-1.39-.32-1.72a2.85 2.85 0 0 0-.69-1.06 2.85 2.85 0 0 0-1.06-.69c-.33-.12-.82-.28-1.72-.32-1.24-.06-1.61-.07-4.76-.07Zm0 3.38a5.04 5.04 0 1 1 0 10.08 5.04 5.04 0 0 1 0-10.08Zm0 1.98a3.06 3.06 0 1 0 0 6.12 3.06 3.06 0 0 0 0-6.12Zm5.26-3.5a1.18 1.18 0 1 1 0 2.36 1.18 1.18 0 0 1 0-2.36Z"/></svg>
+      </a>
+      <a class="btn btn-amber" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener">DM to buy</a>
+      <button class="icon-btn menu-btn" id="menuOpen" aria-label="Menu">
+        <svg class="i" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="wrap menu-top">
+    <a class="logo" href="#top"><span class="mk">M</span><span>MICHEAL<small>The Car Guy</small></span></a>
+    <button class="icon-btn" id="menuClose" aria-label="Close">
+      <svg class="i" viewBox="0 0 24 24"><path d="M6.4 5 5 6.4l5.6 5.6L5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6L19 6.4 17.6 5 12 10.6z"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#do">What I do <span>01</span></a>
+    <a href="#orbit">The hunt <span>02</span></a>
+    <a href="#how">How it works <span>03</span></a>
+    <a href="#about">About <span>04</span></a>
+    <a href="#reviews">Word on the street <span>05</span></a>
+  </nav>
+  <div class="menu-ctas">
+    <a class="btn btn-amber" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener">DM to buy on Instagram</a>
+    <!-- REPLACE:PHONE -->
+    <a class="btn btn-line" href="tel:+10000000000">Call</a>
+    <a class="btn btn-wa" href="https://wa.me/10000000000" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div id="stage" aria-hidden="true"></div>
+    <div class="hero-poster" id="poster" style="background-image:url('../360-remix/assets/cars3d/p911-poster.webp')"></div>
+    <div class="hero-grain"></div>
+    <div class="wrap hero-in">
+      <span class="hero-badge"><span class="dot"></span>Open for pickups &amp; trades this week</span>
+      <h1>Your car guy.<span class="l2">Not a dealership.</span></h1>
+      <p class="hero-sub">I find the clean ones, verify them properly, and hand you the keys — daily drivers to dream builds. No lot games, no mystery fees. Just the plug.</p>
+      <div class="hero-cta">
+        <a class="btn btn-amber" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener">DM the plug <svg class="i arr" viewBox="0 0 24 24"><path d="M5 12h12l-5-5 1.4-1.4L21 12l-7.6 7.4L12 18l5-5H5z"/></svg></a>
+        <a class="btn btn-line" href="#do">See what I do</a>
+      </div>
+      <div class="hero-strip">
+        <!-- REPLACE:STAT (all three are placeholders) -->
+        <div class="st"><b>8+ yrs</b><span>in the game</span></div>
+        <div class="st"><b>500+</b><span>cars moved</span></div>
+        <div class="st"><b>48 hr</b><span>avg. to the right car</span></div>
+      </div>
+    </div>
+    <div class="scrollcue">Scroll<i></i></div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marq" aria-hidden="true">
+    <div class="marq-t">
+      <b>JDM</b><em>/</em><b>Euro</b><em>/</em><b>Muscle</b><em>/</em><b>Trucks</b><em>/</em><b>Exotics</b><em>/</em><b>Daily Drivers</b><em>/</em><b>Project Cars</b><em>/</em><b>Clean Titles</b><em>/</em>
+      <b>JDM</b><em>/</em><b>Euro</b><em>/</em><b>Muscle</b><em>/</em><b>Trucks</b><em>/</em><b>Exotics</b><em>/</em><b>Daily Drivers</b><em>/</em><b>Project Cars</b><em>/</em><b>Clean Titles</b><em>/</em>
+    </div>
+  </div>
+
+  <!-- WHAT I DO -->
+  <section class="sec" id="do">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="kick">What I do</span>
+        <h2 class="h2">One guy. Every step <em>handled.</em></h2>
+        <p class="lede">You tell me the car and the budget. I handle the hunt, the inspection, the paperwork and the handover — so you never set foot in a pressure-cooker showroom.</p>
+      </div>
+      <div class="grid">
+        <article class="card svc rv"><span class="no">01</span>
+          <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m21 21-4.3-4.3a8 8 0 1 0-1.4 1.4L19.6 22 21 21ZM4 10a6 6 0 1 1 12 0A6 6 0 0 1 4 10Z"/></svg></div>
+          <h3>Dream-car hunting</h3>
+          <p>Looking for something specific — a spec, a color, a clean one-owner? I work my network until the right one shows up, then grab it before it hits the market.</p>
+        </article>
+        <article class="card svc rv"><span class="no">02</span>
+          <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2l2-6h10l2 6h2v4h-2a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H3v-4Zm5.2-4-1.3 4h10.2l-1.3-4H8.2Z"/></svg></div>
+          <h3>Buy &amp; sell</h3>
+          <p>Clean inventory moving constantly. If you see it posted it's real, it runs, and the price is the price — DM and it can be yours today.</p>
+        </article>
+        <article class="card svc rv"><span class="no">03</span>
+          <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h8l3 3v4h-2a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H4V9a2 2 0 0 1 2-2h1V5h2v2ZM4 3h10v2H4V3Z"/></svg></div>
+          <h3>Trade-ins</h3>
+          <p>Roll in what you've got, roll out in what you want. Fair numbers on your trade and I take the hassle of selling it off your plate.</p>
+        </article>
+        <article class="card svc rv"><span class="no">04</span>
+          <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7Zm0 4.5A2.5 2.5 0 1 0 12 11a2.5 2.5 0 0 0 0-5Z"/></svg></div>
+          <h3>Nationwide delivery</h3>
+          <p>Not local? No problem. Enclosed and open transport to your door, tracked the whole way, so the car you fell for online shows up exactly as promised.</p>
+        </article>
+        <article class="card svc rv"><span class="no">05</span>
+          <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 3 6v6c0 5 3.8 8.4 9 10 5.2-1.6 9-5 9-10V6l-9-4Zm-1 13-3-3 1.4-1.4L11 12.2l4.6-4.6L17 9l-6 6Z"/></svg></div>
+          <h3>Verified, not sold</h3>
+          <p>Every car gets a real inspection and a clean-title check before I'll put my name on it. If it's not right, I pass — simple as that.</p>
+        </article>
+        <article class="card svc rv"><span class="no">06</span>
+          <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm0 4H4v-2h16v2Zm-6 4H4v-2h10v2Z"/></svg></div>
+          <h3>Financing help</h3>
+          <p>Need a hand with funding? I'll point you to lenders that actually approve real people and make the numbers make sense before you commit.</p>
+          <!-- NOTE: only keep this card if he actually offers/refers financing -->
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORBIT / THE HUNT -->
+  <section class="sec" id="orbit">
+    <div class="wrap">
+      <div class="orbit-grid">
+        <div class="orbit-view" id="orbitView" role="img" aria-label="Rotatable car preview">
+          <span class="orbit-tag">Demo vehicle · drag to spin</span>
+          <!-- 360 frames from repo asset library; placeholder car, swap for a real feature car -->
+          <span class="orbit-hint" id="orbitHint">↔ Drag to spin</span>
+        </div>
+        <div class="rv">
+          <span class="kick">The hunt</span>
+          <h2 class="h2">See it from <em>every angle</em> before you commit.</h2>
+          <p class="lede">This is how a feature car gets shown — walk around it like it's in front of you. When I post a car, you get the real walkaround, the real miles, and the real story on it.</p>
+          <ul class="spec">
+            <!-- REPLACE: these are demo specs for the placeholder vehicle -->
+            <li><span>Body</span><b>Coupe · sport</b></li>
+            <li><span>Condition</span><b>Inspected · clean title</b></li>
+            <li><span>Status</span><b>Representative of feed vibe</b></li>
+            <li><span>To buy</span><b>DM @micheal_thecarguy</b></li>
+          </ul>
+          <a class="btn btn-amber" style="margin-top:22px" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener">See this week's cars <svg class="i arr" viewBox="0 0 24 24"><path d="M5 12h12l-5-5 1.4-1.4L21 12l-7.6 7.4L12 18l5-5H5z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="sec" id="how">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="kick">How it works</span>
+        <h2 class="h2">From DM to driveway in <em>three moves.</em></h2>
+      </div>
+      <div class="steps">
+        <article class="card step rv">
+          <h3>Tell me the car</h3>
+          <p>Slide into the DMs with what you're after — exact car, budget, or just a vibe. Buying, selling or trading, we start with a straight conversation.</p>
+        </article>
+        <article class="card step rv">
+          <h3>I find &amp; verify</h3>
+          <p>I work the network, pull the options, inspect them properly and send you honest video walkarounds. You only see cars worth your money.</p>
+        </article>
+        <article class="card step rv">
+          <h3>You get the keys</h3>
+          <p>We lock the number, I handle the paperwork, and the car comes to you — picked up local or delivered to your door, clean and ready.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-face rv">
+          <div>
+            <!-- REPLACE: drop a real photo of Micheal here (object-fit:cover) -->
+            <div class="big">M.</div>
+            <div class="ph">[ Add a photo of Micheal ]<br>profile / with a car<br>replaces this panel</div>
+          </div>
+        </div>
+        <div class="rv">
+          <span class="kick">The guy</span>
+          <p class="about-quote">"I treat every car like it's going to my own family. If I wouldn't put my people in it, <em>I'm not selling it to you.</em>"</p>
+          <p class="lede">What started as a lifelong obsession with cars turned into a straight-up business: being the guy people actually trust to find the right one. No lot, no suits, no games — just real cars, real prices and a handshake that means something. <span class="ph-note">bio — verify &amp; rewrite in Micheal's words</span></p>
+          <div class="trust">
+            <div class="t"><b>Clean titles</b><span>verified on every car</span></div>
+            <div class="t"><b>Honest video</b><span>real walkarounds, real flaws</span></div>
+            <div class="t"><b>Your budget</b><span>I work it, not around it</span></div>
+            <div class="t"><b>After the sale</b><span>I'm still a text away</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="sec" id="reviews">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="kick">Word on the street</span>
+        <h2 class="h2">People who got the <em>right car.</em></h2>
+        <p class="lede"><span class="ph-note">REPLACE:REVIEW — these are example testimonials, not real customers. Swap for real screenshots/quotes.</span></p>
+      </div>
+      <div class="revs">
+        <article class="card rev rv">
+          <div class="stars">★★★★★</div>
+          <p>"Told him exactly what I wanted and my budget. Two days later he sent me the one. No pressure, no hidden anything. Keys in a week."</p>
+          <div class="who"><span class="av">J</span><div><b>[Customer name]</b><span>Daily driver</span></div></div>
+        </article>
+        <article class="card rev rv">
+          <div class="stars">★★★★★</div>
+          <p>"Delivered the car three states away exactly how he described it on video. First time buying sight-unseen and I'd do it again tomorrow."</p>
+          <div class="who"><span class="av">R</span><div><b>[Customer name]</b><span>Out-of-state delivery</span></div></div>
+        </article>
+        <article class="card rev rv">
+          <div class="stars">★★★★★</div>
+          <p>"Took my trade at a fair number and got me into the truck I'd been chasing for months. The only guy I call now."</p>
+          <div class="who"><span class="av">D</span><div><b>[Customer name]</b><span>Trade-in</span></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" id="faq">
+    <div class="wrap">
+      <div class="sec-head rv" style="text-align:center">
+        <span class="kick" style="justify-content:center">FAQ</span>
+        <h2 class="h2">Straight answers.</h2>
+      </div>
+      <div class="faq rv">
+        <details open><summary>How do I actually buy a car from you?</summary><p>DM <a href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener" style="color:var(--amber2)">@micheal_thecarguy</a> or message me here with what you're after. We talk it through, I show you real options with honest video, and once you're happy we lock the deal and sort delivery or pickup.</p></details>
+        <details><summary>Can you find a specific car that's not posted?</summary><p>That's the main thing I do. Give me the exact year, make, model, spec and budget — I'll work my network and hunt it down, then grab it before it ever hits a public listing.</p></details>
+        <details><summary>Do you deliver out of state?</summary><p>Yes — enclosed or open transport straight to your door, tracked the whole way. <span class="ph-note">confirm the areas/countries Micheal actually ships to</span></p></details>
+        <details><summary>Is every car inspected?</summary><p>Every car gets a real mechanical and title check before I'll stand behind it. You get honest walkaround video showing the good and the flaws — nothing hidden.</p></details>
+        <details><summary>Will you take my current car as a trade?</summary><p>Absolutely. Tell me what you've got and I'll give you a fair number toward whatever you're moving into, and take the headache of reselling it off your hands.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="sec" id="contact">
+    <div class="wrap">
+      <div class="contact-card rv">
+        <div class="contact-grid">
+          <div>
+            <span class="kick">Let's talk cars</span>
+            <h2>Ready when <em>you are.</em></h2>
+            <p class="lede" style="margin-top:14px">Fastest way to reach me is the DM. Tell me the car, the budget, or the one you're trying to sell — I answer personally.</p>
+            <div class="contact-list">
+              <a class="cline" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener">
+                <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.86s0 3.6-.07 4.86c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.86.07s-3.6 0-4.86-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.86c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.21 8.8 2.2 12 2.2Zm0 5.36a4.44 4.44 0 1 0 0 8.88 4.44 4.44 0 0 0 0-8.88Zm0 7.32a2.88 2.88 0 1 1 0-5.76 2.88 2.88 0 0 1 0 5.76Zm4.65-7.5a1.04 1.04 0 1 1 0 2.08 1.04 1.04 0 0 1 0-2.08Z"/></svg></span>
+                <div><b>@micheal_thecarguy</b><span>DM me — fastest reply</span></div>
+              </a>
+              <!-- REPLACE:PHONE -->
+              <a class="cline" href="tel:+10000000000">
+                <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 2.2Z"/></svg></span>
+                <div><b>Call / text <span class="ph-note">add number</span></b><span>Tap to call</span></div>
+              </a>
+              <a class="cline" href="https://wa.me/10000000000" target="_blank" rel="noopener">
+                <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.6-4.1-.1-.2-1.1-1.4-1.1-2.7 0-1.3.7-1.9.9-2.2.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.7-.9c.2-.2.4-.2.6-.1l2 .9c.2.1.4.2.4.3.1.2.1.8-.1 1.4Z"/></svg></span>
+                <div><b>WhatsApp <span class="ph-note">add number</span></b><span>Message me directly</span></div>
+              </a>
+            </div>
+            <p class="lede" style="margin-top:18px;font-size:14px">Based in <b style="color:var(--ink)">[CITY]</b> · serving the area &amp; nationwide delivery <span class="ph-note">set location</span></p>
+          </div>
+
+          <form class="cform" onsubmit="return false" aria-label="Enquiry (demo — not wired to a backend)">
+            <div class="fld"><label for="n">Your name</label><input id="n" type="text" placeholder="Name" autocomplete="name"></div>
+            <div class="fld"><label for="c">The car (or what you're after)</label><input id="c" type="text" placeholder="e.g. clean E46 M3, under $25k"></div>
+            <div class="fld"><label for="m">Message</label><textarea id="m" placeholder="Buying, selling or trading? Tell me the details…"></textarea></div>
+            <a class="btn btn-amber btn-block" id="formSend" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener">Send it to the DMs <svg class="i arr" viewBox="0 0 24 24"><path d="M5 12h12l-5-5 1.4-1.4L21 12l-7.6 7.4L12 18l5-5H5z"/></svg></a>
+            <p class="note">This form opens Instagram DM. <span class="ph-note">Wire to a real backend / Formspree / WhatsApp prefill if you want submissions by email.</span></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="logo" href="#top"><span class="mk">M</span><span>MICHEAL<small>The Car Guy</small></span></a>
+      <div class="foot-links">
+        <a href="#do">What I do</a>
+        <a href="#how">How it works</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="fine">
+      <span>© <span id="yr"></span> Micheal — The Car Guy. Your plug for the right car.</span>
+      <span>Built in the context of @micheal_thecarguy · placeholder details marked for replacement</span>
+    </div>
+  </div>
+</footer>
+
+<a class="fab" href="https://www.instagram.com/micheal_thecarguy" target="_blank" rel="noopener" aria-label="DM to buy">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l1.6-4.2A9 9 0 1 1 7.8 20.4L2 21Zm6.2-5.1c.3 0 .5.1.7.3a7 7 0 1 0-2.2-2.2c.2.2.2.5.1.8L6 17l2.2-.6Z"/></svg>
+  DM to buy
+</a>
+
+<script>
+/* ---- nav solidify, menu, year ---- */
+(function(){
+  var nav=document.getElementById('nav');
+  var onScroll=function(){ nav.classList.toggle('solid', window.scrollY>24); };
+  onScroll(); addEventListener('scroll',onScroll,{passive:true});
+
+  var menu=document.getElementById('menu'), html=document.documentElement;
+  function setMenu(o){ menu.classList.toggle('open',o); menu.setAttribute('aria-hidden',!o); html.classList.toggle('lock',o); }
+  document.getElementById('menuOpen').onclick=function(){setMenu(true)};
+  document.getElementById('menuClose').onclick=function(){setMenu(false)};
+  menu.querySelectorAll('nav a').forEach(function(a){a.onclick=function(){setMenu(false)}});
+  document.getElementById('yr').textContent=new Date().getFullYear();
+
+  /* form -> prefilled IG (best we can do client-side without a backend) */
+  var fs=document.getElementById('formSend');
+  if(fs){ fs.addEventListener('click',function(){
+    /* IG doesn't accept prefilled DM text via URL; this just routes to the profile. */
+  }); }
+})();
+
+/* ---- 360 orbit (drag to spin) using repo frame assets ---- */
+(function(){
+  var view=document.getElementById('orbitView'); if(!view) return;
+  var hint=document.getElementById('orbitHint');
+  var base='../360-remix/assets/orbit/', frames=['fq0','fq1','fq2','fq3','fq4','fq5','fq6','fq7','fq8','fq9'], imgs=[];
+  frames.forEach(function(f,i){
+    var el=document.createElement('img'); el.src=base+f+'.webp'; el.loading=(i===0?'eager':'lazy');
+    if(i===0) el.className='on'; el.setAttribute('aria-hidden','true');
+    view.appendChild(el); imgs.push(el);
+  });
+  var cur=0, dragging=false, startX=0, startF=0, used=false;
+  function show(n){ n=((n%imgs.length)+imgs.length)%imgs.length; if(n===cur) return; imgs[cur].classList.remove('on'); imgs[n].classList.add('on'); cur=n; }
+  function px(e){ return e.touches? e.touches[0].clientX : e.clientX; }
+  function down(e){ dragging=true; startX=px(e); startF=cur; if(!used){used=true; hint&&hint.classList.add('hide');} }
+  function move(e){ if(!dragging) return; var dx=px(e)-startX; var step=view.clientWidth/imgs.length; show(startF - Math.round(dx/step)); if(e.cancelable&&e.type==='touchmove') e.preventDefault(); }
+  function up(){ dragging=false; }
+  view.addEventListener('mousedown',down); addEventListener('mousemove',move); addEventListener('mouseup',up);
+  view.addEventListener('touchstart',down,{passive:true}); view.addEventListener('touchmove',move,{passive:false}); addEventListener('touchend',up);
+  /* gentle idle auto-spin until first interaction, respecting reduced motion */
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var idle=setInterval(function(){ if(used){clearInterval(idle);return;} show(cur+1); },260);
+  }
+})();
+</script>
+
+<script type="module">
+/* ---- WebGL hero: real 3D car on a reflective stage ---- */
+(function(){
+  var stage=document.getElementById('stage'), poster=document.getElementById('poster');
+  if(!stage) return;
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  // honor Save-Data / very small screens with poster only is optional; we still try WebGL.
+  var supported=(function(){ try{ var c=document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl')||c.getContext('experimental-webgl'))); }catch(e){ return false; } })();
+  if(!supported){ return; } // poster stays
+
+  import('three').then(async function(THREE){
+    var addons='https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/';
+    var [{GLTFLoader},{DRACOLoader},{MeshoptDecoder},{RoomEnvironment}]=await Promise.all([
+      import(addons+'loaders/GLTFLoader.js'),
+      import(addons+'loaders/DRACOLoader.js'),
+      import(addons+'libs/meshopt_decoder.module.js'),
+      import(addons+'environments/RoomEnvironment.js')
+    ]);
+
+    var W=stage.clientWidth, H=stage.clientHeight;
+    var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
+    var mob=innerWidth<760;
+    renderer.setPixelRatio(Math.min(devicePixelRatio, mob?1.6:2));
+    renderer.setSize(W,H);
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.08;
+    renderer.outputColorSpace=THREE.SRGBColorSpace;
+    stage.appendChild(renderer.domElement);
+
+    var scene=new THREE.Scene();
+    var camera=new THREE.PerspectiveCamera(42, W/H, 0.1, 100);
+    camera.position.set(4.6, 1.5, 6.2);
+    camera.lookAt(0,0.55,0);
+
+    // IBL
+    var pmrem=new THREE.PMREMGenerator(renderer);
+    scene.environment=pmrem.fromScene(new RoomEnvironment(renderer),0.04).texture;
+
+    // lights
+    var key=new THREE.DirectionalLight(0xfff2dd,2.1); key.position.set(-6,8,6); scene.add(key);
+    var rim=new THREE.DirectionalLight(0xffd27a,1.6); rim.position.set(7,4,-6); scene.add(rim);
+    var fill=new THREE.DirectionalLight(0x9fb4c8,0.6); fill.position.set(2,3,8); scene.add(fill);
+    scene.add(new THREE.HemisphereLight(0xffffff,0x05050a,0.25));
+
+    // reflective floor
+    var floorMat=new THREE.MeshStandardMaterial({color:0x0b0b0d,metalness:0.9,roughness:0.42});
+    var floor=new THREE.Mesh(new THREE.CircleGeometry(16,64),floorMat);
+    floor.rotation.x=-Math.PI/2; floor.position.y=0; scene.add(floor);
+
+    // contact shadow (radial canvas texture)
+    var sc=document.createElement('canvas'); sc.width=sc.height=256;
+    var g=sc.getContext('2d'); var grd=g.createRadialGradient(128,128,10,128,128,128);
+    grd.addColorStop(0,'rgba(0,0,0,.55)'); grd.addColorStop(.55,'rgba(0,0,0,.28)'); grd.addColorStop(1,'rgba(0,0,0,0)');
+    g.fillStyle=grd; g.fillRect(0,0,256,256);
+    var shadowTex=new THREE.CanvasTexture(sc);
+    var shadow=new THREE.Mesh(new THREE.PlaneGeometry(7,3.4),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));
+    shadow.rotation.x=-Math.PI/2; shadow.position.y=0.002; scene.add(shadow);
+
+    // amber glow accents behind the car
+    function glow(x,y,z,c,i){ var m=new THREE.Mesh(new THREE.PlaneGeometry(3,5),new THREE.MeshBasicMaterial({color:new THREE.Color(c).multiplyScalar(i),transparent:true,opacity:.5})); m.position.set(x,y,z); m.lookAt(camera.position); scene.add(m); }
+    glow(-4,2,-5,0xf5a623,1.1); glow(4.5,2.4,-4.5,0x6d7f94,0.7);
+
+    var carGroup=new THREE.Group(); scene.add(carGroup);
+
+    var loader=new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);               // p911-lite.glb is EXT_meshopt_compression
+    var draco=new DRACOLoader(); draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/');
+    loader.setDRACOLoader(draco);                            // lazy: only fetches if a swapped-in model uses DRACO
+
+    var MODEL='../360-remix/assets/cars3d/p911-lite.glb';
+    loader.load(MODEL, function(gltf){
+      var car=gltf.scene;
+      // center + scale to a target length along its longest horizontal axis
+      var box=new THREE.Box3().setFromObject(car); var size=new THREE.Vector3(); box.getSize(size);
+      var center=new THREE.Vector3(); box.getCenter(center);
+      car.position.x-=center.x; car.position.z-=center.z; car.position.y-=box.min.y;
+      var targetLen=4.4; var longest=Math.max(size.x,size.z); var s=targetLen/longest;
+      car.scale.setScalar(s);
+      carGroup.add(car);
+      carGroup.rotation.y=-0.5;
+      carGroup.position.y=0.0;
+      // intro
+      if(!reduce){ carGroup.position.y=-0.4; carGroup.scale.setScalar(.96); var t0=performance.now();
+        (function intro(){ var k=Math.min(1,(performance.now()-t0)/900); var e=1-Math.pow(1-k,3);
+          carGroup.position.y=-0.4+0.4*e; carGroup.scale.setScalar(.96+.04*e); if(k<1) requestAnimationFrame(intro); })(); }
+      poster&&poster.classList.add('gone');
+      ready=true;
+    }, undefined, function(err){ /* load failed -> poster remains */ console.warn('car load failed',err); });
+
+    // pointer parallax
+    var tx=0,ty=0,cx=0,cy=0;
+    addEventListener('pointermove',function(e){ tx=(e.clientX/innerWidth-.5); ty=(e.clientY/innerHeight-.5); },{passive:true});
+
+    var ready=false, visible=true, t=0;
+    var io=new IntersectionObserver(function(es){ visible=es[0].isIntersecting; },{threshold:0.01});
+    io.observe(stage);
+
+    function resize(){ W=stage.clientWidth; H=stage.clientHeight; renderer.setSize(W,H); camera.aspect=W/H; camera.updateProjectionMatrix(); }
+    addEventListener('resize',resize);
+
+    renderer.setAnimationLoop(function(){
+      if(!visible){ return; }
+      t+=0.016;
+      cx+=(tx-cx)*0.05; cy+=(ty-cy)*0.05;
+      if(ready){
+        if(!reduce) carGroup.rotation.y+=0.0032;
+        camera.position.x=4.6+cx*0.9; camera.position.y=1.5-cy*0.5;
+        camera.lookAt(0,0.55,0);
+      }
+      renderer.render(scene,camera);
+    });
+  }).catch(function(e){ console.warn('three import failed',e); /* poster remains */ });
+})();
+</script>
+</body>
+</html>
