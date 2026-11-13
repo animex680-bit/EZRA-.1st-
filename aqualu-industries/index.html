@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-CA">
-<head><meta name="build" content="9536d110bcf1">
+<head><meta name="build" content="6518e1af1c0a">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aqualu Industries — All-aluminum off-road bodies, built in Kelowna, BC.</title>
@@ -348,43 +348,11 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradi
 
 /* ---------- LIGHT BAND: VALUE ---------- */
 .light{background:var(--paper);color:var(--paper-ink)}
-.light .kick{color:#8a6a2c}
-.light .h2 em{color:#9a7531}
-.light .lede{color:var(--paper-dim)}
-.td-grid{display:grid;gap:22px}
-@media(min-width:960px){.td-grid{grid-template-columns:1.05fr .95fr;gap:44px;align-items:start}}
-.td-form{background:#fff;border-radius:20px;padding:clamp(18px,3vw,28px);box-shadow:0 1px 0 rgba(0,0,0,.04),0 24px 50px -28px rgba(60,40,10,.35);display:grid;gap:18px}
-.light .fl>span{color:var(--paper-dim)}
-.light .inp{background:#f7f4ee;border-color:#ddd5c6;color:var(--paper-ink)}
-.light .inp:focus{border-color:#b08a43;box-shadow:0 0 0 3px rgba(176,138,67,.18)}
-.plate{display:flex;align-items:stretch;border-radius:10px;overflow:hidden;border:2px solid #17140f;background:#f7d117;height:60px}
-.plate i{width:40px;background:#1f4ab8;color:#fff;font-style:normal;font-size:12px;font-weight:700;display:grid;place-items:center;letter-spacing:.04em}
-.plate input{flex:1;min-width:0;border:0;background:transparent;text-align:center;font-weight:800;font-size:26px;letter-spacing:.1em;text-transform:uppercase;color:#111;font-family:'Arial Black',Arial,sans-serif}
-.plate input:focus{outline:none}
-.plate input::placeholder{color:rgba(0,0,0,.32)}
-.light .seg button{border-color:#d8cfbf;color:var(--paper-dim)}
-.light .seg button:hover{border-color:#8a7a5f;color:var(--paper-ink)}
-.light .seg button[aria-pressed=true]{background:var(--paper-ink);color:#fff;border-color:var(--paper-ink)}
-.light .rng{accent-color:#a47f3c}
-.mi-row{display:flex;justify-content:space-between;align-items:baseline}
-.mi-row b{font-size:18px}
-.cond-d{font-size:13px;color:var(--paper-dim);min-height:40px}
-.td-result{position:sticky;top:84px;border-radius:20px;background:var(--paper-ink);color:var(--ink);padding:clamp(20px,3vw,30px);box-shadow:0 30px 60px -30px rgba(23,20,15,.7)}
-.td-result .lbl{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.td-range{font-family:var(--ff-d);font-size:clamp(44px,8vw,66px);font-weight:600;line-height:1;letter-spacing:-.02em;margin:8px 0 6px;font-variant-numeric:tabular-nums}
-.td-range small{font-size:.5em;color:var(--ink2)}
-.td-for{font-size:14px;color:var(--ink2);margin-bottom:16px}
-.bars{display:grid;gap:9px;margin:4px 0 18px}
-.bar{display:grid;grid-template-columns:86px 1fr 52px;gap:10px;align-items:center;font-size:12.5px;color:var(--ink2)}
-.bar u{height:6px;border-radius:6px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;text-decoration:none}
-.bar u i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:var(--gold);transition:width .6s var(--ease)}
-.bar u i.dn{background:#e0775e}
-.bar b{text-align:right;font-weight:600;color:var(--ink)}
-.td-acts{display:grid;gap:8px}
-.td-trust{display:grid;gap:8px;margin-top:16px;font-size:13px;color:var(--ink2)}
-.td-trust span{display:flex;gap:8px;align-items:center}
-.td-trust svg{width:15px;height:15px;fill:var(--ok)}
-
+/* v2 — theme transition: the light block fades in and out of the dark page instead of hard-cutting */
+.sec.light{position:relative}
+.sec.light::before,.sec.light::after{content:"";position:absolute;left:0;right:0;height:9vh;pointer-events:none;z-index:2}
+.sec.light::before{top:0;background:linear-gradient(var(--bg) 0%,rgba(13,12,11,0) 92%)}
+.sec.light::after{bottom:0;background:linear-gradient(rgba(13,12,11,0) 8%,var(--bg) 100%)}
 /* ---------- FINANCE ---------- */
 .fn-grid{display:grid;gap:22px}
 @media(min-width:960px){.fn-grid{grid-template-columns:1fr 1fr;gap:44px;align-items:center}}
@@ -765,56 +733,6 @@ body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;op
 @keyframes mqR{from{transform:translateX(-30%)}to{transform:translateX(0)}}
 
 /* ---------- AQ · the intelligence (a bigger version of the floating chatbot) ---------- */
-.omega{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(120% 95% at 30% 44%,#15181e 0%,#0a0b0e 56%,#060608 100%);color:var(--ink)}
-.om-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(233,201,136,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(233,201,136,.05) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(70% 70% at 30% 46%,#000,transparent 80%);opacity:.5;pointer-events:none}
-.om-wrap{position:relative;z-index:2;width:min(1180px,92vw);margin:0 auto;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:clamp(28px,5vw,74px);padding:13vh 0}
-/* the orb — a scaled-up twin of the #bot chatbot */
-.om-stage{position:relative;display:flex;align-items:center;justify-content:center}
-.om-orb{position:relative;appearance:none;border:0;background:none;cursor:pointer;width:clamp(260px,44vmin,52vh);height:clamp(260px,44vmin,52vh);display:grid;place-items:center;border-radius:50%;transform:translate3d(var(--ox,0),var(--oy,0),0)}
-.om-glow{position:absolute;inset:-20%;border-radius:50%;background:radial-gradient(closest-side,rgba(233,201,136,.34),rgba(233,201,136,.06) 55%,transparent 72%);filter:blur(5px);animation:omBreath 5s ease-in-out infinite}
-.om-ring{position:absolute;border-radius:50%;border:1px solid rgba(233,201,136,.2)}
-.om-ring.r1{inset:3%;animation:omSpin 24s linear infinite}
-.om-ring.r2{inset:12%;border-style:dashed;border-color:rgba(233,201,136,.32);animation:omSpin 40s linear infinite reverse}
-.om-ring.r3{inset:-7%;border-color:rgba(233,201,136,.1)}
-.om-ball{position:absolute;inset:17%;border-radius:50%;overflow:hidden;display:grid;place-items:center;
-  background:radial-gradient(38% 34% at 42% 32%,#fff4d6 0%,#eaca86 20%,#bb9550 46%,#6f5225 72%,#241a0c 100%);
-  box-shadow:inset 0 0 44px rgba(0,0,0,.55),0 24px 70px -20px rgba(233,201,136,.55)}
-.om-ball::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 46% at 50% 120%,rgba(255,240,200,.45),transparent 58%)}
-.om-eye{position:relative;width:35%;height:31%;border-radius:50%;background:#140d05;box-shadow:inset 0 0 18px rgba(0,0,0,.85),0 0 0 3px rgba(20,13,5,.55);display:grid;place-items:center;z-index:2}
-.om-pupil{width:46%;height:46%;border-radius:50%;background:radial-gradient(circle at 40% 36%,#fff,#ffe6a6 36%,#caa35e 72%);box-shadow:0 0 12px #ffe6a6;transition:transform .14s linear}
-.om-sym{position:absolute;bottom:8%;left:50%;translate:-50% 0;font-family:Georgia,serif;font-weight:700;font-size:15%;color:rgba(36,26,12,.55);z-index:2}
-.om-tag{position:absolute;bottom:-8%;left:50%;translate:-50% 0;font-family:var(--mono);font-size:clamp(9px,1vw,11px);letter-spacing:.16em;text-transform:uppercase;color:var(--gold2,#e9c988);white-space:nowrap;opacity:.85}
-.om-tag::first-letter{color:#7fd49a}
-.om-orb:hover .om-ball,.om-orb:focus-visible .om-ball{filter:brightness(1.07)}
-.om-orb:focus-visible{outline:2px solid var(--gold2,#e9c988);outline-offset:8px}
-/* the conjured speech bubbles — up to three on screen at once, the AI thinking out loud */
-.om-bubs{position:absolute;inset:0;z-index:4;pointer-events:none}
-.om-bub{position:absolute;width:max-content;max-width:min(40vw,300px);padding:13px 16px;border-radius:16px 16px 16px 5px;background:#14161b;border:1px solid rgba(233,201,136,.3);box-shadow:0 22px 50px -22px rgba(0,0,0,.85);font-size:clamp(13px,1.1vw,15.5px);line-height:1.42;color:#eceae6;cursor:pointer;pointer-events:auto;opacity:0;transform:translateY(14px) scale(.9);transition:opacity .55s var(--out),transform .6s var(--spring)}
-.om-bub.on{opacity:1;transform:translateY(0) scale(1)}
-.om-bub::after{content:"";position:absolute;left:26px;bottom:-9px;width:16px;height:16px;background:#14161b;border-right:1px solid rgba(233,201,136,.3);border-bottom:1px solid rgba(233,201,136,.3);transform:rotate(45deg)}
-.om-bub .bk{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2,#e9c988);margin-bottom:5px}
-.om-bub.s0{left:5%;top:10%}
-.om-bub.s1{left:31%;top:0}
-.om-bub.s2{left:1%;top:56%}
-@media(max-width:860px){.om-bub{max-width:min(74vw,300px)}.om-bub.s0{left:4%;top:3%}.om-bub.s1{right:3%;left:auto;top:21%}.om-bub.s2{left:4%;top:40%}}
-/* copy, with words that assemble on load */
-.om-copy{max-width:52ch}
-.om-k{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2,#e9c988);margin:0 0 18px;display:flex;align-items:center;gap:10px}
-.om-k::before{content:"";width:26px;height:1px;background:var(--gold2,#e9c988)}
-.om-h{font-family:var(--ff-d);font-weight:600;font-size:clamp(36px,5vw,72px);line-height:1;letter-spacing:-.03em;margin:0}
-.om-h .ow{display:inline-block;opacity:0;transform:translate3d(0,26px,0);transition:opacity .55s var(--out),transform .7s var(--out)}
-.om-h.in .ow{opacity:1;transform:none}
-.om-h .ow.g{color:var(--gold2,#e9c988);font-style:italic;font-weight:500}
-.om-l{margin:22px 0 0;font-size:clamp(15px,1.3vw,18px);line-height:1.7;color:var(--dim,#b9b4ab);max-width:46ch}
-.om-stats{display:flex;flex-wrap:wrap;gap:12px 30px;margin:30px 0 32px}
-.om-stats>div{display:flex;flex-direction:column;gap:3px}
-.om-stats b{font-family:var(--ff-d);font-weight:600;font-size:clamp(28px,3vw,40px);line-height:1;letter-spacing:-.02em;color:#fff;font-variant-numeric:lining-nums tabular-nums}
-.om-stats span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2,#e9c988);opacity:.85}
-.om-cta{align-self:flex-start}
-@keyframes omBreath{50%{transform:scale(1.05)}}
-@keyframes omSpin{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.om-glow,.om-ring{animation:none}}
-@media(max-width:860px){.om-wrap{grid-template-columns:1fr;gap:34px;padding:12vh 0 10vh}.om-stage{order:-1}.om-orb{width:clamp(220px,60vw,320px);height:clamp(220px,60vw,320px)}.om-stats{gap:10px 22px}.om-cta{align-self:stretch;text-align:center}}
 /* the green-man clip, now on the final page instead of a loader */
 .visit-walk{display:flex;align-items:center;gap:22px;margin:0 0 36px;padding:16px;border:1px solid var(--line,rgba(255,255,255,.1));border-radius:20px;background:rgba(233,201,136,.03)}
 .visit-walk video{width:clamp(92px,11vw,132px);aspect-ratio:9/16;object-fit:cover;border-radius:12px;background:#0a0b0e;flex:none;box-shadow:0 18px 40px -18px rgba(0,0,0,.7)}
@@ -1472,14 +1390,47 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   #bot .bub{font-size:12px;padding:8px 12px}
   #term .tt small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
 }
+
+/* ---------- v3 · THEME ZONES — the page changes clothes as you travel ---------- */
+body{transition:background-color 1.1s ease}
+.tx-st{transition:background-color 1.1s ease}
+html[data-zone="bay"]{--bg:#120d09;--bg2:#1a130c;--bg3:#231a10;--gold:#cf8a4d;--gold2:#e8ae77;--gold-soft:rgba(207,138,77,.16)}
+html[data-zone="velvet"]{--bg:#100b15;--bg2:#171022;--bg3:#1f1630;--gold:#d9a27a;--gold2:#f0c6a2;--gold-soft:rgba(217,162,122,.15)}
+
+/* ---------- v3 · GHOST WORDS — stroked backdrop type, drifting at its own depth ---------- */
+.sec-ghost{position:absolute;left:50%;top:clamp(80px,11vh,150px);translate:-50% 0;font-family:var(--ff-d);font-weight:700;font-size:min(21vw,290px);line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(227,192,127,.09);white-space:nowrap;pointer-events:none;z-index:0;user-select:none}
+
+/* ---------- v3 · TRANSITION — the odometer finds its level ---------- */
+.tx-odo{height:160vh}
+.tx-odo .tx-st{background:var(--bg2);display:grid;place-items:center;align-content:center;gap:clamp(20px,3.4vh,34px)}
+.od-glow{position:absolute;left:50%;top:50%;width:72vmax;height:72vmax;translate:-50% -50%;border-radius:50%;background:radial-gradient(closest-side,var(--gold-soft),transparent 70%);opacity:var(--ga,0);pointer-events:none}
+.od-cap{position:relative;text-align:center;font-family:var(--ff-d);font-weight:600;font-size:clamp(30px,5vw,56px);line-height:1.05;letter-spacing:-.02em;opacity:var(--ca,0);transform:translateY(var(--cy,40px));margin:0;padding:0 16px}
+.od-cap small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin-bottom:14px;font-weight:500}
+.od-cap em{font-style:italic;color:var(--gold2)}
+.od-row{position:relative;display:flex;align-items:center;gap:clamp(5px,1vw,10px);opacity:var(--ra,0)}
+.od-cur{font-family:var(--ff-d);font-size:clamp(40px,7vw,84px);color:var(--gold2);font-weight:600;margin-right:4px;line-height:1}
+.od-cell{height:clamp(58px,9vw,108px);min-width:clamp(44px,7vw,84px);overflow:hidden;border:1px solid var(--line2);border-radius:14px;background:rgba(255,255,255,.03);box-shadow:var(--sh1)}
+.od-strip{display:flex;flex-direction:column;will-change:transform}
+.od-strip i{font-style:normal;font-family:var(--ff-d);font-weight:600;font-size:clamp(38px,6.6vw,78px);line-height:clamp(58px,9vw,108px);height:clamp(58px,9vw,108px);text-align:center;font-variant-numeric:lining-nums tabular-nums;color:var(--ink)}
+.od-sub{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink2);opacity:var(--ca,0);margin:0;text-align:center}
 </style>
 </head>
 <body>
-<!-- brand splash: logo-first intro, fades to reveal the hero -->
-<div id="brandSplash" aria-hidden="true"><div class="bs-badge"><img src="data:image/jpeg;base64,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" alt="Aqualu Industries logo" draggable="false"></div></div>
-<style id="bs-style">#brandSplash{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;background:var(--bg,#0d0c0b)}#brandSplash::before{content:"";position:absolute;inset:0;background:radial-gradient(62% 52% at 50% 42%,rgba(255,255,255,.06),transparent 72%);pointer-events:none}#brandSplash .bs-badge{position:relative;width:clamp(132px,30vw,182px);height:clamp(132px,30vw,182px);border-radius:28px;overflow:hidden;background:#fff;box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.09);opacity:0;transform:scale(.9);animation:bsIn 1s cubic-bezier(.22,1,.36,1) .12s forwards}#brandSplash .bs-badge img{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none;user-select:none}@keyframes bsIn{to{opacity:1;transform:scale(1)}}#brandSplash.bs-done{animation:bsOut .6s ease forwards}@keyframes bsOut{to{opacity:0;visibility:hidden}}@media(prefers-reduced-motion:reduce){#brandSplash .bs-badge{opacity:1;transform:none;animation:none}}</style>
-<script>(function(){var s=document.getElementById("brandSplash");if(!s)return;var done=false;function go(){if(done)return;done=true;s.classList.add("bs-done");setTimeout(function(){s&&s.parentNode&&s.parentNode.removeChild(s);},650);}setTimeout(go,2000);setTimeout(function(){["pointerdown","wheel","keydown","touchstart"].forEach(function(ev){window.addEventListener(ev,go,{once:true,passive:true});});},700);})();</script>
 
+<!-- ============ BRAND SPLASH · logo-first intro, fades to reveal the car ============ -->
+<div id="brandSplash" aria-hidden="true"><div class="bs-badge"><img src="data:image/jpeg;base64,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" alt="Aqualu Industries logo" draggable="false"></div></div>
+<style id="bs-style">
+#brandSplash{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;background:var(--bg,#0d0c0b)}
+#brandSplash::before{content:"";position:absolute;inset:0;background:radial-gradient(62% 52% at 50% 42%,rgba(255,255,255,.06),transparent 72%);pointer-events:none}
+#brandSplash .bs-badge{position:relative;width:clamp(132px,30vw,182px);height:clamp(132px,30vw,182px);border-radius:28px;overflow:hidden;background:#fff;display:grid;place-items:center;
+box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.09);opacity:0;transform:scale(.9);animation:bsIn 1s cubic-bezier(.22,1,.36,1) .12s forwards}
+#brandSplash .bs-badge img{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none;user-select:none}
+#brandSplash .bs-mark{font-family:var(--ff-d,Georgia,serif);font-weight:700;font-size:40px;letter-spacing:.04em;color:#17120a}
+#brandSplash .bs-mark b{color:var(--gold,#c9a25e)}
+@keyframes bsIn{to{opacity:1;transform:scale(1)}}#brandSplash.bs-done{animation:bsOut .6s ease forwards}@keyframes bsOut{to{opacity:0;visibility:hidden}}
+@media(prefers-reduced-motion:reduce){#brandSplash .bs-badge{opacity:1;transform:none;animation:none}}
+</style>
+<script>(function(){var s=document.getElementById("brandSplash");if(!s)return;var done=false;function go(){if(done)return;done=true;s.classList.add("bs-done");setTimeout(function(){s&&s.parentNode&&s.parentNode.removeChild(s);},650);}setTimeout(go,2000);setTimeout(function(){["pointerdown","wheel","keydown","touchstart"].forEach(function(ev){window.addEventListener(ev,go,{once:true,passive:true});});},700);})();</script>
 
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
@@ -1558,70 +1509,6 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <!-- ============ PATTERN INTERRUPT · the stock tape ============ -->
 <div class="tape" aria-label="Fresh in the shop"><div class="tape-in" id="tape"></div></div>
 
-<!-- ============ TRANSITION · the bay door rolls up ============ -->
-<div class="tx tx-shutter" id="txShutter" aria-hidden="true">
-  <div class="tx-st">
-    <div class="sh-glow" id="shGlow"></div>
-    <p class="sh-t" id="shT"><small>The bodies</small>Three on the bench.<em>Pick one.</em></p>
-    <div class="sh-door" id="shDoor"></div>
-  </div>
-</div>
-
-<!-- ============ 09 · BUILD — a showroom of six real 3D cars ============ -->
-<section class="sec" id="build">
-  <div class="wrap">
-    <div class="sec-head row rv">
-      <div>
-        <p class="kick">The build bench</p>
-        <h2 class="h2">Spec your <em>body.</em></h2>
-      </div>
-      <p class="lede" style="max-width:42ch">Pick a platform and build it out. Jeep, Land Cruiser, Suzuki or the Bravo series.</p>
-    </div>
-    <div class="b3" id="b3">
-      <div class="b3-stage" id="b3Stage" aria-label="3D showroom — tap a car to build it">
-        <canvas id="b3Cv"></canvas>
-        <div class="b3-tags" id="b3Tags"></div>
-        <div class="b3-load" id="b3Load"><div><b id="b3Pct">0%</b>Opening the showroom</div></div>
-        <div class="b3-pick" id="b3Pick"><small>Build bench · 3 rigs</small><b>Tap one to spec the body</b></div>
-        <div class="b3-price" aria-live="polite"><small id="b3Car">Your build</small><b id="b3Total">$0</b><span id="b3Weeks">≈ 0 weeks</span></div>
-        <div class="b3-pop" id="b3Pop"></div>
-        <div class="b3-views" role="group" aria-label="Camera"><button type="button" data-v="34" class="on">¾</button><button type="button" data-v="90">Side</button><button type="button" data-v="180">Rear</button><button type="button" data-v="0">Front</button></div>
-        <button class="b3-back" id="b3Back" type="button"><span aria-hidden="true">←</span> Back to the showroom</button>
-        <p class="b3-hint" id="b3Hint">Drag to look round · tap a rig</p>
-        <p class="b3-cred" id="b3Cred"></p>
-      </div>
-      <div class="b3-side">
-        <div class="b3-g"><h4>The floor <b id="b3Sel">none picked</b></h4><div class="b3-cars" id="b3Cars" role="group" aria-label="Cars in the shop"></div></div>
-        <div class="b3-g b3-ed"><h4>Paint <b id="b3PaintN">Factory</b></h4><div class="b3-sw" id="b3Paint" role="group" aria-label="Paint"></div></div>
-        <div class="b3-g b3-ed"><h4>Parts <b id="b3Cnt">0 fitted</b></h4><div class="b3-parts" id="b3Parts" role="group" aria-label="Parts"></div></div>
-        <div class="b3-g b3-ed"><h4>Wheels</h4><div class="seg" id="b3Wheel" role="group" aria-label="Wheel finish"></div></div>
-        <div class="b3-call">
-          <p><b>Not sure what to fit?</b> Call the bay — we’ll design the car with you and send renders before a spanner turns.</p>
-          <a class="btn btn-gold btn-block" data-tel href="#" id="b3Call"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call — design it for me</a>
-          <button class="lnk" type="button" id="b3Send">or send your build to the shop on WhatsApp -></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PARTS ============ -->
-<section class="sec" id="parts" style="padding-top:0">
-  <div class="wrap">
-    <div class="sec-head row rv">
-      <div>
-        <p class="kick">Parts counter</p>
-        <h2 class="h2">The parts we fit. <em>Fitted, if you like.</em></h2>
-        <p class="lede">Everything here we’ve fitted ourselves. Ask what actually works on your car before you spend.</p>
-      </div>
-    </div>
-    <div class="chips" id="ptChips" style="margin-bottom:16px" role="group" aria-label="Filter parts"></div>
-    <div class="pt-grid rail" id="ptGrid"></div>
-    <div class="rail-hint pt-hint"><span>Swipe</span><b><i id="ptBar"></i></b></div>
-    <div class="more"><button class="btn btn-line" data-enq="parts">Can’t see it? We’ll source it <span class="arr">→</span></button></div>
-  </div>
-</section>
-
 <!-- ============ PATTERN INTERRUPT · kinetic marquee ============ -->
 <section class="band" aria-hidden="true">
   <div class="mq mq1"><div class="mqi">Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i>Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i>Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i></div></div>
@@ -1630,6 +1517,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 
 <!-- ============ STOCK ============ -->
 <section class="sec stock" id="stock">
+  <div class="sec-ghost" aria-hidden="true">THE FLOOR</div>
   <div class="wrap">
     <div class="sec-head rv">
       <p class="kick">On the bench now</p>
@@ -1651,39 +1539,32 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   </div>
 </section>
 
-<!-- ============ AQ · the intelligence that runs the floor ============ -->
-<section class="omega" id="numbers" aria-label="Meet the Aqualu team, your aluminum fabrication specialists">
-  <div class="om-grid" aria-hidden="true"></div>
-  <div class="om-bubs" id="omBubs" aria-live="polite"></div>
-  <div class="om-wrap">
-    <div class="om-stage">
-      <button class="om-orb" id="omOrb" type="button" aria-label="Ask AQ anything">
-        <span class="om-glow" aria-hidden="true"></span>
-        <span class="om-ring r1" aria-hidden="true"></span>
-        <span class="om-ring r2" aria-hidden="true"></span>
-        <span class="om-ring r3" aria-hidden="true"></span>
-        <span class="om-ball" aria-hidden="true">
-          <span class="om-eye"><span class="om-pupil" id="omP1"></span></span>
-          <span class="om-sym">&#937;</span>
-        </span>
-        <span class="om-tag" aria-hidden="true">● AQ online</span>
-      </button>
-    </div>
-    <div class="om-copy" id="omCopy">
-      <p class="om-k">Aqualu · aluminum fabrication specialists</p>
-      <h2 class="om-h" id="omH">We build the body that outlasts the truck.</h2>
-      <p class="om-l">All-aluminum, welded by hand in Kelowna since 1989. Lighter than steel, and it never rusts out from under you.</p>
-      <div class="om-stats">
-        <div><b>16K</b><span>Instagram followers</span></div>
-        <div><b>657</b><span>builds shared</span></div>
-        <div><b>1989</b><span>fabricating since</span></div>
-        <div><b>4.9</b><span>from 260 reviews</span></div>
-        <div><b>&lt;1h</b><span>reply · 7 days</span></div>
+<!-- ============ PARTS ============ -->
+<section class="sec" id="parts">
+  <div class="wrap">
+    <div class="sec-head row rv">
+      <div>
+        <p class="kick">Parts counter</p>
+        <h2 class="h2">The parts we fit. <em>Fitted, if you like.</em></h2>
+        <p class="lede">Everything here we’ve fitted ourselves. Ask what actually works on your car before you spend.</p>
       </div>
-      <button class="btn btn-gold om-cta" type="button" id="omAsk">Ask AQ anything →</button>
     </div>
+    <div class="chips" id="ptChips" style="margin-bottom:16px" role="group" aria-label="Filter parts"></div>
+    <div class="pt-grid rail" id="ptGrid"></div>
+    <div class="rail-hint pt-hint"><span>Swipe</span><b><i id="ptBar"></i></b></div>
+    <div class="more"><button class="btn btn-line" data-enq="parts">Can’t see it? We’ll source it <span class="arr">→</span></button></div>
   </div>
 </section>
+
+<!-- ============ TRANSITION · the odometer finds its level ============ -->
+<div class="tx tx-odo" id="txOdo" aria-hidden="true">
+  <div class="tx-st">
+    <i class="od-glow" id="odGlow"></i>
+    <p class="od-cap" id="odCap"><small>Finance, in-house</small>Watch the monthly <em>find its level.</em></p>
+    <div class="od-row" id="odRow"><span class="od-cur">$</span></div>
+    <p class="od-sub" id="odSub">per month · soft search only</p>
+  </div>
+</div>
 
 <!-- ============ FINANCE · the dial ============ -->
 <section class="sec" id="finance">
@@ -1906,6 +1787,54 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
     <div class="stp" id="stp"><b>VERIFIED</b><small>260 real builds</small></div>
   </div>
 </div>
+
+<!-- ============ TRANSITION · the bay door rolls up ============ -->
+<div class="tx tx-shutter" id="txShutter" aria-hidden="true">
+  <div class="tx-st">
+    <div class="sh-glow" id="shGlow"></div>
+    <p class="sh-t" id="shT"><small>The bodies</small>Three on the bench.<em>Pick one.</em></p>
+    <div class="sh-door" id="shDoor"></div>
+  </div>
+</div>
+
+<!-- ============ 09 · BUILD — a showroom of six real 3D cars ============ -->
+<section class="sec" id="build">
+  <div class="sec-ghost" aria-hidden="true">THE BAY</div>
+  <div class="wrap">
+    <div class="sec-head row rv">
+      <div>
+        <p class="kick">The build bench</p>
+        <h2 class="h2">Spec your <em>body.</em></h2>
+      </div>
+      <p class="lede" style="max-width:42ch">Pick a platform and build it out. Jeep, Land Cruiser, Suzuki or the Bravo series.</p>
+    </div>
+    <div class="b3" id="b3">
+      <div class="b3-stage" id="b3Stage" aria-label="3D showroom — tap a car to build it">
+        <canvas id="b3Cv"></canvas>
+        <div class="b3-tags" id="b3Tags"></div>
+        <div class="b3-load" id="b3Load"><div><b id="b3Pct">0%</b>Opening the showroom</div></div>
+        <div class="b3-pick" id="b3Pick"><small>Build bench · 3 rigs</small><b>Tap one to spec the body</b></div>
+        <div class="b3-price" aria-live="polite"><small id="b3Car">Your build</small><b id="b3Total">$0</b><span id="b3Weeks">≈ 0 weeks</span></div>
+        <div class="b3-pop" id="b3Pop"></div>
+        <div class="b3-views" role="group" aria-label="Camera"><button type="button" data-v="34" class="on">¾</button><button type="button" data-v="90">Side</button><button type="button" data-v="180">Rear</button><button type="button" data-v="0">Front</button></div>
+        <button class="b3-back" id="b3Back" type="button"><span aria-hidden="true">←</span> Back to the showroom</button>
+        <p class="b3-hint" id="b3Hint">Drag to look round · tap a rig</p>
+        <p class="b3-cred" id="b3Cred"></p>
+      </div>
+      <div class="b3-side">
+        <div class="b3-g"><h4>The floor <b id="b3Sel">none picked</b></h4><div class="b3-cars" id="b3Cars" role="group" aria-label="Cars in the shop"></div></div>
+        <div class="b3-g b3-ed"><h4>Paint <b id="b3PaintN">Factory</b></h4><div class="b3-sw" id="b3Paint" role="group" aria-label="Paint"></div></div>
+        <div class="b3-g b3-ed"><h4>Parts <b id="b3Cnt">0 fitted</b></h4><div class="b3-parts" id="b3Parts" role="group" aria-label="Parts"></div></div>
+        <div class="b3-g b3-ed"><h4>Wheels</h4><div class="seg" id="b3Wheel" role="group" aria-label="Wheel finish"></div></div>
+        <div class="b3-call">
+          <p><b>Not sure what to fit?</b> Call the bay — we’ll design the car with you and send renders before a spanner turns.</p>
+          <a class="btn btn-gold btn-block" data-tel href="#" id="b3Call"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call — design it for me</a>
+          <button class="lnk" type="button" id="b3Send">or send your build to the shop on WhatsApp -></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ PROMISE ============ -->
 <section class="sec" id="promise" style="padding-top:0">
@@ -3563,54 +3492,6 @@ function updateHole(now){
   HO.bars.forEach((b,i)=>{ const k=+smooth(clamp((p-.8-i*.011)/.11,0,1)).toFixed(3); if(k!==b.k){ b.k=k; b.el.style.setProperty('--k',k); } });
 }
 
-/* ============================================================ AQ · the big floor intelligence.
-   A scaled-up twin of the #bot chatbot: its eye follows the cursor, it conjures a fact/tip bubble every
-   few seconds (tap it to open the chat), fires a thin laser at the cursor every 3s, assembles its headline
-   on entry, and throws one "before you go" bubble as you scroll out. */
-const OMFACTS=[
-  'All-aluminum, zero rust',
-  'Fabricating since 1989',
-  'Kelowna, British Columbia',
-  'Jeep, Land Cruiser & Suzuki',
-  'In-house Bravo series',
-  'Full-service welding & fab',
-  'Lighter than steel',
-  'Built to outlast the truck'
-];
-const NM={items:[],mx:innerWidth*.3,my:innerHeight*.5,cx:0,cy:0,ex:999,ey:999,bw:300,fi:-1,spawnAt:0,vis:false,exited:false,slots:[],wx:0,wy:0,twx:0,twy:0,wAt:0,wrange:60};
-function buildNums(){ const orb=$id('omOrb'); if(!orb) return;
-  NM.orb=orb; NM.p1=$id('omP1'); NM.bubs=$id('omBubs');
-  const open=()=>{ const bot=$id('bot'); if(bot) bot.click(); };
-  orb.addEventListener('click',open); const ask=$id('omAsk'); if(ask) ask.addEventListener('click',open);
-  addEventListener('pointermove',e=>{ NM.mx=e.clientX; NM.my=e.clientY; },{passive:true});
-  if(NM.bubs){ for(let i=0;i<3;i++){ const b=document.createElement('button'); b.type='button'; b.className='om-bub s'+i; b.setAttribute('aria-label','Ask AQ about this'); b.addEventListener('click',open); NM.bubs.appendChild(b); NM.slots.push({el:b,until:0,busy:false,sticky:false}); } }
-  const h=$id('omH'); if(h&&!h.dataset.split){ h.dataset.split='1'; const words=h.textContent.trim().split(/\s+/);
-    h.innerHTML=words.map((w,i)=>'<span class="ow'+(i>=6?' g':'')+'" style="transition-delay:'+(i*0.06).toFixed(2)+'s">'+esc(w)+'</span>').join(' '); }
-  NM.spawnAt=performance.now()+1300; NM.wAt=performance.now()+1500;
-  layoutNums(); }
-function layoutNums(){ const orb=$id('omOrb'); if(!orb) return; const r=orb.getBoundingClientRect(); NM.cx=r.left+r.width/2; NM.cy=r.top+r.height/2; NM.bw=r.width||300; NM.wrange=isMob?30:Math.min(72,NM.bw*.18); }
-function omSpawn(now,txt,sticky){ const s=NM.slots.find(s=>!s.busy); if(!s) return false; s.busy=true; s.sticky=!!sticky; s.until=now+(sticky?18000:8400);
-  s.el.innerHTML='<span class="bk">AQ</span>'+esc(txt); void s.el.offsetWidth; s.el.classList.add('on'); return true; }
-function updateNums(){ const r=FR.numbers, H=innerHeight; const vis=!!r&&r.bottom>60&&r.top<H-60;
-  if(vis&&!NM.vis){ NM.vis=true; const h=$id('omH'); if(h) h.classList.add('in'); }
-  const now=performance.now();
-  NM.slots.forEach(s=>{ if(s.busy&&now>s.until){ s.el.classList.remove('on'); s.busy=false; s.sticky=false; } });   /* retire the oldest once its time is up */
-  if(!vis){ NM.vis=false; return; }
-  const orb=NM.orb; if(orb){ const rr=orb.getBoundingClientRect(); NM.cx=rr.left+rr.width/2; NM.cy=rr.top+rr.height/2; NM.bw=rr.width||NM.bw; }
-  const rad=Math.max(150,NM.bw*.7), dx=clamp((NM.mx-NM.cx)/rad,-1,1), dy=clamp((NM.my-NM.cy)/rad,-1,1);
-  const er=NM.bw*.05, tx=+(dx*er).toFixed(1), ty=+(dy*er).toFixed(1);
-  if(tx!==NM.ex||ty!==NM.ey){ NM.ex=tx; NM.ey=ty; if(NM.p1) NM.p1.style.transform='translate('+tx+'px,'+ty+'px)'; }
-  /* the orb drifts slowly around its area — a bigger copy of the roaming chatbot */
-  if(!RM){ if(now>NM.wAt){ NM.wAt=now+2600+Math.random()*1900; NM.twx=(Math.random()*2-1)*NM.wrange; NM.twy=(Math.random()*2-1)*NM.wrange*.8; }
-    NM.wx+=(NM.twx-NM.wx)*.012; NM.wy+=(NM.twy-NM.wy)*.012; }
-  if(orb){ orb.style.setProperty('--ox',(NM.wx+dx*7).toFixed(1)+'px'); orb.style.setProperty('--oy',(NM.wy+dy*6).toFixed(1)+'px'); }
-  if(RM||!NM.bubs) return;
-  if(r.bottom<H*.5&&!NM.exited){ NM.exited=true; omSpawn(now,'Leaving already? Ask me one thing before you go →',true); }
-  else if(r.top>H*.25&&NM.exited){ NM.exited=false; }
-  /* a fresh fact / tip every ~2.8s; up to three live on screen at once, each for ~8s */
-  if(now>NM.spawnAt){ NM.fi=(NM.fi+1)%OMFACTS.length; if(omSpawn(now,OMFACTS[NM.fi],false)) NM.spawnAt=now+2800+Math.random()*1500; else NM.spawnAt=now+1100; }
-}
-
 /* ============================================================ 07 · THE SCAN — six checks swept across the car */
 const SCANPTS=[[5,26,66],[2,38,45],[1,47,82],[0,56,53],[4,64,40],[3,79,72]];   /* [report index, x%, y%] in sweep order */
 const SC={rows:[],pins:[],on:[],sx:-1,done:false};
@@ -3628,6 +3509,20 @@ function updateScan(){
       const rd=SC.rows[k].querySelector('.r'); if(on){ const txt=REPORT[ri].m.join(' · '), t0=performance.now(); const tick=now=>{ if(!SC.on[k]) { rd.textContent=''; return; } const n=Math.round(clamp((now-t0)/(txt.length*18),0,1)*txt.length); rd.textContent=txt.slice(0,n); if(n<txt.length) requestAnimationFrame(tick); }; requestAnimationFrame(tick); } else rd.textContent=''; } });
   const done=sx>=100; if(done!==SC.done){ SC.done=done; $id('scGrade').innerHTML='GRADE <b>'+(done?'A · 93':'—')+'</b>'; }
 }
+
+/* ============================================================ v3 · ODOMETER REELS + THEME ZONES */
+const ODO={cells:[],h:0,target:'1249'};
+function buildOdo(){ const row=$id('odRow'); if(!row) return;
+  [...ODO.target].forEach((d,i)=>{ const c=document.createElement('span'); c.className='od-cell'; const s=document.createElement('span'); s.className='od-strip';
+    let digs=''; const spins=2+i; for(let k=0;k<spins;k++) for(let n=0;n<10;n++) digs+='<i>'+n+'</i>'; for(let n=0;n<=+d;n++) digs+='<i>'+n+'</i>';
+    s.innerHTML=digs; c.appendChild(s); row.appendChild(c); ODO.cells.push({strip:s,steps:spins*10+(+d)}); });
+  measureOdo(); }
+function measureOdo(){ if(!ODO.cells.length) return; const f=ODO.cells[0].strip.firstElementChild; ODO.h=f?f.getBoundingClientRect().height:0; }
+/* the page itself changes clothes: ember for the build bay, velvet for the owners — reversible, scroll-decided */
+const ZONE={cur:''};
+function updateZone(){ const H=innerHeight, mid=H*.5, inZ=r=>r&&r.top<mid&&r.bottom>mid;
+  const z=(inZ(FR.build)||inZ(FR.txShutter))?'bay':(inZ(FR.reviews)||inZ(FR.iris)||inZ(FR.txStamp))?'velvet':'';
+  if(z!==ZONE.cur){ ZONE.cur=z; const de=document.documentElement; if(z) de.setAttribute('data-zone',z); else de.removeAttribute('data-zone'); } }
 
 /* ============================================================ THE TRANSITIONS — one between every two or so sections */
 const TXS=[];
@@ -3647,6 +3542,13 @@ function buildTx(){
   TXS.push({id:'txStamp',fn:p=>{ const e=smooth(clamp((p-.26)/.42,0,1)), out=p>.84?smooth((p-.84)/.16):0, st=$id('stp');   /* VERIFIED eases in and settles, no rubber-stamp slam */
     S(st,'--sta',(e*(1-out)).toFixed(3)); S(st,'--ss',(1.16-.16*e+out*.05).toFixed(3)); }});
   TXS.push({id:'txTear',fn:p=>{ const t=ein(clamp((p-.08)/.62,0,1)); S($id('trTop'),'--t',t.toFixed(4)); const b=$id('txTear').querySelector('.tr-back'), ba=smooth(clamp((p-.28)/.3,0,1)); S(b,'--ba',ba.toFixed(3)); S(b,'--bk',(.9+.1*ba).toFixed(4)); }});
+  TXS.push({id:'txOdo',fn:p=>{ if(!ODO.h) measureOdo(); const out=p>.86?smooth((p-.86)/.14):0;
+    S($id('odGlow'),'--ga',smooth(clamp(p/.5,0,1)).toFixed(3));
+    const ca=smooth(clamp((p-.08)/.3,0,1)), cap=$id('odCap'); S(cap,'--ca',(ca*(1-out)).toFixed(3)); S(cap,'--cy',((1-ca)*36-out*90).toFixed(1)+'px');
+    const sa=smooth(clamp((p-.52)/.2,0,1)); S($id('odSub'),'--ca',(sa*(1-out)).toFixed(3));
+    const ra=smooth(clamp((p-.16)/.26,0,1)); S($id('odRow'),'--ra',(ra*(1-out)).toFixed(3));
+    ODO.cells.forEach((c,i)=>{ const e=smooth(clamp((p-.14-i*.055)/.56,0,1)); const y=(-e*c.steps*ODO.h).toFixed(1)+'px';
+      if(c.y!==y){ c.y=y; c.strip.style.transform='translateY('+y+')'; } }); }});
   TXS.forEach(t=>{ t.el=$id(t.id); t.p=-1; });
 }
 function updateTx(){ const H=innerHeight; TXS.forEach(t=>{ const r=FR[t.id]; if(!r||r.bottom<0||r.top>H) return; const p=clamp(-r.top/Math.max(1,r.height-H),0,1);
@@ -3657,7 +3559,6 @@ function updateTx(){ const H=innerHeight; TXS.forEach(t=>{ const r=FR[t.id]; if(
 const BAV=[];
 function botAvoid(){ BAV.length=0; if(isMob) return; const H=innerHeight, vis=r=>r&&r.bottom>0&&r.top<H;
   if(vis(FR.hole)) BAV.push(HO.cap.getBoundingClientRect());
-  if(vis(FR.numbers)){ const b=$id('omOrb'); if(b) BAV.push(b.getBoundingClientRect()); }
   if(vis(FR.scan)) BAV.push($id('scanCar').getBoundingClientRect());
   if(vis(FR.ways)) BAV.push($id('waysDots').getBoundingClientRect());
   if(vis(FR.report)) BAV.push($id('pkFilm').getBoundingClientRect()); }
@@ -3740,7 +3641,7 @@ function wrapWords(root){ const out=[]; const walk=n=>[...n.childNodes].forEach(
     const frag=document.createElement('span'); frag.className='wdw'; c.textContent.split(/(\s+)/).forEach(t=>{ if(!t) return; if(/^\s+$/.test(t)){ frag.append(t); return; } const s=document.createElement('span'); s.className='wd'; s.textContent=t; frag.append(s); out.push(s); }); c.replaceWith(frag); });
   walk(root); return out; }
 function buildWords(){
-  const sel='.h2:not(.sr),.kick,.lede,.st-line,.tile h3,.tile p,.faq summary,.stock-foot p,.b3-call p,.pk-sub,.rscore .s,.om-l';
+  const sel='.h2:not(.sr),.kick,.lede,.st-line,.tile h3,.tile p,.faq summary,.stock-foot p,.b3-call p,.pk-sub,.rscore .s';
   $$(sel).forEach(el=>{ if(el.closest('.pk-l,#ms,#term,#pd,.sheet,.modal,.ways-world')) return; const w=wrapWords(el); if(!w.length) return;
     WG.push({el,w:w.map((s,i)=>({el:s,i,x:0,y:0,r:0,cx:0,cy:0,hot:false,re:(i*7+WG.length*3)%4===0})),wave:el.classList.contains('h2')||el.classList.contains('iris-t'),pin:!!el.closest('.reel-pin,.pk-pin,.ow-pin,.iris-pin,.scan-pin,.ways-pin,.hole-pin,.nums-pin,.tx-st'),vis:false,mt:0,bb:null}); });
   const h=$$('#hh1 .w'); if(h.length) WG.push({el:$id('hh1'),w:h.map((s,i)=>({el:s,i,x:0,y:0,r:0,cx:0,cy:0,hot:false,re:i%4===1})),wave:true,pin:true,vis:true,mt:0,bb:null});
@@ -3790,7 +3691,7 @@ function splitH1(){ if(document.visibilityState!=='visible'||RM) return; let i=0
   walk($id('hh1')); }
 /* every layout read the loop needs happens here, in one batch, before any style is written —
    reads after writes force the browser to lay the page out again mid-frame */
-const FR={}; const FRIDS=['orbit','fdial','ways','hole','numbers','report','scan','reviews','iris','txPlate','txDoors','txShutter','txStamp','txTear'];
+const FR={}; const FRIDS=['orbit','fdial','ways','hole','build','report','scan','reviews','iris','txPlate','txDoors','txShutter','txStamp','txTear','txOdo'];
 function measureAll(now){ FRIDS.forEach(id=>{ FR[id]=$id(id).getBoundingClientRect(); }); FR.pkAfter=PK.after.getBoundingClientRect();
   FR.mg=mgCur?mgCur.getBoundingClientRect():null; FR.term=BOT.docked?$id('term').getBoundingClientRect():null; measureWords(now); botAvoid(); }
 let lastT=performance.now();
@@ -3800,15 +3701,15 @@ function frame(now){
   measureAll(now); updateWords(now);
   heroVisible=FR.orbit.bottom>0&&!document.hidden;
   if(heroVisible){ GDT=dt; updateOrbit(dt,now); drawGL(now); hud(); updateFocus(now); }
-  updateDial(now); updateWays(now,dt); updateHole(now); updateNums(); updatePark(now); updateScan(); updateTx(); updateRing(dt,now); updateBands(); updateBot(dt,now); updateMagnets(); updatePar();
+  updateDial(now); updateWays(now,dt); updateHole(now); updateZone(); updatePark(now); updateScan(); updateTx(); updateRing(dt,now); updateBands(); updateBot(dt,now); updateMagnets(); updatePar();
   requestAnimationFrame(frame);
 }
 onChange(()=>{ paintHUD(); calcFin(); });
 addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(OW.lg>=0) closeMS(); else if(pdOpen) closePD(); else if(CORE.open) closeCore(); } });
-renderCfg(); buildDial(); buildWays(); buildHole(); buildNums(); buildPark(); buildScan(); buildTx(); buildRing(); buildBook(); splitH1(); buildWords(); buildPar(); watchRoll(); sizeBot();
+renderCfg(); buildDial(); buildWays(); buildHole(); buildOdo(); buildPark(); buildScan(); buildTx(); buildRing(); buildBook(); splitH1(); buildWords(); buildPar(); watchRoll(); sizeBot();
 FN.a=FN.ta=v2a(FN.price); drawDial(FN.a); calcFin(true); paintHUD();
 glok=initGL(); layoutBox(); if(document.fonts) document.fonts.ready.then(layoutBox);
-let lastW=innerWidth; addEventListener('resize',()=>{ if(isMob&&Math.abs(innerWidth-lastW)<2) return; lastW=innerWidth; layoutBox(); layoutWays(); layoutPark(); layoutNums(); measurePar(); });
+let lastW=innerWidth; addEventListener('resize',()=>{ if(isMob&&Math.abs(innerWidth-lastW)<2) return; lastW=innerWidth; layoutBox(); layoutWays(); layoutPark(); measureOdo(); measurePar(); });
 loadFrames().then(()=>{ LD.ready=true; if(glok) ['fq4','fq3','fq5','fq2','fq6'].forEach(n=>texFor(n)); $id('hintT').textContent='Drag to walk round · tap ＋ to read the report'; ORB.idleT=performance.now(); });
 requestAnimationFrame(frame);
 
@@ -3819,7 +3720,7 @@ window.__rx={
   openReview:i=>openMS(i,RING.els[i]), closeReview:closeMS, ways:k=>snapTo(k), snapStep, setFinCar, finCost:v=>{ FN.car=-1; FN.price=v; FN.ta=v2a(v); calcFin(); }, setBkCar, printPass,
   state:()=>({yaw:+wy(ORB.yaw).toFixed(1),view:viewName(ORB.yaw),gl:glok,set:IMGSET,box:{...BOX},tex:Object.keys(TEX).length,hots:HOTS.filter(h=>h.el.classList.contains('vis')).length,cfg:{...CFG},resp:cfgPrice(),
     fin:{car:FN.car,price:FN.price,mo:Math.round(FN.mo),zone:finZone(FN.mo).l,resp:FN.resp},ring:{front:RING.front,ms:OW.lg},bk:{...BKS},core:CORE.open,lead:window.__lastLead||null,
-    ways:{cs:+WS.cs.toFixed(3),k:WS.k,lock:SN.lock,top:Math.round(WS.secTop),range:Math.round(WS.range)},hole:{on:HO.on,mask:HO.maskOn,rs:HO.vid.readyState,t:+HO.vid.currentTime.toFixed(2)},nums:+NM.p.toFixed(3),scan:{sx:+SC.sx.toFixed(1),on:SC.on.filter(Boolean).length},tx:TXS.map(t=>t.id+':'+t.p),ld:LD.done,park:{shown:+PK.shown.toFixed(3),loaded:PARK.loaded,bmp:PARK.bmp.filter(Boolean).length,lit:PK.lit,on:PK.on.join(''),teal:PK.teal},
+    ways:{cs:+WS.cs.toFixed(3),k:WS.k,lock:SN.lock,top:Math.round(WS.secTop),range:Math.round(WS.range)},hole:{on:HO.on,mask:HO.maskOn,rs:HO.vid.readyState,t:+HO.vid.currentTime.toFixed(2)},zone:ZONE.cur,scan:{sx:+SC.sx.toFixed(1),on:SC.on.filter(Boolean).length},tx:TXS.map(t=>t.id+':'+t.p),ld:LD.done,park:{shown:+PK.shown.toFixed(3),loaded:PARK.loaded,bmp:PARK.bmp.filter(Boolean).length,lit:PK.lit,on:PK.on.join(''),teal:PK.teal},
     gal:{stock:GSTOCK.state(),parts:GPARTS.state()},words:WG.reduce((a,g)=>a+g.w.length,0),focus:!!FOC.until}),
   gal:(w,v)=>(w==='parts'?GPARTS:GSTOCK).open(v),
   upscale(){ const r=[]; r.push({src:'orbit-box',up:+(BOX.w*DPR/NATW).toFixed(2)});
@@ -4158,6 +4059,31 @@ async function boot(){
   await Promise.all(order.slice(1).map(async i=>{ show(i, await loadOne(i), 0); reveal(); }));
   if(!S3.loaded) throw new Error('no cars loaded');
 }
+</script>
+<script>
+/* v2 · magnetic gold buttons — transform-only, fine pointers, respects reduced motion */
+(function(){
+  if(!matchMedia('(pointer:fine)').matches||matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const R=90;let btns=[],raf=0,mx=-9e3,my=-9e3;
+  const scan=()=>{btns=[...document.querySelectorAll('.btn-gold')].map(b=>({b,x:0,y:0,tx:0,ty:0}))};
+  scan();addEventListener('load',scan,{once:true});
+  addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;if(!raf)raf=requestAnimationFrame(tick)},{passive:true});
+  function tick(){
+    raf=0;let live=false;
+    for(const o of btns){
+      const r=o.b.getBoundingClientRect();
+      if(!r.width||r.bottom<-40||r.top>innerHeight+40){ if(o.x||o.y){o.tx=o.ty=0;} }
+      else{
+        const cx=r.left+r.width/2,cy=r.top+r.height/2,dx=mx-cx,dy=my-cy,d=Math.hypot(dx,dy);
+        const f=d<R?(1-d/R)*.32:0;o.tx=dx*f;o.ty=dy*f;
+      }
+      o.x+=(o.tx-o.x)*.22;o.y+=(o.ty-o.y)*.22;
+      if(Math.abs(o.x)>.08||Math.abs(o.y)>.08){o.b.style.transform='translate('+o.x.toFixed(1)+'px,'+o.y.toFixed(1)+'px)';live=true;}
+      else if(o.b.style.transform){o.b.style.transform='';}
+    }
+    if(live)raf=requestAnimationFrame(tick);
+  }
+})();
 </script>
 </body>
 </html>
