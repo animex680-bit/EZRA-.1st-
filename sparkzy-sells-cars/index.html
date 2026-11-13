@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
-<head><meta name="build" content="2a51e22db410">
+<head><meta name="build" content="fedce61c7be0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sparkzy Sells Cars — Get approved, drive out of Raleigh today.</title>
@@ -353,60 +353,6 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradi
 .sec.light::before,.sec.light::after{content:"";position:absolute;left:0;right:0;height:9vh;pointer-events:none;z-index:2}
 .sec.light::before{top:0;background:linear-gradient(var(--bg) 0%,rgba(13,12,11,0) 92%)}
 .sec.light::after{bottom:0;background:linear-gradient(rgba(13,12,11,0) 8%,var(--bg) 100%)}
-/* v2 — omega: aurora drift, glass copy card, stat underlines, quick-ask chips */
-.om-aur{position:absolute;width:62vmax;height:62vmax;border-radius:50%;pointer-events:none;z-index:0;opacity:.55;will-change:transform}
-.om-aur.a{left:-18vmax;top:-22vmax;background:radial-gradient(circle at 42% 42%,rgba(201,162,94,.16),transparent 62%);animation:omA 19s ease-in-out infinite alternate}
-.om-aur.b{right:-24vmax;bottom:-26vmax;background:radial-gradient(circle at 55% 55%,rgba(90,130,220,.13),transparent 60%);animation:omB 26s ease-in-out infinite alternate}
-@keyframes omA{from{transform:translate(0,0) scale(1)}to{transform:translate(9vmax,6vmax) scale(1.18)}}
-@keyframes omB{from{transform:translate(0,0) scale(1.12)}to{transform:translate(-8vmax,-7vmax) scale(.94)}}
-.om-copy{position:relative;background:rgba(255,255,255,.028);border:1px solid var(--line);border-radius:22px;padding:30px clamp(20px,2.6vw,36px);animation:omBr 4.5s ease-in-out infinite}
-@keyframes omBr{0%,100%{box-shadow:0 0 0 1px rgba(201,162,94,0),0 24px 70px rgba(0,0,0,.35)}50%{box-shadow:0 0 0 1px rgba(201,162,94,.22),0 24px 70px rgba(0,0,0,.45)}}
-.om-copy::before{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);opacity:.65}
-.om-stats>div{position:relative;padding-bottom:8px}
-.om-stats>div::after{content:"";position:absolute;left:0;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));width:calc(var(--sp,0)*100%);opacity:.75}
-.om-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.om-chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:9px 15px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);background:rgba(255,255,255,.03);cursor:pointer;transition:transform .25s ease,border-color .2s,color .2s,box-shadow .25s}
-.om-chip:hover,.om-chip:focus-visible{border-color:var(--gold);color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 26px rgba(201,162,94,.18)}
-.om-chip:active{transform:translateY(0) scale(.97)}
-@media(prefers-reduced-motion:reduce){.om-aur{animation:none}.om-copy{animation:none}}
-@media(max-width:860px){.om-copy{padding:22px 18px}}
-.light .kick{color:#8a6a2c}
-.light .h2 em{color:#9a7531}
-.light .lede{color:var(--paper-dim)}
-.td-grid{display:grid;gap:22px}
-@media(min-width:960px){.td-grid{grid-template-columns:1.05fr .95fr;gap:44px;align-items:start}}
-.td-form{background:#fff;border-radius:20px;padding:clamp(18px,3vw,28px);box-shadow:0 1px 0 rgba(0,0,0,.04),0 24px 50px -28px rgba(60,40,10,.35);display:grid;gap:18px}
-.light .fl>span{color:var(--paper-dim)}
-.light .inp{background:#f7f4ee;border-color:#ddd5c6;color:var(--paper-ink)}
-.light .inp:focus{border-color:#b08a43;box-shadow:0 0 0 3px rgba(176,138,67,.18)}
-.plate{display:flex;align-items:stretch;border-radius:10px;overflow:hidden;border:2px solid #17140f;background:#f7d117;height:60px}
-.plate i{width:40px;background:#1f4ab8;color:#fff;font-style:normal;font-size:12px;font-weight:700;display:grid;place-items:center;letter-spacing:.04em}
-.plate input{flex:1;min-width:0;border:0;background:transparent;text-align:center;font-weight:800;font-size:26px;letter-spacing:.1em;text-transform:uppercase;color:#111;font-family:'Arial Black',Arial,sans-serif}
-.plate input:focus{outline:none}
-.plate input::placeholder{color:rgba(0,0,0,.32)}
-.light .seg button{border-color:#d8cfbf;color:var(--paper-dim)}
-.light .seg button:hover{border-color:#8a7a5f;color:var(--paper-ink)}
-.light .seg button[aria-pressed=true]{background:var(--paper-ink);color:#fff;border-color:var(--paper-ink)}
-.light .rng{accent-color:#a47f3c}
-.mi-row{display:flex;justify-content:space-between;align-items:baseline}
-.mi-row b{font-size:18px}
-.cond-d{font-size:13px;color:var(--paper-dim);min-height:40px}
-.td-result{position:sticky;top:84px;border-radius:20px;background:var(--paper-ink);color:var(--ink);padding:clamp(20px,3vw,30px);box-shadow:0 30px 60px -30px rgba(23,20,15,.7)}
-.td-result .lbl{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.td-range{font-family:var(--ff-d);font-size:clamp(44px,8vw,66px);font-weight:600;line-height:1;letter-spacing:-.02em;margin:8px 0 6px;font-variant-numeric:tabular-nums}
-.td-range small{font-size:.5em;color:var(--ink2)}
-.td-for{font-size:14px;color:var(--ink2);margin-bottom:16px}
-.bars{display:grid;gap:9px;margin:4px 0 18px}
-.bar{display:grid;grid-template-columns:86px 1fr 52px;gap:10px;align-items:center;font-size:12.5px;color:var(--ink2)}
-.bar u{height:6px;border-radius:6px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;text-decoration:none}
-.bar u i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:var(--gold);transition:width .6s var(--ease)}
-.bar u i.dn{background:#e0775e}
-.bar b{text-align:right;font-weight:600;color:var(--ink)}
-.td-acts{display:grid;gap:8px}
-.td-trust{display:grid;gap:8px;margin-top:16px;font-size:13px;color:var(--ink2)}
-.td-trust span{display:flex;gap:8px;align-items:center}
-.td-trust svg{width:15px;height:15px;fill:var(--ok)}
-
 /* ---------- FINANCE ---------- */
 .fn-grid{display:grid;gap:22px}
 @media(min-width:960px){.fn-grid{grid-template-columns:1fr 1fr;gap:44px;align-items:center}}
@@ -787,56 +733,6 @@ body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;op
 @keyframes mqR{from{transform:translateX(-30%)}to{transform:translateX(0)}}
 
 /* ---------- SZ · the intelligence (a bigger version of the floating chatbot) ---------- */
-.omega{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(120% 95% at 30% 44%,#15181e 0%,#0a0b0e 56%,#060608 100%);color:var(--ink)}
-.om-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(233,201,136,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(233,201,136,.05) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(70% 70% at 30% 46%,#000,transparent 80%);opacity:.5;pointer-events:none}
-.om-wrap{position:relative;z-index:2;width:min(1180px,92vw);margin:0 auto;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:clamp(28px,5vw,74px);padding:13vh 0}
-/* the orb — a scaled-up twin of the #bot chatbot */
-.om-stage{position:relative;display:flex;align-items:center;justify-content:center}
-.om-orb{position:relative;appearance:none;border:0;background:none;cursor:pointer;width:clamp(260px,44vmin,52vh);height:clamp(260px,44vmin,52vh);display:grid;place-items:center;border-radius:50%;transform:translate3d(var(--ox,0),var(--oy,0),0)}
-.om-glow{position:absolute;inset:-20%;border-radius:50%;background:radial-gradient(closest-side,rgba(233,201,136,.34),rgba(233,201,136,.06) 55%,transparent 72%);filter:blur(5px);animation:omBreath 5s ease-in-out infinite}
-.om-ring{position:absolute;border-radius:50%;border:1px solid rgba(233,201,136,.2)}
-.om-ring.r1{inset:3%;animation:omSpin 24s linear infinite}
-.om-ring.r2{inset:12%;border-style:dashed;border-color:rgba(233,201,136,.32);animation:omSpin 40s linear infinite reverse}
-.om-ring.r3{inset:-7%;border-color:rgba(233,201,136,.1)}
-.om-ball{position:absolute;inset:17%;border-radius:50%;overflow:hidden;display:grid;place-items:center;
-  background:radial-gradient(38% 34% at 42% 32%,#fff4d6 0%,#eaca86 20%,#bb9550 46%,#6f5225 72%,#241a0c 100%);
-  box-shadow:inset 0 0 44px rgba(0,0,0,.55),0 24px 70px -20px rgba(233,201,136,.55)}
-.om-ball::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 46% at 50% 120%,rgba(255,240,200,.45),transparent 58%)}
-.om-eye{position:relative;width:35%;height:31%;border-radius:50%;background:#140d05;box-shadow:inset 0 0 18px rgba(0,0,0,.85),0 0 0 3px rgba(20,13,5,.55);display:grid;place-items:center;z-index:2}
-.om-pupil{width:46%;height:46%;border-radius:50%;background:radial-gradient(circle at 40% 36%,#fff,#ffe6a6 36%,#caa35e 72%);box-shadow:0 0 12px #ffe6a6;transition:transform .14s linear}
-.om-sym{position:absolute;bottom:8%;left:50%;translate:-50% 0;font-family:Georgia,serif;font-weight:700;font-size:15%;color:rgba(36,26,12,.55);z-index:2}
-.om-tag{position:absolute;bottom:-8%;left:50%;translate:-50% 0;font-family:var(--mono);font-size:clamp(9px,1vw,11px);letter-spacing:.16em;text-transform:uppercase;color:var(--gold2,#e9c988);white-space:nowrap;opacity:.85}
-.om-tag::first-letter{color:#7fd49a}
-.om-orb:hover .om-ball,.om-orb:focus-visible .om-ball{filter:brightness(1.07)}
-.om-orb:focus-visible{outline:2px solid var(--gold2,#e9c988);outline-offset:8px}
-/* the conjured speech bubbles — up to three on screen at once, the AI thinking out loud */
-.om-bubs{position:absolute;inset:0;z-index:4;pointer-events:none}
-.om-bub{position:absolute;width:max-content;max-width:min(40vw,300px);padding:13px 16px;border-radius:16px 16px 16px 5px;background:#14161b;border:1px solid rgba(233,201,136,.3);box-shadow:0 22px 50px -22px rgba(0,0,0,.85);font-size:clamp(13px,1.1vw,15.5px);line-height:1.42;color:#eceae6;cursor:pointer;pointer-events:auto;opacity:0;transform:translateY(14px) scale(.9);transition:opacity .55s var(--out),transform .6s var(--spring)}
-.om-bub.on{opacity:1;transform:translateY(0) scale(1)}
-.om-bub::after{content:"";position:absolute;left:26px;bottom:-9px;width:16px;height:16px;background:#14161b;border-right:1px solid rgba(233,201,136,.3);border-bottom:1px solid rgba(233,201,136,.3);transform:rotate(45deg)}
-.om-bub .bk{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2,#e9c988);margin-bottom:5px}
-.om-bub.s0{left:5%;top:10%}
-.om-bub.s1{left:31%;top:0}
-.om-bub.s2{left:1%;top:56%}
-@media(max-width:860px){.om-bub{max-width:min(74vw,300px)}.om-bub.s0{left:4%;top:3%}.om-bub.s1{right:3%;left:auto;top:21%}.om-bub.s2{left:4%;top:40%}}
-/* copy, with words that assemble on load */
-.om-copy{max-width:52ch}
-.om-k{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2,#e9c988);margin:0 0 18px;display:flex;align-items:center;gap:10px}
-.om-k::before{content:"";width:26px;height:1px;background:var(--gold2,#e9c988)}
-.om-h{font-family:var(--ff-d);font-weight:600;font-size:clamp(36px,5vw,72px);line-height:1;letter-spacing:-.03em;margin:0}
-.om-h .ow{display:inline-block;opacity:0;transform:translate3d(0,26px,0);transition:opacity .55s var(--out),transform .7s var(--out)}
-.om-h.in .ow{opacity:1;transform:none}
-.om-h .ow.g{color:var(--gold2,#e9c988);font-style:italic;font-weight:500}
-.om-l{margin:22px 0 0;font-size:clamp(15px,1.3vw,18px);line-height:1.7;color:var(--dim,#b9b4ab);max-width:46ch}
-.om-stats{display:flex;flex-wrap:wrap;gap:12px 30px;margin:30px 0 32px}
-.om-stats>div{display:flex;flex-direction:column;gap:3px}
-.om-stats b{font-family:var(--ff-d);font-weight:600;font-size:clamp(28px,3vw,40px);line-height:1;letter-spacing:-.02em;color:#fff;font-variant-numeric:lining-nums tabular-nums}
-.om-stats span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2,#e9c988);opacity:.85}
-.om-cta{align-self:flex-start}
-@keyframes omBreath{50%{transform:scale(1.05)}}
-@keyframes omSpin{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){.om-glow,.om-ring{animation:none}}
-@media(max-width:860px){.om-wrap{grid-template-columns:1fr;gap:34px;padding:12vh 0 10vh}.om-stage{order:-1}.om-orb{width:clamp(220px,60vw,320px);height:clamp(220px,60vw,320px)}.om-stats{gap:10px 22px}.om-cta{align-self:stretch;text-align:center}}
 /* the green-man clip, now on the final page instead of a loader */
 .visit-walk{display:flex;align-items:center;gap:22px;margin:0 0 36px;padding:16px;border:1px solid var(--line,rgba(255,255,255,.1));border-radius:20px;background:rgba(233,201,136,.03)}
 .visit-walk video{width:clamp(92px,11vw,132px);aspect-ratio:9/16;object-fit:cover;border-radius:12px;background:#0a0b0e;flex:none;box-shadow:0 18px 40px -18px rgba(0,0,0,.7)}
@@ -1494,14 +1390,47 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   #bot .bub{font-size:12px;padding:8px 12px}
   #term .tt small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
 }
+
+/* ---------- v3 · THEME ZONES — the page changes clothes as you travel ---------- */
+body{transition:background-color 1.1s ease}
+.tx-st{transition:background-color 1.1s ease}
+html[data-zone="bay"]{--bg:#120d09;--bg2:#1a130c;--bg3:#231a10;--gold:#cf8a4d;--gold2:#e8ae77;--gold-soft:rgba(207,138,77,.16)}
+html[data-zone="velvet"]{--bg:#100b15;--bg2:#171022;--bg3:#1f1630;--gold:#d9a27a;--gold2:#f0c6a2;--gold-soft:rgba(217,162,122,.15)}
+
+/* ---------- v3 · GHOST WORDS — stroked backdrop type, drifting at its own depth ---------- */
+.sec-ghost{position:absolute;left:50%;top:clamp(80px,11vh,150px);translate:-50% 0;font-family:var(--ff-d);font-weight:700;font-size:min(21vw,290px);line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(227,192,127,.09);white-space:nowrap;pointer-events:none;z-index:0;user-select:none}
+
+/* ---------- v3 · TRANSITION — the odometer finds its level ---------- */
+.tx-odo{height:160vh}
+.tx-odo .tx-st{background:var(--bg2);display:grid;place-items:center;align-content:center;gap:clamp(20px,3.4vh,34px)}
+.od-glow{position:absolute;left:50%;top:50%;width:72vmax;height:72vmax;translate:-50% -50%;border-radius:50%;background:radial-gradient(closest-side,var(--gold-soft),transparent 70%);opacity:var(--ga,0);pointer-events:none}
+.od-cap{position:relative;text-align:center;font-family:var(--ff-d);font-weight:600;font-size:clamp(30px,5vw,56px);line-height:1.05;letter-spacing:-.02em;opacity:var(--ca,0);transform:translateY(var(--cy,40px));margin:0;padding:0 16px}
+.od-cap small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin-bottom:14px;font-weight:500}
+.od-cap em{font-style:italic;color:var(--gold2)}
+.od-row{position:relative;display:flex;align-items:center;gap:clamp(5px,1vw,10px);opacity:var(--ra,0)}
+.od-cur{font-family:var(--ff-d);font-size:clamp(40px,7vw,84px);color:var(--gold2);font-weight:600;margin-right:4px;line-height:1}
+.od-cell{height:clamp(58px,9vw,108px);min-width:clamp(44px,7vw,84px);overflow:hidden;border:1px solid var(--line2);border-radius:14px;background:rgba(255,255,255,.03);box-shadow:var(--sh1)}
+.od-strip{display:flex;flex-direction:column;will-change:transform}
+.od-strip i{font-style:normal;font-family:var(--ff-d);font-weight:600;font-size:clamp(38px,6.6vw,78px);line-height:clamp(58px,9vw,108px);height:clamp(58px,9vw,108px);text-align:center;font-variant-numeric:lining-nums tabular-nums;color:var(--ink)}
+.od-sub{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink2);opacity:var(--ca,0);margin:0;text-align:center}
 </style>
 </head>
 <body>
-<!-- brand splash: logo-first intro, fades to reveal the hero -->
-<div id="brandSplash" aria-hidden="true"><div class="bs-badge"><img src="data:image/jpeg;base64,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" alt="Sparkzy Sells Cars logo" draggable="false"></div></div>
-<style id="bs-style">#brandSplash{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;background:var(--bg,#0d0c0b)}#brandSplash::before{content:"";position:absolute;inset:0;background:radial-gradient(62% 52% at 50% 42%,rgba(255,255,255,.06),transparent 72%);pointer-events:none}#brandSplash .bs-badge{position:relative;width:clamp(132px,30vw,182px);height:clamp(132px,30vw,182px);border-radius:28px;overflow:hidden;background:#fff;box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.09);opacity:0;transform:scale(.9);animation:bsIn 1s cubic-bezier(.22,1,.36,1) .12s forwards}#brandSplash .bs-badge img{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none;user-select:none}@keyframes bsIn{to{opacity:1;transform:scale(1)}}#brandSplash.bs-done{animation:bsOut .6s ease forwards}@keyframes bsOut{to{opacity:0;visibility:hidden}}@media(prefers-reduced-motion:reduce){#brandSplash .bs-badge{opacity:1;transform:none;animation:none}}</style>
-<script>(function(){var s=document.getElementById("brandSplash");if(!s)return;var done=false;function go(){if(done)return;done=true;s.classList.add("bs-done");setTimeout(function(){s&&s.parentNode&&s.parentNode.removeChild(s);},650);}setTimeout(go,2000);setTimeout(function(){["pointerdown","wheel","keydown","touchstart"].forEach(function(ev){window.addEventListener(ev,go,{once:true,passive:true});});},700);})();</script>
 
+<!-- ============ BRAND SPLASH · logo-first intro, fades to reveal the car ============ -->
+<div id="brandSplash" aria-hidden="true"><div class="bs-badge"><img src="data:image/jpeg;base64,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" alt="Sparkzy Sells Cars logo" draggable="false"></div></div>
+<style id="bs-style">
+#brandSplash{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;background:var(--bg,#0d0c0b)}
+#brandSplash::before{content:"";position:absolute;inset:0;background:radial-gradient(62% 52% at 50% 42%,rgba(255,255,255,.06),transparent 72%);pointer-events:none}
+#brandSplash .bs-badge{position:relative;width:clamp(132px,30vw,182px);height:clamp(132px,30vw,182px);border-radius:28px;overflow:hidden;background:#fff;display:grid;place-items:center;
+box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.09);opacity:0;transform:scale(.9);animation:bsIn 1s cubic-bezier(.22,1,.36,1) .12s forwards}
+#brandSplash .bs-badge img{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none;user-select:none}
+#brandSplash .bs-mark{font-family:var(--ff-d,Georgia,serif);font-weight:700;font-size:40px;letter-spacing:.04em;color:#17120a}
+#brandSplash .bs-mark b{color:var(--gold,#c9a25e)}
+@keyframes bsIn{to{opacity:1;transform:scale(1)}}#brandSplash.bs-done{animation:bsOut .6s ease forwards}@keyframes bsOut{to{opacity:0;visibility:hidden}}
+@media(prefers-reduced-motion:reduce){#brandSplash .bs-badge{opacity:1;transform:none;animation:none}}
+</style>
+<script>(function(){var s=document.getElementById("brandSplash");if(!s)return;var done=false;function go(){if(done)return;done=true;s.classList.add("bs-done");setTimeout(function(){s&&s.parentNode&&s.parentNode.removeChild(s);},650);}setTimeout(go,2000);setTimeout(function(){["pointerdown","wheel","keydown","touchstart"].forEach(function(ev){window.addEventListener(ev,go,{once:true,passive:true});});},700);})();</script>
 
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
@@ -1539,7 +1468,139 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   </div>
 </div>
 
-<main id="top"><style id="ci-style">.cintro{position:relative;height:320vh}.ci-pin{position:sticky;top:0;height:100vh;overflow:hidden}.ci-word{position:absolute;left:0;right:0;bottom:3vh;text-align:center;font-family:var(--ff-d);font-weight:700;font-size:clamp(84px,16vw,250px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.1);letter-spacing:.05em;white-space:nowrap;user-select:none;pointer-events:none}#ciGL{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease}#ciGL.on{opacity:1}.ci-top{position:absolute;left:0;right:0;top:calc(64px + 6vh);text-align:center;pointer-events:none;padding:0 16px}.ci-top .ci-k{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin:0 0 14px}.ci-top h2{font-family:var(--ff-d);font-weight:600;font-size:clamp(34px,6.2vw,72px);line-height:.98;letter-spacing:-.022em;margin:0}.ci-top h2 em{font-style:italic;color:var(--gold2)}.ci-cap{position:absolute;bottom:11vh;left:clamp(16px,6vw,92px);max-width:34ch;font-size:clamp(14px,1.5vw,17px);line-height:1.55;color:var(--ink2);opacity:0;pointer-events:none;margin:0}.ci-cap b{color:var(--ink)}.ci-cap.r{left:auto;right:clamp(16px,6vw,92px);text-align:right}.ci-cue{position:absolute;left:50%;transform:translateX(-50%);bottom:3.6vh;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink2);transition:opacity .4s ease}.ci-cue i{width:1px;height:32px;background:linear-gradient(var(--gold2),transparent);display:block;animation:ciCue 1.8s ease-in-out infinite}@keyframes ciCue{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}.ci-credit{position:absolute;right:12px;bottom:6px;font-size:9.5px;letter-spacing:.04em;color:var(--ink2);opacity:.5;pointer-events:none}@media(max-width:820px){.cintro{height:280vh}.ci-cap{bottom:15vh;max-width:62vw}.ci-cap.r{max-width:58vw}.ci-word{font-size:22vw}}</style><section class="cintro" id="cintro" aria-label="Sparkzy Sells Cars — the car, taken apart and rebuilt as you scroll"><div class="ci-pin"><div class="ci-word" id="ciWord" aria-hidden="true">APPROVED</div><canvas id="ciGL" aria-hidden="true"></canvas><div class="ci-top" id="ciTop"><p class="ci-k">Sparkzy · Car Connection Raleigh</p><h2>Every car on the lot,<br><em>broken down.</em></h2></div><p class="ci-cap" id="ciCapA"><b>Nothing hidden.</b> Every car gets taken apart before it hits the lot - history, condition, payment. You see it all before you sign.</p><p class="ci-cap r" id="ciCapB"><b>Back together. Ready to roll.</b> Text Sparkzy at (919) 633-7155, get approved in minutes and drive out of Raleigh tonight.</p><span class="ci-cue" id="ciCue"><i></i>Scroll - see it come apart</span><span class="ci-credit">3D: &ldquo;1970 Chevrolet Camaro Pro Touring&rdquo; by everhard &middot; CC BY 4.0 &middot; modified</span></div></section><script type="module">(async()=>{var sec=document.getElementById("cintro");if(!sec)return;try{var MODS=await Promise.all([import("three"),import("three/addons/loaders/GLTFLoader.js"),import("three/addons/loaders/DRACOLoader.js"),import("three/addons/libs/meshopt_decoder.module.js"),import("three/addons/environments/RoomEnvironment.js")]);var THREE=MODS[0],GLTFLoader=MODS[1].GLTFLoader,DRACOLoader=MODS[2].DRACOLoader,MeshoptDecoder=MODS[3].MeshoptDecoder,RoomEnvironment=MODS[4].RoomEnvironment;var LEN=4.78,YAW=180;var canvas=document.getElementById("ciGL"),MOB=function(){return innerWidth<821};var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,powerPreference:"high-performance"});renderer.setClearColor(0,0);renderer.setPixelRatio(Math.min(devicePixelRatio,MOB()?1.5:2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;var scene=new THREE.Scene();var pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new RoomEnvironment(),.03).texture;var cam=new THREE.PerspectiveCamera(30,1,.05,200);cam.position.set(6,2.2,7);var sun=new THREE.DirectionalLight(0xfff2e0,2.2);sun.position.set(4,9,5);sun.castShadow=true;sun.shadow.mapSize.set(MOB()?1024:2048,MOB()?1024:2048);sun.shadow.camera.left=-6;sun.shadow.camera.right=6;sun.shadow.camera.top=6;sun.shadow.camera.bottom=-6;sun.shadow.camera.near=1;sun.shadow.camera.far=25;sun.shadow.bias=-.0004;sun.shadow.radius=7;scene.add(sun);scene.add(new THREE.AmbientLight(0xffffff,.3));var rim=new THREE.DirectionalLight(0x9fc4ff,.9);rim.position.set(-6,3,-6);scene.add(rim);var floor=new THREE.Mesh(new THREE.PlaneGeometry(80,80),new THREE.ShadowMaterial({opacity:.32}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);var bc=document.createElement("canvas");bc.width=bc.height=256;var bg=bc.getContext("2d"),rg=bg.createRadialGradient(128,128,0,128,128,128);rg.addColorStop(0,"rgba(0,0,0,.5)");rg.addColorStop(.55,"rgba(0,0,0,.16)");rg.addColorStop(1,"rgba(0,0,0,0)");bg.fillStyle=rg;bg.fillRect(0,0,256,256);var blob=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bc),transparent:true,depthWrite:false,toneMapped:false}));blob.rotation.x=-Math.PI/2;blob.position.y=.004;scene.add(blob);var clampN=function(v,a,b){return Math.min(b,Math.max(a,v))},smooth=function(t){t=clampN(t,0,1);return t*t*(3-2*t)},lerpN=function(a,b,t){return a+(b-a)*t};var seg=function(p,a,b,c,d){if(p<=a)return 0;if(p>=d)return c<d?0:1;if(p<b)return smooth((p-a)/(b-a));if(p<=c)return 1;return 1-smooth((p-c)/(d-c))};var hash=function(s){var h=2166136261;for(var i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return((h>>>0)%1000)/1000};var draco=new DRACOLoader();draco.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");var loader=new GLTFLoader();loader.setDRACOLoader(draco);loader.setMeshoptDecoder(MeshoptDecoder);var gltf=await new Promise(function(res,rej){loader.load("../oldsoul/models/chevrolet-camaro-pro.glb",res,undefined,rej)});var car=new THREE.Group(),holder=new THREE.Group();holder.add(gltf.scene);car.add(holder);scene.add(car);car.updateMatrixWorld(true);var meshes=[];holder.traverse(function(o){if(o.isMesh&&o.geometry&&o.geometry.attributes.position){if(Array.isArray(o.material))o.material=o.material[0];meshes.push(o)}});var bx=function(m){return new THREE.Box3().setFromObject(m)};var all=new THREE.Box3(),boxes=meshes.map(function(m){var b=bx(m);all.union(b);return b});var asz=all.getSize(new THREE.Vector3()),big=Math.max(asz.x,asz.y,asz.z);meshes=meshes.filter(function(m,i){var s=boxes[i].getSize(new THREE.Vector3()),mx=Math.max(s.x,s.z);var junk=(s.y<mx*.012&&mx>big*.6)||/shadow|ground|floor/i.test(m.material.name+m.name);if(junk)m.parent.remove(m);return !junk});var fit=function(){var b=new THREE.Box3();meshes.forEach(function(m){b.union(bx(m))});return b};var b=fit(),s=b.getSize(new THREE.Vector3());holder.rotation.y=(s.x>s.z?Math.PI/2:0)+YAW*Math.PI/180;car.updateMatrixWorld(true);b=fit();s=b.getSize(new THREE.Vector3());holder.scale.setScalar(LEN/s.z);car.updateMatrixWorld(true);b=fit();var ctr=b.getCenter(new THREE.Vector3());holder.position.set(-ctr.x,-b.min.y,-ctr.z);car.updateMatrixWorld(true);b=fit();var halfW=b.getSize(new THREE.Vector3()).x/2;blob.scale.set(halfW*2*1.6,LEN*1.3,1);meshes.forEach(function(m){m.castShadow=true});var PAINT="#1f8a4c";if(PAINT){var PRX=new RegExp("^body$"),pmap=new Map();meshes.forEach(function(m){if(!PRX.test((m.material&&m.material.name)||""))return;var n=pmap.get(m.material);if(!n){n=new THREE.MeshPhysicalMaterial({name:m.material.name,normalMap:m.material.normalMap||null,side:m.material.side});n.color.set(PAINT);n.metalness=.55;n.roughness=.34;n.clearcoat=1;n.clearcoatRoughness=.05;pmap.set(m.material,n)}m.material=n})}var norm=function(x){return x.toLowerCase().replace(/\./g,"").replace(/\s+/g,"_")};var keyOf=function(m){var n=m.name||"",mn=(m.material&&m.material.name)||"";if(!n||/^(object|mesh|node|cube|plane|cylinder|sphere|material)[_.\s]?\d*$/i.test(n))return "mat:"+(mn||"x");var k=norm(n),mm=norm(mn);k=k.replace(/(_\d{1,2})+$/,"");if(mm&&k.slice(-mm.length-1)==="_"+mm)k=k.slice(0,-mm.length-1);return k.replace(/_\d{3}$/,"")||("mat:"+mn)};var map=new Map();meshes.forEach(function(m){var k=keyOf(m),p=map.get(k);if(!p)map.set(k,p={meshes:[]});p.meshes.push(m)});var parts=[],cc0=new THREE.Vector3(0,.55,0),sc=LEN/4.8;map.forEach(function(p,k){var B=new THREE.Box3();p.meshes.forEach(function(m){B.union(bx(m))});var g=new THREE.Group();car.add(g);var cp=B.getCenter(new THREE.Vector3());g.position.copy(cp);g.updateMatrixWorld(true);p.meshes.forEach(function(m){g.attach(m)});var d=cp.clone().sub(cc0);d.x*=1.6;d.y=d.y*.8+.22;d.normalize();var diag=B.getSize(new THREE.Vector3()).length(),h=hash(k);p.g=g;p.base=g.position.clone();p.exv=d.multiplyScalar((2.1+h*1.7)*clampN(1-diag/(LEN*.9),.55,1)*sc);p.exv.x*=1.35;p.exv.y*=.75;p.exv.z*=1.15;parts.push(p)});var capA=document.getElementById("ciCapA"),capB=document.getElementById("ciCapB"),top=document.getElementById("ciTop"),cue=document.getElementById("ciCue"),word=document.getElementById("ciWord");var M={top:0,end:1},fitD=8;function measure(){var r=sec.getBoundingClientRect();M.top=r.top+scrollY;M.end=Math.max(M.top+1,M.top+sec.offsetHeight-innerHeight);var W=innerWidth,H=innerHeight;renderer.setSize(W,H,false);cam.aspect=W/H;cam.fov=W<H?42:30;cam.updateProjectionMatrix();var vf=cam.fov*Math.PI/360,hf=Math.atan(Math.tan(vf)*cam.aspect);fitD=Math.max((LEN*.58)/Math.tan(hf),(LEN*.46)/Math.tan(vf),LEN*1.05)}addEventListener("resize",measure);measure();var ptr={x:0,y:0},pt={x:0,y:0};addEventListener("pointermove",function(e){pt.x=e.clientX/innerWidth*2-1;pt.y=e.clientY/innerHeight*2-1},{passive:true});var ex=0,P=0;function apply(){for(var i=0;i<parts.length;i++){var p=parts[i];p.g.position.copy(p.base).addScaledVector(p.exv,ex)}}function tick(t){requestAnimationFrame(tick);var y=scrollY;if(y>M.end+innerHeight*1.5)return;P=clampN((y-M.top)/(M.end-M.top),0,1);var e2=seg(P,.14,.34,.56,.8);if(Math.abs(e2-ex)>1e-4){ex=e2;apply()}ptr.x+=(pt.x-ptr.x)*.06;ptr.y+=(pt.y-ptr.y)*.06;var az=.62+P*4.4+Math.sin(t*.00031)*.08+ptr.x*.14;var el=.30-P*.1+Math.sin(t*.00047)*.015-ptr.y*.05;var d=fitD*(1.04+ex*(MOB()?.3:.1));var ty=lerpN(1.02,.55,smooth(P/.22))+Math.sin(t*.0006)*.012;cam.position.set(Math.sin(az)*Math.cos(el)*d,Math.sin(el)*d+.6,Math.cos(az)*Math.cos(el)*d);cam.lookAt(0,ty,0);car.position.y=Math.sin(t*.00052)*.015+ex*.1;blob.material.opacity=.9-ex*.45;var ho=1-smooth(P/.12);top.style.opacity=ho;top.style.transform="translateY("+(P*-60)+"px)";cue.style.opacity=P>.05?0:1;var a1=seg(P,.2,.3,.44,.54);capA.style.opacity=a1;capA.style.transform="translateY("+((1-a1)*24)+"px)";var a2=seg(P,.55,.65,.82,.92);capB.style.opacity=a2;capB.style.transform="translateY("+((1-a2)*24)+"px)";word.style.transform="translateY("+(P*-16)+"vh)";word.style.opacity=.9-P*.5;renderer.render(scene,cam)}canvas.classList.add("on");requestAnimationFrame(tick);}catch(e){console.warn("carIntro disabled:",e);sec.style.display="none"}})();</script>
+<main id="top">
+
+<!-- ============ 00 · THE STRIP-DOWN — a real 3D car breaks apart and rebuilds as you scroll (hero) ============ -->
+<style id="ci-style">
+.cintro{position:relative;height:320vh}
+.ci-pin{position:sticky;top:0;height:100vh;overflow:hidden}
+.ci-word{position:absolute;left:0;right:0;bottom:3vh;text-align:center;font-family:var(--ff-d);font-weight:700;font-size:clamp(84px,16vw,250px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(241,235,223,.1);letter-spacing:.05em;white-space:nowrap;user-select:none;pointer-events:none}
+#ciGL{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease}
+#ciGL.on{opacity:1}
+.ci-top{position:absolute;left:0;right:0;top:calc(64px + 6vh);text-align:center;pointer-events:none;padding:0 16px}
+.ci-top .ci-k{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin:0 0 14px}
+.ci-top h2{font-family:var(--ff-d);font-weight:600;font-size:clamp(34px,6.2vw,72px);line-height:.98;letter-spacing:-.022em;margin:0}
+.ci-top h2 em{font-style:italic;color:var(--gold2)}
+.ci-cap{position:absolute;bottom:11vh;left:clamp(16px,6vw,92px);max-width:34ch;font-size:clamp(14px,1.5vw,17px);line-height:1.55;color:var(--ink2);opacity:0;pointer-events:none;margin:0}
+.ci-cap b{color:var(--ink)}
+.ci-cap.r{left:auto;right:clamp(16px,6vw,92px);text-align:right}
+.ci-cue{position:absolute;left:50%;transform:translateX(-50%);bottom:3.6vh;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink2);transition:opacity .4s ease}
+.ci-cue i{width:1px;height:32px;background:linear-gradient(var(--gold2),transparent);display:block;animation:ciCue 1.8s ease-in-out infinite}
+@keyframes ciCue{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+.ci-credit{position:absolute;right:12px;bottom:6px;font-size:9.5px;letter-spacing:.04em;color:var(--ink2);opacity:.5;pointer-events:none}
+@media(max-width:820px){.cintro{height:280vh}.ci-cap{bottom:15vh;max-width:62vw}.ci-cap.r{max-width:58vw}.ci-word{font-size:22vw}}
+</style>
+<section class="cintro" id="cintro" aria-label="The car, taken apart and rebuilt as you scroll">
+  <div class="ci-pin">
+    <div class="ci-word" id="ciWord" aria-hidden="true">APPROVED</div>
+    <canvas id="ciGL" aria-hidden="true"></canvas>
+    <div class="ci-top" id="ciTop"><p class="ci-k">Sparkzy · Car Connection Raleigh</p><h2>Every car on the lot,<br><em>broken down.</em></h2></div>
+    <p class="ci-cap" id="ciCapA"><b>Nothing hidden.</b> Every car gets taken apart before it hits the lot - history, condition, payment. You see it all before you sign.</p>
+    <p class="ci-cap r" id="ciCapB"><b>Back together. Ready to roll.</b> Text Sparkzy at (919) 633-7155, get approved in minutes and drive out of Raleigh tonight.</p>
+    <span class="ci-cue" id="ciCue"><i></i>Scroll - see it come apart</span>
+    <span class="ci-credit" id="ciCredit"></span>
+  </div>
+</section>
+<script type="module">(async()=>{
+const sec=document.getElementById("cintro");if(!sec)return;try{
+const CI={car:"camaro",paint:"#1f8a4c",base:"../oldsoul/models/"};
+const CIREG={
+  camaro:['chevrolet-camaro-pro.glb',4.78,180,'1970 Chevrolet Camaro Pro Touring','everhard','^body$'],
+  firebird:['pontiac-firebird-trans.glb',4.87,0,'1970 Pontiac Firebird Trans Am','everhard','^body$'],
+  skyline:['nissan-skyline-gt-r.glb',4.46,180,"Nissan Skyline GT-R C110 Kenmeri '73",'Martin Trafas','^Paint$'],
+  m4:['bmw-m4-f82.glb',4.67,0,'BMW M4 f82','Black Snow','^ARm4_main$'],
+  mclaren:['mclaren-spider.glb',4.57,0,'McLaren Spider','SINNIK','^Primary_Paint$'],
+  phantom:['rolls-royce-phantom.glb',5.76,0,'rollsroyce phantom','Jagguz_wrld','^car_body_in$'],
+  p918:['porsche-918.glb',4.64,0,'Porsche 918 Free','Black Snow','^P918_paint$']};
+const CAR=CIREG[CI.car]||CIREG.mclaren, modelUrl=CI.base+CAR[0];
+const cred=document.getElementById("ciCredit"); if(cred) cred.innerHTML='3D: &ldquo;'+CAR[3]+'&rdquo; by '+CAR[4]+' &middot; CC BY 4.0 &middot; modified';
+const MODS=await Promise.all([import("three"),import("three/addons/loaders/GLTFLoader.js"),import("three/addons/loaders/DRACOLoader.js"),import("three/addons/libs/meshopt_decoder.module.js"),import("three/addons/environments/RoomEnvironment.js")]);
+const THREE=MODS[0],{GLTFLoader}=MODS[1],{DRACOLoader}=MODS[2],{MeshoptDecoder}=MODS[3],{RoomEnvironment}=MODS[4];
+const LEN=CAR[1],YAW=CAR[2];
+const canvas=document.getElementById("ciGL"),MOB=()=>innerWidth<821;
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:"high-performance"});
+renderer.setClearColor(0,0);renderer.setPixelRatio(Math.min(devicePixelRatio,MOB()?1.5:2));
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new RoomEnvironment(),.03).texture;
+const cam=new THREE.PerspectiveCamera(30,1,.05,200);cam.position.set(6,2.2,7);
+const sun=new THREE.DirectionalLight(0xfff2e0,2.2);sun.position.set(4,9,5);sun.castShadow=true;sun.shadow.mapSize.set(MOB()?1024:2048,MOB()?1024:2048);
+sun.shadow.camera.left=-6;sun.shadow.camera.right=6;sun.shadow.camera.top=6;sun.shadow.camera.bottom=-6;sun.shadow.camera.near=1;sun.shadow.camera.far=25;sun.shadow.bias=-.0004;sun.shadow.radius=7;scene.add(sun);
+scene.add(new THREE.AmbientLight(0xffffff,.3));
+const rim=new THREE.DirectionalLight(0x9fc4ff,.9);rim.position.set(-6,3,-6);scene.add(rim);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(80,80),new THREE.ShadowMaterial({opacity:.32}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+const bc=document.createElement("canvas");bc.width=bc.height=256;const bg=bc.getContext("2d"),rg=bg.createRadialGradient(128,128,0,128,128,128);
+rg.addColorStop(0,"rgba(0,0,0,.5)");rg.addColorStop(.55,"rgba(0,0,0,.16)");rg.addColorStop(1,"rgba(0,0,0,0)");bg.fillStyle=rg;bg.fillRect(0,0,256,256);
+const blob=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bc),transparent:true,depthWrite:false,toneMapped:false}));
+blob.rotation.x=-Math.PI/2;blob.position.y=.004;scene.add(blob);
+const clampN=(v,a,b)=>Math.min(b,Math.max(a,v)),smoothC=t=>{t=clampN(t,0,1);return t*t*(3-2*t)},lerpN=(a,b,t)=>a+(b-a)*t;
+const segC=(p,a,b,c,d)=>{if(p<=a)return 0;if(p>=d)return c<d?0:1;if(p<b)return smoothC((p-a)/(b-a));if(p<=c)return 1;return 1-smoothC((p-c)/(d-c))};
+const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return((h>>>0)%1000)/1000};
+const draco=new DRACOLoader();draco.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");
+const loader=new GLTFLoader();loader.setDRACOLoader(draco);loader.setMeshoptDecoder(MeshoptDecoder);
+const gltf=await new Promise((res,rej)=>loader.load(modelUrl,res,undefined,rej));
+const car=new THREE.Group(),holder=new THREE.Group();holder.add(gltf.scene);car.add(holder);scene.add(car);car.updateMatrixWorld(true);
+let meshes=[];holder.traverse(o=>{if(o.isMesh&&o.geometry&&o.geometry.attributes.position){if(Array.isArray(o.material))o.material=o.material[0];meshes.push(o)}});
+const bx=m=>new THREE.Box3().setFromObject(m);
+const all=new THREE.Box3(),boxes=meshes.map(m=>{const b=bx(m);all.union(b);return b});
+const asz=all.getSize(new THREE.Vector3()),big=Math.max(asz.x,asz.y,asz.z);
+meshes=meshes.filter((m,i)=>{const s=boxes[i].getSize(new THREE.Vector3()),mx=Math.max(s.x,s.z);
+const junk=(s.y<mx*.012&&mx>big*.6)||/shadow|ground|floor/i.test(m.material.name+m.name);if(junk)m.parent.remove(m);return !junk});
+const fit=()=>{const b=new THREE.Box3();meshes.forEach(m=>b.union(bx(m)));return b};
+let b=fit(),s=b.getSize(new THREE.Vector3());
+holder.rotation.y=(s.x>s.z?Math.PI/2:0)+YAW*Math.PI/180;car.updateMatrixWorld(true);
+b=fit();s=b.getSize(new THREE.Vector3());holder.scale.setScalar(LEN/s.z);car.updateMatrixWorld(true);
+b=fit();const ctr=b.getCenter(new THREE.Vector3());holder.position.set(-ctr.x,-b.min.y,-ctr.z);car.updateMatrixWorld(true);
+b=fit();const halfW=b.getSize(new THREE.Vector3()).x/2;
+blob.scale.set(halfW*2*1.6,LEN*1.3,1);meshes.forEach(m=>{m.castShadow=true});
+if(CI.paint){const PRX=new RegExp(CAR[5]),pmap=new Map();
+meshes.forEach(m=>{if(!PRX.test((m.material&&m.material.name)||""))return;let n=pmap.get(m.material);
+if(!n){n=new THREE.MeshPhysicalMaterial({name:m.material.name,normalMap:m.material.normalMap||null,side:m.material.side});
+n.color.set(CI.paint);n.metalness=.55;n.roughness=.34;n.clearcoat=1;n.clearcoatRoughness=.05;pmap.set(m.material,n)}m.material=n})}
+const norm=x=>x.toLowerCase().replace(/\./g,"").replace(/\s+/g,"_");
+const keyOf=m=>{const n=m.name||"",mn=(m.material&&m.material.name)||"";
+if(!n||/^(object|mesh|node|cube|plane|cylinder|sphere|material)[_.\s]?\d*$/i.test(n))return "mat:"+(mn||"x");
+let k=norm(n),mm=norm(mn);k=k.replace(/(_\d{1,2})+$/,"");if(mm&&k.slice(-mm.length-1)==="_"+mm)k=k.slice(0,-mm.length-1);return k.replace(/_\d{3}$/,"")||("mat:"+mn)};
+const map=new Map();meshes.forEach(m=>{const k=keyOf(m);let p=map.get(k);if(!p)map.set(k,p={meshes:[]});p.meshes.push(m)});
+const parts=[],cc0=new THREE.Vector3(0,.55,0),sc=LEN/4.8;
+map.forEach((p,k)=>{const B=new THREE.Box3();p.meshes.forEach(m=>B.union(bx(m)));
+const g=new THREE.Group();car.add(g);const cp=B.getCenter(new THREE.Vector3());g.position.copy(cp);g.updateMatrixWorld(true);
+p.meshes.forEach(m=>g.attach(m));
+const d=cp.clone().sub(cc0);d.x*=1.6;d.y=d.y*.8+.22;d.normalize();
+const diag=B.getSize(new THREE.Vector3()).length(),h=hash(k);
+p.g=g;p.base=g.position.clone();p.exv=d.multiplyScalar((2.1+h*1.7)*clampN(1-diag/(LEN*.9),.55,1)*sc);
+p.exv.x*=1.35;p.exv.y*=.75;p.exv.z*=1.15;parts.push(p)});
+const capA=document.getElementById("ciCapA"),capB=document.getElementById("ciCapB"),top=document.getElementById("ciTop"),cue=document.getElementById("ciCue"),word=document.getElementById("ciWord");
+const M={top:0,end:1};let fitD=8;
+function measure(){const r=sec.getBoundingClientRect();M.top=r.top+scrollY;M.end=Math.max(M.top+1,M.top+sec.offsetHeight-innerHeight);
+const W=innerWidth,H=innerHeight;renderer.setSize(W,H,false);cam.aspect=W/H;cam.fov=W<H?42:30;cam.updateProjectionMatrix();
+const vf=cam.fov*Math.PI/360,hf=Math.atan(Math.tan(vf)*cam.aspect);fitD=Math.max((LEN*.58)/Math.tan(hf),(LEN*.46)/Math.tan(vf),LEN*1.05)}
+addEventListener("resize",measure);measure();
+const ptr={x:0,y:0},pt={x:0,y:0};
+addEventListener("pointermove",e=>{pt.x=e.clientX/innerWidth*2-1;pt.y=e.clientY/innerHeight*2-1},{passive:true});
+let ex=0,P=0;
+function apply(){for(let i=0;i<parts.length;i++){const p=parts[i];p.g.position.copy(p.base).addScaledVector(p.exv,ex)}}
+function tick(t){requestAnimationFrame(tick);
+const y=scrollY;if(y>M.end+innerHeight*1.5)return;
+P=clampN((y-M.top)/(M.end-M.top),0,1);
+const e2=segC(P,.14,.34,.56,.8);if(Math.abs(e2-ex)>1e-4){ex=e2;apply()}
+ptr.x+=(pt.x-ptr.x)*.06;ptr.y+=(pt.y-ptr.y)*.06;
+const az=.62+P*4.4+Math.sin(t*.00031)*.08+ptr.x*.14;
+const el2=.30-P*.1+Math.sin(t*.00047)*.015-ptr.y*.05;
+const d=fitD*(1.04+ex*(MOB()?.3:.1));
+const ty=lerpN(1.02,.55,smoothC(P/.22))+Math.sin(t*.0006)*.012;
+cam.position.set(Math.sin(az)*Math.cos(el2)*d,Math.sin(el2)*d+.6,Math.cos(az)*Math.cos(el2)*d);cam.lookAt(0,ty,0);
+car.position.y=Math.sin(t*.00052)*.015+ex*.1;blob.material.opacity=.9-ex*.45;
+const ho=1-smoothC(P/.12);top.style.opacity=ho;top.style.transform="translateY("+(P*-60)+"px)";
+cue.style.opacity=P>.05?0:1;
+const a1=segC(P,.2,.3,.44,.54);capA.style.opacity=a1;capA.style.transform="translateY("+((1-a1)*24)+"px)";
+const a2=segC(P,.55,.65,.82,.92);capB.style.opacity=a2;capB.style.transform="translateY("+((1-a2)*24)+"px)";
+word.style.transform="translateY("+(P*-16)+"vh)";word.style.opacity=.9-P*.5;
+renderer.render(scene,cam)}
+window.__ci={p:()=>P,parts:()=>parts.length,ex:()=>ex};
+canvas.classList.add("on");requestAnimationFrame(tick);
+}catch(e){console.warn("carIntro disabled:",e);sec.style.display="none"}
+})();</script>
 
 <!-- ============ 02 · FIVE WAYS IN — one scroll, one stop (inspire 4) ============ -->
 <section class="ways" id="ways" aria-label="What brings you in?">
@@ -1580,53 +1641,6 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 <!-- ============ PATTERN INTERRUPT · the stock tape ============ -->
 <div class="tape" aria-label="Fresh on the lot"><div class="tape-in" id="tape"></div></div>
 
-<!-- ============ TRANSITION · the bay door rolls up ============ -->
-<div class="tx tx-shutter" id="txShutter" aria-hidden="true">
-  <div class="tx-st">
-    <div class="sh-glow" id="shGlow"></div>
-    <p class="sh-t" id="shT"><small>The lot</small>Three ready to roll.<em>Pick one.</em></p>
-    <div class="sh-door" id="shDoor"></div>
-  </div>
-</div>
-
-<!-- ============ 09 · BUILD — a showroom of six real 3D cars ============ -->
-<section class="sec" id="build">
-  <div class="wrap">
-    <div class="sec-head row rv">
-      <div>
-        <p class="kick">The lot, live</p>
-        <h2 class="h2">Pick one. <em>Drive it out.</em></h2>
-      </div>
-      <p class="lede" style="max-width:42ch">Tap a car, spec it how you want it, and see the payment move live. Then text Sparkzy and make it real.</p>
-    </div>
-    <div class="b3" id="b3">
-      <div class="b3-stage" id="b3Stage" aria-label="3D showroom — tap a car to build it">
-        <canvas id="b3Cv"></canvas>
-        <div class="b3-tags" id="b3Tags"></div>
-        <div class="b3-load" id="b3Load"><div><b id="b3Pct">0%</b>Opening the showroom</div></div>
-        <div class="b3-pick" id="b3Pick"><small>The lot · 3 cars</small><b>Tap a car to spec it</b></div>
-        <div class="b3-price" aria-live="polite"><small id="b3Car">Your build</small><b id="b3Total">$0</b><span id="b3Weeks">≈ 0 weeks</span></div>
-        <div class="b3-pop" id="b3Pop"></div>
-        <div class="b3-views" role="group" aria-label="Camera"><button type="button" data-v="34" class="on">¾</button><button type="button" data-v="90">Side</button><button type="button" data-v="180">Rear</button><button type="button" data-v="0">Front</button></div>
-        <button class="b3-back" id="b3Back" type="button"><span aria-hidden="true">←</span> Back to the showroom</button>
-        <p class="b3-hint" id="b3Hint">Drag to look round · tap a car</p>
-        <p class="b3-cred" id="b3Cred"></p>
-      </div>
-      <div class="b3-side">
-        <div class="b3-g"><h4>The floor <b id="b3Sel">none picked</b></h4><div class="b3-cars" id="b3Cars" role="group" aria-label="Cars on the lot"></div></div>
-        <div class="b3-g b3-ed"><h4>Paint <b id="b3PaintN">Factory</b></h4><div class="b3-sw" id="b3Paint" role="group" aria-label="Paint"></div></div>
-        <div class="b3-g b3-ed"><h4>Parts <b id="b3Cnt">0 fitted</b></h4><div class="b3-parts" id="b3Parts" role="group" aria-label="Parts"></div></div>
-        <div class="b3-g b3-ed"><h4>Wheels</h4><div class="seg" id="b3Wheel" role="group" aria-label="Wheel finish"></div></div>
-        <div class="b3-call">
-          <p><b>Not sure what to fit?</b> Call the bay — we’ll design the car with you and send renders before a spanner turns.</p>
-          <a class="btn btn-gold btn-block" data-tel href="#" id="b3Call"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call — design it for me</a>
-          <button class="lnk" type="button" id="b3Send">or send this one to Sparkzy on WhatsApp -></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ============ PATTERN INTERRUPT · kinetic marquee ============ -->
 <section class="band" aria-hidden="true">
   <div class="mq mq1"><div class="mqi">Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i>Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i>Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i></div></div>
@@ -1635,6 +1649,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
 
 <!-- ============ STOCK ============ -->
 <section class="sec stock" id="stock">
+  <div class="sec-ghost" aria-hidden="true">THE FLOOR</div>
   <div class="wrap">
     <div class="sec-head rv">
       <p class="kick">On the lot now</p>
@@ -1673,42 +1688,15 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   </div>
 </section>
 
-<!-- ============ SZ · the intelligence that runs the floor ============ -->
-<section class="omega" id="numbers" aria-label="Meet Sparkzy, Raleigh’s car plug">
-  <div class="om-grid" aria-hidden="true"></div>
-  <div class="om-aur a" aria-hidden="true"></div>
-  <div class="om-aur b" aria-hidden="true"></div>
-  <div class="om-bubs" id="omBubs" aria-live="polite"></div>
-  <div class="om-wrap">
-    <div class="om-stage">
-      <button class="om-orb" id="omOrb" type="button" aria-label="Ask SZ anything">
-        <span class="om-glow" aria-hidden="true"></span>
-        <span class="om-ring r1" aria-hidden="true"></span>
-        <span class="om-ring r2" aria-hidden="true"></span>
-        <span class="om-ring r3" aria-hidden="true"></span>
-        <span class="om-ball" aria-hidden="true">
-          <span class="om-eye"><span class="om-pupil" id="omP1"></span></span>
-          <span class="om-sym">&#937;</span>
-        </span>
-        <span class="om-tag" aria-hidden="true">● SZ online</span>
-      </button>
-    </div>
-    <div class="om-copy" id="omCopy">
-      <p class="om-k">Sparkzy · Raleigh’s car plug</p>
-      <h2 class="om-h" id="omH">76K follow him. The lot is why they stay.</h2>
-      <p class="om-l">CEO of Car Connection Raleigh. Approvals in minutes, trades paid properly, and a text that actually gets answered.</p>
-      <div class="om-stats">
-        <div><b>71</b><span>cars sold</span></div>
-        <div><b>34</b><span>builds shipped</span></div>
-        <div><b>23</b><span>approvals closed</span></div>
-        <div><b>4.9</b><span>from 340 reviews</span></div>
-        <div><b>&lt;1h</b><span>reply · 7 days</span></div>
-      </div>
-      <button class="btn btn-gold om-cta" type="button" id="omAsk">Ask SZ anything →</button>
-      <div class="om-chips" id="omChips" aria-label="Quick questions"></div>
-    </div>
+<!-- ============ TRANSITION · the odometer finds its level ============ -->
+<div class="tx tx-odo" id="txOdo" aria-hidden="true">
+  <div class="tx-st">
+    <i class="od-glow" id="odGlow"></i>
+    <p class="od-cap" id="odCap"><small>Finance, in-house</small>Watch the monthly <em>find its level.</em></p>
+    <div class="od-row" id="odRow"><span class="od-cur">$</span></div>
+    <p class="od-sub" id="odSub">per month · soft search only</p>
   </div>
-</section>
+</div>
 
 <!-- ============ FINANCE · the dial ============ -->
 <section class="sec" id="finance">
@@ -1931,6 +1919,54 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
     <div class="stp" id="stp"><b>VERIFIED</b><small>340 real invoices</small></div>
   </div>
 </div>
+
+<!-- ============ TRANSITION · the bay door rolls up ============ -->
+<div class="tx tx-shutter" id="txShutter" aria-hidden="true">
+  <div class="tx-st">
+    <div class="sh-glow" id="shGlow"></div>
+    <p class="sh-t" id="shT"><small>The lot</small>Three ready to roll.<em>Pick one.</em></p>
+    <div class="sh-door" id="shDoor"></div>
+  </div>
+</div>
+
+<!-- ============ 09 · BUILD — a showroom of six real 3D cars ============ -->
+<section class="sec" id="build">
+  <div class="sec-ghost" aria-hidden="true">THE BAY</div>
+  <div class="wrap">
+    <div class="sec-head row rv">
+      <div>
+        <p class="kick">The lot, live</p>
+        <h2 class="h2">Pick one. <em>Drive it out.</em></h2>
+      </div>
+      <p class="lede" style="max-width:42ch">Tap a car, spec it how you want it, and see the payment move live. Then text Sparkzy and make it real.</p>
+    </div>
+    <div class="b3" id="b3">
+      <div class="b3-stage" id="b3Stage" aria-label="3D showroom — tap a car to build it">
+        <canvas id="b3Cv"></canvas>
+        <div class="b3-tags" id="b3Tags"></div>
+        <div class="b3-load" id="b3Load"><div><b id="b3Pct">0%</b>Opening the showroom</div></div>
+        <div class="b3-pick" id="b3Pick"><small>The lot · 3 cars</small><b>Tap a car to spec it</b></div>
+        <div class="b3-price" aria-live="polite"><small id="b3Car">Your build</small><b id="b3Total">$0</b><span id="b3Weeks">≈ 0 weeks</span></div>
+        <div class="b3-pop" id="b3Pop"></div>
+        <div class="b3-views" role="group" aria-label="Camera"><button type="button" data-v="34" class="on">¾</button><button type="button" data-v="90">Side</button><button type="button" data-v="180">Rear</button><button type="button" data-v="0">Front</button></div>
+        <button class="b3-back" id="b3Back" type="button"><span aria-hidden="true">←</span> Back to the showroom</button>
+        <p class="b3-hint" id="b3Hint">Drag to look round · tap a car</p>
+        <p class="b3-cred" id="b3Cred"></p>
+      </div>
+      <div class="b3-side">
+        <div class="b3-g"><h4>The floor <b id="b3Sel">none picked</b></h4><div class="b3-cars" id="b3Cars" role="group" aria-label="Cars on the lot"></div></div>
+        <div class="b3-g b3-ed"><h4>Paint <b id="b3PaintN">Factory</b></h4><div class="b3-sw" id="b3Paint" role="group" aria-label="Paint"></div></div>
+        <div class="b3-g b3-ed"><h4>Parts <b id="b3Cnt">0 fitted</b></h4><div class="b3-parts" id="b3Parts" role="group" aria-label="Parts"></div></div>
+        <div class="b3-g b3-ed"><h4>Wheels</h4><div class="seg" id="b3Wheel" role="group" aria-label="Wheel finish"></div></div>
+        <div class="b3-call">
+          <p><b>Not sure what to fit?</b> Call the bay — we’ll design the car with you and send renders before a spanner turns.</p>
+          <a class="btn btn-gold btn-block" data-tel href="#" id="b3Call"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call — design it for me</a>
+          <button class="lnk" type="button" id="b3Send">or send this one to Sparkzy on WhatsApp -></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ PROMISE ============ -->
 <section class="sec" id="promise" style="padding-top:0">
@@ -3585,62 +3621,6 @@ function updateHole(now){
   HO.bars.forEach((b,i)=>{ const k=+smooth(clamp((p-.8-i*.011)/.11,0,1)).toFixed(3); if(k!==b.k){ b.k=k; b.el.style.setProperty('--k',k); } });
 }
 
-/* ============================================================ SZ · the big floor intelligence.
-   A scaled-up twin of the #bot chatbot: its eye follows the cursor, it conjures a fact/tip bubble every
-   few seconds (tap it to open the chat), fires a thin laser at the cursor every 3s, assembles its headline
-   on entry, and throws one "before you go" bubble as you scroll out. */
-const OMFACTS=[
-  'CEO of Car Connection Raleigh',
-  'Text me: (919) 633-7155',
-  '76K followers and climbing',
-  'Approvals in minutes',
-  'Bad credit welcome',
-  'Raleigh, North Carolina',
-  'Trade-ins paid top dollar',
-  'DM or just pull up'
-];
-const NM={items:[],mx:innerWidth*.3,my:innerHeight*.5,cx:0,cy:0,ex:999,ey:999,bw:300,fi:-1,spawnAt:0,vis:false,exited:false,slots:[],wx:0,wy:0,twx:0,twy:0,wAt:0,wrange:60};
-function buildNums(){ const orb=$id('omOrb'); if(!orb) return;
-  NM.orb=orb; NM.p1=$id('omP1'); NM.bubs=$id('omBubs');
-  const open=()=>{ const bot=$id('bot'); if(bot) bot.click(); };
-  orb.addEventListener('click',open); const ask=$id('omAsk'); if(ask) ask.addEventListener('click',open);
-  addEventListener('pointermove',e=>{ NM.mx=e.clientX; NM.my=e.clientY; },{passive:true});
-  if(NM.bubs){ for(let i=0;i<3;i++){ const b=document.createElement('button'); b.type='button'; b.className='om-bub s'+i; b.setAttribute('aria-label','Ask SZ about this'); b.addEventListener('click',open); NM.bubs.appendChild(b); NM.slots.push({el:b,until:0,busy:false,sticky:false}); } }
-  /* v2: quick-ask chips (from the bot's own chip list) + scroll-driven count-up stats */
-  setTimeout(()=>{ try{ const ce=$id('omChips'); if(ce&&!ce.childElementCount&&Array.isArray(TCH)) TCH.slice(0,4).forEach(t=>{ const c=document.createElement('button'); c.type='button'; c.className='om-chip'; c.textContent=t; c.addEventListener('click',open); ce.appendChild(c); }); }catch(e){} },0);
-  NM.stats=[...document.querySelectorAll('.om-stats b')].map(b=>{ const m=(b.textContent||'').match(/^([^0-9]*)([0-9][0-9,.]*)(.*)$/); if(!m) return null;
-    const dec=(m[2].split('.')[1]||'').length; return {b,el:b.parentElement,pre:m[1],suf:m[3],t:parseFloat(m[2].replace(/,/g,'')),dec,comma:m[2].indexOf(',')>=0,last:''}; }).filter(Boolean);
-  const h=$id('omH'); if(h&&!h.dataset.split){ h.dataset.split='1'; const words=h.textContent.trim().split(/\s+/);
-    h.innerHTML=words.map((w,i)=>'<span class="ow'+(i>=6?' g':'')+'" style="transition-delay:'+(i*0.06).toFixed(2)+'s">'+esc(w)+'</span>').join(' '); }
-  NM.spawnAt=performance.now()+1300; NM.wAt=performance.now()+1500;
-  layoutNums(); }
-function layoutNums(){ const orb=$id('omOrb'); if(!orb) return; const r=orb.getBoundingClientRect(); NM.cx=r.left+r.width/2; NM.cy=r.top+r.height/2; NM.bw=r.width||300; NM.wrange=isMob?30:Math.min(72,NM.bw*.18); }
-function omSpawn(now,txt,sticky){ const s=NM.slots.find(s=>!s.busy); if(!s) return false; s.busy=true; s.sticky=!!sticky; s.until=now+(sticky?18000:8400);
-  s.el.innerHTML='<span class="bk">SZ</span>'+esc(txt); void s.el.offsetWidth; s.el.classList.add('on'); return true; }
-function updateNums(){ const r=FR.numbers, H=innerHeight; const vis=!!r&&r.bottom>60&&r.top<H-60;
-  if(vis&&!NM.vis){ NM.vis=true; const h=$id('omH'); if(h) h.classList.add('in'); }
-  const now=performance.now();
-  NM.slots.forEach(s=>{ if(s.busy&&now>s.until){ s.el.classList.remove('on'); s.busy=false; s.sticky=false; } });   /* retire the oldest once its time is up */
-  if(!vis){ NM.vis=false; return; }
-  /* v2: stats count up (and back down) as a pure function of the section's position */
-  if(NM.stats&&NM.stats.length){ const sp=clamp((H*.86-r.top)/(H*.6),0,1), e2=sp*sp*(3-2*sp);
-    NM.stats.forEach(s=>{ const v=s.t*e2; let txt=v.toFixed(s.dec); if(s.comma) txt=Number(txt).toLocaleString('en-US',{minimumFractionDigits:s.dec});
-      const out=s.pre+txt+s.suf; if(out!==s.last){ s.last=out; s.b.textContent=out; s.el.style.setProperty('--sp',e2.toFixed(3)); } }); }
-  const orb=NM.orb; if(orb){ const rr=orb.getBoundingClientRect(); NM.cx=rr.left+rr.width/2; NM.cy=rr.top+rr.height/2; NM.bw=rr.width||NM.bw; }
-  const rad=Math.max(150,NM.bw*.7), dx=clamp((NM.mx-NM.cx)/rad,-1,1), dy=clamp((NM.my-NM.cy)/rad,-1,1);
-  const er=NM.bw*.05, tx=+(dx*er).toFixed(1), ty=+(dy*er).toFixed(1);
-  if(tx!==NM.ex||ty!==NM.ey){ NM.ex=tx; NM.ey=ty; if(NM.p1) NM.p1.style.transform='translate('+tx+'px,'+ty+'px)'; }
-  /* the orb drifts slowly around its area — a bigger copy of the roaming chatbot */
-  if(!RM){ if(now>NM.wAt){ NM.wAt=now+2600+Math.random()*1900; NM.twx=(Math.random()*2-1)*NM.wrange; NM.twy=(Math.random()*2-1)*NM.wrange*.8; }
-    NM.wx+=(NM.twx-NM.wx)*.012; NM.wy+=(NM.twy-NM.wy)*.012; }
-  if(orb){ orb.style.setProperty('--ox',(NM.wx+dx*7).toFixed(1)+'px'); orb.style.setProperty('--oy',(NM.wy+dy*6).toFixed(1)+'px'); }
-  if(RM||!NM.bubs) return;
-  if(r.bottom<H*.5&&!NM.exited){ NM.exited=true; omSpawn(now,'Leaving already? Ask me one thing before you go →',true); }
-  else if(r.top>H*.25&&NM.exited){ NM.exited=false; }
-  /* a fresh fact / tip every ~2.8s; up to three live on screen at once, each for ~8s */
-  if(now>NM.spawnAt){ NM.fi=(NM.fi+1)%OMFACTS.length; if(omSpawn(now,OMFACTS[NM.fi],false)) NM.spawnAt=now+2800+Math.random()*1500; else NM.spawnAt=now+1100; }
-}
-
 /* ============================================================ 07 · THE SCAN — six checks swept across the car */
 const SCANPTS=[[5,26,66],[2,38,45],[1,47,82],[0,56,53],[4,64,40],[3,79,72]];   /* [report index, x%, y%] in sweep order */
 const SC={rows:[],pins:[],on:[],sx:-1,done:false};
@@ -3658,6 +3638,20 @@ function updateScan(){
       const rd=SC.rows[k].querySelector('.r'); if(on){ const txt=REPORT[ri].m.join(' · '), t0=performance.now(); const tick=now=>{ if(!SC.on[k]) { rd.textContent=''; return; } const n=Math.round(clamp((now-t0)/(txt.length*18),0,1)*txt.length); rd.textContent=txt.slice(0,n); if(n<txt.length) requestAnimationFrame(tick); }; requestAnimationFrame(tick); } else rd.textContent=''; } });
   const done=sx>=100; if(done!==SC.done){ SC.done=done; $id('scGrade').innerHTML='GRADE <b>'+(done?'A · 93':'—')+'</b>'; }
 }
+
+/* ============================================================ v3 · ODOMETER REELS + THEME ZONES */
+const ODO={cells:[],h:0,target:'1249'};
+function buildOdo(){ const row=$id('odRow'); if(!row) return;
+  [...ODO.target].forEach((d,i)=>{ const c=document.createElement('span'); c.className='od-cell'; const s=document.createElement('span'); s.className='od-strip';
+    let digs=''; const spins=2+i; for(let k=0;k<spins;k++) for(let n=0;n<10;n++) digs+='<i>'+n+'</i>'; for(let n=0;n<=+d;n++) digs+='<i>'+n+'</i>';
+    s.innerHTML=digs; c.appendChild(s); row.appendChild(c); ODO.cells.push({strip:s,steps:spins*10+(+d)}); });
+  measureOdo(); }
+function measureOdo(){ if(!ODO.cells.length) return; const f=ODO.cells[0].strip.firstElementChild; ODO.h=f?f.getBoundingClientRect().height:0; }
+/* the page itself changes clothes: ember for the build bay, velvet for the owners — reversible, scroll-decided */
+const ZONE={cur:''};
+function updateZone(){ const H=innerHeight, mid=H*.5, inZ=r=>r&&r.top<mid&&r.bottom>mid;
+  const z=(inZ(FR.build)||inZ(FR.txShutter))?'bay':(inZ(FR.reviews)||inZ(FR.iris)||inZ(FR.txStamp))?'velvet':'';
+  if(z!==ZONE.cur){ ZONE.cur=z; const de=document.documentElement; if(z) de.setAttribute('data-zone',z); else de.removeAttribute('data-zone'); } }
 
 /* ============================================================ THE TRANSITIONS — one between every two or so sections */
 const TXS=[];
@@ -3677,6 +3671,13 @@ function buildTx(){
   TXS.push({id:'txStamp',fn:p=>{ const e=smooth(clamp((p-.26)/.42,0,1)), out=p>.84?smooth((p-.84)/.16):0, st=$id('stp');   /* VERIFIED eases in and settles, no rubber-stamp slam */
     S(st,'--sta',(e*(1-out)).toFixed(3)); S(st,'--ss',(1.16-.16*e+out*.05).toFixed(3)); }});
   TXS.push({id:'txTear',fn:p=>{ const t=ein(clamp((p-.08)/.62,0,1)); S($id('trTop'),'--t',t.toFixed(4)); const b=$id('txTear').querySelector('.tr-back'), ba=smooth(clamp((p-.28)/.3,0,1)); S(b,'--ba',ba.toFixed(3)); S(b,'--bk',(.9+.1*ba).toFixed(4)); }});
+  TXS.push({id:'txOdo',fn:p=>{ if(!ODO.h) measureOdo(); const out=p>.86?smooth((p-.86)/.14):0;
+    S($id('odGlow'),'--ga',smooth(clamp(p/.5,0,1)).toFixed(3));
+    const ca=smooth(clamp((p-.08)/.3,0,1)), cap=$id('odCap'); S(cap,'--ca',(ca*(1-out)).toFixed(3)); S(cap,'--cy',((1-ca)*36-out*90).toFixed(1)+'px');
+    const sa=smooth(clamp((p-.52)/.2,0,1)); S($id('odSub'),'--ca',(sa*(1-out)).toFixed(3));
+    const ra=smooth(clamp((p-.16)/.26,0,1)); S($id('odRow'),'--ra',(ra*(1-out)).toFixed(3));
+    ODO.cells.forEach((c,i)=>{ const e=smooth(clamp((p-.14-i*.055)/.56,0,1)); const y=(-e*c.steps*ODO.h).toFixed(1)+'px';
+      if(c.y!==y){ c.y=y; c.strip.style.transform='translateY('+y+')'; } }); }});
   TXS.forEach(t=>{ t.el=$id(t.id); t.p=-1; });
 }
 function updateTx(){ const H=innerHeight; TXS.forEach(t=>{ const r=FR[t.id]; if(!r||r.bottom<0||r.top>H) return; const p=clamp(-r.top/Math.max(1,r.height-H),0,1);
@@ -3687,7 +3688,6 @@ function updateTx(){ const H=innerHeight; TXS.forEach(t=>{ const r=FR[t.id]; if(
 const BAV=[];
 function botAvoid(){ BAV.length=0; if(isMob) return; const H=innerHeight, vis=r=>r&&r.bottom>0&&r.top<H;
   if(vis(FR.hole)) BAV.push(HO.cap.getBoundingClientRect());
-  if(vis(FR.numbers)){ const b=$id('omOrb'); if(b) BAV.push(b.getBoundingClientRect()); }
   if(vis(FR.scan)) BAV.push($id('scanCar').getBoundingClientRect());
   if(vis(FR.ways)) BAV.push($id('waysDots').getBoundingClientRect());
   if(vis(FR.report)) BAV.push($id('pkFilm').getBoundingClientRect()); }
@@ -3770,7 +3770,7 @@ function wrapWords(root){ const out=[]; const walk=n=>[...n.childNodes].forEach(
     const frag=document.createElement('span'); frag.className='wdw'; c.textContent.split(/(\s+)/).forEach(t=>{ if(!t) return; if(/^\s+$/.test(t)){ frag.append(t); return; } const s=document.createElement('span'); s.className='wd'; s.textContent=t; frag.append(s); out.push(s); }); c.replaceWith(frag); });
   walk(root); return out; }
 function buildWords(){
-  const sel='.h2:not(.sr),.kick,.lede,.st-line,.tile h3,.tile p,.faq summary,.stock-foot p,.b3-call p,.pk-sub,.rscore .s,.om-l';
+  const sel='.h2:not(.sr),.kick,.lede,.st-line,.tile h3,.tile p,.faq summary,.stock-foot p,.b3-call p,.pk-sub,.rscore .s';
   $$(sel).forEach(el=>{ if(el.closest('.pk-l,#ms,#term,#pd,.sheet,.modal,.ways-world')) return; const w=wrapWords(el); if(!w.length) return;
     WG.push({el,w:w.map((s,i)=>({el:s,i,x:0,y:0,r:0,cx:0,cy:0,hot:false,re:(i*7+WG.length*3)%4===0})),wave:el.classList.contains('h2')||el.classList.contains('iris-t'),pin:!!el.closest('.reel-pin,.pk-pin,.ow-pin,.iris-pin,.scan-pin,.ways-pin,.hole-pin,.nums-pin,.tx-st'),vis:false,mt:0,bb:null}); });
   const h=$$('#hh1 .w'); if(h.length) WG.push({el:$id('hh1'),w:h.map((s,i)=>({el:s,i,x:0,y:0,r:0,cx:0,cy:0,hot:false,re:i%4===1})),wave:true,pin:true,vis:true,mt:0,bb:null});
@@ -3820,7 +3820,7 @@ function splitH1(){ if(document.visibilityState!=='visible'||RM) return; let i=0
   walk($id('hh1')); }
 /* every layout read the loop needs happens here, in one batch, before any style is written —
    reads after writes force the browser to lay the page out again mid-frame */
-const FR={}; const FRIDS=['orbit','fdial','ways','hole','numbers','report','scan','reviews','iris','txPlate','txDoors','txShutter','txStamp','txTear'];
+const FR={}; const FRIDS=['orbit','fdial','ways','hole','build','report','scan','reviews','iris','txPlate','txDoors','txShutter','txStamp','txTear','txOdo'];
 function measureAll(now){ FRIDS.forEach(id=>{ FR[id]=$id(id).getBoundingClientRect(); }); FR.pkAfter=PK.after.getBoundingClientRect();
   FR.mg=mgCur?mgCur.getBoundingClientRect():null; FR.term=BOT.docked?$id('term').getBoundingClientRect():null; measureWords(now); botAvoid(); }
 let lastT=performance.now();
@@ -3830,15 +3830,15 @@ function frame(now){
   measureAll(now); updateWords(now);
   heroVisible=FR.orbit.bottom>0&&!document.hidden;
   if(heroVisible){ GDT=dt; updateOrbit(dt,now); drawGL(now); hud(); updateFocus(now); }
-  updateDial(now); updateWays(now,dt); updateHole(now); updateNums(); updatePark(now); updateScan(); updateTx(); updateRing(dt,now); updateBands(); updateBot(dt,now); updateMagnets(); updatePar();
+  updateDial(now); updateWays(now,dt); updateHole(now); updateZone(); updatePark(now); updateScan(); updateTx(); updateRing(dt,now); updateBands(); updateBot(dt,now); updateMagnets(); updatePar();
   requestAnimationFrame(frame);
 }
 onChange(()=>{ paintHUD(); calcFin(); });
 addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(OW.lg>=0) closeMS(); else if(pdOpen) closePD(); else if(CORE.open) closeCore(); } });
-renderCfg(); buildDial(); buildWays(); buildHole(); buildNums(); buildPark(); buildScan(); buildTx(); buildRing(); buildBook(); splitH1(); buildWords(); buildPar(); watchRoll(); sizeBot();
+renderCfg(); buildDial(); buildWays(); buildHole(); buildOdo(); buildPark(); buildScan(); buildTx(); buildRing(); buildBook(); splitH1(); buildWords(); buildPar(); watchRoll(); sizeBot();
 FN.a=FN.ta=v2a(FN.price); drawDial(FN.a); calcFin(true); paintHUD();
 glok=initGL(); layoutBox(); if(document.fonts) document.fonts.ready.then(layoutBox);
-let lastW=innerWidth; addEventListener('resize',()=>{ if(isMob&&Math.abs(innerWidth-lastW)<2) return; lastW=innerWidth; layoutBox(); layoutWays(); layoutPark(); layoutNums(); measurePar(); });
+let lastW=innerWidth; addEventListener('resize',()=>{ if(isMob&&Math.abs(innerWidth-lastW)<2) return; lastW=innerWidth; layoutBox(); layoutWays(); layoutPark(); measureOdo(); measurePar(); });
 loadFrames().then(()=>{ LD.ready=true; if(glok) ['fq4','fq3','fq5','fq2','fq6'].forEach(n=>texFor(n)); $id('hintT').textContent='Drag to walk round · tap ＋ to read the report'; ORB.idleT=performance.now(); });
 requestAnimationFrame(frame);
 
@@ -3849,7 +3849,7 @@ window.__rx={
   openReview:i=>openMS(i,RING.els[i]), closeReview:closeMS, ways:k=>snapTo(k), snapStep, setFinCar, finCost:v=>{ FN.car=-1; FN.price=v; FN.ta=v2a(v); calcFin(); }, setBkCar, printPass,
   state:()=>({yaw:+wy(ORB.yaw).toFixed(1),view:viewName(ORB.yaw),gl:glok,set:IMGSET,box:{...BOX},tex:Object.keys(TEX).length,hots:HOTS.filter(h=>h.el.classList.contains('vis')).length,cfg:{...CFG},resp:cfgPrice(),
     fin:{car:FN.car,price:FN.price,mo:Math.round(FN.mo),zone:finZone(FN.mo).l,resp:FN.resp},ring:{front:RING.front,ms:OW.lg},bk:{...BKS},core:CORE.open,lead:window.__lastLead||null,
-    ways:{cs:+WS.cs.toFixed(3),k:WS.k,lock:SN.lock,top:Math.round(WS.secTop),range:Math.round(WS.range)},hole:{on:HO.on,mask:HO.maskOn,rs:HO.vid.readyState,t:+HO.vid.currentTime.toFixed(2)},nums:+NM.p.toFixed(3),scan:{sx:+SC.sx.toFixed(1),on:SC.on.filter(Boolean).length},tx:TXS.map(t=>t.id+':'+t.p),ld:LD.done,park:{shown:+PK.shown.toFixed(3),loaded:PARK.loaded,bmp:PARK.bmp.filter(Boolean).length,lit:PK.lit,on:PK.on.join(''),teal:PK.teal},
+    ways:{cs:+WS.cs.toFixed(3),k:WS.k,lock:SN.lock,top:Math.round(WS.secTop),range:Math.round(WS.range)},hole:{on:HO.on,mask:HO.maskOn,rs:HO.vid.readyState,t:+HO.vid.currentTime.toFixed(2)},zone:ZONE.cur,scan:{sx:+SC.sx.toFixed(1),on:SC.on.filter(Boolean).length},tx:TXS.map(t=>t.id+':'+t.p),ld:LD.done,park:{shown:+PK.shown.toFixed(3),loaded:PARK.loaded,bmp:PARK.bmp.filter(Boolean).length,lit:PK.lit,on:PK.on.join(''),teal:PK.teal},
     gal:{stock:GSTOCK.state(),parts:GPARTS.state()},words:WG.reduce((a,g)=>a+g.w.length,0),focus:!!FOC.until}),
   gal:(w,v)=>(w==='parts'?GPARTS:GSTOCK).open(v),
   upscale(){ const r=[]; r.push({src:'orbit-box',up:+(BOX.w*DPR/NATW).toFixed(2)});
