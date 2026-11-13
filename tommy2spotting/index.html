@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="build" content="f681cffe07d9">
+<head><meta name="build" content="e410eddfe02f">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tommy2Spotting — Worldwide carspotting, shot in Milano.</title>
@@ -348,6 +348,28 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradi
 
 /* ---------- LIGHT BAND: VALUE ---------- */
 .light{background:var(--paper);color:var(--paper-ink)}
+/* v2 — theme transition: the light block fades in and out of the dark page instead of hard-cutting */
+.sec.light{position:relative}
+.sec.light::before,.sec.light::after{content:"";position:absolute;left:0;right:0;height:9vh;pointer-events:none;z-index:2}
+.sec.light::before{top:0;background:linear-gradient(var(--bg) 0%,rgba(13,12,11,0) 92%)}
+.sec.light::after{bottom:0;background:linear-gradient(rgba(13,12,11,0) 8%,var(--bg) 100%)}
+/* v2 — omega: aurora drift, glass copy card, stat underlines, quick-ask chips */
+.om-aur{position:absolute;width:62vmax;height:62vmax;border-radius:50%;pointer-events:none;z-index:0;opacity:.55;will-change:transform}
+.om-aur.a{left:-18vmax;top:-22vmax;background:radial-gradient(circle at 42% 42%,rgba(201,162,94,.16),transparent 62%);animation:omA 19s ease-in-out infinite alternate}
+.om-aur.b{right:-24vmax;bottom:-26vmax;background:radial-gradient(circle at 55% 55%,rgba(90,130,220,.13),transparent 60%);animation:omB 26s ease-in-out infinite alternate}
+@keyframes omA{from{transform:translate(0,0) scale(1)}to{transform:translate(9vmax,6vmax) scale(1.18)}}
+@keyframes omB{from{transform:translate(0,0) scale(1.12)}to{transform:translate(-8vmax,-7vmax) scale(.94)}}
+.om-copy{position:relative;background:rgba(255,255,255,.028);border:1px solid var(--line);border-radius:22px;padding:30px clamp(20px,2.6vw,36px);animation:omBr 4.5s ease-in-out infinite}
+@keyframes omBr{0%,100%{box-shadow:0 0 0 1px rgba(201,162,94,0),0 24px 70px rgba(0,0,0,.35)}50%{box-shadow:0 0 0 1px rgba(201,162,94,.22),0 24px 70px rgba(0,0,0,.45)}}
+.om-copy::before{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);opacity:.65}
+.om-stats>div{position:relative;padding-bottom:8px}
+.om-stats>div::after{content:"";position:absolute;left:0;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));width:calc(var(--sp,0)*100%);opacity:.75}
+.om-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.om-chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:9px 15px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);background:rgba(255,255,255,.03);cursor:pointer;transition:transform .25s ease,border-color .2s,color .2s,box-shadow .25s}
+.om-chip:hover,.om-chip:focus-visible{border-color:var(--gold);color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 26px rgba(201,162,94,.18)}
+.om-chip:active{transform:translateY(0) scale(.97)}
+@media(prefers-reduced-motion:reduce){.om-aur{animation:none}.om-copy{animation:none}}
+@media(max-width:860px){.om-copy{padding:22px 18px}}
 .light .kick{color:#8a6a2c}
 .light .h2 em{color:#9a7531}
 .light .lede{color:var(--paper-dim)}
@@ -1517,7 +1539,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   </div>
 </div>
 
-<main id="top"><style id="ci-style">.cintro{position:relative;height:320vh}.ci-pin{position:sticky;top:0;height:100vh;overflow:hidden}.ci-word{position:absolute;left:0;right:0;bottom:3vh;text-align:center;font-family:var(--ff-d);font-weight:700;font-size:clamp(84px,16vw,250px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.1);letter-spacing:.05em;white-space:nowrap;user-select:none;pointer-events:none}#ciGL{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease}#ciGL.on{opacity:1}.ci-top{position:absolute;left:0;right:0;top:calc(64px + 6vh);text-align:center;pointer-events:none;padding:0 16px}.ci-top .ci-k{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin:0 0 14px}.ci-top h2{font-family:var(--ff-d);font-weight:600;font-size:clamp(34px,6.2vw,72px);line-height:.98;letter-spacing:-.022em;margin:0}.ci-top h2 em{font-style:italic;color:var(--gold2)}.ci-cap{position:absolute;bottom:11vh;left:clamp(16px,6vw,92px);max-width:34ch;font-size:clamp(14px,1.5vw,17px);line-height:1.55;color:var(--ink2);opacity:0;pointer-events:none;margin:0}.ci-cap b{color:var(--ink)}.ci-cap.r{left:auto;right:clamp(16px,6vw,92px);text-align:right}.ci-cue{position:absolute;left:50%;transform:translateX(-50%);bottom:3.6vh;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink2);transition:opacity .4s ease}.ci-cue i{width:1px;height:32px;background:linear-gradient(var(--gold2),transparent);display:block;animation:ciCue 1.8s ease-in-out infinite}@keyframes ciCue{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}.ci-credit{position:absolute;right:12px;bottom:6px;font-size:9.5px;letter-spacing:.04em;color:var(--ink2);opacity:.5;pointer-events:none}@media(max-width:820px){.cintro{height:280vh}.ci-cap{bottom:15vh;max-width:62vw}.ci-cap.r{max-width:58vw}.ci-word{font-size:22vw}}</style><section class="cintro" id="cintro" aria-label="Tommy2Spotting — the car, taken apart and rebuilt as you scroll"><div class="ci-pin"><div class="ci-word" id="ciWord" aria-hidden="true">SPOTTED</div><canvas id="ciGL" aria-hidden="true"></canvas><div class="ci-top" id="ciTop"><p class="ci-k">Tommy2Spotting · Milano</p><h2>Caught in the wild.<br>Every <em>detail.</em></h2></div><p class="ci-cap" id="ciCapA"><b>Every spot breaks down.</b> The angle, the light, the badge, the moment — this is how a car on the street becomes a shot you save.</p><p class="ci-cap r" id="ciCapB"><b>Then it comes back together.</b> One feed, all original content — the rarest metal Milan and the world can throw at a lens.</p><span class="ci-cue" id="ciCue"><i></i>Scroll — it comes apart</span><span class="ci-credit">3D: &ldquo;McLaren Spider&rdquo; by SINNIK &middot; CC BY 4.0 &middot; modified</span></div></section><script type="module">(async()=>{var sec=document.getElementById("cintro");if(!sec)return;try{var MODS=await Promise.all([import("three"),import("three/addons/loaders/GLTFLoader.js"),import("three/addons/loaders/DRACOLoader.js"),import("three/addons/libs/meshopt_decoder.module.js"),import("three/addons/environments/RoomEnvironment.js")]);var THREE=MODS[0],GLTFLoader=MODS[1].GLTFLoader,DRACOLoader=MODS[2].DRACOLoader,MeshoptDecoder=MODS[3].MeshoptDecoder,RoomEnvironment=MODS[4].RoomEnvironment;var LEN=4.57,YAW=0;var canvas=document.getElementById("ciGL"),MOB=function(){return innerWidth<821};var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,powerPreference:"high-performance"});renderer.setClearColor(0,0);renderer.setPixelRatio(Math.min(devicePixelRatio,MOB()?1.5:2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;var scene=new THREE.Scene();var pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new RoomEnvironment(),.03).texture;var cam=new THREE.PerspectiveCamera(30,1,.05,200);cam.position.set(6,2.2,7);var sun=new THREE.DirectionalLight(0xfff2e0,2.2);sun.position.set(4,9,5);sun.castShadow=true;sun.shadow.mapSize.set(MOB()?1024:2048,MOB()?1024:2048);sun.shadow.camera.left=-6;sun.shadow.camera.right=6;sun.shadow.camera.top=6;sun.shadow.camera.bottom=-6;sun.shadow.camera.near=1;sun.shadow.camera.far=25;sun.shadow.bias=-.0004;sun.shadow.radius=7;scene.add(sun);scene.add(new THREE.AmbientLight(0xffffff,.3));var rim=new THREE.DirectionalLight(0x9fc4ff,.9);rim.position.set(-6,3,-6);scene.add(rim);var floor=new THREE.Mesh(new THREE.PlaneGeometry(80,80),new THREE.ShadowMaterial({opacity:.32}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);var bc=document.createElement("canvas");bc.width=bc.height=256;var bg=bc.getContext("2d"),rg=bg.createRadialGradient(128,128,0,128,128,128);rg.addColorStop(0,"rgba(0,0,0,.5)");rg.addColorStop(.55,"rgba(0,0,0,.16)");rg.addColorStop(1,"rgba(0,0,0,0)");bg.fillStyle=rg;bg.fillRect(0,0,256,256);var blob=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bc),transparent:true,depthWrite:false,toneMapped:false}));blob.rotation.x=-Math.PI/2;blob.position.y=.004;scene.add(blob);var clampN=function(v,a,b){return Math.min(b,Math.max(a,v))},smooth=function(t){t=clampN(t,0,1);return t*t*(3-2*t)},lerpN=function(a,b,t){return a+(b-a)*t};var seg=function(p,a,b,c,d){if(p<=a)return 0;if(p>=d)return c<d?0:1;if(p<b)return smooth((p-a)/(b-a));if(p<=c)return 1;return 1-smooth((p-c)/(d-c))};var hash=function(s){var h=2166136261;for(var i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return((h>>>0)%1000)/1000};var draco=new DRACOLoader();draco.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");var loader=new GLTFLoader();loader.setDRACOLoader(draco);loader.setMeshoptDecoder(MeshoptDecoder);var gltf=await new Promise(function(res,rej){loader.load("../oldsoul/models/mclaren-spider.glb",res,undefined,rej)});var car=new THREE.Group(),holder=new THREE.Group();holder.add(gltf.scene);car.add(holder);scene.add(car);car.updateMatrixWorld(true);var meshes=[];holder.traverse(function(o){if(o.isMesh&&o.geometry&&o.geometry.attributes.position){if(Array.isArray(o.material))o.material=o.material[0];meshes.push(o)}});var bx=function(m){return new THREE.Box3().setFromObject(m)};var all=new THREE.Box3(),boxes=meshes.map(function(m){var b=bx(m);all.union(b);return b});var asz=all.getSize(new THREE.Vector3()),big=Math.max(asz.x,asz.y,asz.z);meshes=meshes.filter(function(m,i){var s=boxes[i].getSize(new THREE.Vector3()),mx=Math.max(s.x,s.z);var junk=(s.y<mx*.012&&mx>big*.6)||/shadow|ground|floor/i.test(m.material.name+m.name);if(junk)m.parent.remove(m);return !junk});var fit=function(){var b=new THREE.Box3();meshes.forEach(function(m){b.union(bx(m))});return b};var b=fit(),s=b.getSize(new THREE.Vector3());holder.rotation.y=(s.x>s.z?Math.PI/2:0)+YAW*Math.PI/180;car.updateMatrixWorld(true);b=fit();s=b.getSize(new THREE.Vector3());holder.scale.setScalar(LEN/s.z);car.updateMatrixWorld(true);b=fit();var ctr=b.getCenter(new THREE.Vector3());holder.position.set(-ctr.x,-b.min.y,-ctr.z);car.updateMatrixWorld(true);b=fit();var halfW=b.getSize(new THREE.Vector3()).x/2;blob.scale.set(halfW*2*1.6,LEN*1.3,1);meshes.forEach(function(m){m.castShadow=true});var PAINT="";if(PAINT){var PRX=new RegExp("^Primary_Paint$"),pmap=new Map();meshes.forEach(function(m){if(!PRX.test((m.material&&m.material.name)||""))return;var n=pmap.get(m.material);if(!n){n=new THREE.MeshPhysicalMaterial({name:m.material.name,normalMap:m.material.normalMap||null,side:m.material.side});n.color.set(PAINT);n.metalness=.55;n.roughness=.34;n.clearcoat=1;n.clearcoatRoughness=.05;pmap.set(m.material,n)}m.material=n})}var norm=function(x){return x.toLowerCase().replace(/\./g,"").replace(/\s+/g,"_")};var keyOf=function(m){var n=m.name||"",mn=(m.material&&m.material.name)||"";if(!n||/^(object|mesh|node|cube|plane|cylinder|sphere|material)[_.\s]?\d*$/i.test(n))return "mat:"+(mn||"x");var k=norm(n),mm=norm(mn);k=k.replace(/(_\d{1,2})+$/,"");if(mm&&k.slice(-mm.length-1)==="_"+mm)k=k.slice(0,-mm.length-1);return k.replace(/_\d{3}$/,"")||("mat:"+mn)};var map=new Map();meshes.forEach(function(m){var k=keyOf(m),p=map.get(k);if(!p)map.set(k,p={meshes:[]});p.meshes.push(m)});var parts=[],cc0=new THREE.Vector3(0,.55,0),sc=LEN/4.8;map.forEach(function(p,k){var B=new THREE.Box3();p.meshes.forEach(function(m){B.union(bx(m))});var g=new THREE.Group();car.add(g);var cp=B.getCenter(new THREE.Vector3());g.position.copy(cp);g.updateMatrixWorld(true);p.meshes.forEach(function(m){g.attach(m)});var d=cp.clone().sub(cc0);d.x*=1.25;d.y=d.y*.8+.22;d.normalize();var diag=B.getSize(new THREE.Vector3()).length(),h=hash(k);p.g=g;p.base=g.position.clone();p.exv=d.multiplyScalar((.95+h*1.15)*clampN(1-diag/(LEN*.9),.3,1)*sc);parts.push(p)});var capA=document.getElementById("ciCapA"),capB=document.getElementById("ciCapB"),top=document.getElementById("ciTop"),cue=document.getElementById("ciCue"),word=document.getElementById("ciWord");var M={top:0,end:1},fitD=8;function measure(){var r=sec.getBoundingClientRect();M.top=r.top+scrollY;M.end=Math.max(M.top+1,M.top+sec.offsetHeight-innerHeight);var W=innerWidth,H=innerHeight;renderer.setSize(W,H,false);cam.aspect=W/H;cam.fov=W<H?42:30;cam.updateProjectionMatrix();var vf=cam.fov*Math.PI/360,hf=Math.atan(Math.tan(vf)*cam.aspect);fitD=Math.max((LEN*.58)/Math.tan(hf),(LEN*.46)/Math.tan(vf),LEN*1.05)}addEventListener("resize",measure);measure();var ptr={x:0,y:0},pt={x:0,y:0};addEventListener("pointermove",function(e){pt.x=e.clientX/innerWidth*2-1;pt.y=e.clientY/innerHeight*2-1},{passive:true});var ex=0,P=0;function apply(){for(var i=0;i<parts.length;i++){var p=parts[i];p.g.position.copy(p.base).addScaledVector(p.exv,ex)}}function tick(t){requestAnimationFrame(tick);var y=scrollY;if(y>M.end+innerHeight*1.5)return;P=clampN((y-M.top)/(M.end-M.top),0,1);var e2=seg(P,.16,.36,.52,.76);if(Math.abs(e2-ex)>1e-4){ex=e2;apply()}ptr.x+=(pt.x-ptr.x)*.06;ptr.y+=(pt.y-ptr.y)*.06;var az=.62+P*4.4+Math.sin(t*.00031)*.08+ptr.x*.14;var el=.30-P*.1+Math.sin(t*.00047)*.015-ptr.y*.05;var d=fitD*(1.04+ex*(MOB()?.62:.34));var ty=lerpN(1.02,.55,smooth(P/.22))+Math.sin(t*.0006)*.012;cam.position.set(Math.sin(az)*Math.cos(el)*d,Math.sin(el)*d+.6,Math.cos(az)*Math.cos(el)*d);cam.lookAt(0,ty,0);car.position.y=Math.sin(t*.00052)*.015+ex*.1;blob.material.opacity=.9-ex*.45;var ho=1-smooth(P/.12);top.style.opacity=ho;top.style.transform="translateY("+(P*-60)+"px)";cue.style.opacity=P>.05?0:1;var a1=seg(P,.2,.3,.44,.54);capA.style.opacity=a1;capA.style.transform="translateY("+((1-a1)*24)+"px)";var a2=seg(P,.55,.65,.82,.92);capB.style.opacity=a2;capB.style.transform="translateY("+((1-a2)*24)+"px)";word.style.transform="translateY("+(P*-16)+"vh)";word.style.opacity=.9-P*.5;renderer.render(scene,cam)}canvas.classList.add("on");requestAnimationFrame(tick);}catch(e){console.warn("carIntro disabled:",e);sec.style.display="none"}})();</script>
+<main id="top"><style id="ci-style">.cintro{position:relative;height:320vh}.ci-pin{position:sticky;top:0;height:100vh;overflow:hidden}.ci-word{position:absolute;left:0;right:0;bottom:3vh;text-align:center;font-family:var(--ff-d);font-weight:700;font-size:clamp(84px,16vw,250px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.1);letter-spacing:.05em;white-space:nowrap;user-select:none;pointer-events:none}#ciGL{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease}#ciGL.on{opacity:1}.ci-top{position:absolute;left:0;right:0;top:calc(64px + 6vh);text-align:center;pointer-events:none;padding:0 16px}.ci-top .ci-k{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);margin:0 0 14px}.ci-top h2{font-family:var(--ff-d);font-weight:600;font-size:clamp(34px,6.2vw,72px);line-height:.98;letter-spacing:-.022em;margin:0}.ci-top h2 em{font-style:italic;color:var(--gold2)}.ci-cap{position:absolute;bottom:11vh;left:clamp(16px,6vw,92px);max-width:34ch;font-size:clamp(14px,1.5vw,17px);line-height:1.55;color:var(--ink2);opacity:0;pointer-events:none;margin:0}.ci-cap b{color:var(--ink)}.ci-cap.r{left:auto;right:clamp(16px,6vw,92px);text-align:right}.ci-cue{position:absolute;left:50%;transform:translateX(-50%);bottom:3.6vh;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink2);transition:opacity .4s ease}.ci-cue i{width:1px;height:32px;background:linear-gradient(var(--gold2),transparent);display:block;animation:ciCue 1.8s ease-in-out infinite}@keyframes ciCue{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}.ci-credit{position:absolute;right:12px;bottom:6px;font-size:9.5px;letter-spacing:.04em;color:var(--ink2);opacity:.5;pointer-events:none}@media(max-width:820px){.cintro{height:280vh}.ci-cap{bottom:15vh;max-width:62vw}.ci-cap.r{max-width:58vw}.ci-word{font-size:22vw}}</style><section class="cintro" id="cintro" aria-label="Tommy2Spotting — the car, taken apart and rebuilt as you scroll"><div class="ci-pin"><div class="ci-word" id="ciWord" aria-hidden="true">SPOTTED</div><canvas id="ciGL" aria-hidden="true"></canvas><div class="ci-top" id="ciTop"><p class="ci-k">Tommy2Spotting · Milano</p><h2>Caught in the wild.<br>Every <em>detail.</em></h2></div><p class="ci-cap" id="ciCapA"><b>Every spot breaks down.</b> The angle, the light, the badge, the moment — this is how a car on the street becomes a shot you save.</p><p class="ci-cap r" id="ciCapB"><b>Then it comes back together.</b> One feed, all original content — the rarest metal Milan and the world can throw at a lens.</p><span class="ci-cue" id="ciCue"><i></i>Scroll — it comes apart</span><span class="ci-credit">3D: &ldquo;McLaren Spider&rdquo; by SINNIK &middot; CC BY 4.0 &middot; modified</span></div></section><script type="module">(async()=>{var sec=document.getElementById("cintro");if(!sec)return;try{var MODS=await Promise.all([import("three"),import("three/addons/loaders/GLTFLoader.js"),import("three/addons/loaders/DRACOLoader.js"),import("three/addons/libs/meshopt_decoder.module.js"),import("three/addons/environments/RoomEnvironment.js")]);var THREE=MODS[0],GLTFLoader=MODS[1].GLTFLoader,DRACOLoader=MODS[2].DRACOLoader,MeshoptDecoder=MODS[3].MeshoptDecoder,RoomEnvironment=MODS[4].RoomEnvironment;var LEN=4.57,YAW=0;var canvas=document.getElementById("ciGL"),MOB=function(){return innerWidth<821};var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,powerPreference:"high-performance"});renderer.setClearColor(0,0);renderer.setPixelRatio(Math.min(devicePixelRatio,MOB()?1.5:2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;var scene=new THREE.Scene();var pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new RoomEnvironment(),.03).texture;var cam=new THREE.PerspectiveCamera(30,1,.05,200);cam.position.set(6,2.2,7);var sun=new THREE.DirectionalLight(0xfff2e0,2.2);sun.position.set(4,9,5);sun.castShadow=true;sun.shadow.mapSize.set(MOB()?1024:2048,MOB()?1024:2048);sun.shadow.camera.left=-6;sun.shadow.camera.right=6;sun.shadow.camera.top=6;sun.shadow.camera.bottom=-6;sun.shadow.camera.near=1;sun.shadow.camera.far=25;sun.shadow.bias=-.0004;sun.shadow.radius=7;scene.add(sun);scene.add(new THREE.AmbientLight(0xffffff,.3));var rim=new THREE.DirectionalLight(0x9fc4ff,.9);rim.position.set(-6,3,-6);scene.add(rim);var floor=new THREE.Mesh(new THREE.PlaneGeometry(80,80),new THREE.ShadowMaterial({opacity:.32}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);var bc=document.createElement("canvas");bc.width=bc.height=256;var bg=bc.getContext("2d"),rg=bg.createRadialGradient(128,128,0,128,128,128);rg.addColorStop(0,"rgba(0,0,0,.5)");rg.addColorStop(.55,"rgba(0,0,0,.16)");rg.addColorStop(1,"rgba(0,0,0,0)");bg.fillStyle=rg;bg.fillRect(0,0,256,256);var blob=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bc),transparent:true,depthWrite:false,toneMapped:false}));blob.rotation.x=-Math.PI/2;blob.position.y=.004;scene.add(blob);var clampN=function(v,a,b){return Math.min(b,Math.max(a,v))},smooth=function(t){t=clampN(t,0,1);return t*t*(3-2*t)},lerpN=function(a,b,t){return a+(b-a)*t};var seg=function(p,a,b,c,d){if(p<=a)return 0;if(p>=d)return c<d?0:1;if(p<b)return smooth((p-a)/(b-a));if(p<=c)return 1;return 1-smooth((p-c)/(d-c))};var hash=function(s){var h=2166136261;for(var i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return((h>>>0)%1000)/1000};var draco=new DRACOLoader();draco.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");var loader=new GLTFLoader();loader.setDRACOLoader(draco);loader.setMeshoptDecoder(MeshoptDecoder);var gltf=await new Promise(function(res,rej){loader.load("../oldsoul/models/mclaren-spider.glb",res,undefined,rej)});var car=new THREE.Group(),holder=new THREE.Group();holder.add(gltf.scene);car.add(holder);scene.add(car);car.updateMatrixWorld(true);var meshes=[];holder.traverse(function(o){if(o.isMesh&&o.geometry&&o.geometry.attributes.position){if(Array.isArray(o.material))o.material=o.material[0];meshes.push(o)}});var bx=function(m){return new THREE.Box3().setFromObject(m)};var all=new THREE.Box3(),boxes=meshes.map(function(m){var b=bx(m);all.union(b);return b});var asz=all.getSize(new THREE.Vector3()),big=Math.max(asz.x,asz.y,asz.z);meshes=meshes.filter(function(m,i){var s=boxes[i].getSize(new THREE.Vector3()),mx=Math.max(s.x,s.z);var junk=(s.y<mx*.012&&mx>big*.6)||/shadow|ground|floor/i.test(m.material.name+m.name);if(junk)m.parent.remove(m);return !junk});var fit=function(){var b=new THREE.Box3();meshes.forEach(function(m){b.union(bx(m))});return b};var b=fit(),s=b.getSize(new THREE.Vector3());holder.rotation.y=(s.x>s.z?Math.PI/2:0)+YAW*Math.PI/180;car.updateMatrixWorld(true);b=fit();s=b.getSize(new THREE.Vector3());holder.scale.setScalar(LEN/s.z);car.updateMatrixWorld(true);b=fit();var ctr=b.getCenter(new THREE.Vector3());holder.position.set(-ctr.x,-b.min.y,-ctr.z);car.updateMatrixWorld(true);b=fit();var halfW=b.getSize(new THREE.Vector3()).x/2;blob.scale.set(halfW*2*1.6,LEN*1.3,1);meshes.forEach(function(m){m.castShadow=true});var PAINT="";if(PAINT){var PRX=new RegExp("^Primary_Paint$"),pmap=new Map();meshes.forEach(function(m){if(!PRX.test((m.material&&m.material.name)||""))return;var n=pmap.get(m.material);if(!n){n=new THREE.MeshPhysicalMaterial({name:m.material.name,normalMap:m.material.normalMap||null,side:m.material.side});n.color.set(PAINT);n.metalness=.55;n.roughness=.34;n.clearcoat=1;n.clearcoatRoughness=.05;pmap.set(m.material,n)}m.material=n})}var norm=function(x){return x.toLowerCase().replace(/\./g,"").replace(/\s+/g,"_")};var keyOf=function(m){var n=m.name||"",mn=(m.material&&m.material.name)||"";if(!n||/^(object|mesh|node|cube|plane|cylinder|sphere|material)[_.\s]?\d*$/i.test(n))return "mat:"+(mn||"x");var k=norm(n),mm=norm(mn);k=k.replace(/(_\d{1,2})+$/,"");if(mm&&k.slice(-mm.length-1)==="_"+mm)k=k.slice(0,-mm.length-1);return k.replace(/_\d{3}$/,"")||("mat:"+mn)};var map=new Map();meshes.forEach(function(m){var k=keyOf(m),p=map.get(k);if(!p)map.set(k,p={meshes:[]});p.meshes.push(m)});var parts=[],cc0=new THREE.Vector3(0,.55,0),sc=LEN/4.8;map.forEach(function(p,k){var B=new THREE.Box3();p.meshes.forEach(function(m){B.union(bx(m))});var g=new THREE.Group();car.add(g);var cp=B.getCenter(new THREE.Vector3());g.position.copy(cp);g.updateMatrixWorld(true);p.meshes.forEach(function(m){g.attach(m)});var d=cp.clone().sub(cc0);d.x*=1.6;d.y=d.y*.8+.22;d.normalize();var diag=B.getSize(new THREE.Vector3()).length(),h=hash(k);p.g=g;p.base=g.position.clone();p.exv=d.multiplyScalar((2.1+h*1.7)*clampN(1-diag/(LEN*.9),.55,1)*sc);p.exv.x*=1.35;p.exv.y*=.75;p.exv.z*=1.15;parts.push(p)});var capA=document.getElementById("ciCapA"),capB=document.getElementById("ciCapB"),top=document.getElementById("ciTop"),cue=document.getElementById("ciCue"),word=document.getElementById("ciWord");var M={top:0,end:1},fitD=8;function measure(){var r=sec.getBoundingClientRect();M.top=r.top+scrollY;M.end=Math.max(M.top+1,M.top+sec.offsetHeight-innerHeight);var W=innerWidth,H=innerHeight;renderer.setSize(W,H,false);cam.aspect=W/H;cam.fov=W<H?42:30;cam.updateProjectionMatrix();var vf=cam.fov*Math.PI/360,hf=Math.atan(Math.tan(vf)*cam.aspect);fitD=Math.max((LEN*.58)/Math.tan(hf),(LEN*.46)/Math.tan(vf),LEN*1.05)}addEventListener("resize",measure);measure();var ptr={x:0,y:0},pt={x:0,y:0};addEventListener("pointermove",function(e){pt.x=e.clientX/innerWidth*2-1;pt.y=e.clientY/innerHeight*2-1},{passive:true});var ex=0,P=0;function apply(){for(var i=0;i<parts.length;i++){var p=parts[i];p.g.position.copy(p.base).addScaledVector(p.exv,ex)}}function tick(t){requestAnimationFrame(tick);var y=scrollY;if(y>M.end+innerHeight*1.5)return;P=clampN((y-M.top)/(M.end-M.top),0,1);var e2=seg(P,.14,.34,.56,.8);if(Math.abs(e2-ex)>1e-4){ex=e2;apply()}ptr.x+=(pt.x-ptr.x)*.06;ptr.y+=(pt.y-ptr.y)*.06;var az=.62+P*4.4+Math.sin(t*.00031)*.08+ptr.x*.14;var el=.30-P*.1+Math.sin(t*.00047)*.015-ptr.y*.05;var d=fitD*(1.04+ex*(MOB()?.3:.1));var ty=lerpN(1.02,.55,smooth(P/.22))+Math.sin(t*.0006)*.012;cam.position.set(Math.sin(az)*Math.cos(el)*d,Math.sin(el)*d+.6,Math.cos(az)*Math.cos(el)*d);cam.lookAt(0,ty,0);car.position.y=Math.sin(t*.00052)*.015+ex*.1;blob.material.opacity=.9-ex*.45;var ho=1-smooth(P/.12);top.style.opacity=ho;top.style.transform="translateY("+(P*-60)+"px)";cue.style.opacity=P>.05?0:1;var a1=seg(P,.2,.3,.44,.54);capA.style.opacity=a1;capA.style.transform="translateY("+((1-a1)*24)+"px)";var a2=seg(P,.55,.65,.82,.92);capB.style.opacity=a2;capB.style.transform="translateY("+((1-a2)*24)+"px)";word.style.transform="translateY("+(P*-16)+"vh)";word.style.opacity=.9-P*.5;renderer.render(scene,cam)}canvas.classList.add("on");requestAnimationFrame(tick);}catch(e){console.warn("carIntro disabled:",e);sec.style.display="none"}})();</script>
 
 <!-- ============ 02 · FIVE WAYS IN — one scroll, one stop (inspire 4) ============ -->
 <section class="ways" id="ways" aria-label="What brings you in?">
@@ -1529,8 +1551,8 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
       <p class="wh-s">Worldwide carspotting from Milan. Supercars, hypercars and one-offs, caught in the wild — all original content.</p>
       <span class="wh-cue" aria-hidden="true"><i></i>Scroll into the feed</span>
     </div>
-    <div class="ways-top wrap"><p class="kick">What brings you in</p><p class="ways-ct" aria-hidden="true"><b id="waysN">00</b><u><i id="waysBar"></i></u>05</p></div>
-    <h2 class="ways-big" id="waysBig" aria-hidden="true"><span id="waysWord">Ways in</span><sup>(05)</sup></h2>
+    <div class="ways-top wrap"><p class="kick">What brings you in</p><p class="ways-ct" aria-hidden="true"><b id="waysN">00</b><u><i id="waysBar"></i></u>04</p></div>
+    <h2 class="ways-big" id="waysBig" aria-hidden="true"><span id="waysWord">Ways in</span><sup>(04)</sup></h2>
     <p class="ways-hint" id="waysHint"><i></i>One scroll, one stop</p>
     <nav class="ways-dots" id="waysDots" aria-label="Jump to"></nav>
   </div>
@@ -1605,23 +1627,6 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   </div>
 </section>
 
-<!-- ============ PARTS ============ -->
-<section class="sec" id="parts" style="padding-top:0">
-  <div class="wrap">
-    <div class="sec-head row rv">
-      <div>
-        <p class="kick">Parts counter</p>
-        <h2 class="h2">The parts we fit. <em>Fitted, if you like.</em></h2>
-        <p class="lede">Everything here we’ve fitted ourselves. Ask what actually works on your car before you spend.</p>
-      </div>
-    </div>
-    <div class="chips" id="ptChips" style="margin-bottom:16px" role="group" aria-label="Filter parts"></div>
-    <div class="pt-grid rail" id="ptGrid"></div>
-    <div class="rail-hint pt-hint"><span>Swipe</span><b><i id="ptBar"></i></b></div>
-    <div class="more"><button class="btn btn-line" data-enq="parts">Can’t see it? We’ll source it <span class="arr">→</span></button></div>
-  </div>
-</section>
-
 <!-- ============ PATTERN INTERRUPT · kinetic marquee ============ -->
 <section class="band" aria-hidden="true">
   <div class="mq mq1"><div class="mqi">Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i>Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i>Inspected<i>✦</i>Photographed<i>✦</i>Published<i>✦</i>Faults included<i>✦</i></div></div>
@@ -1651,9 +1656,28 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
   </div>
 </section>
 
+<!-- ============ PARTS ============ -->
+<section class="sec" id="parts">
+  <div class="wrap">
+    <div class="sec-head row rv">
+      <div>
+        <p class="kick">Parts counter</p>
+        <h2 class="h2">The parts we fit. <em>Fitted, if you like.</em></h2>
+        <p class="lede">Everything here we’ve fitted ourselves. Ask what actually works on your car before you spend.</p>
+      </div>
+    </div>
+    <div class="chips" id="ptChips" style="margin-bottom:16px" role="group" aria-label="Filter parts"></div>
+    <div class="pt-grid rail" id="ptGrid"></div>
+    <div class="rail-hint pt-hint"><span>Swipe</span><b><i id="ptBar"></i></b></div>
+    <div class="more"><button class="btn btn-line" data-enq="parts">Can’t see it? We’ll source it <span class="arr">→</span></button></div>
+  </div>
+</section>
+
 <!-- ============ T2 · the intelligence that runs the floor ============ -->
 <section class="omega" id="numbers" aria-label="Meet Tommy, your worldwide carspotter">
   <div class="om-grid" aria-hidden="true"></div>
+  <div class="om-aur a" aria-hidden="true"></div>
+  <div class="om-aur b" aria-hidden="true"></div>
   <div class="om-bubs" id="omBubs" aria-live="polite"></div>
   <div class="om-wrap">
     <div class="om-stage">
@@ -1681,6 +1705,7 @@ html.teal .nav.solid{background:rgba(3,17,19,.88)}
         <div><b>&lt;1h</b><span>reply · 7 days</span></div>
       </div>
       <button class="btn btn-gold om-cta" type="button" id="omAsk">Ask T2 anything →</button>
+      <div class="om-chips" id="omChips" aria-label="Quick questions"></div>
     </div>
   </div>
 </section>
@@ -3386,13 +3411,10 @@ const WAYS=[
          {k:'img',src:'pics/pics-42.jpg',nw:736,nh:1308,ax:1,ay:-.22,z:-170,w:110},{k:'bit',txt:'48 MONTHS · €0 PART-EX',ax:-1,ay:.34,z:30}]},
   {t:'Feature your car',w:'Feature',s:'Own something special in Milan? Book a shoot and get it spotted properly.',img:'pics/pics-26.jpg',nw:734,nh:437,go:'build',
     sat:[{k:'type',em:'3D',sm:'<b>Spec it live</b>six on the feed',ax:1,ay:.22,z:150,w:176,h:176},{k:'pill',txt:'RESTOMOD',ax:-1,ay:-.28,z:90,w:196,h:56},
-         {k:'img',src:'part/engine.jpg',nw:507,nh:533,ax:-1,ay:.26,z:-140,w:132},{k:'bit',txt:'≈ 18 WEEKS IN THE BAY',ax:1,ay:-.34,z:40}]},
-  {t:'Behind the lens',w:'BTS',s:'How the shots happen: the gear, the angles and the chase itself.',img:'part/stock-wheels.jpg',nw:960,nh:720,go:'parts',gal:'parts',
-    sat:[{k:'type',em:'12',sm:'<b>Parts</b>fitted in-house',ax:-1,ay:.22,z:130,w:176,h:176},{k:'pill',txt:'FITTED TODAY',ax:1,ay:-.3,z:170,w:216,h:56,gold:1},
-         {k:'img',src:'part/brakes.jpg',nw:736,nh:920,ax:1,ay:.24,z:-120,w:118},{k:'img',src:'part/coilover.jpg',nw:736,nh:736,ax:-1,ay:-.28,z:-200,w:118}]}
+         {k:'img',src:'part/engine.jpg',nw:507,nh:533,ax:-1,ay:.26,z:-140,w:132},{k:'bit',txt:'≈ 18 WEEKS IN THE BAY',ax:1,ay:-.34,z:40}]}
 ];
 /* card centres in world px (z toward the viewer). Landscape for desktop, a zig-zag column for phones. */
-const WPOS={d:[[-480,-30,0],[-10,-250,-120],[450,-40,70],[-150,250,-40],[380,300,130]],m:[[-70,-560,0],[90,-230,-120],[-80,90,70],[90,410,-40],[-60,730,130]]};
+const WPOS={d:[[-480,-30,0],[-10,-250,-120],[450,-40,70],[150,270,-40],[380,300,130]],m:[[-70,-560,0],[90,-230,-120],[-80,90,70],[90,410,-40],[-60,730,130]]};
 const WTGT={d:[[-.1,-.04],[.09,-.05],[-.08,-.03],[.1,-.05],[-.06,-.04]],m:[[0,-.07],[.02,-.06],[-.02,-.07],[.02,-.06],[-.02,-.07]]};
 const WF=1000, WS={els:[],stops:[],cs:0,ts:0,k:-1,vis:false,SF:2.4,word:'',lastT:0,bb:null,secTop:0,range:1,hint:true,intro:1,introT0:0};
 function wysrc(f){ return '../360-remix/assets/'+f; } function wyblur(f){ return '../360-remix/assets/v3/blur/'+f.split('/').pop(); }
@@ -3584,6 +3606,10 @@ function buildNums(){ const orb=$id('omOrb'); if(!orb) return;
   orb.addEventListener('click',open); const ask=$id('omAsk'); if(ask) ask.addEventListener('click',open);
   addEventListener('pointermove',e=>{ NM.mx=e.clientX; NM.my=e.clientY; },{passive:true});
   if(NM.bubs){ for(let i=0;i<3;i++){ const b=document.createElement('button'); b.type='button'; b.className='om-bub s'+i; b.setAttribute('aria-label','Ask T2 about this'); b.addEventListener('click',open); NM.bubs.appendChild(b); NM.slots.push({el:b,until:0,busy:false,sticky:false}); } }
+  /* v2: quick-ask chips (from the bot's own chip list) + scroll-driven count-up stats */
+  setTimeout(()=>{ try{ const ce=$id('omChips'); if(ce&&!ce.childElementCount&&Array.isArray(TCH)) TCH.slice(0,4).forEach(t=>{ const c=document.createElement('button'); c.type='button'; c.className='om-chip'; c.textContent=t; c.addEventListener('click',open); ce.appendChild(c); }); }catch(e){} },0);
+  NM.stats=[...document.querySelectorAll('.om-stats b')].map(b=>{ const m=(b.textContent||'').match(/^([^0-9]*)([0-9][0-9,.]*)(.*)$/); if(!m) return null;
+    const dec=(m[2].split('.')[1]||'').length; return {b,el:b.parentElement,pre:m[1],suf:m[3],t:parseFloat(m[2].replace(/,/g,'')),dec,comma:m[2].indexOf(',')>=0,last:''}; }).filter(Boolean);
   const h=$id('omH'); if(h&&!h.dataset.split){ h.dataset.split='1'; const words=h.textContent.trim().split(/\s+/);
     h.innerHTML=words.map((w,i)=>'<span class="ow'+(i>=6?' g':'')+'" style="transition-delay:'+(i*0.06).toFixed(2)+'s">'+esc(w)+'</span>').join(' '); }
   NM.spawnAt=performance.now()+1300; NM.wAt=performance.now()+1500;
@@ -3596,6 +3622,10 @@ function updateNums(){ const r=FR.numbers, H=innerHeight; const vis=!!r&&r.botto
   const now=performance.now();
   NM.slots.forEach(s=>{ if(s.busy&&now>s.until){ s.el.classList.remove('on'); s.busy=false; s.sticky=false; } });   /* retire the oldest once its time is up */
   if(!vis){ NM.vis=false; return; }
+  /* v2: stats count up (and back down) as a pure function of the section's position */
+  if(NM.stats&&NM.stats.length){ const sp=clamp((H*.86-r.top)/(H*.6),0,1), e2=sp*sp*(3-2*sp);
+    NM.stats.forEach(s=>{ const v=s.t*e2; let txt=v.toFixed(s.dec); if(s.comma) txt=Number(txt).toLocaleString('en-US',{minimumFractionDigits:s.dec});
+      const out=s.pre+txt+s.suf; if(out!==s.last){ s.last=out; s.b.textContent=out; s.el.style.setProperty('--sp',e2.toFixed(3)); } }); }
   const orb=NM.orb; if(orb){ const rr=orb.getBoundingClientRect(); NM.cx=rr.left+rr.width/2; NM.cy=rr.top+rr.height/2; NM.bw=rr.width||NM.bw; }
   const rad=Math.max(150,NM.bw*.7), dx=clamp((NM.mx-NM.cx)/rad,-1,1), dy=clamp((NM.my-NM.cy)/rad,-1,1);
   const er=NM.bw*.05, tx=+(dx*er).toFixed(1), ty=+(dy*er).toFixed(1);
@@ -4158,6 +4188,31 @@ async function boot(){
   await Promise.all(order.slice(1).map(async i=>{ show(i, await loadOne(i), 0); reveal(); }));
   if(!S3.loaded) throw new Error('no cars loaded');
 }
+</script>
+<script>
+/* v2 · magnetic gold buttons — transform-only, fine pointers, respects reduced motion */
+(function(){
+  if(!matchMedia('(pointer:fine)').matches||matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const R=90;let btns=[],raf=0,mx=-9e3,my=-9e3;
+  const scan=()=>{btns=[...document.querySelectorAll('.btn-gold')].map(b=>({b,x:0,y:0,tx:0,ty:0}))};
+  scan();addEventListener('load',scan,{once:true});
+  addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;if(!raf)raf=requestAnimationFrame(tick)},{passive:true});
+  function tick(){
+    raf=0;let live=false;
+    for(const o of btns){
+      const r=o.b.getBoundingClientRect();
+      if(!r.width||r.bottom<-40||r.top>innerHeight+40){ if(o.x||o.y){o.tx=o.ty=0;} }
+      else{
+        const cx=r.left+r.width/2,cy=r.top+r.height/2,dx=mx-cx,dy=my-cy,d=Math.hypot(dx,dy);
+        const f=d<R?(1-d/R)*.32:0;o.tx=dx*f;o.ty=dy*f;
+      }
+      o.x+=(o.tx-o.x)*.22;o.y+=(o.ty-o.y)*.22;
+      if(Math.abs(o.x)>.08||Math.abs(o.y)>.08){o.b.style.transform='translate('+o.x.toFixed(1)+'px,'+o.y.toFixed(1)+'px)';live=true;}
+      else if(o.b.style.transform){o.b.style.transform='';}
+    }
+    if(live)raf=requestAnimationFrame(tick);
+  }
+})();
 </script>
 </body>
 </html>
