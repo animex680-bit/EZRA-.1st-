@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en-SG">
-<head><meta name="build" content="291f037c3043">
+<head><meta name="build" content="3b157ef4106d">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Platinum Motoring — Singapore’s largest preowned car dealership.</title>
-<meta name="description" content="Platinum Motoring - Singapore’s #1 largest preowned car dealership and SGCM Premium Dealer 2023-2026. One-stop service for every aspect of car ownership: buy, sell, trade-in and finance.">
+<meta name="description" content="Platinum Motoring - Singapore’s #1 largest preowned car dealership and SGCM Premium Dealer 2023-2026. One-stop service for every aspect of car ownership.">
 <meta name="theme-color" content="#0d0c0b">
-<meta property="og:title" content="Platinum Motoring - Singapore’s #1 Preowned Car Dealership">
-<meta property="og:description" SGCM Premium Dealer 2023-2026. One-stop for buying, selling, trade-in and financing your next car.>
+<meta property="og:title" content="Platinum Motoring - Preowned Cars, Singapore">
+<meta property="og:description" SGCM Premium Dealer 2023-2026. Singapore’s largest preowned car dealership - buy, sell, finance and service, all under one roof.>
 <meta property="og:image" content="../360-remix/assets/orbit/fq4.webp">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d0c0b'/><text x='16' y='22' font-family='Georgia,serif' font-size='9' font-weight='bold' fill='%23c9a25e' text-anchor='middle'>PM</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1517,18 +1517,18 @@ setTimeout(function(){["pointerdown","wheel","keydown","touchstart"].forEach(fun
 </style>
 <section class="cintro" id="cintro" aria-label="The car, taken apart and rebuilt as you scroll">
   <div class="ci-pin">
-    <div class="ci-word" id="ciWord" aria-hidden="true">PLATINUM</div>
+    <div class="ci-word" id="ciWord" aria-hidden="true">PROVEN</div>
     <canvas id="ciGL" aria-hidden="true"></canvas>
-    <div class="ci-top" id="ciTop"><p class="ci-k">Platinum Motoring - Singapore</p><h2>Every car,<br><em>one roof.</em></h2></div>
-    <p class="ci-cap" id="ciCapA"><b>Inspected.</b> Every car checked before it reaches the floor.</p>
-    <p class="ci-cap r" id="ciCapB"><b>Settled fast.</b> Buy, trade and finance in one stop.</p>
+    <div class="ci-top" id="ciTop"><p class="ci-k">Platinum Motoring . Singapore</p><h2>Every car,<br><em>proven first.</em></h2></div>
+    <p class="ci-cap" id="ciCapA"><b>Inspected.</b> Checked end to end before it reaches the lot.</p>
+    <p class="ci-cap r" id="ciCapB"><b>Yours.</b> Drive it home with finance sorted in-house.</p>
     <span class="ci-cue" id="ciCue"><i></i>Scroll - it comes apart</span>
     <span class="ci-credit" id="ciCredit"></span>
   </div>
 </section>
 <script type="module">(async()=>{
 const sec=document.getElementById("cintro");if(!sec)return;try{
-const CI={car:"camaro",paint:"#8a8f99",base:"../oldsoul/models/"};
+const CI={car:"camaro",paint:"#9aa3ad",base:"../oldsoul/models/"};
 const CIREG={
   camaro:['chevrolet-camaro-pro.glb',4.78,180,'1970 Chevrolet Camaro Pro Touring','everhard','^body$'],
   firebird:['pontiac-firebird-trans.glb',4.87,0,'1970 Pontiac Firebird Trans Am','everhard','^body$'],
@@ -1536,7 +1536,18 @@ const CIREG={
   m4:['bmw-m4-f82.glb',4.67,0,'BMW M4 f82','Black Snow','^ARm4_main$'],
   mclaren:['mclaren-spider.glb',4.57,0,'McLaren Spider','SINNIK','^Primary_Paint$'],
   phantom:['rolls-royce-phantom.glb',5.76,0,'rollsroyce phantom','Jagguz_wrld','^car_body_in$'],
-  p918:['porsche-918.glb',4.64,0,'Porsche 918 Free','Black Snow','^P918_paint$']};
+  p918:['porsche-918.glb',4.64,0,'Porsche 918 Free','Black Snow','^P918_paint$'],
+  silverado:['chevrolet-silverado-ev.glb',5.93,0,'2024 Chevrolet Silverado EV RST','Ddiaz Design','^M_Body_paint\\.002$'],
+  ram:['dodge-ram-3500.glb',6.38,0,'Dodge Ram 3500','David_Holiday','^1___Default$'],
+  s10:['chevrolet-s10.glb',4.87,0,'Chevrolet S10','Luquita','^carpaint$'],
+  shelby:['ford-mustang-gt500.glb',4.79,0,'Ford Mustang Shelby GT500','Jiaxing','^carpaint$'],
+  malibu:['chevrolet-malibu-65.glb',5.03,180,"'65 Chevy Malibu",'Joko_P','^Car_Paint$'],
+  challenger:['dodge-challenger-srt.glb',5.03,0,'Dodge Challenger SRT','SDC PERFORMANCE','^Carosserie$'],
+  express:['chevrolet-express.glb',5.69,0,'2003 Chevrolet Express GMC Savana','Ddiaz Design','^CGphong5SG1$'],
+  ducato:['fiat-ducato.glb',5.0,0,'2014 Fiat Ducato','razor24','^metal$'],
+  ranger:['ford-ranger-23.glb',5.37,0,'Ford Ranger Next-Gen 2023 Sport','Asadawut.Kaewma','^carpaint$'],
+  hilux:['toyota-hilux.glb',5.26,0,'Toyota Hilux 2007','David_Holiday','^vpc_v1_006_carpaint_1$'],
+  toro:['fiat-toro.glb',4.92,180,'Fiat Toro','FreshCanidae1571','^primary\\.002$']};
 const CAR=CIREG[CI.car]||CIREG.mclaren, modelUrl=CI.base+CAR[0];
 const cred=document.getElementById("ciCredit"); if(cred) cred.innerHTML='3D: &ldquo;'+CAR[3]+'&rdquo; by '+CAR[4]+' &middot; CC BY 4.0 &middot; modified';
 const MODS=await Promise.all([import("three"),import("three/addons/loaders/GLTFLoader.js"),import("three/addons/loaders/DRACOLoader.js"),import("three/addons/libs/meshopt_decoder.module.js"),import("three/addons/environments/RoomEnvironment.js")]);
@@ -1632,10 +1643,10 @@ canvas.classList.add("on");requestAnimationFrame(tick);
   <div class="ways-pin" id="waysPin">
     <div class="ways-world" id="waysWorld"></div>
     <div class="ways-hero" id="waysHero">
-      <p class="wh-k">Platinum Motoring - Singapore</p>
-      <h1 class="wh-h">Every car, <em>one roof.</em></h1>
-      <p class="wh-s">Singapore’s largest preowned dealership and SGCM Premium Dealer. Buy, sell, trade-in and finance - handled end to end.</p>
-      <span class="wh-cue" aria-hidden="true"><i></i>Scroll to browse the lot</span>
+      <p class="wh-k">Platinum Motoring . Singapore</p>
+      <h1 class="wh-h">One stop for<br>every <em>car owner.</em></h1>
+      <p class="wh-s">Singapore’s largest preowned car dealership and SGCM Premium Dealer 2023-2026 - buy, sell, finance and service under one roof.</p>
+      <span class="wh-cue" aria-hidden="true"><i></i>Scroll to see the lot</span>
     </div>
     <div class="ways-top wrap"><p class="kick">What brings you in</p><p class="ways-ct" aria-hidden="true"><b id="waysN">00</b><u><i id="waysBar"></i></u>05</p></div>
     <h2 class="ways-big" id="waysBig" aria-hidden="true"><span id="waysWord">Ways in</span><sup>(05)</sup></h2>
@@ -1731,7 +1742,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
         <p class="kick">Finance & leasing, in-house</p>
         <h2 class="h2">Turn the dial. <em>Feel the monthly.</em></h2>
       </div>
-      <p class="lede" style="max-width:44ch">Pick a car, or drag the ring to any amount — it snaps to the cars we have. The color tells you how it will sit month to month. Checking is a soft search only.</p>
+      <p class="lede" style="max-width:44ch">Pick a car, or drag the ring to any amount — it snaps to the cars we have. The colour tells you how it will sit month to month. Checking is a soft search only.</p>
     </div>
     <div class="fgrid">
       <div class="dialwrap rv">
@@ -1913,7 +1924,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
 <!-- ============ PATTERN INTERRUPT · the iris ============ -->
 <section class="iris" id="iris" aria-hidden="true">
   <div class="iris-pin"><div class="iris-c" id="irisC"></div>
-    <p class="iris-t" id="irisT"><span>Don’t take</span><em>our word for it.</em><small>212 buyers · every review from a real sale</small></p>
+    <p class="iris-t" id="irisT"><span>Don’t take</span><em>our word for it.</em><small>188 buyers · every review from a real sale</small></p>
   </div>
 </section>
 
@@ -1941,7 +1952,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
 <div class="tx tx-stamp" id="txStamp" aria-hidden="true">
   <div class="tx-st">
     <p class="stp-words" id="stpW"></p>
-    <div class="stp" id="stp"><b>VERIFIED</b><small>212 real sales</small></div>
+    <div class="stp" id="stp"><b>VERIFIED</b><small>188 real sales</small></div>
   </div>
 </div>
 
@@ -2310,7 +2321,7 @@ const REVIEWS=[
   {face:'faces/faces-07.jpg',name:'Devon L.',car:'GR86 — widebody build',date:'Oct 2025',stars:5,text:'Brought them a tired shell. Got back something I wouldn’t sell for twice what it cost. Every invoice itemised.'},
   {face:'faces/faces-04.jpg',name:'Noor A.',car:'Forged wheel set',date:'Jan 2026',stars:4,text:'Wheels were two weeks later than quoted, but they called every week with an honest update and discounted the fitting.'},
 ];
-const DIST=[191,17,3,1,0];
+const DIST=[169,15,3,1,0];
 
 const DONORS=[
   {name:'GR86 shell',img:'../360-remix/assets/upshift-img/car-gr86.jpg',base:14500,accent:'#3f7dff',weeks:22,mat:'#a8a8aa'},
@@ -3164,7 +3175,7 @@ function buildRing(){
   RING.els=$$('#rot .oc3');
   const tot=DIST.reduce((a,b)=>a+b,0);
   $id('rbars').innerHTML=[5,4,3,2,1].map((s,i)=>'<div class="rbar"><span>'+s+'★</span><div class="t"><i data-w="'+(DIST[i]/tot*100).toFixed(1)+'"></i></div><span>'+Math.round(DIST[i]/tot*100)+'%</span></div>').join('');
-  new IntersectionObserver(([e],o)=>{ if(!e.isIntersecting) return; o.disconnect(); RING.counted=true; tween($id('oN'),4.9,v=>v.toFixed(1),1300); tween($id('oC'),212,v=>String(Math.round(v)),1300); $$('#rbars i').forEach(b=>b.style.width=b.dataset.w+'%'); },{threshold:.3}).observe($id('reviews'));
+  new IntersectionObserver(([e],o)=>{ if(!e.isIntersecting) return; o.disconnect(); RING.counted=true; tween($id('oN'),4.9,v=>v.toFixed(1),1300); tween($id('oC'),188,v=>String(Math.round(v)),1300); $$('#rbars i').forEach(b=>b.style.width=b.dataset.w+'%'); },{threshold:.3}).observe($id('reviews'));
   const r=$id('ring3');
   r.addEventListener('pointerdown',e=>{ RING.drag=true; RING.lastX=e.clientX; RING.moved=0; r.classList.add('drag'); RING.idleT=performance.now(); RING.downT=e.target.closest('.oc3'); });
   addEventListener('pointermove',e=>{ if(!RING.drag) return; const dx=e.clientX-RING.lastX; RING.lastX=e.clientX; RING.moved+=Math.abs(dx); RING.a+=dx*.22; RING.vel=dx*.22; RING.target=null; });
@@ -3352,7 +3363,7 @@ function coreRun(raw){
   if(/deliver|collect|transport|ship/.test(q)) return coreSay('Enclosed transport <b>anywhere in Singapore</b>, quoted up front — and we can collect your trade-in the same day.');
   if(/hour|open|close|when are you/.test(q)){ const d=new Date(),h=d.getHours()+d.getMinutes()/60,dy=d.getDay(); const o=dy>=1&&dy<=6&&h>=9&&h<19; return coreSay((o?'<b>Open now</b>, until 7pm. ':'Closed right now — message us and we reply first thing. ')+'Mon–Sat 9:00–19:00, Sunday by appointment.'); }
   if(/where|address|location|find you|directions|parking/.test(q)) return coreSay('We send the location pin with your viewing pass — there’s parking on site and the car will be out on the lot when you arrive.',[['Book a test drive','go:visit']]);
-  if(/review|rating|trust|legit|scam|honest/.test(q)){ if(isMob) closeCore(); goTo('reviews'); return coreSay('<b>4.9</b> from 212 verified buyers — every review tied to a real invoice. Scroll the handover and tap a face to read theirs.',[['Read the reviews','go:reviews']]); }
+  if(/review|rating|trust|legit|scam|honest/.test(q)){ if(isMob) closeCore(); goTo('reviews'); return coreSay('<b>4.9</b> from 188 verified buyers — every review tied to a real invoice. Scroll the handover and tap a face to read theirs.',[['Read the reviews','go:reviews']]); }
   /* a car by name */
   if(cars.length){
     if(cars.length===1){ const c=cars[0];
