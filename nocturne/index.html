@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nocturne — Restomod &amp; Performance Works</title>
+<meta name="description" content="Nocturne builds one car at a time: chassis, drivetrain and finish rebuilt to a standard you can hear. Workshop in Rivergate. Book a bay.">
+<meta name="theme-color" content="#08080a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nocturne — Restomod &amp; Performance Works">
+<meta property="og:description" content="One car at a time. Chassis, drivetrain and finish rebuilt to a standard you can hear.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:url" content="https://animex680-bit.github.io/EZRA-.1st-/nocturne/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://animex680-bit.github.io/EZRA-.1st-/nocturne/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2308080a'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23e8e4dc' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2.6' fill='%23ff5a1f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<a class="skip" href="#work">Skip to the work</a>
+
+<!-- the scene sits behind everything; sections slide over it, so there are no hard edges -->
+<div class="stage" aria-hidden="true">
+  <canvas id="gl"></canvas>
+  <div class="stage-fallback" id="fallback"></div>
+  <div class="vig"></div>
+</div>
+
+<header class="nav">
+  <a class="mark" href="#top" aria-label="Nocturne, home">
+    <svg width="22" height="22" viewBox="0 0 32 32" role="presentation" focusable="false">
+      <circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="16" cy="16" r="2.8" fill="#ff5a1f"/>
+    </svg>
+    <span>Nocturne</span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#work">Work</a>
+    <a href="#process">Process</a>
+    <a href="#numbers">Numbers</a>
+  </nav>
+  <a class="btn btn-sm magnetic" href="#book">Book a bay</a>
+</header>
+
+<main id="top">
+
+  <!-- ─── hero: the wheel is pinned, the scroll turns it ─── -->
+  <section class="hero" id="hero">
+    <div class="hero-in">
+      <p class="kicker" data-reveal>Rivergate · est. 2011</p>
+      <h1 class="display" data-assemble>One car at a time.</h1>
+      <p class="lede" data-reveal>We rebuild chassis, drivetrain and finish to a standard you can hear before
+        you see. No volume work, no filler, no car leaves on someone else's deadline.</p>
+      <div class="hero-cta" data-reveal>
+        <a class="btn magnetic" href="#book">Book a bay</a>
+        <a class="btn ghost magnetic" href="#work">See the work</a>
+      </div>
+    </div>
+    <p class="cue" aria-hidden="true">Scroll — the wheel turns, the brakes heat</p>
+  </section>
+
+  <!-- ─── work ─── -->
+  <section class="band" id="work">
+    <div class="band-head">
+      <p class="eyebrow" data-reveal>The work</p>
+      <h2 class="h2" data-assemble>Three builds, in the order they mattered.</h2>
+    </div>
+    <div class="tiles">
+      <article class="tile drift" data-reveal>
+        <span class="tile-no">01</span>
+        <h3>Chassis &amp; geometry</h3>
+        <p>Seam-welded, measured on a jig, corner-weighted with the driver in the seat. Everything downstream
+          is guesswork until this is true.</p>
+        <ul class="facts"><li>Jig-measured to 0.5&nbsp;mm</li><li>Corner-weighted loaded</li><li>Documented, photographed</li></ul>
+      </article>
+      <article class="tile drift" data-reveal>
+        <span class="tile-no">02</span>
+        <h3>Drivetrain</h3>
+        <p>Built on the bench, not in the bay. Every clearance written down, every torque figure signed off by
+          the person who turned the wrench.</p>
+        <ul class="facts"><li>Bench-assembled</li><li>Dyno-verified</li><li>Signed build sheet</li></ul>
+      </article>
+      <article class="tile drift" data-reveal>
+        <span class="tile-no">03</span>
+        <h3>Finish</h3>
+        <p>Paint is the last 5% and the first thing anyone sees. Blocked flat, cut back by hand, left to settle
+          before it goes anywhere near daylight.</p>
+        <ul class="facts"><li>Blocked flat</li><li>Hand cut &amp; polished</li><li>Six-week cure</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─── process ─── -->
+  <section class="band" id="process">
+    <div class="band-head">
+      <p class="eyebrow" data-reveal>How it runs</p>
+      <h2 class="h2" data-assemble>Four stages. You see all of them.</h2>
+    </div>
+    <ol class="steps">
+      <li data-reveal><span class="step-n">01</span><div><h3>Strip and assess</h3><p>The car comes apart before we quote the real number. What we find is photographed and sent to you the same week.</p></div></li>
+      <li data-reveal><span class="step-n">02</span><div><h3>Fixed scope</h3><p>One document: what is being done, what it costs, when it ends. Changes are priced before they happen, not after.</p></div></li>
+      <li data-reveal><span class="step-n">03</span><div><h3>Build</h3><p>Weekly photographs from the bay. You can walk in and look at your own car on any working day.</p></div></li>
+      <li data-reveal><span class="step-n">04</span><div><h3>Shakedown</h3><p>Six hundred kilometres on our plates before yours go back on. Anything that moves, settles or leaks gets found by us.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- ─── numbers ─── -->
+  <section class="band tight" id="numbers">
+    <div class="band-head">
+      <p class="eyebrow" data-reveal>Numbers</p>
+      <h2 class="h2" data-assemble>Fourteen years, counted honestly.</h2>
+    </div>
+    <div class="stats">
+      <div class="stat" data-reveal><span class="stat-v" data-count="68">0</span><span class="stat-l">cars finished</span></div>
+      <div class="stat" data-reveal><span class="stat-v" data-count="14">0</span><span class="stat-l">years at it</span></div>
+      <div class="stat" data-reveal><span class="stat-v" data-count="3">0</span><span class="stat-l">builds at once, maximum</span></div>
+      <div class="stat" data-reveal><span class="stat-v" data-count="600">0</span><span class="stat-l">shakedown km, every car</span></div>
+    </div>
+  </section>
+
+  <!-- ─── contact ─── -->
+  <section class="band book" id="book">
+    <div class="book-in">
+      <p class="eyebrow" data-reveal>Next bay</p>
+      <h2 class="h2" data-assemble>Tell us what it is and what it needs to be.</h2>
+      <p class="lede" data-reveal>We take on a car when a bay opens, not before. Call the workshop or send the
+        car's history and we will tell you honestly whether we are the right shop for it.</p>
+      <div class="contact-row" data-reveal>
+        <a class="btn magnetic" href="tel:+27215550142">Call the workshop</a>
+        <a class="btn ghost magnetic" href="mailto:bay@nocturneworks.example?subject=Build%20enquiry">Email the build desk</a>
+      </div>
+      <dl class="details" data-reveal>
+        <div><dt>Workshop</dt><dd>Unit 7, Rivergate Yard</dd></div>
+        <div><dt>Hours</dt><dd>Mon–Fri, 08:00–17:00</dd></div>
+        <div><dt>Phone</dt><dd><a href="tel:+27215550142">+27 21 555 0142</a></dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:bay@nocturneworks.example">bay@nocturneworks.example</a></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Nocturne Restomod &amp; Performance Works · Rivergate</p>
+  <p class="foot-note">Built by <a href="../webber/">Webber</a>. Demonstration site — the workshop is fictional.</p>
+</footer>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>

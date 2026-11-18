@@ -64,3 +64,39 @@ When the brief wants motion but WebGL can't be verified, a static page driven by
 - Don't ship without disposing resources / without a WebGL-unavailable fallback.
 
 Hands the signature moment to `web3d-shaders`, motion to `web3d-motion`, and must clear `web3d-perf`.
+
+
+## Verifying WebGL (updated 2026-11-18 — this reverses an older rule)
+
+**WebGL 2 runs in this sandbox.** Headless Chromium renders it through SwiftShader, so a 3D page can and
+must be seen before it ships.
+
+```js
+const b = await chromium.launch({ args: ['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=swiftshader'] });
+```
+
+**Work shader-first.** Build the fragment shader as its own file, render it to PNG at several `uScroll`
+values as a contact sheet, judge the form, iterate. Only wrap a page around it once the look is right —
+judging a single angle is how a shape that is wrong from every other angle gets shipped.
+
+### Rules that cost real iterations
+
+- **GLSL has no recursion.** A one-bounce mirror needs `shadeBase()` (no reflection ray) plus a `shade()`
+  that calls it. The error reads `Recursive function call in the following call chain`.
+- **A subtracting primitive must pass fully through the shape.** A cut-out that stops short leaves a thin
+  solid plate — which silently turns a deep alloy wheel into a flat hubcap.
+- **Check the swizzle on axis-aligned primitives.** With `cyl()` taking its radius from `p.xz`, a lateral
+  axle needs `.xzy`. The wrong axis renders as a stub.
+- **Model in real metres.** Eyeballed proportions read as a blob no matter how good the lighting is.
+- **Pick a subject the medium is good at.** Distance fields excel at rotationally symmetric, machined
+  forms. A literal car fought back for five iterations; a hero wheel landed first time.
+
+### Keep the audit clean
+
+Put the engine in a **local `assets/app.js`**. A CDN `<script>` is a third-party runtime dependency and a
+single point of failure; a huge inline `<script>` is un-cacheable bloat. A local file is neither.
+
+### Always build the no-WebGL path, and look at it
+
+Stub `HTMLCanvasElement.prototype.getContext` to return `null`, load the page, and screenshot it. Canvas
+hidden, a designed backdrop in its place, every word legible, no console errors. Not a `<noscript>` note.

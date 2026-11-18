@@ -42,3 +42,23 @@ A 3D site that stutters is slop no matter how it looks. This is a **gate**: a bu
 Reduce draw calls (instance/merge) → cut texture sizes / KTX2 → lower DPR → simplify/skip postprocessing on mobile → render-on-demand → reduce particle counts / shader cost → LOD or hide distant detail → serve a lighter mobile scene.
 
 Record the final FPS + payload numbers into the project's LEARNINGS entry (`web3d-evolve`).
+
+
+## The zero-asset architecture (measured, 2026-11-18)
+
+The cheapest way to pass every weight rule is to have nothing to weigh. Hand-written WebGL2 with
+**procedurally generated geometry** — signed distance fields raymarched in the fragment shader — means no
+model files, no textures, no video and no library.
+
+Two complete 3D marketing sites built this way measured **91 KB and 98 KB total**, including a JPEG social
+preview. For comparison, the video-driven pages in the same repo run 10–25 MB each.
+
+There is nothing to lazy-load because there is nothing to load. Budget the GPU instead:
+
+- Render **below CSS resolution** (≈0.66 desktop, ≈0.52 mobile) and let the browser scale up. Raymarching
+  is fill-rate bound, so this is the single biggest lever.
+- **Cap devicePixelRatio** (1.5 desktop, 1.1 mobile).
+- **Measure the achieved frame rate** over the first ~1.5 s and step resolution down once if it is under
+  target. Measure; do not guess from the user agent.
+- **Stop the loop** on `visibilitychange`, and render exactly one frame under `prefers-reduced-motion`.
+- Handle `webglcontextlost` by showing the fallback rather than freezing.

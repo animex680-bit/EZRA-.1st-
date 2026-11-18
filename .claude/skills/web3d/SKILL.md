@@ -31,6 +31,9 @@ Reject our own work against this list before showing the client. We failed here 
 - [ ] **Performance budget met.** 60fps on a mid-tier phone, initial payload lean, models Draco/KTX2 compressed (see web3d-perf).
 - [ ] **Accessible fallback.** `prefers-reduced-motion` honored; degrades gracefully without WebGL.
 - [ ] **Doesn't look AI/tool-generated.** If it looks like a bundler export, it's slop.
+- [ ] **Seen, not assumed.** WebGL renders in this sandbox (Chromium + SwiftShader), so the 3D page has
+      been screenshotted at several scroll positions, at desktop and phone width — **and so has the
+      no-WebGL fallback path**. Shipping 3D nobody has looked at is how two blank screens got delivered.
 
 ## Phases (route to the sub-skills)
 

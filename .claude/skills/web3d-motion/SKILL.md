@@ -62,3 +62,13 @@ Wire-up: drive `lenis.raf` from `gsap.ticker`, call `ScrollTrigger.update` on Le
 - Don't animate everything. Don't use bounce/elastic on a luxury brand.
 
 Implements the storyboard from `web3d-concept`; bounded by `web3d-perf`.
+
+
+## Scrubbed type: group characters into words (2026-11-18)
+
+Per-character `inline-block` spans let a line break **between two letters of the same word** — `"at a ti /
+me."` — which reads as broken, not designed. Wrap each word in a `span.word { display:inline-block;
+white-space:nowrap }` and put the character spans inside it.
+
+The settled state must still carry **no residual transform**: animate from scatter to an exact zero, and
+clear the inline `transform` entirely once progress reaches 1.

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Webber — Real 3D websites, built before you're asked</title>
+<meta name="description" content="Webber builds websites in real WebGL, not CSS tricks. We build yours first and send you the live link. You only pay if you want to keep it.">
+<meta name="theme-color" content="#07080c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Webber — Real 3D websites, built before you're asked">
+<meta property="og:description" content="We build your site first and send you the live link. You only pay if you want to keep it.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:url" content="https://animex680-bit.github.io/EZRA-.1st-/webber/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://animex680-bit.github.io/EZRA-.1st-/webber/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2307080c'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4.6' fill='none' stroke='%23e9ecf4' stroke-width='1.7'/%3E%3Cellipse cx='16' cy='16' rx='4.6' ry='11' fill='none' stroke='%236f9bff' stroke-width='1.7'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<a class="skip" href="#method">Skip to how it works</a>
+
+<div class="stage" aria-hidden="true">
+  <canvas id="gl"></canvas>
+  <div class="stage-fallback" id="fallback"></div>
+  <div class="vig"></div>
+</div>
+
+<header class="nav">
+  <a class="mark" href="#top" aria-label="Webber, home">
+    <svg width="22" height="22" viewBox="0 0 32 32" role="presentation" focusable="false">
+      <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <ellipse cx="16" cy="16" rx="4.6" ry="11" fill="none" stroke="#6f9bff" stroke-width="1.7"/>
+    </svg>
+    <span>Webber</span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#method">Method</a>
+    <a href="#build">What you get</a>
+    <a href="#work">Work</a>
+  </nav>
+  <a class="btn btn-sm magnetic" href="#talk">Get in touch</a>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero-in">
+      <p class="kicker" data-reveal>Independent web studio</p>
+      <h1 class="display" data-assemble>We build it first. Then we show you.</h1>
+      <p class="lede" data-reveal>Most studios send a proposal. We send a working site, built for
+        <em>your</em> business, live on the internet, before you have paid anything. If you want to keep
+        it, we talk. If you don't, you have lost nothing.</p>
+      <div class="hero-cta" data-reveal>
+        <a class="btn magnetic" href="#talk">Start a conversation</a>
+        <a class="btn ghost magnetic" href="#work">See a build</a>
+      </div>
+    </div>
+    <p class="cue" aria-hidden="true">Everything you see here is rendered live</p>
+  </section>
+
+  <section class="band" id="method">
+    <div class="band-head">
+      <p class="eyebrow" data-reveal>The method</p>
+      <h2 class="h2" data-assemble>No pitch deck. A link.</h2>
+      <p class="lede" data-reveal>It is the only honest way to sell a website. You cannot judge a
+        rendering, a mood board or a list of adjectives. You can judge the real thing in ten seconds on
+        your own phone.</p>
+    </div>
+    <ol class="steps">
+      <li data-reveal><span class="step-n">01</span><div><h3>We study your business</h3><p>What you sell, who buys it, and what your current site fails to do. No questionnaire, no discovery fee.</p></div></li>
+      <li data-reveal><span class="step-n">02</span><div><h3>We build it</h3><p>A real site under your own name, deployed and reachable. Not a template with your logo dropped in.</p></div></li>
+      <li data-reveal><span class="step-n">03</span><div><h3>You open the link</h3><p>On your phone, in front of whoever you want. That is the entire pitch.</p></div></li>
+      <li data-reveal><span class="step-n">04</span><div><h3>You decide</h3><p>Keep it and we finish it properly, with your copy, your photography and your domain. Or walk away.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="band" id="build">
+    <div class="band-head">
+      <p class="eyebrow" data-reveal>What you get</p>
+      <h2 class="h2" data-assemble>Built to be fast, found and contacted.</h2>
+    </div>
+    <div class="tiles">
+      <article class="tile drift" data-reveal>
+        <span class="tile-no">01</span>
+        <h3>Real 3D, not fake depth</h3>
+        <p>Genuine WebGL — geometry, lighting and reflection solved every frame on your visitor's device.
+          The shapes on this page are mathematics, not pictures. Nothing here is a video loop.</p>
+        <ul class="facts"><li>Hand-written shaders</li><li>No 3D model files to download</li><li>Whole page under 100&nbsp;KB</li></ul>
+      </article>
+      <article class="tile drift" data-reveal>
+        <span class="tile-no">02</span>
+        <h3>It works on the phone it is opened on</h3>
+        <p>Resolution scales to the device, the frame rate is watched and quality steps down if it has to,
+          and if a device cannot do 3D at all it still gets a complete, good-looking page.</p>
+        <ul class="facts"><li>Mobile-first, tested</li><li>Graceful fallback, never a blank screen</li><li>Respects reduced-motion</li></ul>
+      </article>
+      <article class="tile drift" data-reveal>
+        <span class="tile-no">03</span>
+        <h3>Able to actually get you work</h3>
+        <p>A phone link, an email link, clear things to click, and correct preview cards so the page looks
+          like something when you paste it into a message. Most beautiful sites fail here.</p>
+        <ul class="facts"><li>One tap to call</li><li>Proper link previews</li><li>Accessible, keyboard-navigable</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="work">
+    <div class="band-head">
+      <p class="eyebrow" data-reveal>Work</p>
+      <h2 class="h2" data-assemble>Nocturne</h2>
+      <p class="lede" data-reveal>A performance workshop. The hero is a wheel, brake rotor and caliper
+        raymarched from distance fields — no model, no photograph. Scrolling turns the wheel and heats
+        the discs. It is the same engine running behind this page.</p>
+      <p data-reveal><a class="btn magnetic" href="../nocturne/">Open the Nocturne build</a></p>
+    </div>
+  </section>
+
+  <section class="band book" id="talk">
+    <div class="book-in">
+      <p class="eyebrow" data-reveal>Talk</p>
+      <h2 class="h2" data-assemble>Send us the business. We'll send back a site.</h2>
+      <p class="lede" data-reveal>Tell us what you do and where you are. If it is a fit we will build
+        something and send you the link. There is nothing to sign and nothing to pay to find out.</p>
+      <div class="contact-row" data-reveal>
+        <a class="btn magnetic" href="tel:+27000000000">Call the studio</a>
+        <a class="btn ghost magnetic" href="mailto:hello@webber.example?subject=A%20site%20for%20my%20business">Email us</a>
+      </div>
+      <dl class="details" data-reveal>
+        <div><dt>Studio</dt><dd>Cape Town, South Africa</dd></div>
+        <div><dt>Working with</dt><dd>Europe &amp; Australia</dd></div>
+        <div><dt>Phone</dt><dd><a href="tel:+27000000000">+27 00 000 0000</a></dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:hello@webber.example">hello@webber.example</a></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Webber — independent web studio, Cape Town</p>
+  <p class="foot-note">Contact details on this page are placeholders pending a domain and business line.</p>
+</footer>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>
