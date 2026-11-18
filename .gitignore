@@ -1,0 +1,5 @@
+
+# --- Private business data: this repo is PUBLIC. ---
+# The business memory and CRM hold revenue, pricing and third-party prospect
+# emails. They live in a separate PRIVATE repo. Never commit them here.
+business/
