@@ -14,6 +14,7 @@
      ①  EDIT EVERYTHING HERE.  Names, words, numbers, logo, colours.
          Nothing below this block needs touching to rebrand the site.
      ════════════════════════════════════════════════════════════════ -->
+<!-- CFG:START -->
 <script>
 window.CFG = {
 
@@ -40,6 +41,20 @@ window.CFG = {
     gold:   "#c9a25e",
     gold2:  "#e3c07f",
     accent: "#c4121c"            // the italic word colour
+  },
+
+  /* ---------- NAV (label + the section it jumps to) ---------------- */
+  nav: {
+    callCta:  "Call the bay",
+    callShort:"Call",
+    links: [
+      ["The floor",  "#stock"],
+      ["Parts",      "#parts"],
+      ["Calculator", "#calc"],
+      ["Honesty",    "#honesty"],
+      ["Owners",     "#reviews"],
+      ["Visit",      "#contact"]
+    ]
   },
 
   /* ---------- OPENING LOGO SCREEN --------------------------------- */
@@ -113,6 +128,9 @@ window.CFG = {
     terms: [24, 36, 48, 60, 72],
     makes: ["Audi","BMW","Ford","Lamborghini","McLaren","Mercedes","Nissan","Porsche","Rolls-Royce","Toyota","Other"],
     baseValue: 48000,             // starting point for the valuation tool
+    // fuel units for the cost-to-run tool. perGallon: 1 if you price by the
+    // gallon, 4.546 if you price by the litre (imperial mpg), 3.785 for US.
+    fuel: { unit: "gal", price: 4.2, min: 2, max: 9, step: 0.05, perGallon: 1 },
     promise: ["Paid same day by bank transfer","We settle outstanding finance","Non-runners and projects welcome"]
   },
 
@@ -172,6 +190,7 @@ window.CFG = {
   }
 };
 </script>
+<!-- CFG:END -->
 
 <style>
 /* ════════ ②  tokens — driven by CFG.theme at runtime ════════ */
@@ -180,7 +199,7 @@ window.CFG = {
   --ink:#f1ebdf; --ink2:#b8b0a2; --dim:#8a8275;
   --gold:#c9a25e; --gold2:#e3c07f; --accent:#c4121c; --ok:#5fa773;
   --line:rgba(241,235,223,.09); --line2:rgba(241,235,223,.17);
-  --mat:#1b1714;
+  --mat:var(--bg3);
   --ff:"Space Grotesk",system-ui,sans-serif;
   --ff-d:"Fraunces",Georgia,serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
@@ -278,7 +297,7 @@ em{font-style:italic;color:var(--accent);font-weight:600}
 /* ════════ ⑤ nav ════════ */
 header.nav{position:fixed;top:0;left:0;right:0;z-index:90;transition:background .4s,backdrop-filter .4s,border-color .4s;
   border-bottom:1px solid transparent;padding-top:env(safe-area-inset-top)}
-header.nav.stuck{background:rgba(13,12,11,.82);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+header.nav.stuck{background:color-mix(in srgb,var(--bg) 84%,transparent);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;gap:14px;height:64px}
 .wordmark{font-family:var(--ff-d);font-size:22px;font-weight:600;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
 .wordmark em{font-style:italic}
@@ -357,14 +376,14 @@ h1.hero-h .l2{display:block}
   color-mix(in srgb,var(--c,#c9a25e) 26%,transparent),transparent 70%)}
 .car:hover{border-color:color-mix(in srgb,var(--c) 55%,transparent);box-shadow:var(--sh2)}
 .car-media{position:relative;display:block;width:100%;aspect-ratio:1;overflow:hidden;cursor:pointer;
-  background:radial-gradient(80% 70% at 50% 45%,color-mix(in srgb,var(--c) 32%,#16130f),#0f0d0b 78%)}
+  background:radial-gradient(80% 70% at 50% 45%,color-mix(in srgb,var(--c) 32%,var(--bg)),var(--bg) 78%)}
 .car-media img{width:100%;height:100%;object-fit:contain;transition:transform .8s var(--ease);
   transform:translateY(var(--py,0px))}
 @media(hover:hover){.car-media img{animation:floaty 9s ease-in-out infinite;animation-delay:var(--d,0s)}}
 .badge{position:absolute;left:10px;top:10px;font-size:10.5px;font-weight:600;letter-spacing:.07em;
-  text-transform:uppercase;padding:5px 9px;border-radius:999px;background:rgba(13,12,11,.82);border:1px solid var(--line2)}
+  text-transform:uppercase;padding:5px 9px;border-radius:999px;background:color-mix(in srgb,var(--bg) 84%,transparent);border:1px solid var(--line2)}
 .grade{position:absolute;right:10px;top:10px;display:flex;align-items:center;gap:6px;font-size:11.5px;
-  font-weight:700;padding:4px 9px 4px 4px;border-radius:999px;background:rgba(13,12,11,.82);border:1px solid var(--line2)}
+  font-weight:700;padding:4px 9px 4px 4px;border-radius:999px;background:color-mix(in srgb,var(--bg) 84%,transparent);border:1px solid var(--line2)}
 .grade b{display:grid;place-items:center;min-width:24px;height:24px;border-radius:50%;
   background:var(--gold);color:#17120a;font-size:10.5px}
 .peek{position:absolute;left:50%;bottom:10px;transform:translate(-50%,8px);opacity:0;font-size:12px;
@@ -395,8 +414,8 @@ h1.hero-h .l2{display:block}
   display:flex;flex-direction:column;position:relative;
   translate:var(--tx,0) var(--ty,0);transition:border-color .3s,translate .5s var(--out)}
 .part::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:var(--g,0);
-  transition:opacity .4s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(201,162,94,.2),transparent 70%)}
-.part:hover{border-color:rgba(201,162,94,.4)}
+  transition:opacity .4s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--gold) 20%,transparent),transparent 70%)}
+.part:hover{border-color:color-mix(in srgb,var(--gold) 40%,transparent)}
 .part .pm{aspect-ratio:1;background:var(--mat);display:grid;place-items:center;overflow:hidden}
 .part .pm img{width:100%;height:100%;object-fit:contain;transform:translateY(var(--py,0px))}
 .part .pb{padding:12px;display:flex;flex-direction:column;gap:2px;flex:1}
@@ -412,8 +431,8 @@ h1.hero-h .l2{display:block}
 <style>
 /* ════════ ⑧ CALCULATOR ════════ */
 #calc{background:
-  radial-gradient(90% 60% at 12% 0%,rgba(201,162,94,.1),transparent 60%),
-  radial-gradient(70% 50% at 100% 100%,rgba(196,18,28,.07),transparent 60%),var(--bg)}
+  radial-gradient(90% 60% at 12% 0%,color-mix(in srgb,var(--gold) 10%,transparent),transparent 60%),
+  radial-gradient(70% 50% at 100% 100%,color-mix(in srgb,var(--accent) 8%,transparent),transparent 60%),var(--bg)}
 .ctabs{display:inline-flex;padding:5px;gap:4px;border-radius:999px;background:var(--bg2);
   border:1px solid var(--line);margin-bottom:22px;max-width:100%;overflow-x:auto;scrollbar-width:none}
 .ctabs::-webkit-scrollbar{display:none}
@@ -442,11 +461,11 @@ input[type=range]::-moz-range-track{height:8px;border-radius:8px;background:rgba
 input[type=range]::-moz-range-progress{height:8px;border-radius:8px;background:var(--gold)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-11px;
   border-radius:50%;background:linear-gradient(180deg,#fff,var(--gold2));border:2px solid var(--bg);
-  box-shadow:0 4px 14px -4px rgba(0,0,0,.9),0 0 0 0 rgba(227,192,127,.4);
+  box-shadow:0 4px 14px -4px rgba(0,0,0,.9),0 0 0 0 color-mix(in srgb,var(--gold2) 40%,transparent);
   transition:box-shadow .3s,transform .3s var(--spring)}
 input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;
   background:linear-gradient(180deg,#fff,var(--gold2));border:2px solid var(--bg)}
-input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 4px 14px -4px #000,0 0 0 9px rgba(227,192,127,.14)}
+input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 4px 14px -4px #000,0 0 0 9px color-mix(in srgb,var(--gold2) 14%,transparent)}
 input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;
   letter-spacing:.1em;color:var(--dim);margin-top:-5px}
@@ -470,10 +489,10 @@ select.inp{appearance:none;-webkit-appearance:none;cursor:pointer;
 
 /* result card */
 .cout{position:sticky;top:84px;border-radius:var(--r2);padding:clamp(20px,3vw,30px);
-  background:linear-gradient(170deg,rgba(201,162,94,.14),rgba(21,18,15,.96) 46%),var(--bg2);
-  border:1px solid rgba(201,162,94,.28);box-shadow:var(--sh2);overflow:hidden}
+  background:linear-gradient(170deg,color-mix(in srgb,var(--gold) 14%,transparent),color-mix(in srgb,var(--bg2) 96%,transparent) 46%),var(--bg2);
+  border:1px solid color-mix(in srgb,var(--gold) 28%,transparent);box-shadow:var(--sh2);overflow:hidden}
 .cout::before{content:"";position:absolute;inset:-40% -10% auto -10%;height:70%;pointer-events:none;
-  background:radial-gradient(60% 60% at 50% 50%,rgba(227,192,127,.18),transparent 70%);animation:floaty 7s ease-in-out infinite}
+  background:radial-gradient(60% 60% at 50% 50%,color-mix(in srgb,var(--gold2) 18%,transparent),transparent 70%);animation:floaty 7s ease-in-out infinite}
 .cout .lbl{margin:0;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold2)}
 .cbig{font-family:var(--ff-d);font-size:clamp(46px,9vw,82px);font-weight:600;line-height:.94;
   letter-spacing:-.035em;margin:8px 0 0;font-variant-numeric:tabular-nums lining-nums}
@@ -519,10 +538,10 @@ select.inp{appearance:none;-webkit-appearance:none;cursor:pointer;
   box-shadow:0 44px 84px -44px #000;animation:floaty 7s ease-in-out infinite}
 .honcard img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.78) contrast(1.08) brightness(.82)}
 .honcard .scangrid{position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(rgba(224,180,87,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(224,180,87,.1) 1px,transparent 1px);
+  background-image:linear-gradient(color-mix(in srgb,var(--gold2) 12%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--gold2) 12%,transparent) 1px,transparent 1px);
   background-size:38px 38px}
 .honcard::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(120% 90% at 50% 0%,rgba(224,180,87,.18),transparent 55%)}
+  background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--gold2) 18%,transparent),transparent 55%)}
 .honcard .scanline{position:absolute;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,var(--gold2),transparent);box-shadow:0 0 18px 2px var(--gold);
   top:0;animation:scandown 3.6s ease-in-out infinite}
@@ -557,15 +576,15 @@ select.inp{appearance:none;-webkit-appearance:none;cursor:pointer;
   mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .ring3.drag{cursor:grabbing}
 .ring3 .rot{position:absolute;left:50%;top:48%;width:0;height:0;transform-style:preserve-3d}
-.oc3{position:absolute;width:236px;left:-118px;top:-200px;border-radius:18px;background:#1b1714;
+.oc3{position:absolute;width:236px;left:-118px;top:-200px;border-radius:18px;background:var(--bg3);
   border:1px solid var(--line2);overflow:hidden;backface-visibility:hidden;cursor:pointer;
   transition:border-color .4s,box-shadow .4s;-webkit-tap-highlight-color:transparent}
-.oc3 .of{position:relative;aspect-ratio:4/5;overflow:hidden;background:#16130f}
+.oc3 .of{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--bg)}
 .oc3 .of img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 24%;
   transition:transform .8s var(--out)}
 .oc3:hover .of img{transform:scale(1.04)}
 .oc3 .tagr{position:absolute;left:10px;top:10px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;
-  background:rgba(13,12,11,.82);color:var(--gold2);padding:5px 8px;border-radius:999px}
+  background:color-mix(in srgb,var(--bg) 84%,transparent);color:var(--gold2);padding:5px 8px;border-radius:999px}
 .oc3 .tap{position:absolute;left:50%;bottom:12px;translate:-50% 8px;font-size:12px;font-weight:600;
   color:#17120a;background:linear-gradient(180deg,var(--gold2),var(--gold));padding:7px 12px;border-radius:999px;
   white-space:nowrap;opacity:0;transition:opacity .4s,translate .5s var(--spring)}
@@ -574,7 +593,7 @@ select.inp{appearance:none;-webkit-appearance:none;cursor:pointer;
 .oc3 .ob b{display:block;font-size:15px}
 .oc3 .ob span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--dim);
   margin-top:3px;text-transform:uppercase}
-.oc3.front{border-color:var(--gold2);box-shadow:0 0 60px -12px rgba(227,192,127,.55)}
+.oc3.front{border-color:var(--gold2);box-shadow:0 0 60px -12px color-mix(in srgb,var(--gold2) 55%,transparent)}
 .rst{display:flex;gap:3px;margin-top:8px}
 .rst i{width:12px;height:12px;background:var(--gold2);
   clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
@@ -612,7 +631,7 @@ select.inp{appearance:none;-webkit-appearance:none;cursor:pointer;
 .sh-grid{display:grid;gap:18px}
 @media(min-width:900px){.sh-grid{grid-template-columns:1.02fr 1fr;gap:32px;align-items:start}}
 .sh-media{position:relative;border-radius:var(--r);overflow:hidden;height:min(42svh,480px);
-  background:radial-gradient(80% 70% at 50% 45%,color-mix(in srgb,var(--c,#c9a25e) 36%,#16130f),#0f0d0b 80%)}
+  background:radial-gradient(80% 70% at 50% 45%,color-mix(in srgb,var(--c,#c9a25e) 36%,var(--bg)),var(--bg) 80%)}
 @media(min-width:900px){.sh-media{height:min(64vh,580px)}}
 .sh-media img{width:100%;height:100%;object-fit:contain;animation:floaty 8s ease-in-out infinite}
 .sh-make{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
@@ -659,13 +678,13 @@ footer{padding:26px 0 calc(30px + env(safe-area-inset-bottom));border-top:1px so
 /* ════════ ⑬ chatbot — it never sits still ════════ */
 #bot{position:fixed;right:calc(14px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom));
   z-index:130;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
-  background:radial-gradient(60% 60% at 35% 30%,#fff5df,var(--gold) 52%,#8a6a2c);
-  box-shadow:0 14px 34px -12px rgba(201,162,94,.75),0 0 0 1px rgba(255,255,255,.14) inset;
+  background:radial-gradient(60% 60% at 35% 30%,color-mix(in srgb,var(--gold2) 45%,#fff),var(--gold) 52%,color-mix(in srgb,var(--gold) 58%,#000));
+  box-shadow:0 14px 34px -12px color-mix(in srgb,var(--gold) 75%,transparent),0 0 0 1px rgba(255,255,255,.14) inset;
   translate:var(--bx,0) var(--by,0);animation:idle 6s ease-in-out infinite}
-#bot::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px solid rgba(227,192,127,.35);
+#bot::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px solid color-mix(in srgb,var(--gold2) 35%,transparent);
   animation:pulse 3.4s ease-out infinite}
 @keyframes pulse{0%{transform:scale(.86);opacity:.9}100%{transform:scale(1.25);opacity:0}}
-#bot b{font-family:var(--ff-d);font-size:21px;font-weight:700;color:#2a1d07;font-style:italic}
+#bot b{font-family:var(--ff-d);font-size:21px;font-weight:700;font-style:italic;color:color-mix(in srgb,var(--gold) 22%,#000)}
 #chat{position:fixed;right:calc(14px + env(safe-area-inset-right));
   bottom:calc(82px + env(safe-area-inset-bottom));z-index:131;width:min(360px,calc(100vw - 28px));
   max-height:min(560px,70svh);border-radius:22px;background:var(--bg2);border:1px solid var(--line2);
@@ -731,10 +750,7 @@ footer{padding:26px 0 calc(30px + env(safe-area-inset-bottom));border-top:1px so
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a class="wordmark" href="#top" id="navMark" aria-label="Home"></a>
-    <nav class="nav-links">
-      <a href="#stock">The floor</a><a href="#parts">Parts</a><a href="#calc">Calculator</a>
-      <a href="#honesty">Honesty</a><a href="#reviews">Owners</a><a href="#contact">Visit</a>
-    </nav>
+    <nav class="nav-links" id="navLinks"></nav>
     <div class="nav-cta"><a class="btn btn-gold btn-sm mag" id="navCall" href="#contact">Call the bay</a></div>
   </div>
 </header>
@@ -930,8 +946,8 @@ footer{padding:26px 0 calc(30px + env(safe-area-inset-bottom));border-top:1px so
             <div class="ticks"><span>8 mpg</span><span>60 mpg</span></div>
           </div>
           <div class="fld">
-            <div class="fld-top"><label for="rFuel">Fuel price</label><output id="rFuelO"></output></div>
-            <input type="range" id="rFuel" min="2" max="9" step="0.05" value="4.2">
+            <div class="fld-top"><label for="rFuel" id="rFuelL">Fuel price</label><output id="rFuelO"></output></div>
+            <input type="range" id="rFuel">
           </div>
           <div class="row2">
             <div class="fld"><div class="fld-top"><label for="rIns">Insurance / yr</label></div>
@@ -1071,9 +1087,17 @@ const setv=(id,v)=>{const e=$(id);if(e)e.textContent=v};
 const seth=(id,v)=>{const e=$(id);if(e)e.innerHTML=v};
 
 /* ════════ theme + every string from CFG ════════ */
-(function theme(){const t=C.theme,r=document.documentElement.style;
- r.setProperty('--bg',t.bg);r.setProperty('--bg2',t.panel);r.setProperty('--ink',t.ink);
- r.setProperty('--gold',t.gold);r.setProperty('--gold2',t.gold2);r.setProperty('--accent',t.accent);})();
+(function theme(){const t=C.theme,r=document.documentElement.style,S=(k,v)=>r.setProperty(k,v);
+ const mix=(a,b,p)=>'color-mix(in srgb,'+a+' '+p+'%,'+b+')';
+ S('--bg',t.bg);S('--bg2',t.panel);S('--ink',t.ink);
+ S('--gold',t.gold);S('--gold2',t.gold2);S('--accent',t.accent);
+ // everything else is derived, so six colours really do re-skin the site
+ S('--bg3',mix(t.panel,t.ink,92));
+ S('--mat',mix(t.panel,t.ink,94));
+ S('--ink2',mix(t.ink,t.bg,72));
+ S('--dim', mix(t.ink,t.bg,52));
+ S('--line', mix(t.ink,'transparent',9));
+ S('--line2',mix(t.ink,'transparent',17));})();
 
 const B=C.brand, markHTML=esc(B.name)+'<em>'+esc(B.nameItal)+'</em>';
 document.title=B.name+B.nameItal+' — '+B.tagline;
@@ -1108,7 +1132,9 @@ seth('stFootCta',esc(C.stock.footCta)+' <span class="arr">&rarr;</span>');
 seth('ptMore',esc(C.parts.moreCta)+' <span class="arr">&rarr;</span>');
 setv('oLine',C.reviews.salesLine);
 $('honImg').src=C.honesty.img; setv('honGrade',C.honesty.grade);
-const navC=$('navCall');navC.textContent=innerWidth<600?'Call':'Call the bay';
+const NV=C.nav||{};
+seth('navLinks',(NV.links||[]).map(l=>'<a href="'+esc(l[1])+'">'+esc(l[0])+'</a>').join(''));
+const navC=$('navCall');navC.textContent=innerWidth<600?(NV.callShort||'Call'):(NV.callCta||'Call us');
 navC.href='tel:'+B.phone.replace(/[^+\d]/g,'');
 setv('ctCta',C.contact.cta);
 $('ctCta').href='https://wa.me/'+B.whatsapp;
@@ -1353,14 +1379,17 @@ $('vToPay').addEventListener('click',()=>{
 /* ·· running cost ·· */
 let rUseV=1;
 segPick('rUse',v=>{rUseV=+v;calcRun()});
+const FU=Object.assign({unit:'gal',price:4.2,min:2,max:9,step:.05,perGallon:1},K.fuel||{});
+Object.assign($('rFuel'),{min:FU.min,max:FU.max,step:FU.step,value:FU.price});
+setv('rFuelL','Fuel price per '+(FU.unit==='gal'?'gallon':FU.unit==='L'?'litre':FU.unit));
 function calcRun(){
  const mi=+$('rMi').value,mpg=+$('rMpg').value,fuel=+$('rFuel').value;
  const ins=+$('rIns').value||0,tax=+$('rTax').value||0;
- const fuelYr=mi/mpg*fuel, srv=rUseV*(mi*.085+850);
+ const fuelYr=mi/mpg*FU.perGallon*fuel, srv=rUseV*(mi*.085+850);
  const yr=fuelYr+ins+tax+srv, mo=yr/12, pm=yr/Math.max(1,mi);
  rngFill($('rMi'));rngFill($('rMpg'));rngFill($('rFuel'));
  setv('rMiO',nf.format(mi)+' mi'); setv('rMpgO',mpg+' mpg');
- setv('rFuelO',C.brand.currency+fuel.toFixed(2)+'/gal');
+ setv('rFuelO',C.brand.currency+fuel.toFixed(2)+'/'+FU.unit);
  setv('rUseO',rUseV<1?'Weekend':rUseV>1?'Hard use':'Normal');
  seth('rOut','<sup>'+C.brand.currency+'</sup>'+nf.format(Math.round(mo))+'<span class="per">/mo</span>');
  setv('rNote','That is '+money(yr)+' a year, everything in — before any finance payment.');
