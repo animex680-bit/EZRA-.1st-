@@ -3,6 +3,48 @@
 <head><meta name="build" content="bd89086f2d60">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- BRAND:START ════════════════════════════════════════════════════════════
+     EVERYTHING you change per client lives here. Nothing below needs editing.
+     `node automations/motorsoul/make-site.mjs <slug>` swaps this block for
+     automations/motorsoul/sites/<slug>.json and writes /<slug>/index.html.
+     ══════════════════════════════════════════════════════════════════════ -->
+<script>
+window.BRAND = {
+  name:      "Motordeal Group",
+  markA:     "MOTOR",            /* the wordmark, split so one letter can carry the accent */
+  markB:     "D",
+  markC:     "EAL",
+  tagline:   "Quality pre-owned cars",
+  city:      "Vereeniging, Gauteng",
+  phone:     "+27 11 835 3535",
+  wa:        "442079460011",     /* digits only, with country code */
+  email:     "",
+  hours:     "Mon\u2013Fri 8\u201317:30 \u00b7 Sat 8\u201313:00",
+  currency:  "R",
+  locale:    "en-GB",
+  lang:      "en-ZA",
+  apr:       9.9,
+  endpoint:  "",                 /* optional Formspree / webhook URL */
+  logo:      "",                 /* image URL or data: URI. "" keeps the wordmark */
+
+  meta: {
+    title: "Motordeal Group \u2014 Quality pre-owned car dealer in Vereeniging, Gauteng.",
+    desc:  "Quality pre-owned cars, cash for your car, finance through all major banks and nationwide delivery."
+  },
+
+  /* the 3D hero - the only words on the first screen, so keep them short */
+  hero: {
+    kick:  "Motordeal Group \u00b7 Vereeniging, Gauteng",
+    line1: "Old soul.",
+    line2: "New heart.",          /* shown in the accent colour */
+    copy:  "We strip classics to bare metal and rebuild them with modern power, brakes and manners.",
+    cta1:  "See the floor \u2192",
+    cta2:  "How we work",
+    panelKick: ""            /* label over the 3D car's spec panel. "" = the car's own */
+  }
+};
+</script>
+<!-- BRAND:END -->
 <title>Motordeal Group — Quality pre-owned car dealer in Vereeniging, Gauteng.</title>
 <meta name="description" content="Motordeal Group - quality pre-owned cars in Vereeniging, Gauteng. Cash for your car, flexible finance through all major banks, and nationwide delivery. We deliver with a difference.">
 <meta name="theme-color" content="#0d0c0b">
@@ -1749,7 +1791,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
   <div class="ways-pin" id="waysPin">
     <div class="ways-world" id="waysWorld"></div>
     <div class="ways-hero" id="waysHero">
-      <p class="wh-k">Motordeal Group · Vereeniging, Gauteng</p>
+      <p class="wh-k"><span data-brand></span> · <span data-city></span></p>
       <h1 class="wh-h">Quality pre-owned,<br>delivered with a <em>difference.</em></h1>
       <p class="wh-s">Hand-picked used cars, cash for your current car and flexible finance through all major banks - with nationwide delivery from Vereeniging.</p>
       <span class="wh-cue" aria-hidden="true"><i></i>Scroll to explore</span>
@@ -2338,15 +2380,12 @@ canvas.classList.add("on");requestAnimationFrame(tick);
 
 <script>
 /* ============ CONFIG — swap these for the client's real details ============ */
-const SITE={
-  phone:'+27 11 835 3535',   /* placeholder — replace with the real number */
-  wa:'442079460011',          /* WhatsApp number, digits only with country code */
-  endpoint:'',                /* optional: Formspree / webhook URL for form posts */
-  apr:9.9
-};
+const B=window.BRAND;
+const SITE={phone:B.phone,wa:B.wa,endpoint:B.endpoint,apr:B.apr};
 
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const fmt=n=>'R'+Math.round(n).toLocaleString('en-GB');
+const CUR=B.currency, LOC=B.locale;
+const fmt=n=>CUR+Math.round(n).toLocaleString(LOC);
 const waLink=t=>`https://wa.me/${SITE.wa}?text=${encodeURIComponent(t)}`;
 const isDesk=matchMedia('(min-width:760px)').matches;
 const canHover=matchMedia('(hover:hover) and (pointer:fine)').matches;
@@ -2457,6 +2496,18 @@ function monthly(price,depPct,px,term){
 const fromMo=c=>{const p=priceNum(c);return p?monthly(p,20,0,60).mo:null;};
 
 /* ---------- generic wiring ---------- */
+/* ---- brand binding: every name, number and label on the page ---- */
+document.documentElement.lang=B.lang;
+document.title=B.meta.title;
+{const m=document.querySelector('meta[name=description]'); if(m) m.content=B.meta.desc;}
+{const m=document.querySelector('meta[property="og:title"]'); if(m) m.content=B.name+' \u2014 '+B.tagline;}
+$$('.logo span').forEach(e=>{ if(B.logo){ e.innerHTML='<img src="'+B.logo+'" alt="'+B.name+'" style="height:30px;width:auto;display:block">'; }
+  else e.innerHTML=B.markA+'<b>'+B.markB+'</b>'+B.markC; });
+$$('.logo').forEach(e=>e.setAttribute('aria-label',B.name+' home'));
+$$('[data-wa]').forEach(a=>{ a.dataset.wa=a.dataset.wa.replace(/^Hi [^,]+, /,'Hi '+B.name+', '); });
+$$('[data-brand]').forEach(e=>e.textContent=B.name);
+$$('[data-city]').forEach(e=>e.textContent=B.city);
+$$('[data-hours]').forEach(e=>e.textContent=B.hours);
 $$('[data-phone]').forEach(e=>e.textContent=SITE.phone);
 $$('[data-tel]').forEach(a=>a.href='tel:'+SITE.phone.replace(/\s/g,''));
 $$('[data-wa]').forEach(a=>a.href=waLink(a.dataset.wa));
@@ -2786,7 +2837,7 @@ const isMob=matchMedia('(max-width:820px)').matches;
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const DPR=Math.min(2,Math.max(1,window.devicePixelRatio||1));
 const hex2rgb=h=>{h=h.replace('#','');return [parseInt(h.slice(0,2),16)/255,parseInt(h.slice(2,4),16)/255,parseInt(h.slice(4,6),16)/255];};
-const fmtK=n=>n>=1e6?'R'+(n/1e6).toFixed(1)+'m':'R'+Math.round(n/1000)+'k';
+const fmtK=n=>n>=1e6?CUR+(n/1e6).toFixed(1)+'m':CUR+Math.round(n/1000)+'k';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const HERO=CARS[3];
 const TWN=new WeakMap();
@@ -4116,7 +4167,7 @@ const WHEEL3=[['Original',null,0,0],['Silver','#d4d6d9',1,.22],['Gunmetal','#3b3
 const S3={sel:-1,mode:'show',paint:0,wheel:0,on:{wing:false,split:false,skirt:false,diff:false,low:false,tint:false},ready:false,loaded:0,err:null,az:34,busy:false};
 let api=null;
 const cur=()=>S3.sel>=0?CARS3[S3.sel]:null;
-const money=n=>n>=1e6?'R'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'m':fmt(n);
+const money=n=>n>=1e6?CUR+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'m':fmt(n);
 function total(){ const c=cur(); if(!c) return {p:0,w:0}; let p=c.base,w=c.w; PARTS3.forEach(x=>{ if(S3.on[x.k]){ p+=x.p; w+=x.w; } }); if(S3.paint) p+=7400; if(S3.wheel) p+=1200; return {p,w}; }
 function specLine(){ const c=cur(); if(!c) return 'a build'; return c.n+' '+c.sub+' · '+PAINT3[S3.paint][0]+' paint · '+WHEEL3[S3.wheel][0].toLowerCase()+' wheels'+PARTS3.filter(x=>S3.on[x.k]).map(x=>' · '+x.n.toLowerCase()).join('')+' — est. '+money(total().p)+', ~'+total().w+' weeks'; }
 function paintTotals(){ const c=cur(), t=total(); if(c){ tween(el('b3Total'),t.p,money); el('b3Weeks').textContent='≈ '+t.w+' weeks in the bay'; el('b3Car').textContent=c.n+' · '+c.sub; }
@@ -4870,6 +4921,18 @@ main{padding:0}
   var root=host.attachShadow({mode:"open"});
   root.appendChild(document.getElementById("osTpl").content.cloneNode(true));
   window.__OSROOT=root;
+  /* the hero's words come from BRAND too - it is the first screen, keep it short */
+  (function(){ var B=window.BRAND||{}, h=B.hero||{};
+    var q=function(sel){return root.querySelector(sel)};
+    if(h.kick){ var k=q('.h-top .kick'); if(k) k.textContent=h.kick; }
+    var h1=q('#h1');
+    if(h1&&h.line1){ h1.innerHTML=h.line1.split(/\s+/).map(function(w,i){return '<span class="u" style="--i:'+i+'">'+w+'</span>'}).join(' ')
+      +' <em>'+h.line2.split(/\s+/).map(function(w,i){return '<span class="u" style="--i:'+(i+2)+'">'+w+'</span>'}).join(' ')+'</em>'; }
+    var p=q('.h-bl p'); if(p&&h.copy) p.textContent=h.copy;
+    var c=root.querySelectorAll('.h-bl .cta a');
+    if(c[0]&&h.cta1) c[0].textContent=h.cta1;
+    if(c[1]&&h.cta2) c[1].textContent=h.cta2;
+  })();
   /* the car and the ghost word are fixed to the viewport, so they have to
      leave once the story is behind us or they would sit over the dark page */
   var layers=["gl","bgword","pill"].map(function(id){return root.getElementById(id)}).filter(Boolean);
@@ -5102,7 +5165,7 @@ async function loadCar(c){
  G={car,body,piv,W:WH,wheelsOK,parts,paint,rims,cal,glass,meshes};
  blob.scale.set(halfW*2*1.55,c.len*1.3,1);
  buildBayUI();applyAll();paintFinishDirty();
- $('hName').textContent=nm(c);$('hGrp').textContent=c.grp+' · on the lift now';
+ $('hName').textContent=nm(c);$('hGrp').textContent=((window.BRAND||{}).hero||{}).panelKick||(c.grp+' · on the lift now');
  $('hSpecs').innerHTML=c.spec.map(([k,v])=>`<div><span>${k}</span><span>${v}</span></div>`).join('')+`<div><span>From</span><span>${money(c.base)}</span></div>`;
  $('nParts').textContent=parts.size;
  $('credit').innerHTML=`3D model: “${esc(c.credit[0])}” by ${esc(c.credit[1])} · <a href="${c.credit[2]}" target="_blank" rel="noopener">Sketchfab</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> · modified`;
