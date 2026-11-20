@@ -1789,6 +1789,35 @@ canvas.classList.add("on");requestAnimationFrame(tick);
   <div class="mq mq2"><div class="mqi">sold · built · parted · sold · built · parted · sold · built · parted · sold · built · parted · sold · built · parted · sold · built · parted · </div></div>
 </section>
 
+<!-- ============ 07 · THE SCAN — six checks, swept across the car ============ -->
+<section class="scan" id="scan" aria-label="The six checks">
+  <div class="scan-pin" id="scanPin">
+    <div class="scan-l wrap">
+      <div class="scan-copy">
+        <p class="kick">Every vehicle · inspected & documented</p>
+        <h2 class="h2">No surprises. <em>Only honesty.</em></h2>
+        <p class="lede">Watch us go through it. Every panel, mile and service record lands on the report you get before you buy. Clean history, honest pricing, nothing hidden.</p>
+        <div class="scan-ctas">
+          <a class="btn btn-gold" data-wa="Hi, could you send me a full vehicle report for one of your cars? The car is: " href="#" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg>Request the report</a>
+          <a class="btn btn-line" href="#stock">Browse stock</a>
+        </div>
+      </div>
+      <ol class="scan-list" id="scanList"></ol>
+      <div id="checks" hidden></div>
+    </div>
+    <div class="scan-car" id="scanCar">
+      <div class="scan-scr">
+        <img class="sc-a" src="../360-remix/assets/orbit/rq.webp" alt="Porsche 911 GT3 RS on the scan bay" decoding="async">
+        <img class="sc-b" id="scB" src="../360-remix/assets/orbit/rq.webp" alt="" aria-hidden="true" decoding="async">
+        <i class="sc-line" id="scLine"></i>
+        <div class="sc-pins" id="scPins"></div>
+        <span class="sc-hud">BAY 02 · SCAN <b id="scPct">000</b>%</span>
+        <span class="sc-grade" id="scGrade">GRADE <b>—</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ STOCK ============ -->
 <section class="sec stock" id="stock">
   <div class="sec-ghost" aria-hidden="true">THE FLOOR</div>
@@ -1935,35 +1964,6 @@ canvas.classList.add("on");requestAnimationFrame(tick);
     <p class="hm"><i class="sw0" id="tSw"></i> <span id="tPaint">Shark Blue</span> · <b>R218,000</b> · <span id="tMo"></span></p>
     <button type="button" data-hero-car>Specs, report &amp; monthly <span aria-hidden="true">→</span></button>
   </aside>
-</section>
-
-<!-- ============ 07 · THE SCAN — six checks, swept across the car ============ -->
-<section class="scan" id="scan" aria-label="The six checks">
-  <div class="scan-pin" id="scanPin">
-    <div class="scan-l wrap">
-      <div class="scan-copy">
-        <p class="kick">Every vehicle · inspected & documented</p>
-        <h2 class="h2">No surprises. <em>Only honesty.</em></h2>
-        <p class="lede">Watch us go through it. Every panel, mile and service record lands on the report you get before you buy. Clean history, honest pricing, nothing hidden.</p>
-        <div class="scan-ctas">
-          <a class="btn btn-gold" data-wa="Hi, could you send me a full vehicle report for one of your cars? The car is: " href="#" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24"><use href="#i-wa"/></svg>Request the report</a>
-          <a class="btn btn-line" href="#stock">Browse stock</a>
-        </div>
-      </div>
-      <ol class="scan-list" id="scanList"></ol>
-      <div id="checks" hidden></div>
-    </div>
-    <div class="scan-car" id="scanCar">
-      <div class="scan-scr">
-        <img class="sc-a" src="../360-remix/assets/orbit/rq.webp" alt="Porsche 911 GT3 RS on the scan bay" decoding="async">
-        <img class="sc-b" id="scB" src="../360-remix/assets/orbit/rq.webp" alt="" aria-hidden="true" decoding="async">
-        <i class="sc-line" id="scLine"></i>
-        <div class="sc-pins" id="scPins"></div>
-        <span class="sc-hud">BAY 02 · SCAN <b id="scPct">000</b>%</span>
-        <span class="sc-grade" id="scGrade">GRADE <b>—</b></span>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- ============ TRANSITION · the plate lands ============ -->
@@ -3923,6 +3923,12 @@ function buildPar(){
   add('.stock .toolbar',.04); add('#ptChips',.05); add('.pr-grid .tile:nth-child(odd)',.06); add('.pr-grid .tile:nth-child(even)',-.03);
   add('.faq-grid>*:first-child',.07); add('.faq-grid>*:last-child',-.03); add('.bk-grid>*:first-child',.04); add('.printer',-.08); add('.contact-list',.05); add('.hours',.08);
   add('.ring-ghost',-.28); add('.ring-top',.06); add('.rquote',-.05); add('.b3-side',.04); add('footer .ft',.1);
+  /* every remaining block gets a depth of its own, so no section sits flat */
+  add('.sec-head .btn-row',.06); add('.stock-foot',.05); add('.more',.05); add('.scan-copy',.07);
+  add('.scan-car',-.05); add('.td-form',.05); add('.td-result',-.05); add('.honchecks',.04);
+  add('.pr-grid .tile:nth-child(4n+1)',.05); add('.pr-grid .tile:nth-child(4n+3)',-.04);
+  add('.faq-grid .fq:nth-child(odd)',.04); add('.rbars',.05); add('.rscore',-.06);
+  add('.sec > .wrap > p',.04); add('.sec-ghost',-.22); add('.chips',.04); add('.toolbar .sel',.05);
   const io=new IntersectionObserver(es=>es.forEach(e=>{ const o=PAR.find(o=>o.el===e.target); if(o) o.vis=e.isIntersecting; }),{rootMargin:'120px 0px'});
   PAR.forEach(o=>io.observe(o.el)); measurePar(); setInterval(measurePar,2500); }
 function measurePar(){ const sy=scrollY; PAR.forEach(o=>{ const r=o.el.getBoundingClientRect(); o.y0=r.top+sy-o.ty; o.h=r.height; }); }
@@ -4695,6 +4701,26 @@ form input:focus,form textarea:focus{outline:0;border-color:var(--accent);box-sh
 :host{background-attachment:scroll}
 .nav,#bay,#flow,#burger,#pill{display:none!important}
 main{padding:0}
+/* ---- grafted: the hero has to sit on one phone screen without crowding the car ---- */
+@media(max-width:820px){
+ .h-top{top:74px;padding:0 14px}
+ .h-top .kick{font-size:9.5px;letter-spacing:.15em;line-height:1.3}
+ .h-top h1{font-size:clamp(36px,11vw,56px);margin-top:9px}
+ .h-bl{bottom:104px}
+ .h-bl .cta{gap:8px}
+ .h-bl .btn{padding:11px 15px;font-size:13px}
+ .h-bc{bottom:14px;left:0;right:0;transform:none;width:auto;max-width:none;display:flex;flex-wrap:nowrap;justify-content:flex-start;
+   gap:7px;overflow-x:auto;scrollbar-width:none;padding:0 14px;scroll-snap-type:x proximity}
+ .h-bc::-webkit-scrollbar{display:none}
+ .h-bc .chip{flex:none;padding:6px 10px;font-size:11.5px;scroll-snap-align:start}
+ .cap h2{font-size:26px}
+ .cap p{font-size:13px;line-height:1.42}
+ .cap .n{font-size:11px}
+}
+@media(max-width:420px){
+ .h-top h1{font-size:clamp(32px,10.5vw,46px)}
+ .h-bl{bottom:96px}
+}
 
 </style>
 <div id="bgword" aria-hidden="true"><span id="bgw">Restomod</span></div>
@@ -4848,8 +4874,12 @@ main{padding:0}
      leave once the story is behind us or they would sit over the dark page */
   var layers=["gl","bgword","pill"].map(function(id){return root.getElementById(id)}).filter(Boolean);
   var nav=document.getElementById("nav");
-  function clip(){ var r=host.getBoundingClientRect(), off=r.bottom<40||r.top>innerHeight;
-    layers.forEach(function(el){ el.style.visibility=off?"hidden":""; });
+  function clip(){ var r=host.getBoundingClientRect(), off=r.bottom<=0||r.top>=innerHeight;
+    var top=Math.max(0,r.top), bot=Math.max(0,innerHeight-r.bottom);
+    layers.forEach(function(el){ el.style.visibility=off?"hidden":"";
+      /* fixed to the viewport, so it has to be clipped to the hero band or
+         it keeps drawing over everything underneath */
+      el.style.clipPath=off?"":"inset("+top.toFixed(1)+"px 0 "+bot.toFixed(1)+"px 0)"; });
     var over=r.top<=64 && r.bottom>64;
     if(nav) nav.classList.toggle("onlight", over);
     document.documentElement.classList.toggle("os-top", over); }
