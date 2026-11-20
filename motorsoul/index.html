@@ -1462,7 +1462,7 @@ setTimeout(function(){["pointerdown","wheel","keydown","touchstart"].forEach(fun
   <div class="wrap nav-in">
     <a href="#top" class="logo" aria-label="Motordeal Group home"><span>MOTOR<b>D</b>EAL</span></a>
     <nav class="nav-links" aria-label="Main">
-      <a href="#stock">Stock</a><a href="#value">Value my ride</a><a href="#finance">Finance</a><a href="#build" data-panel="build">Builds</a><a href="#parts">Parts</a><a href="#reviews">Reviews</a>
+      <a href="#stock">Stock</a><a href="#value">Value my ride</a><a href="#build" data-panel="build">Builds</a><a href="#parts">Parts</a><a href="#reviews">Reviews</a>
     </nav>
     <div class="nav-act">
       <a class="nav-tel" data-tel href="#"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg><span data-phone></span></a>
@@ -1515,13 +1515,12 @@ setTimeout(function(){["pointerdown","wheel","keydown","touchstart"].forEach(fun
 .ci-credit{position:absolute;right:12px;bottom:6px;font-size:9.5px;letter-spacing:.04em;color:var(--ink2);opacity:.5;pointer-events:none}
 @media(max-width:820px){.cintro{height:280vh}.ci-cap{bottom:15vh;max-width:62vw}.ci-cap.r{max-width:58vw}.ci-word{font-size:22vw}}
 
-/* ══════════ REWORK ══════════════════════════════════════════════════════
-   readable dropdowns in the light "sell or trade-in" block, the owners
-   deck that replaces the 3D ring, and the promise row's left-to-right flight
-   ═══════════════════════════════════════════════════════════════════════ */
+/* ══════════ REWORK ═════════════════════════════════════════════
+   readable dropdowns in the cream "sell or trade-in" block, the six checks
+   as a card deck, and the promise row as a full screen the cards land on
+   ════════════════════════════════════════════════════════════════════════ */
 
-/* the dropdowns were dark text on a near-black bar — nothing was legible */
-/* every select on the site gets a visible arrow and readable option list */
+/* every select gets a visible arrow and a readable option list */
 select.inp{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:42px;
   background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
   background-position:calc(100% - 21px) calc(50% + 1px),calc(100% - 16px) calc(50% + 1px);
@@ -1582,41 +1581,41 @@ select.inp option,select.inp optgroup{background:#1f1a16;color:#f4efe4}
 #value .td-trust span{display:flex;align-items:center;gap:9px;font-size:12.5px;color:#b9b1a2}
 #value .td-trust svg{width:15px;height:15px;flex:none;fill:none;stroke:#6fbf86;stroke-width:2.4}
 
-/* ── the owners deck ─────────────────────────────────────────────────── */
-/* the reviews section clipped its overflow, which kills position:sticky */
-.sec.ringsec{overflow:visible;overflow-x:clip}
-.ring3{position:relative;height:calc(var(--dn,12) * 48vh + 52vh);margin-top:0;
-  cursor:default;touch-action:auto;perspective:none}
-.ring3.drag{cursor:default}
-.deck-st{position:sticky;top:0;height:100svh;display:grid;grid-template-rows:minmax(0,1fr) auto;
-  align-items:center;overflow:hidden}
-.ring3 .rot{position:relative;left:auto;top:auto;width:100%;height:100%;
-  perspective:1400px;transform-style:flat}
-.oc3{position:absolute;left:50%;top:50%;translate:-50% -50%;width:min(300px,74vw);
-  transform:translate3d(var(--x,0px),var(--y,0px),var(--z,0px)) rotate(var(--r,0deg)) scale(var(--s,1));
-  opacity:var(--o,0);will-change:transform,opacity;backface-visibility:visible;
-  box-shadow:0 40px 70px -30px rgba(0,0,0,.9)}
-.deck-rip{position:absolute;left:50%;top:50%;translate:-50% -50%;border-radius:18px;
-  border:2px solid var(--gold2);opacity:0;pointer-events:none;z-index:995;
-  box-shadow:0 0 34px -6px var(--gold2)}
-.deck-rip.go{animation:deckRip .66s cubic-bezier(.16,1,.3,1)}
-@keyframes deckRip{0%{opacity:.92;transform:scale(.955)}55%{opacity:.45}100%{opacity:0;transform:scale(1.17)}}
-.ring3 .rquote{padding:0 var(--g) clamp(16px,4vh,42px);position:relative;z-index:5;margin:0 auto}
-@media(max-width:700px){.ring3{height:calc(var(--dn,12) * 44vh + 40vh)}.oc3{width:min(258px,72vw)}}
-
-/* ── the promise row: in from the left, filling the line right-to-left ── */
-.pr-grid .tile{transform:translate3d(calc((var(--t,1) - 1) * 58vw),0,0)
-  rotate(calc((1 - var(--t,1)) * -6deg)) scale(calc(.9 + .1 * var(--t,1)));
-  opacity:var(--t,1);will-change:transform,opacity}
-.pr-grid .tile:active{transform:translate3d(calc((var(--t,1) - 1) * 58vw),0,0) scale(.98)}
-.pr-grid .tile::after{content:"";position:absolute;inset:0;border-radius:inherit;
+/* ── the six checks arrive one at a time, like cards onto a pile ────── */
+.scan-list{position:relative;display:block;height:clamp(118px,17vh,164px);padding:0;perspective:900px}
+.scan-list .sl{position:absolute;left:0;right:0;top:50%;border-radius:14px;
+  transform:translate3d(var(--sx,0),calc(-50% + var(--sy,0px)),0) rotate(var(--sr,0deg)) scale(var(--ss,1));
+  opacity:var(--o,0);will-change:transform,opacity;
+  box-shadow:0 26px 44px -26px rgba(0,0,0,.85)}
+.scan-list .sl::after{content:"";position:absolute;inset:0;border-radius:inherit;
   border:2px solid var(--gold2);opacity:0;pointer-events:none}
-.pr-grid .tile.land::after{animation:prRip .62s cubic-bezier(.16,1,.3,1)}
-@keyframes prRip{0%{opacity:.85;transform:scale(.985)}100%{opacity:0;transform:scale(1.06)}}
+.scan-list .sl.land::after{animation:deckRip .62s cubic-bezier(.16,1,.3,1)}
+@keyframes deckRip{0%{opacity:.9;transform:scale(.98)}55%{opacity:.45}100%{opacity:0;transform:scale(1.055)}}
+
+/* ── the promise row owns a screen; cards lose altitude into the deck ── */
+#promise.prsec{padding:0;height:calc(var(--pn,4) * 76vh + 64vh)}
+.pr-pin{position:sticky;top:0;min-height:100svh;display:grid;grid-template-rows:auto minmax(0,1fr);
+  padding:calc(64px + 5vh) 0 6vh;overflow:hidden}
+.prsec .sec-head{position:relative;z-index:3;margin-bottom:0}
+.prsec .sec-head .kick{margin-bottom:12px}
+.prsec .pr-grid{align-self:center}
+.prsec .pr-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:900px){.prsec .pr-grid{grid-template-columns:repeat(4,1fr);gap:16px}}
+.prsec .pr-grid .tile{
+  transform:translate3d(calc((var(--t,1) - 1) * 46vw),calc((1 - var(--t,1)) * -15vh),0)
+            rotate(calc((1 - var(--t,1)) * -7deg)) scale(calc(1.14 - .14 * var(--t,1)));
+  opacity:var(--t,1);will-change:transform,opacity;
+  filter:drop-shadow(0 calc((1 - var(--t,1)) * 30px) calc((1 - var(--t,1)) * 26px) rgba(0,0,0,.55))}
+.prsec .pr-grid .tile:active{transform:translate3d(calc((var(--t,1) - 1) * 46vw),0,0) scale(.98)}
+.prsec .pr-grid .tile::after{content:"";position:absolute;inset:0;border-radius:inherit;
+  border:2px solid var(--gold2);opacity:0;pointer-events:none}
+.prsec .pr-grid .tile.land::after{animation:deckRip .62s cubic-bezier(.16,1,.3,1)}
 
 @media(prefers-reduced-motion:reduce){
-  .pr-grid .tile{transform:none;opacity:1}
-  .deck-rip,.pr-grid .tile.land::after{animation:none}
+  .prsec .pr-grid .tile{transform:none;opacity:1;filter:none}
+  .scan-list{height:auto;display:grid;gap:6px}
+  .scan-list .sl{position:static;transform:none;opacity:1;box-shadow:none}
+  .scan-list .sl.land::after,.prsec .pr-grid .tile.land::after{animation:none}
 }
 </style>
 <section class="cintro" id="cintro" aria-label="The car, taken apart and rebuilt as you scroll">
@@ -1839,7 +1838,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
 </div>
 
 <!-- ============ FINANCE · the dial ============ -->
-<section class="sec" id="finance">
+<section class="sec" id="finance" hidden style="display:none">
   <div class="wrap">
     <div class="sec-head row rv">
       <div>
@@ -2003,7 +2002,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
         <div class="bars" id="tdBars"></div>
         <div class="td-acts">
           <button class="btn btn-gold btn-block" id="tdLock">Lock in this price <span class="arr">→</span></button>
-          <button class="btn btn-line btn-block" id="tdToFin">Use it as a deposit on finance</button>
+          
         </div>
         <div class="td-trust">
           <span><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>Paid same day by bank transfer</span>
@@ -2045,11 +2044,9 @@ canvas.classList.add("on");requestAnimationFrame(tick);
       <div class="rbars" id="rbars"></div>
     </div>
   </div>
-  <div class="ring3" id="ring3"><div class="deck-st">
-      <div class="rot" id="rot"></div>
-      <div class="rquote" id="rquote" aria-live="polite"><q id="rq"></q><p class="who" id="rwho"></p></div>
-    </div></div>
+  <div class="ring3" id="ring3"><div class="rot" id="rot"></div></div>
   <div class="wrap">
+    <div class="rquote" id="rquote" aria-live="polite"><q id="rq"></q><p class="who" id="rwho"></p></div>
     <div class="rnav"><button class="btn btn-line" id="rPrev" type="button">← Prev</button><button class="btn btn-gold" id="rOpen" type="button">Hear the rest</button><button class="btn btn-line" id="rNext" type="button">Next →</button></div>
   </div>
 </section>
@@ -2074,7 +2071,8 @@ canvas.classList.add("on");requestAnimationFrame(tick);
 
 
 <!-- ============ PROMISE ============ -->
-<section class="sec" id="promise" style="padding-top:0">
+<section class="sec prsec" id="promise">
+  <div class="pr-pin">
   <div class="wrap">
     <div class="sec-head rv"><p class="kick">Our promise</p><h2 class="h2">Buy with <em>nothing to lose.</em></h2></div>
     <div class="pr-grid">
@@ -2083,6 +2081,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
       <div class="tile mag" style="--k:2"><span class="ic"><svg viewBox="0 0 24 24"><use href="#i-back"/></svg></span><h3>14-day money back</h3><p>Bought remotely and not happy? Return it within 14 days, no argument.</p></div>
       <div class="tile mag" style="--k:3"><span class="ic"><svg viewBox="0 0 24 24"><use href="#i-truck"/></svg></span><h3>Delivered to your door</h3><p>Enclosed transport anywhere in the UK, or collect from the showroom.</p></div>
     </div>
+  </div>
   </div>
 </section>
 
@@ -2208,7 +2207,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
 <footer>
   <div class="wrap ft">
     <span class="logo"><span>MOTOR<b>D</b>EAL</span></span>
-    <nav aria-label="Footer"><a href="#stock">Stock</a><a href="#value">Value my ride</a><a href="#finance">Finance</a><a href="#build" data-panel="build">Builds</a><a href="#parts">Parts</a><a href="#faq">FAQ</a></nav>
+    <nav aria-label="Footer"><a href="#stock">Stock</a><a href="#value">Value my ride</a><a href="#build" data-panel="build">Builds</a><a href="#parts">Parts</a><a href="#faq">FAQ</a></nav>
     <span>© <span id="yr"></span> Motordeal Group · Cars, done right</span>
   </div>
 </footer>
@@ -3215,15 +3214,14 @@ function calcFin(instant){
   if(typeof renderTicket==='function') renderTicket();
 }
 function drawDial(a){ $id('dva').setAttribute('d',arcPath(A0,Math.max(A0+.5,a),160)); const k=polar(a,160); $id('knob').setAttribute('cx',k[0].toFixed(2)); $id('knob').setAttribute('cy',k[1].toFixed(2)); }
-function updateDial(now){
+function updateDial(now){ if(FIN_OFF) return;
   const r=FR.fdial; if(r.bottom<0||r.top>innerHeight) { if(FN.a!==FN.ta){ FN.a=FN.ta; drawDial(FN.a); } return; }
   if(Math.abs(FN.ta-FN.a)>=.02){ FN.a=RM?FN.ta:lerp(FN.a,FN.ta,.16); drawDial(FN.a); }
   /* the knob breathes and the ring's tick marks shimmer round, so the dial never sits dead */
   if(!RM){ const k=$id('knob'); k.setAttribute('r',(13+Math.sin(now/380)*1.6).toFixed(2));
     const t=(now/2600)%1, tk=FTK||(FTK=$$('#fdialSvg .dtk')); tk.forEach((l,i)=>{ const d=Math.abs(i/tk.length-t); l.style.stroke='rgba(255,255,255,'+(.12+Math.max(0,.4-d*4)).toFixed(3)+')'; }); } }
 let FTK=null;
-/* the valuation drops straight into the trade box */
-$('#tdToFin').onclick=()=>{ FN.px=Math.round(tdMid/50)*50; $id('fPx').value=FN.px; calcFin(); goTo('finance'); };
+/* the "use it as a deposit" hand-off went with the finance dial */
 
 /* ============================================================ REVIEWS · the owners ring */
 /* four more buyers */
@@ -3287,73 +3285,50 @@ function buildRing(){
   addEventListener('pointermove',e=>{ if(!RING.drag) return; const dx=e.clientX-RING.lastX; RING.lastX=e.clientX; RING.moved+=Math.abs(dx); RING.a+=dx*.22; RING.vel=dx*.22; RING.target=null; });
   addEventListener('pointerup',e=>{ if(!RING.drag) return; RING.drag=false; r.classList.remove('drag'); RING.idleT=performance.now();
     if(RING.moved<6){ const c=RING.downT; if(c){ const i=+c.dataset.i; focusOwner(i); openMS(i,c); return; } }
-    });
+    RING.target=Math.round((RING.a+RING.vel*6)/RSTEP)*RSTEP; });
   r.addEventListener('keydown',e=>{ const c=e.target.closest('.oc3'); if(!c) return; if(e.key==='Enter'||e.key===' '){ e.preventDefault(); const i=+c.dataset.i; focusOwner(i); openMS(i,c); } });
-  $id('rPrev').addEventListener('click',()=>deckGoTo(RING.front-1));
-  $id('rNext').addEventListener('click',()=>deckGoTo(RING.front+1));
+  $id('rPrev').addEventListener('click',()=>{ RING.target=Math.round(RING.a/RSTEP)*RSTEP+RSTEP; RING.idleT=performance.now(); });
+  $id('rNext').addEventListener('click',()=>{ RING.target=Math.round(RING.a/RSTEP)*RSTEP-RSTEP; RING.idleT=performance.now(); });
   /* one sideways scroll (trackpad swipe or shift+wheel) = exactly one reviewer. vertical wheel is left alone so the page still scrolls past */
   let rwT=0; addEventListener('wheel',e=>{ const sr=FR.reviews; if(OW.lg>=0||!sr||sr.bottom<140||sr.top>innerHeight-140) return;
     const hx=e.shiftKey?e.deltaY:e.deltaX; if(Math.abs(hx)<4||Math.abs(hx)<=Math.abs(e.deltaY)&&!e.shiftKey) return;
     e.preventDefault(); const now=performance.now(); if(now-rwT<360) return; rwT=now;
-    deckGoTo(RING.front+(Math.sign(hx)>0?1:-1)); RING.idleT=now; },{passive:false});
+    RING.target=Math.round(RING.a/RSTEP)*RSTEP+(Math.sign(hx)>0?-RSTEP:RSTEP); RING.idleT=now; },{passive:false});
   $id('rOpen').addEventListener('click',()=>{ const i=Math.max(0,RING.front); openMS(i,RING.els[i]); });
-  deckInit(); PRM.els=$$('#promise .pr-grid .tile');
+  PRM.els=$$('#promise .pr-grid .tile'); $id('promise').style.setProperty('--pn',PRM.els.length);
 }
-function focusOwner(i){ deckGoTo(i); }
+function focusOwner(i){ const n=REVIEWS.length, cur=Math.round(RING.a/RSTEP); let d=((-i-cur)%n+n)%n; if(d>n/2) d-=n; RING.target=(cur+d)*RSTEP; RING.idleT=performance.now(); }
 function updateRing(dt,now){
-  const r=FR.ring3, H=innerHeight, n=DECK.n; if(!r||!n) return;
-  if(r.bottom<-240||r.top>H+240) return;
-  const p=clamp(-r.top/Math.max(1,r.height-H),0,1), pos=p*n, W=innerWidth;
-  const px=PTR.live?PTR.sx:0, py=PTR.live?PTR.sy:0;
-  let best=0, bestO=-1;
-  RING.els.forEach((el,i)=>{
-    const L=pos-i;
-    if(L<-1.3||L>2.0){ if(el.style.visibility!=='hidden'){ el.style.visibility='hidden'; el.style.setProperty('--o','0'); } return; }
-    if(el.style.visibility) el.style.visibility='';
-    const ein=smooth(clamp(L+1,0,1)), eout=smooth(clamp((L-.62)/.88,0,1));
-    const o=ein*(1-eout), land=o;
-    el.style.setProperty('--x',(((1-ein)*.80-eout*.92)*W+px*9*land).toFixed(1)+'px');
-    el.style.setProperty('--y',((1-ein)*-30+eout*22+py*7*land).toFixed(1)+'px');
-    el.style.setProperty('--z',(-180*(1-ein)-160*eout).toFixed(1)+'px');
-    el.style.setProperty('--r',((1-ein)*9-eout*11).toFixed(2)+'deg');
-    el.style.setProperty('--s',((.84+.16*ein)-eout*.10).toFixed(3));
-    el.style.setProperty('--o',o.toFixed(3));
-    el.style.zIndex=String(900+Math.round(o*90));
-    if(o>bestO){ bestO=o; best=i; }
-  });
-  /* the card on the pile is whichever is most present, not whichever index we passed */
-  const cur=best;
-  if(cur!==DECK.cur){ const first=DECK.cur<0; DECK.cur=cur; setFront(cur); if(!first) deckRipple(cur); }
+  const sr=FR.reviews; if(sr.bottom<-100||sr.top>innerHeight+100) return;
+  const R=isMob?340:540;
+  if(!RING.drag){ if(RING.target!==null){ RING.a+=(RING.target-RING.a)*Math.min(1,dt*5); if(Math.abs(RING.target-RING.a)<.05){ RING.a=RING.target; RING.target=null; } }
+    else if(!RM&&OW.lg<0&&now-RING.idleT>7000){ RING.target=Math.round(RING.a/RSTEP)*RSTEP-RSTEP; RING.idleT=now; }
+    else if(!RM&&RING.target===null) RING.a+=Math.sin(now/2400)*.012; }
+  const px=PTR.live?PTR.sx:0, py=PTR.live?PTR.sy:0; let best=0,bz=-1e9;
+  RING.els.forEach((el,i)=>{ const ang=(i*RSTEP+RING.a)*Math.PI/180, z=Math.cos(ang)*R, x=Math.sin(ang)*R, bob=RM?0:Math.sin(now/1200+i)*6;
+    el.style.transform='translate3d('+(x+px*z*.02).toFixed(1)+'px,'+(bob+py*z*.012).toFixed(1)+'px,'+(z-R).toFixed(1)+'px) rotateY('+(i*RSTEP+RING.a+px*4).toFixed(2)+'deg)';
+    el.style.opacity=(.22+.78*smooth((Math.cos(ang)+.35)/1.35)).toFixed(3); el.style.zIndex=String(Math.round(z+1000));
+    if(z>bz){ bz=z; best=i; } });
+  if(best!==RING.front){ RING.front=best; RING.els.forEach((el,i)=>el.classList.toggle('front',i===best)); const o=REVIEWS[best], q=$id('rquote');
+    q.style.opacity='0'; q.style.transform='translateY(8px)';
+    setTimeout(()=>{ if(RING.front!==best) return; $id('rq').textContent=o.text; $id('rwho').innerHTML='<b>'+esc(o.name)+'</b> · '+esc(o.car)+' · '+'★'.repeat(o.stars); q.style.opacity='1'; q.style.transform='none'; },170); }
 }
-/* the deck: one card on the pile at a time - the next one in pushes the last one out */
-const DECK={cur:-1,n:0,rip:null};
-function deckInit(){ DECK.n=RING.els.length; $id('ring3').style.setProperty('--dn',DECK.n);
-  $id('rot').insertAdjacentHTML('beforeend','<i class="deck-rip" id="deckRip" aria-hidden="true"></i>');
-  DECK.rip=$id('deckRip'); }
-function deckRipple(i){ const e=DECK.rip, c=RING.els[i]; if(!e||RM||!c) return;
-  e.style.width=c.offsetWidth+'px'; e.style.height=c.offsetHeight+'px';
-  e.classList.remove('go'); void e.offsetWidth; e.classList.add('go'); }
-function deckGoTo(k){ const r=FR.ring3, n=DECK.n; if(!r||!n) return; k=clamp(Math.round(k),0,n-1);
-  const top=r.top+scrollY, range=Math.max(1,r.height-innerHeight);
-  scrollTo({top:Math.round(top+range*((k+.5)/n)),behavior:RM?'auto':'smooth'}); }
-function setFront(best){ RING.front=best; RING.els.forEach((el,i)=>el.classList.toggle('front',i===best));
-  const o=REVIEWS[best], q=$id('rquote'); q.style.opacity='0'; q.style.transform='translateY(8px)';
-  setTimeout(()=>{ if(RING.front!==best) return; $id('rq').textContent=o.text;
-    $id('rwho').innerHTML='<b>'+esc(o.name)+'</b> \u00b7 '+esc(o.car)+' \u00b7 '+'\u2605'.repeat(o.stars);
-    q.style.opacity='1'; q.style.transform='none'; },170); }
 
-/* the promise row: tiles fly in from the left and fill the line right-to-left, and all four stay */
+/* the promise row owns the whole screen: one scroll brings one card down out
+   of the air and into the deck, and every card stays once it lands */
 const PRM={els:[],done:new Set()};
 function updatePromise(){
-  if(!PRM.els.length) return;
-  const g=$id('promise'), H=innerHeight, r=g.getBoundingClientRect();
+  const el=$id('promise'); if(!el||!PRM.els.length) return;
+  const r=el.getBoundingClientRect(), H=innerHeight;
   if(r.bottom<0||r.top>H) return;
-  const p=clamp((H*.84-r.top)/(H*.60),0,1), n=PRM.els.length;
-  PRM.els.forEach((el,i)=>{ const ord=n-1-i;                    /* rightmost settles first */
-    const t=smooth(clamp((p-ord*.12)/.48,0,1));
-    el.style.setProperty('--t',t.toFixed(3));
-    if(t>.99&&!PRM.done.has(i)){ PRM.done.add(i); if(!RM){ el.classList.remove('land'); void el.offsetWidth; el.classList.add('land'); } }
-    else if(t<.88&&PRM.done.has(i)) PRM.done.delete(i); });
+  const n=PRM.els.length, p=clamp(-r.top/Math.max(1,r.height-H),0,1), pos=p*(n+.45);
+  PRM.els.forEach((tile,i)=>{
+    const ord=n-1-i;                            /* the rightmost card settles first */
+    const t=smooth(clamp(pos-ord,0,1));
+    tile.style.setProperty('--t',t.toFixed(3));
+    if(t>.99&&!PRM.done.has(i)){ PRM.done.add(i); land(tile); }
+    else if(t<.9&&PRM.done.has(i)) PRM.done.delete(i);
+  });
 }
 /* the mini screen grows out of the face you tapped */
 const MS={el:$id('ms'),win:$id('msWin'),from:null};
@@ -3774,6 +3749,7 @@ function updateWays(now,dt){ if(WAYS_OFF) return;
 /* the snap: inside the pinned collage one wheel flick, swipe or key press moves exactly one stop.
    At either end the page is let go, so you can always scroll on past it. */
 const WAYS_OFF=!$id('ways')||$id('ways').hidden;   /* section retired — never hijack the wheel */
+const FIN_OFF=!$id('finance')||$id('finance').hidden;
 const SN={anim:null,quietUntil:0,lastWheel:0,lock:false};
 function wayStopY(k){ const n=WS.stops.length-1; return WS.secTop+WS.range*clamp(k,0,n)/n; }
 function wayK(){ return clamp((scrollY-WS.secTop)/WS.range*(WS.stops.length-1),-1,WS.stops.length); }
@@ -3839,6 +3815,30 @@ function updateHole(now){
   HO.bars.forEach((b,i)=>{ const k=+smooth(clamp((p-.8-i*.011)/.11,0,1)).toFixed(3); if(k!==b.k){ b.k=k; b.el.style.setProperty('--k',k); } });
 }
 
+/* the six checks fly in as cards: one lands on the pile, the one before it
+   leaves, and each landing sends a small ripple through the card */
+const SDK={cur:-1};
+function land(el){ if(RM) return; el.classList.remove('land'); void el.offsetWidth; el.classList.add('land'); }
+function scanDeck(sx){
+  const rows=SC.rows, n=rows.length; if(!n) return;
+  const pos=clamp(sx/100,0,1)*n;
+  let best=0,bestO=-1;
+  rows.forEach((el,i)=>{
+    const L=pos-i;
+    if(L<-1.25||L>2){ if(el.style.visibility!=='hidden'){ el.style.visibility='hidden'; el.style.setProperty('--o','0'); } return; }
+    if(el.style.visibility) el.style.visibility='';
+    const ein=smooth(clamp(L+1,0,1)), eout=smooth(clamp((L-.66)/.9,0,1)), o=ein*(1-eout);
+    el.style.setProperty('--sx',(((1-ein)*.72-eout*.86)*100).toFixed(1)+'%');
+    el.style.setProperty('--sy',((1-ein)*-20+eout*14).toFixed(1)+'px');
+    el.style.setProperty('--sr',((1-ein)*8-eout*9).toFixed(2)+'deg');
+    el.style.setProperty('--ss',((.88+.12*ein)-eout*.08).toFixed(3));
+    el.style.setProperty('--o',o.toFixed(3));
+    el.style.zIndex=String(10+Math.round(o*20));
+    if(o>bestO){ bestO=o; best=i; }
+  });
+  if(best!==SDK.cur){ const first=SDK.cur<0; SDK.cur=best; if(!first) land(rows[best]); }
+}
+
 /* ============================================================ 07 · THE SCAN — six checks swept across the car */
 const SCANPTS=[[5,26,66],[2,38,45],[1,47,82],[0,56,53],[4,64,40],[3,79,72]];   /* [report index, x%, y%] in sweep order */
 const SC={rows:[],pins:[],on:[],sx:-1,done:false};
@@ -3854,6 +3854,7 @@ function updateScan(){
   if(Math.abs(sx-SC.sx)>.05){ SC.sx=sx; const s=scr.querySelector('.scan-scr'); s.style.setProperty('--sx',sx.toFixed(2)+'%'); s.style.setProperty('--la',sx>=100?0:1); $id('scPct').textContent=String(Math.round(sx)).padStart(3,'0'); }
   SCANPTS.forEach(([ri,x],k)=>{ const on=sx>=x; if(on!==SC.on[k]){ SC.on[k]=on; SC.rows[k].classList.toggle('on',on); SC.pins[k].classList.toggle('on',on);
       const rd=SC.rows[k].querySelector('.r'); if(on){ const txt=REPORT[ri].m.join(' · '), t0=performance.now(); const tick=now=>{ if(!SC.on[k]) { rd.textContent=''; return; } const n=Math.round(clamp((now-t0)/(txt.length*18),0,1)*txt.length); rd.textContent=txt.slice(0,n); if(n<txt.length) requestAnimationFrame(tick); }; requestAnimationFrame(tick); } else rd.textContent=''; } });
+  scanDeck(sx);
   const done=sx>=100; if(done!==SC.done){ SC.done=done; $id('scGrade').innerHTML='GRADE <b>'+(done?'A · 93':'—')+'</b>'; }
 }
 
@@ -4038,7 +4039,7 @@ function splitH1(){ if(document.visibilityState!=='visible'||RM) return; let i=0
   walk($id('hh1')); }
 /* every layout read the loop needs happens here, in one batch, before any style is written —
    reads after writes force the browser to lay the page out again mid-frame */
-const FR={}; const FRIDS=['orbit','fdial','ways','hole','build','report','scan','reviews','ring3','iris','txPlate','txDoors','txShutter','txStamp','txTear','txOdo'];
+const FR={}; const FRIDS=['orbit','fdial','ways','hole','build','report','scan','reviews','iris','txPlate','txDoors','txShutter','txStamp','txTear','txOdo'];
 function measureAll(now){ FRIDS.forEach(id=>{ FR[id]=$id(id).getBoundingClientRect(); }); FR.pkAfter=PK.after.getBoundingClientRect();
   FR.mg=mgCur?mgCur.getBoundingClientRect():null; FR.term=BOT.docked?$id('term').getBoundingClientRect():null; measureWords(now); botAvoid(); }
 let lastT=performance.now();
@@ -4137,7 +4138,7 @@ buildUI();
 window.__b3={state:()=>({lost:S3.lost||0,ready:S3.ready,loaded:S3.loaded,err:S3.err,sel:S3.sel,mode:S3.mode,busy:S3.busy,paint:S3.paint,wheel:S3.wheel,on:{...S3.on},total:total().p,az:Math.round(S3.az),cars:api?api.debug():null}),toggle,pick:i=>api&&api.pick(i),back:()=>api&&api.back(),look:(a,e)=>api&&api.look(a,e),meshes:i=>api&&api.meshes(i)};
 
 let started=false;
-const WARM={done:false}; window.__warm=WARM;
+const WARM={done:false};
 new IntersectionObserver(([e],o)=>{ if(e.isIntersecting&&!started){ started=true; o.disconnect(); boot().catch(fail); } },{rootMargin:'300% 0px'}).observe(stage);
 
 /* ---------- warm start ----------------------------------------------------
