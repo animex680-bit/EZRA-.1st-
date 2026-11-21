@@ -1477,6 +1477,10 @@ html[data-zone="velvet"]{--bg:#100b15;--bg2:#171022;--bg3:#1f1630;--gold:#d9a27a
 #nav.onlight .btn-gold{background:#191613;color:#ece7dc;box-shadow:0 10px 24px -12px rgba(25,22,19,.6)}
 /* the assistant orb would sit on the hero's spec panel */
 html.os-top #bot{opacity:0;pointer-events:none;transition:opacity .4s}
+
+/* the kicker and its heading move at different depths - keep them clear of each other */
+.sec-head .kick{margin-bottom:12px}
+.scan-copy .kick{margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -1901,6 +1905,45 @@ canvas.classList.add("on");requestAnimationFrame(tick);
   </div>
 </section>
 
+<!-- ============ SHOWROOM - in the page now, below the parts counter ============ -->
+<section class="sec showroom" id="build" aria-label="3D showroom">
+  <div class="sec-ghost" aria-hidden="true">THE BAY</div>
+  <div class="wrap">
+    <div class="sec-head row rv">
+      <div>
+        <p class="kick">Builds, done in our shop</p>
+        <h2 class="h2">Pick a ride. <em>The rest clear the lot.</em></h2>
+      </div>
+      <p class="lede" style="max-width:42ch">Three machines on the showroom floor. Tap one — the others roll out — then bolt parts on, choose the finish and watch the price move. Rather we source it? One call.</p>
+    </div>
+    <div class="b3" id="b3">
+      <div class="b3-stage" id="b3Stage" aria-label="3D showroom — tap a car to build it">
+        <canvas id="b3Cv"></canvas>
+        <div class="b3-tags" id="b3Tags"></div>
+        <div class="b3-load" id="b3Load"><div><b id="b3Pct">0%</b>Opening the showroom</div></div>
+        <div class="b3-pick" id="b3Pick"><small>Showroom · 3 cars</small><b>Tap a car to build it</b></div>
+        <div class="b3-price" aria-live="polite"><small id="b3Car">Your build</small><b id="b3Total">R0</b><span id="b3Weeks">≈ 0 weeks</span></div>
+        <div class="b3-pop" id="b3Pop"></div>
+        <div class="b3-views" role="group" aria-label="Camera"><button type="button" data-v="34" class="on">¾</button><button type="button" data-v="90">Side</button><button type="button" data-v="180">Rear</button><button type="button" data-v="0">Front</button></div>
+        <button class="b3-back" id="b3Back" type="button"><span aria-hidden="true">←</span> Back to the showroom</button>
+        <p class="b3-hint" id="b3Hint">Drag to look round · tap a car</p>
+        <p class="b3-cred" id="b3Cred"></p>
+      </div>
+      <div class="b3-side">
+        <div class="b3-g"><h4>The floor <b id="b3Sel">none picked</b></h4><div class="b3-cars" id="b3Cars" role="group" aria-label="Cars on the lot"></div></div>
+        <div class="b3-g b3-ed"><h4>Paint <b id="b3PaintN">Factory</b></h4><div class="b3-sw" id="b3Paint" role="group" aria-label="Paint"></div></div>
+        <div class="b3-g b3-ed"><h4>Parts <b id="b3Cnt">0 fitted</b></h4><div class="b3-parts" id="b3Parts" role="group" aria-label="Parts"></div></div>
+        <div class="b3-g b3-ed"><h4>Wheels</h4><div class="seg" id="b3Wheel" role="group" aria-label="Wheel finish"></div></div>
+        <div class="b3-call">
+          <p><b>Not sure what to fit?</b> Call the bay — we’ll design the car with you and send renders before a spanner turns.</p>
+          <a class="btn btn-gold btn-block" data-tel href="#" id="b3Call"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call — design it for me</a>
+          <button class="lnk" type="button" id="b3Send">or send this build on WhatsApp →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ TRANSITION · the odometer finds its level ============ -->
 <div class="tx tx-odo" id="txOdo" aria-hidden="true" hidden style="display:none">
   <div class="tx-st">
@@ -2165,44 +2208,7 @@ canvas.classList.add("on");requestAnimationFrame(tick);
 </main>
 
 <!-- ============ PANELS · showroom + booking (opened from the nav) ============ -->
-<section class="sec panel" id="build" role="dialog" aria-modal="true" aria-label="Build a custom build" aria-hidden="true">
-  <div class="panel-bar"><span class="pb-t"><i>Showroom</i>Build a custom build</span><button class="panel-x" data-close-panel type="button">Close <svg viewBox="0 0 24 24"><use href="#i-x"/></svg></button></div>
-  <div class="sec-ghost" aria-hidden="true">THE BAY</div>
-  <div class="wrap">
-    <div class="sec-head row rv">
-      <div>
-        <p class="kick">Builds, done in our shop</p>
-        <h2 class="h2">Pick a ride. <em>The rest clear the lot.</em></h2>
-      </div>
-      <p class="lede" style="max-width:42ch">Three machines on the showroom floor. Tap one — the others roll out — then bolt parts on, choose the finish and watch the price move. Rather we source it? One call.</p>
-    </div>
-    <div class="b3" id="b3">
-      <div class="b3-stage" id="b3Stage" aria-label="3D showroom — tap a car to build it">
-        <canvas id="b3Cv"></canvas>
-        <div class="b3-tags" id="b3Tags"></div>
-        <div class="b3-load" id="b3Load"><div><b id="b3Pct">0%</b>Opening the showroom</div></div>
-        <div class="b3-pick" id="b3Pick"><small>Showroom · 3 cars</small><b>Tap a car to build it</b></div>
-        <div class="b3-price" aria-live="polite"><small id="b3Car">Your build</small><b id="b3Total">R0</b><span id="b3Weeks">≈ 0 weeks</span></div>
-        <div class="b3-pop" id="b3Pop"></div>
-        <div class="b3-views" role="group" aria-label="Camera"><button type="button" data-v="34" class="on">¾</button><button type="button" data-v="90">Side</button><button type="button" data-v="180">Rear</button><button type="button" data-v="0">Front</button></div>
-        <button class="b3-back" id="b3Back" type="button"><span aria-hidden="true">←</span> Back to the showroom</button>
-        <p class="b3-hint" id="b3Hint">Drag to look round · tap a car</p>
-        <p class="b3-cred" id="b3Cred"></p>
-      </div>
-      <div class="b3-side">
-        <div class="b3-g"><h4>The floor <b id="b3Sel">none picked</b></h4><div class="b3-cars" id="b3Cars" role="group" aria-label="Cars on the lot"></div></div>
-        <div class="b3-g b3-ed"><h4>Paint <b id="b3PaintN">Factory</b></h4><div class="b3-sw" id="b3Paint" role="group" aria-label="Paint"></div></div>
-        <div class="b3-g b3-ed"><h4>Parts <b id="b3Cnt">0 fitted</b></h4><div class="b3-parts" id="b3Parts" role="group" aria-label="Parts"></div></div>
-        <div class="b3-g b3-ed"><h4>Wheels</h4><div class="seg" id="b3Wheel" role="group" aria-label="Wheel finish"></div></div>
-        <div class="b3-call">
-          <p><b>Not sure what to fit?</b> Call the bay — we’ll design the car with you and send renders before a spanner turns.</p>
-          <a class="btn btn-gold btn-block" data-tel href="#" id="b3Call"><svg class="i" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call — design it for me</a>
-          <button class="lnk" type="button" id="b3Send">or send this build on WhatsApp →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+
 <section class="sec visit panel" id="visit" role="dialog" aria-modal="true" aria-label="Book a test drive" aria-hidden="true">
   <div class="panel-bar"><span class="pb-t"><i>Visit</i>Book a test drive</span><button class="panel-x" data-close-panel type="button">Close <svg viewBox="0 0 24 24"><use href="#i-x"/></svg></button></div>
   <div class="wrap">
@@ -2714,10 +2720,11 @@ function closePanel(){
 }
 $$('[data-panel]').forEach(b=>b.addEventListener('click',e=>{ e.preventDefault();
   if(b.hasAttribute('data-close-menu')){ menu.classList.remove('open'); $('#menuBtn').setAttribute('aria-expanded','false'); }
-  openPanel(b.dataset.panel==='build'?'build':'visit'); }));
+  if(b.dataset.panel==='build'){ const t=$id('build'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+  openPanel('visit'); }));
 $$('[data-close-panel]').forEach(b=>b.addEventListener('click',closePanel));
 /* any remaining anchor to a panelled section (e.g. the ways card) opens the panel instead of jumping to a hidden node */
-document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a[href="#build"],a[href="#visit"]'); if(!a) return; e.preventDefault(); openPanel(a.getAttribute('href')==='#build'?'build':'visit'); },true);
+document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('a[href="#visit"]'); if(!a) return; e.preventDefault(); openPanel('visit'); });
 $$('[data-pref] button').forEach(b=>b.onclick=()=>$$('button',b.parentNode).forEach(x=>x.setAttribute('aria-pressed',x===b)));
 addEventListener('keydown',e=>{
   if(e.key==='Escape'){if(enq.classList.contains('open'))closeEnq();else if(sheet.classList.contains('open'))closeSheet();else if(menu.classList.contains('open'))$('[data-close-menu]').click();else if(PANEL.open)closePanel();}
@@ -3969,7 +3976,7 @@ function botAvoid(){ BAV.length=0; if(isMob) return; const H=innerHeight, vis=r=
 const PAR=[];
 function buildPar(){
   const add=(sel,k)=>$$(sel).forEach(el=>{ if(el.closest('#orbit,.ways,.hole,.nums,.omega,.scan,.tx,.park,.iris,#ms,#term,#pd,.sheet,.modal,.menu,.nav,.dock,.panel')) return; if(PAR.some(o=>o.el===el)) return; PAR.push({el,k,y0:0,h:0,vis:false,ty:0}); });
-  add('.sec-head .kick',.16); add('.sec-head .h2',.09); add('.sec-head .lede',.05); add('.sec-head>p',.05);
+  add('.sec-head .kick',.11); add('.sec-head .h2',.09); add('.sec-head .lede',.05); add('.sec-head>p',.05);
   add('.band .mq1',.12); add('.band .mq2',-.1); add('.tape',.06); add('.dialwrap',.07); add('.fout',-.04); add('.td-grid>*:first-child',.05); add('.td-grid>*:last-child',-.05);
   add('.stock .toolbar',.04); add('#ptChips',.05); add('.pr-grid .tile:nth-child(odd)',.06); add('.pr-grid .tile:nth-child(even)',-.03);
   add('.faq-grid>*:first-child',.07); add('.faq-grid>*:last-child',-.03); add('.bk-grid>*:first-child',.04); add('.printer',-.08); add('.contact-list',.05); add('.hours',.08);
@@ -4179,7 +4186,9 @@ function buildUI(){
   el('b3Paint').innerHTML=PAINT3.map((c,i)=>'<button class="swb'+(i===0?' on':'')+'" type="button" data-i="'+i+'" style="--c:'+(c[1]||'conic-gradient(#888,#ddd,#888)')+(c[1]?'':';background:conic-gradient(from 40deg,#bbb,#555,#eee,#777,#bbb)')+'" aria-label="'+c[0]+(i?' · +R7,400':' · as built')+'" title="'+c[0]+'"></button>').join('');
   el('b3Parts').innerHTML=PARTS3.map(x=>'<button class="b3-part" type="button" data-k="'+x.k+'" aria-pressed="false"><i>✓</i>'+x.n+'<span>+'+fmt(x.p)+'</span></button>').join('');
   el('b3Wheel').innerHTML=WHEEL3.map((w,i)=>'<button type="button" data-i="'+i+'" aria-pressed="'+(i===0)+'">'+w[0]+'</button>').join('');
-  el('b3Cars').addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(!b||b.disabled) return; const i=+b.dataset.i; if(i===S3.sel) return; if(api) api.pick(i); });
+  el('b3Cars').addEventListener('click',async e=>{ const b=e.target.closest('[data-i]'); if(!b||b.disabled) return; const i=+b.dataset.i;
+    if(b.dataset.lazy&&S3.fetchCar){ await S3.fetchCar(i); }
+    if(i===S3.sel) return; if(api) api.pick(i); });
   el('b3Paint').addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(!b) return; S3.paint=+b.dataset.i; [...el('b3Paint').children].forEach(x=>x.classList.toggle('on',x===b)); if(api) api.paint(); paintTotals(); pop(PAINT3[S3.paint][0]+(S3.paint?' · +R7,400':' · as built')); });
   el('b3Parts').addEventListener('click',e=>{ const b=e.target.closest('[data-k]'); if(b) toggle(b.dataset.k); });
   el('b3Wheel').addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(!b) return; S3.wheel=+b.dataset.i; [...el('b3Wheel').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); if(api){ api.wheels(); api.look(62,5); } paintTotals(); });
@@ -4198,7 +4207,7 @@ buildUI();
 window.__b3={state:()=>({lost:S3.lost||0,ready:S3.ready,loaded:S3.loaded,err:S3.err,sel:S3.sel,mode:S3.mode,busy:S3.busy,paint:S3.paint,wheel:S3.wheel,on:{...S3.on},total:total().p,az:Math.round(S3.az),cars:api?api.debug():null}),toggle,pick:i=>api&&api.pick(i),back:()=>api&&api.back(),look:(a,e)=>api&&api.look(a,e),meshes:i=>api&&api.meshes(i)};
 
 let started=false;
-const WARM={done:false};
+const WARM={done:false,buf:new Map()};
 new IntersectionObserver(([e],o)=>{ if(e.isIntersecting&&!started){ started=true; o.disconnect(); boot().catch(fail); } },{rootMargin:'300% 0px'}).observe(stage);
 
 /* ---------- warm start ----------------------------------------------------
@@ -4219,6 +4228,8 @@ new IntersectionObserver(([e],o)=>{ if(e.isIntersecting&&!started){ started=true
     /* bound, not bare: a detached requestIdleCallback throws in a module */
     const idle=f=>window.requestIdleCallback?window.requestIdleCallback(f,{timeout:4000}):setTimeout(f,1800);
     const order=CARS3.map((_,i)=>i).sort((a,b)=>(CARS3[a].kb||9999)-(CARS3[b].kb||9999));
+    /* a phone warms only the car it will actually open with */
+    const want=isMob?order.slice(0,1):order;
     /* one car at a time, smallest first, at low priority - a slow line still
        gets the first car quickly and nothing competes with the page itself.
        The renderer is deliberately NOT started here: the hero already holds a
@@ -4226,9 +4237,11 @@ new IntersectionObserver(([e],o)=>{ if(e.isIntersecting&&!started){ started=true
     let fired=false;
     const pull=async()=>{
       if(fired) return; fired=true; WARM.state='pulling';
-      for(const i of order){
-        if(S3.ready) return;                                   /* the panel beat us to it */
-        try{ await fetch(CARS3[i].file,{cache:'force-cache',priority:'low'}); }catch(e){ return; }
+      for(const i of want){
+        if(S3.ready) return;                                   /* the showroom beat us to it */
+        try{ const r=await fetch(CARS3[i].file,{cache:'force-cache',priority:'low'});
+          if(r.ok) WARM.buf.set(CARS3[i].file, await r.arrayBuffer());
+        }catch(e){ return; }
       }
       WARM.done=true; WARM.state='done';
     };
@@ -4464,9 +4477,11 @@ async function boot(){
 
   new ResizeObserver(resize).observe(stage); resize();
   let vis=true, running=false, last=performance.now();
-  const kick=()=>{ if(running||!vis) return; running=true; last=performance.now(); requestAnimationFrame(loop); };
+  const kick=()=>{ if(running||!vis||document.hidden) return; running=true; last=performance.now(); requestAnimationFrame(loop); };
+  /* a backgrounded tab should not be rendering a showroom nobody is looking at */
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) kick(); });
   new IntersectionObserver(([e])=>{ vis=e.isIntersecting; kick(); }).observe(stage);
-  function loop(now){ if(!vis){ running=false; return; }
+  function loop(now){ if(!vis||document.hidden){ running=false; return; }
     const dt=Math.min(.05,(now-last)/1000); last=now; const t=now/1000;
     C.forEach(o=>{ if(o) stepCar(o,now,dt); });
     if(camT){ const k=Math.min(1,(now-camT.t0)/camT.dur), e=EASE.io(k); cam.position.lerpVectors(camT.p0,camT.p1,e); ctl.target.lerpVectors(camT.t0g,camT.t1,e); cam.lookAt(ctl.target); if(k>=1){ const d=camT.done; camT=null; if(d) d(); } }
@@ -4496,7 +4511,16 @@ async function boot(){
 
   /* ---------- load the cars: smallest file first so one appears fast, then the rest in parallel ---------- */
   const order=CARS3.map((_,i)=>i).sort((a,b)=>(CARS3[a].kb||9999)-(CARS3[b].kb||9999));
-  const loadOne=i=>new Promise(res=>loader.load(CARS3[i].file,g=>res(g),x=>{ if(x.total){ prog[i]=x.loaded/x.total; pct(); } },e=>res(e instanceof Error?e:new Error(String(e)))));
+  /* if the warm start already pulled this car, parse those bytes instead of
+     asking the network again - a host without cache headers would otherwise
+     download all of it twice. */
+  const loadOne=i=>new Promise(res=>{
+    const f=CARS3[i].file, buf=WARM.buf.get(f);
+    if(buf){ WARM.buf.delete(f); prog[i]=1; pct();
+      try{ loader.parse(buf, f.replace(/[^/]*$/,''), g=>res(g), e=>res(e instanceof Error?e:new Error(String(e)))); return; }
+      catch(e){ /* fall through to a normal fetch */ } }
+    loader.load(f,g=>res(g),x=>{ if(x.total){ prog[i]=x.loaded/x.total; pct(); } },e=>res(e instanceof Error?e:new Error(String(e))));
+  });
   const show=(i,gltf,delay)=>{ if(gltf instanceof Error){ console.warn('showroom: '+CARS3[i].k+' failed',gltf.message); prog[i]=1; pct(); const b=el('b3Cars').children[i]; if(b){ const s=b.querySelector('small'); if(s) s.textContent='unavailable'; } return; }
     prog[i]=1; pct(); const o=prep(CARS3[i],gltf,i); S3.loaded++; const b=el('b3Cars').children[i]; if(b) b.disabled=false; enter(o,delay); };
   const reveal=()=>{ if(!S3.ready&&S3.loaded){ S3.ready=true; el('b3Load').classList.add('gone'); } };
@@ -4506,8 +4530,31 @@ async function boot(){
      machine they come one at a time instead: three parallel decodes there just
      stall the first frame everyone is actually waiting for. */
   const rest=order.slice(1);
+  const cn=navigator.connection||{}, et=cn.effectiveType||'4g';
+  /* downlink starts as a low guess and settles, so it misfires at boot -
+     saveData and effectiveType are the stable signals */
+  const slow=cn.saveData||et==='slow-2g'||et==='2g'||et==='3g';
   const lean=mob||(navigator.deviceMemory||4)<6||(navigator.hardwareConcurrency||4)<6;
-  if(lean){ for(const i of rest){ show(i, await loadOne(i), 0); reveal(); } }
+
+  /* one car is enough to use the showroom. Fetch the others only when the
+     pipe can afford them - on a thin line they arrive when actually asked for. */
+  S3.fetchCar=async i=>{
+    const b=el('b3Cars').children[i]; const sm=b&&b.querySelector('small');
+    if(b) b.disabled=true; if(sm) sm.textContent='loading\u2026';
+    show(i, await loadOne(i), 0); reveal();
+    if(b){ b.disabled=false; delete b.dataset.lazy; }
+    if(sm&&sm.dataset.was) sm.textContent=sm.dataset.was;
+  };
+
+  /* A phone does not want 6 MB of car, and three of them in GPU memory is
+     where it starts to stutter. One car is ready immediately; the others
+     come down the moment someone actually asks for them. */
+  if(slow||mob){
+    rest.forEach(i=>{ const b=el('b3Cars').children[i]; if(!b) return;
+      b.disabled=false; b.dataset.lazy='1';
+      const sm=b.querySelector('small'); if(sm){ sm.dataset.was=sm.textContent; sm.textContent='tap to load'; } });
+  }
+  else if(lean){ for(const i of rest){ show(i, await loadOne(i), 0); reveal(); } }
   else await Promise.all(rest.map(async i=>{ show(i, await loadOne(i), 0); reveal(); }));
   if(!S3.loaded) throw new Error('no cars loaded');
 }
@@ -4950,7 +4997,7 @@ main{padding:0}
   var cta=root.querySelectorAll(".h-bl .cta a");
   if(cta[0]){ cta[0].removeAttribute("data-go"); cta[0].setAttribute("href","#build");
     cta[0].addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation();
-      var t=document.querySelector("[data-panel=build]"); if(t) t.click(); },true); }
+      var t=document.getElementById("build"); if(t) t.scrollIntoView({behavior:"smooth",block:"start"}); },true); }
   addEventListener("scroll",function(){requestAnimationFrame(clip)},{passive:true});
   addEventListener("resize",clip); clip();
 })();
@@ -5338,7 +5385,8 @@ addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return
 /* ================= scroll timeline ================= */
 const M={storyTop:0,storyEnd:1,bayTop:0,bayH:0,flowTop:0};
 const absTop=el=>el.getBoundingClientRect().top+scrollY;
-function measure(){const st=$('story'),b=$('bay');M.storyTop=absTop(st);M.storyEnd=M.storyTop+st.offsetHeight-innerHeight;M.bayTop=1e9;M.bayH=0;M.flowTop=1e9;   /* grafted: nothing of oldsoul's follows the story */scrollDirty=true}
+function measure(){const st=$('story'),b=$('bay');M.storyTop=absTop(st);M.storyEnd=M.storyTop+st.offsetHeight-innerHeight;M.bayTop=1e9;M.bayH=0;M.flowTop=1e9;   /* grafted: nothing of oldsoul's follows the story */
+ M.heroBottom=M.storyTop+st.offsetHeight;   /* where the grafted block actually ends */scrollDirty=true}
 function go(id){let y=id==='top'?0:id==='story'?M.storyTop+2:id==='bay'?M.bayTop+2:absTop($(id))-64;y=Math.min(y,document.body.scrollHeight-innerHeight);scrollTo({top:y,behavior:'smooth'})}
 const KEYS=[[0,35,11,8.6],[.14,52,16,9.6],[.26,82,24,11.8],[.36,122,26,11.8],[.48,166,14,9.6],[.58,210,10,8.5],[.68,255,15,8.1],[.78,300,9,8.3],[.90,335,5,7.9],[1,392,11,8.6]];
 function keyAt(P){let i=0;while(i<KEYS.length-2&&P>KEYS[i+1][0])i++;const a=KEYS[i],b=KEYS[i+1],u=smooth((P-a[0])/(b[0]-a[0]));return[lerp(a[1],b[1],u),lerp(a[2],b[2],u),lerp(a[3],b[3],u)]}
@@ -5385,12 +5433,16 @@ function magApply(e){const R=260;MAGS().forEach(el=>{const r=el.getBoundingClien
 
 function frame(t){
  const y=scrollY,vh=innerHeight;
+ /* The hero owns only the top of the page. Once it is behind us this loop has
+    nothing to do - it was rendering WebGL and writing story transforms for the
+    whole document, which is what made scrolling feel heavy further down. */
+ if(y>=M.heroBottom||document.hidden){lastY=y;return}
  if(y!==lastY||scrollDirty){lastY=y;scrollDirty=false;P=clamp(y/M.storyEnd);domScroll(y);storyApply()}
  else if(storyDirty)storyApply();
  if(magDirty){magApply(magDirty);magDirty=null}
  ptr.x+=(ptr.tx-ptr.x)*.06;ptr.y+=(ptr.ty-ptr.y)*.06;
  $('bgw').style.transform=`translate3d(${(-ptr.x*26).toFixed(1)}px,${(-y*.12-ptr.y*14+Math.sin(t*.0004)*8).toFixed(1)}px,0) rotate(${(Math.sin(t*.00023)*.6).toFixed(3)}deg)`;
- if(y>=M.flowTop||!G||document.hidden)return; // canvas fully covered
+ if(!G)return;   // model not in yet
  const nowBay=y>M.bayTop-vh*.45&&y<M.bayTop+M.bayH-vh*.62;
  if(nowBay!==bayOn){bayOn=nowBay;canvas.classList.toggle('live',bayOn);orbit.enabled=bayOn;if(bayOn)orbit.target.copy(tgt);else{select(null)}}
  const mob=MOB(),k=keyAt(P),deg=Math.PI/180,ls=cfg.len/4.78;
